@@ -24,7 +24,7 @@ public class SequenceProgrammerUI implements UI {
     private long fadeTimestamp = System.currentTimeMillis();
 
     public SequenceProgrammerUI() {
-        setLocation(1000, 20);
+        setLocation(330, 200);
     }
 
     @Override

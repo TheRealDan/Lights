@@ -13,7 +13,7 @@ import me.therealdan.lights.util.Util;
 public class GroupsUI implements UI {
 
     public GroupsUI() {
-        setLocation(140, 20);
+        setLocation(120, 20);
     }
 
     @Override

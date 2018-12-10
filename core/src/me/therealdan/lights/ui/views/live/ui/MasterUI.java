@@ -12,7 +12,7 @@ public class MasterUI implements UI {
     public static float HEIGHT = 250;
 
     public MasterUI() {
-        setLocation(20, 1100);
+        setLocation(20, 500);
 
         setWidth(80);
     }

@@ -17,7 +17,7 @@ public class FadersUI implements UI {
     private int bank = 1;
 
     public FadersUI() {
-        setLocation(500, 1100);
+        setLocation(120, 500);
     }
 
     @Override

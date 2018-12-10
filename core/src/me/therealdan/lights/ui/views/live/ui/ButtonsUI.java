@@ -17,7 +17,7 @@ public class ButtonsUI implements UI {
     public static float HEIGHT = 800;
 
     public ButtonsUI() {
-        setLocation(1700, 20);
+        setLocation(460, 500);
     }
 
     @Override

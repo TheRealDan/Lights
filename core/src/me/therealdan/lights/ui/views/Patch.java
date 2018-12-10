@@ -21,8 +21,6 @@ import java.util.List;
 
 public class Patch implements Tab {
 
-    // TODO - set and delete fixtures
-
     private static Patch patch;
 
     private HashMap<String, Float> cellWidth = new HashMap<>();
@@ -45,53 +43,10 @@ public class Patch implements Tab {
     public Patch() {
         patch = this;
 
-        Profile dimmer = Profile.create("Dimmer",
-                new Channel(Channel.Type.INTENSITY, 0),
-                new Channel(Channel.Type.INTENSITY, 1),
-                new Channel(Channel.Type.INTENSITY, 2),
-                new Channel(Channel.Type.INTENSITY, 3),
-                new Channel(Channel.Type.INTENSITY, 4),
-                new Channel(Channel.Type.INTENSITY, 5),
-                new Channel(Channel.Type.INTENSITY, 6),
-                new Channel(Channel.Type.INTENSITY, 7),
-                new Channel(Channel.Type.INTENSITY, 8),
-                new Channel(Channel.Type.INTENSITY, 9),
-                new Channel(Channel.Type.INTENSITY, 10),
-                new Channel(Channel.Type.INTENSITY, 11)
-        );
-
-        Profile ming = Profile.create("Ming",
-                new Channel(Channel.Type.INTENSITY, 4, 5, 6),
-                new Channel(Channel.Type.RED, 4),
-                new Channel(Channel.Type.GREEN, 5),
-                new Channel(Channel.Type.BLUE, 6),
-
-                new Channel(Channel.Type.INTENSITY, 7, 8, 9),
-                new Channel(Channel.Type.RED, 7),
-                new Channel(Channel.Type.GREEN, 8),
-                new Channel(Channel.Type.BLUE, 9),
-
-                new Channel(Channel.Type.INTENSITY, 10, 11, 12),
-                new Channel(Channel.Type.RED, 10),
-                new Channel(Channel.Type.GREEN, 11),
-                new Channel(Channel.Type.BLUE, 12)
-        );
-        ming.setPhysicalChannels(13);
-
-        Profile ledStrip = Profile.create("LED Strip",
-                new Channel(Channel.Type.INTENSITY, 0, 1, 2),
-                new Channel(Channel.Type.RED, 0),
-                new Channel(Channel.Type.GREEN, 1),
-                new Channel(Channel.Type.BLUE, 2)
-        );
-
-        Profile parcan = Profile.create("Par Can",
-                new Channel(Channel.Type.INTENSITY, 0),
-                new Channel(Channel.Type.RED, 1),
-                new Channel(Channel.Type.GREEN, 2),
-                new Channel(Channel.Type.BLUE, 3)
-        );
-        parcan.setPhysicalChannels(8);
+        Profile dimmer = ProfileEditor.profileByName("Dimmer");
+        Profile ming = ProfileEditor.profileByName("Ming");
+        Profile ledStrip = ProfileEditor.profileByName("LED Strip");
+        Profile parcan = ProfileEditor.profileByName("Par Can");
 
         add(new Fixture("Dimmer", dimmer, 1, 1, new Vector3(0, 10, 5f)));
 
@@ -145,6 +100,11 @@ public class Patch implements Tab {
         for (Fixture fixture : fixtures())
             if (!fixture.getProfile().equals("Dimmer"))
                 fluros.add(fixture);
+    }
+
+    @Override
+    public void save() {
+
     }
 
     @Override
@@ -547,14 +507,14 @@ public class Patch implements Tab {
         patch.groups.add(group);
     }
 
-    public static Fixture byID(int id) {
+    public static Fixture fixtureByID(int id) {
         for (Fixture fixture : patch.fixtures)
             if (fixture.getID() == id)
                 return fixture;
         return null;
     }
 
-    public static Fixture byName(String name) {
+    public static Fixture fixtureByName(String name) {
         for (Fixture fixture : patch.fixtures)
             if (fixture.getName().equalsIgnoreCase(name))
                 return fixture;

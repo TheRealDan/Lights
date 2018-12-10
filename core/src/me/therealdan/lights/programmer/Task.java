@@ -59,7 +59,7 @@ public class Task {
     public static Task fromString(String string) {
         String[] args = string.split(";");
         return new Task(
-                Patch.byID(Integer.parseInt(args[0])),
+                Patch.fixtureByID(Integer.parseInt(args[0])),
                 Channel.Type.valueOf(args[1]),
                 Integer.parseInt(args[2]),
                 Float.parseFloat(args[3])

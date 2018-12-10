@@ -15,8 +15,6 @@ import java.util.List;
 
 public class Profile {
 
-    private static List<Profile> profiles = new ArrayList<>();
-
     private static ModelBuilder modelBuilder = new ModelBuilder();
 
     private String name;
@@ -61,8 +59,6 @@ public class Profile {
                 }
             }
         }
-
-        profiles.add(this);
     }
 
     public void setPhysicalChannels(int physicalChannels) {
@@ -136,17 +132,5 @@ public class Profile {
 
     public static Profile create(String name, Channel... channels) {
         return new Profile(name, channels);
-    }
-
-    public static Profile get(String name) {
-        for (Profile profile : Profile.values())
-            if (profile.getName().equalsIgnoreCase(name))
-                return profile;
-
-        return null;
-    }
-
-    public static List<Profile> values() {
-        return new ArrayList<>(profiles);
     }
 }

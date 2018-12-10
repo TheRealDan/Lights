@@ -45,19 +45,19 @@ public class Sequences implements Tab {
 
         Sequence stage = new Sequence("Stage", false, true, true);
         Frame stageFrame = new Frame(1000, 1000);
-        stageFrame.set(Patch.byName("Dimmer"), Channel.Type.INTENSITY, 255f, 1, 2, 3, 4);
+        stageFrame.set(Patch.fixtureByName("Dimmer"), Channel.Type.INTENSITY, 255f, 1, 2, 3, 4);
         stage.add(stageFrame);
         add(stage);
 
         Sequence house = new Sequence("House", false, true, true);
         Frame houseFrame = new Frame(1000, 1000);
-        houseFrame.set(Patch.byName("Dimmer"), Channel.Type.INTENSITY, 255f, 5, 6, 7, 8);
+        houseFrame.set(Patch.fixtureByName("Dimmer"), Channel.Type.INTENSITY, 255f, 5, 6, 7, 8);
         house.add(houseFrame);
         add(house);
 
         Sequence sideCans = new Sequence("Side Cans", false, true, true);
         Frame sideCansFrame = new Frame(1000, 1000);
-        sideCansFrame.set(Patch.byName("Dimmer"), Channel.Type.INTENSITY, 128f, 12);
+        sideCansFrame.set(Patch.fixtureByName("Dimmer"), Channel.Type.INTENSITY, 128f, 12);
         sideCans.add(sideCansFrame);
         add(sideCans);
 

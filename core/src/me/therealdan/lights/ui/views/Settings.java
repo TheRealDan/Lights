@@ -2,6 +2,7 @@ package me.therealdan.lights.ui.views;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.files.FileHandle;
 import me.therealdan.lights.LightsCore;
 import me.therealdan.lights.dmx.DMX;
 import me.therealdan.lights.dmx.Output;
@@ -32,6 +33,23 @@ public class Settings implements Tab {
 
         for (Setting setting : Setting.values())
             this.settings.put(setting, setting.getType());
+
+        FileHandle fileHandle = Gdx.files.local("Lights/Settings/Settings.txt");
+        if (fileHandle.exists()) {
+            for (String line : fileHandle.readString().split("\\r?\\n")) {
+                String[] args = line.split(";");
+                Setting.valueOf(args[0]).set(args[1]);
+            }
+        }
+    }
+
+    @Override
+    public void save() {
+        FileHandle fileHandle = Gdx.files.local("Lights/Settings/Settings.txt");
+        fileHandle.writeString("", false);
+        for (Setting setting : Setting.values()) {
+            fileHandle.writeString(setting.toString() + ";" + setting.getValue() + "\r\n", true);
+        }
     }
 
     @Override
@@ -161,6 +179,20 @@ public class Settings implements Tab {
         LIMIT_LED_STRIPS,
         DRAW_DMX;
 
+        public void set(String string) {
+            switch (getType()) {
+                case BOOLEAN:
+                    setBoolean(Boolean.parseBoolean(string));
+                    return;
+                case LONG:
+                    setLong(Long.parseLong(string));
+                    return;
+                case INT:
+                    setInt(Integer.parseInt(string));
+                    return;
+            }
+        }
+
         public void increment() {
             increment(Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) ? 10 : 1);
         }
@@ -221,6 +253,26 @@ public class Settings implements Tab {
             }
         }
 
+        public void setBoolean(boolean bool) {
+            if (getBoolean() != bool) toggle();
+        }
+
+        public void setLong(long value) {
+            if (value > getLong()) {
+                increment(value - getLong());
+            } else if (value < getLong()) {
+                decrement(getLong() - value);
+            }
+        }
+
+        public void setInt(long value) {
+            if (value > getLong()) {
+                increment(value - getInt());
+            } else if (value < getLong()) {
+                decrement(getInt() - value);
+            }
+        }
+
         public void toggle() {
             switch (this) {
                 case SHOW_DMX_SEND_DEBUG:
@@ -276,6 +328,18 @@ public class Settings implements Tab {
                     return Output.CONNECTION_WAIT;
             }
             return 0L;
+        }
+
+        public String getValue() {
+            switch (getType()) {
+                case INT:
+                    return "" + getInt();
+                case LONG:
+                    return "" + getLong();
+                case BOOLEAN:
+                    return "" + getBoolean();
+            }
+            return null;
         }
 
         public String getName() {

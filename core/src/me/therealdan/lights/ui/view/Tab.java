@@ -7,6 +7,10 @@ public interface Tab extends Viewable {
 
     List<Tab> tabs = new ArrayList<>();
 
+    default void save() {
+
+    }
+
     default void update() {
 
     }

@@ -107,6 +107,9 @@ public class LightsCore extends ApplicationAdapter {
     public void dispose() {
         menuBar.dispose();
         renderer.dispose();
+
+        for (Tab tab : Tab.values())
+            tab.save();
     }
 
     public ViewBar getViewBar() {

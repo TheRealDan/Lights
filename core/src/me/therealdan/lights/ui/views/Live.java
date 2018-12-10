@@ -58,6 +58,15 @@ public class Live implements Tab {
         uis.add(new MasterUI());
         uis.add(new FadersUI());
         uis.add(new ButtonsUI());
+
+        for (UI ui : uis)
+            ui.load();
+    }
+
+    @Override
+    public void save() {
+        for (UI ui : uis)
+            ui.save();
     }
 
     @Override

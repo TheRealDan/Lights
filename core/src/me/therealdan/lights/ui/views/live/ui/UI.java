@@ -1,6 +1,7 @@
 package me.therealdan.lights.ui.views.live.ui;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import me.therealdan.lights.LightsCore;
 import me.therealdan.lights.renderer.Renderer;
 import me.therealdan.lights.util.Util;
@@ -12,6 +13,18 @@ public interface UI {
 
     HashSet<String> hidden = new HashSet<>();
     HashMap<String, Float> uiLocation = new HashMap<>();
+
+    default void load() {
+        FileHandle fileHandle = Gdx.files.local("Lights/UI/" + getName() + ".txt");
+        if (fileHandle.exists()) {
+            String[] location = fileHandle.readString().split(";");
+            setLocation(Float.parseFloat(location[0]), Float.parseFloat(location[1]));
+        }
+    }
+
+    default void save() {
+        Gdx.files.local("Lights/UI/" + getName() + ".txt").writeString(getX() + ";" + getY(), false);
+    }
 
     default void keyUp(int keycode) {
     }

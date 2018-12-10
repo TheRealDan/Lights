@@ -59,6 +59,7 @@ public class ProfileEditor implements Tab {
 
             Profile profile = new Profile(name, modelDesigns, channels);
             profile.setPhysicalChannels(physicalChannels);
+            add(profile);
         }
     }
 

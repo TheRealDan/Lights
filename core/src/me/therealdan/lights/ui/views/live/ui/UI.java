@@ -17,13 +17,17 @@ public interface UI {
     default void load() {
         FileHandle fileHandle = Gdx.files.local("Lights/UI/" + getName() + ".txt");
         if (fileHandle.exists()) {
-            String[] location = fileHandle.readString().split(";");
-            setLocation(Float.parseFloat(location[0]), Float.parseFloat(location[1]));
+            String[] lines = fileHandle.readString().split("\\r?\\n");
+            setLocation(
+                    Float.parseFloat(lines[0].replace("X: ", "")),
+                    Float.parseFloat(lines[1].replace("Y: ", ""))
+            );
         }
     }
 
     default void save() {
-        Gdx.files.local("Lights/UI/" + getName() + ".txt").writeString(getX() + ";" + getY(), false);
+        Gdx.files.local("Lights/UI/" + getName() + ".txt").writeString("X: " + getX() + "\r\n", false);
+        Gdx.files.local("Lights/UI/" + getName() + ".txt").writeString("Y: " + getY(), true);
     }
 
     default void keyUp(int keycode) {

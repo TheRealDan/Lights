@@ -37,7 +37,7 @@ public class Settings implements Tab {
         FileHandle fileHandle = Gdx.files.local("Lights/Settings/Settings.txt");
         if (fileHandle.exists()) {
             for (String line : fileHandle.readString().split("\\r?\\n")) {
-                String[] args = line.split(";");
+                String[] args = line.split(": ");
                 Setting.valueOf(args[0]).set(args[1]);
             }
         }
@@ -48,7 +48,7 @@ public class Settings implements Tab {
         FileHandle fileHandle = Gdx.files.local("Lights/Settings/Settings.txt");
         fileHandle.writeString("", false);
         for (Setting setting : Setting.values()) {
-            fileHandle.writeString(setting.toString() + ";" + setting.getValue() + "\r\n", true);
+            fileHandle.writeString(setting.toString() + ": " + setting.getValue() + "\r\n", true);
         }
     }
 

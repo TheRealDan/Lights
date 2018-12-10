@@ -49,4 +49,16 @@ public class ModelDesign {
     public String toString() {
         return getDimensions().x + ";" + getDimensions().y + ";" + getDimensions().z + ";" + getOffset().x + ";" + getOffset().y + ";" + getOffset().z;
     }
+
+    public static ModelDesign fromString(String string) {
+        String[] args = string.split(";");
+        return new ModelDesign(
+                Float.parseFloat(args[0]),
+                Float.parseFloat(args[1]),
+                Float.parseFloat(args[2]),
+                Float.parseFloat(args[3]),
+                Float.parseFloat(args[4]),
+                Float.parseFloat(args[5])
+        );
+    }
 }

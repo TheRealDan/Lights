@@ -1,7 +1,6 @@
 package me.therealdan.lights.fixtures;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class Profile {
@@ -14,16 +13,12 @@ public class Profile {
 
     private boolean virtualIntensity = false;
 
-    private List<ModelDesign> modelDesigns = new ArrayList<>();
+    private List<ModelDesign> modelDesigns;
 
-    public Profile(String name, int physicalChannels, Channel... channels) {
-        this(name, channels);
-        setPhysicalChannels(physicalChannels);
-    }
-
-    public Profile(String name, Channel... channels) {
+    public Profile(String name, List<ModelDesign> modelDesigns, List<Channel> channels) {
         this.name = name;
-        this.channels = new ArrayList<>(Arrays.asList(channels));
+        this.modelDesigns = modelDesigns;
+        this.channels = new ArrayList<>(channels);
 
         this.virtualChannels = this.channels.size();
 

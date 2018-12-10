@@ -7,11 +7,20 @@ import java.util.List;
 public class Channel {
 
     private Type type;
-    private List<Integer> addressOffset;
+    private List<Integer> addressOffsets;
+
+    public Channel(String string) {
+        String[] args = string.split(": ");
+        this.type = Type.valueOf(args[0]);
+        this.addressOffsets = new ArrayList<>();
+
+        for (String offset : args[1].split(", "))
+            this.addressOffsets.add(Integer.parseInt(offset));
+    }
 
     public Channel(Type type, Integer... addressOffset) {
         this.type = type;
-        this.addressOffset = new ArrayList<>(Arrays.asList(addressOffset));
+        this.addressOffsets = new ArrayList<>(Arrays.asList(addressOffset));
     }
 
     public Type getType() {
@@ -19,7 +28,7 @@ public class Channel {
     }
 
     public List<Integer> addressOffsets() {
-        return new ArrayList<>(addressOffset);
+        return new ArrayList<>(addressOffsets);
     }
 
     public enum Type {

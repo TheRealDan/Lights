@@ -10,11 +10,11 @@ public class Model {
     private ModelInstance modelInstance;
     private Vector3 position, offset, dimensions;
 
-    public Model(ModelInstance modelInstance, Vector3 position, Vector3 offset, Vector3 dimensions) {
-        this.modelInstance = modelInstance;
+    public Model(ModelDesign modelDesign, Vector3 position) {
+        this.modelInstance = new ModelInstance(modelDesign.getModel(), position);
         this.position = position;
-        this.offset = offset;
-        this.dimensions = dimensions;
+        this.offset = modelDesign.getOffset();
+        this.dimensions = modelDesign.getDimensions();
     }
 
     public void setColor(Color color) {

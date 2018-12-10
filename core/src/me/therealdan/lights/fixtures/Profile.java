@@ -1,19 +1,10 @@
 package me.therealdan.lights.fixtures;
 
-import com.badlogic.gdx.graphics.VertexAttributes;
-import com.badlogic.gdx.graphics.g3d.Material;
-import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
-import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
-import com.badlogic.gdx.math.Vector3;
-import me.therealdan.lights.LightsCore;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class Profile {
-
-    private static ModelBuilder modelBuilder = new ModelBuilder();
 
     private String name;
     private List<Channel> channels;
@@ -91,35 +82,23 @@ public class Profile {
         if (modelDesigns.size() == 0) {
             switch (getName()) {
                 case "Ming":
-                    modelDesigns.add(createModel(2f / 3f, 0.2f, 0.2f, -(2f / 3f), 0f, 0f));
-                    modelDesigns.add(createModel(2f / 3f, 0.2f, 0.2f));
-                    modelDesigns.add(createModel(2f / 3f, 0.2f, 0.2f, 2f / 3f, 0f, 0f));
+                    modelDesigns.add(new ModelDesign(2f / 3f, 0.2f, 0.2f, -(2f / 3f), 0f, 0f));
+                    modelDesigns.add(new ModelDesign(2f / 3f, 0.2f, 0.2f));
+                    modelDesigns.add(new ModelDesign(2f / 3f, 0.2f, 0.2f, 2f / 3f, 0f, 0f));
                     break;
 
                 case "LED Strip":
-                    modelDesigns.add(createModel(0.2f, 2f, 0.2f));
-                    modelDesigns.add(createModel(0.2f, 2f, 0.2f, 0.5f, 0f, 0f));
-                    modelDesigns.add(createModel(0.2f, 2f, 0.2f, 1f, 0f, 0f));
-                    modelDesigns.add(createModel(0.2f, 2f, 0.2f, 1.5f, 0f, 0f));
+                    modelDesigns.add(new ModelDesign(0.2f, 2f, 0.2f));
+                    modelDesigns.add(new ModelDesign(0.2f, 2f, 0.2f, 0.5f, 0f, 0f));
+                    modelDesigns.add(new ModelDesign(0.2f, 2f, 0.2f, 1f, 0f, 0f));
+                    modelDesigns.add(new ModelDesign(0.2f, 2f, 0.2f, 1.5f, 0f, 0f));
                     break;
 
                 case "Par Can":
-                    modelDesigns.add(createModel(0.5f, 0.5f, 0.5f));
+                    modelDesigns.add(new ModelDesign(0.5f));
                     break;
             }
         }
         return new ArrayList<>(modelDesigns);
-    }
-
-    private static ModelDesign createModel(float width, float height, float depth) {
-        return createModel(width, height, depth, 0, 0, 0);
-    }
-
-    private static ModelDesign createModel(float width, float height, float depth, float xOffset, float yOffset, float zOffset) {
-        return new ModelDesign(
-                modelBuilder.createBox(width, height, depth, new Material(ColorAttribute.createDiffuse(LightsCore.BLACK)), VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal),
-                new Vector3(xOffset, yOffset, zOffset),
-                new Vector3(width, height, depth)
-        );
     }
 }

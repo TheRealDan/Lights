@@ -1,28 +1,52 @@
 package me.therealdan.lights.fixtures;
 
+import com.badlogic.gdx.graphics.VertexAttributes;
+import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.Model;
+import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
+import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.math.Vector3;
+import me.therealdan.lights.LightsCore;
 
 public class ModelDesign {
 
-    private Model model;
-    private Vector3 offset, dimensions;
+    private static ModelBuilder modelBuilder = new ModelBuilder();
 
-    public ModelDesign(Model model, Vector3 offset, Vector3 dimensions) {
-        this.model = model;
-        this.offset = offset;
-        this.dimensions = dimensions;
+    private Model model;
+    private Vector3 dimensions, offset;
+
+    public ModelDesign(float cube) {
+        this(cube, 0, 0, 0);
+    }
+
+    public ModelDesign(float cube, float xOffset, float yOffset, float zOffset) {
+        this(cube, cube, cube, xOffset, yOffset, zOffset);
+    }
+
+    public ModelDesign(float width, float height, float depth) {
+        this(width, height, depth, 0, 0, 0);
+    }
+
+    public ModelDesign(float width, float height, float depth, float xOffset, float yOffset, float zOffset) {
+        this.model = modelBuilder.createBox(width, height, depth, new Material(ColorAttribute.createDiffuse(LightsCore.BLACK)), VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal);
+        this.dimensions = new Vector3(width, height, depth);
+        this.offset = new Vector3(xOffset, yOffset, zOffset);
     }
 
     public Model getModel() {
         return model;
     }
 
+    public Vector3 getDimensions() {
+        return dimensions;
+    }
+
     public Vector3 getOffset() {
         return offset;
     }
 
-    public Vector3 getDimensions() {
-        return dimensions;
+    @Override
+    public String toString() {
+        return getDimensions().x + ";" + getDimensions().y + ";" + getDimensions().z + ";" + getOffset().x + ";" + getOffset().y + ";" + getOffset().z;
     }
 }

@@ -32,8 +32,14 @@ public class Fixture {
 
     public void buildModels() {
         models.clear();
-        for (ModelDesign modelDesign : profile.getModelDesigns())
-            models.add(new Model(new ModelInstance(modelDesign.getModel(), new Vector3()), modelDesign.getOffset(), getPosition().add(modelDesign.getOffset()), modelDesign.getDimensions()));
+        for (ModelDesign modelDesign : profile.getModelDesigns()) {
+            Vector3 position = new Vector3(
+                    getPosition().x + modelDesign.getOffset().x,
+                    getPosition().y + modelDesign.getOffset().y,
+                    getPosition().z + modelDesign.getOffset().z
+            );
+            models.add(new Model(modelDesign, position));
+        }
     }
 
     private void setColor(Color color) {

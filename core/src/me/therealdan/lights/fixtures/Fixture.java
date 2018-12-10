@@ -1,9 +1,7 @@
 package me.therealdan.lights.fixtures;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
-import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.math.Vector3;
 import me.therealdan.lights.dmx.DMX;
 
@@ -17,8 +15,8 @@ public class Fixture {
     private int address;
     private int id;
 
-    private List<ModelInstance> models = new ArrayList<>();
     private Vector3 position;
+    private List<Model> models = new ArrayList<>();
 
     public Fixture(String name, Profile profile, int address, int id) {
         this(name, profile, address, id, new Vector3());
@@ -29,33 +27,29 @@ public class Fixture {
         this.profile = profile;
         this.address = address;
         this.id = id;
-
         this.position = position;
     }
 
-    public void buildModel() {
-        for (Model model : profile.getModels())
-            models.add(new ModelInstance(model, new Vector3(
-                    position.x + profile.getOffset(model).x,
-                    position.y + profile.getOffset(model).y,
-                    position.z + profile.getOffset(model).z
-            )));
+    public void buildModels() {
+        models.clear();
+        for (ModelDesign modelDesign : profile.getModelDesigns())
+            models.add(new Model(new ModelInstance(modelDesign.getModel(), new Vector3()), modelDesign.getOffset(), getPosition().add(modelDesign.getOffset()), modelDesign.getDimensions()));
     }
 
     private void setColor(Color color) {
-        for (ModelInstance model : models)
+        for (Model model : getModels())
             setColor(model, color);
     }
 
-    private void setColor(ModelInstance model, Color color) {
-        model.materials.get(0).set(ColorAttribute.createDiffuse(color));
+    private void setColor(Model model, Color color) {
+        model.setColor(color);
     }
 
     public void updateColor(DMX visualiser) {
         switch (getProfile()) {
             case "Ming":
                 int parameter = 1;
-                for (ModelInstance model : getModels()) {
+                for (Model model : getModels()) {
                     setColor(model, new Color(
                             getValue(visualiser, Channel.Type.RED, parameter) / 255f,
                             getValue(visualiser, Channel.Type.GREEN, parameter) / 255f,
@@ -88,17 +82,13 @@ public class Fixture {
     }
 
     public void move(float x, float y, float z) {
-        for (ModelInstance model : getModels())
-            model.transform.setTranslation(position.set(
-                    getPosition().x + x,
-                    getPosition().y + y,
-                    getPosition().z + z
-            ));
+        for (Model model : getModels())
+            model.move(x, y, z);
     }
 
     public void teleport(float x, float y, float z) {
-        for (ModelInstance model : getModels())
-            model.transform.setTranslation(position.set(x, y, z));
+        for (Model model : getModels())
+            model.teleport(x, y, z, true);
     }
 
     public void rename(String name) {
@@ -125,17 +115,20 @@ public class Fixture {
         return id;
     }
 
-    public List<ModelInstance> getModels() {
-        if (models.size() == 0) buildModel();
-        return models;
-    }
-
     public Vector3 getPosition() {
         return position;
     }
 
-    public Vector3 getDimensions() {
-        return profile.getDimensions();
+    public List<Model> getModels() {
+        if (models.size() == 0) buildModels();
+        return new ArrayList<>(models);
+    }
+
+    public List<ModelInstance> getModelInstances() {
+        List<ModelInstance> modelInstances = new ArrayList<>();
+        for (Model model : getModels())
+            modelInstances.add(model.getModelInstance());
+        return modelInstances;
     }
 
     public int getVirtualChannels() {

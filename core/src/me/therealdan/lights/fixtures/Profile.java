@@ -2,7 +2,6 @@ package me.therealdan.lights.fixtures;
 
 import com.badlogic.gdx.graphics.VertexAttributes;
 import com.badlogic.gdx.graphics.g3d.Material;
-import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.math.Vector3;
@@ -10,7 +9,6 @@ import me.therealdan.lights.LightsCore;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedHashMap;
 import java.util.List;
 
 public class Profile {
@@ -25,10 +23,14 @@ public class Profile {
 
     private boolean virtualIntensity = false;
 
-    private Vector3 dimensions;
-    private LinkedHashMap<Model, Vector3> models = new LinkedHashMap<>();
+    private List<ModelDesign> modelDesigns = new ArrayList<>();
 
-    private Profile(String name, Channel... channels) {
+    public Profile(String name, int physicalChannels, Channel... channels) {
+        this(name, channels);
+        setPhysicalChannels(physicalChannels);
+    }
+
+    public Profile(String name, Channel... channels) {
         this.name = name;
         this.channels = new ArrayList<>(Arrays.asList(channels));
 
@@ -85,52 +87,39 @@ public class Profile {
         return virtualIntensity;
     }
 
-    public List<Model> getModels() {
-        if (models.size() == 0) {
+    public List<ModelDesign> getModelDesigns() {
+        if (modelDesigns.size() == 0) {
             switch (getName()) {
                 case "Ming":
-                    dimensions = new Vector3(2f, 0.2f, 0.2f);
-                    createModel(this, 2f / 3f, 0.2f, 0.2f, -(2f / 3f), 0f, 0f);
-                    createModel(this, 2f / 3f, 0.2f, 0.2f);
-                    createModel(this, 2f / 3f, 0.2f, 0.2f, 2f / 3f, 0f, 0f);
+                    modelDesigns.add(createModel(2f / 3f, 0.2f, 0.2f, -(2f / 3f), 0f, 0f));
+                    modelDesigns.add(createModel(2f / 3f, 0.2f, 0.2f));
+                    modelDesigns.add(createModel(2f / 3f, 0.2f, 0.2f, 2f / 3f, 0f, 0f));
                     break;
 
                 case "LED Strip":
-                    dimensions = new Vector3(0.2f, 2f, 0.2f);
-                    createModel(this, 0.2f, 2f, 0.2f);
-                    createModel(this, 0.2f, 2f, 0.2f, 0.5f, 0f, 0f);
-                    createModel(this, 0.2f, 2f, 0.2f, 1f, 0f, 0f);
-                    createModel(this, 0.2f, 2f, 0.2f, 1.5f, 0f, 0f);
+                    modelDesigns.add(createModel(0.2f, 2f, 0.2f));
+                    modelDesigns.add(createModel(0.2f, 2f, 0.2f, 0.5f, 0f, 0f));
+                    modelDesigns.add(createModel(0.2f, 2f, 0.2f, 1f, 0f, 0f));
+                    modelDesigns.add(createModel(0.2f, 2f, 0.2f, 1.5f, 0f, 0f));
                     break;
 
                 case "Par Can":
-                    dimensions = new Vector3(0.5f, 0.5f, 0.5f);
-                    createModel(this, 0.5f, 0.5f, 0.5f);
+                    modelDesigns.add(createModel(0.5f, 0.5f, 0.5f));
                     break;
             }
         }
-        return new ArrayList<>(models.keySet());
+        return new ArrayList<>(modelDesigns);
     }
 
-    public Vector3 getOffset(Model model) {
-        return models.get(model);
+    private static ModelDesign createModel(float width, float height, float depth) {
+        return createModel(width, height, depth, 0, 0, 0);
     }
 
-    public Vector3 getDimensions() {
-        return dimensions;
-    }
-
-    private static void createModel(Profile profile, float width, float height, float depth) {
-        createModel(profile, width, height, depth, 0, 0, 0);
-    }
-
-    private static void createModel(Profile profile, float width, float height, float depth, float xOffset, float yOffset, float zOffset) {
-        Model model = modelBuilder.createBox(width, height, depth, new Material(ColorAttribute.createDiffuse(LightsCore.BLACK)), VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal);
-        Vector3 offset = new Vector3(xOffset, yOffset, zOffset);
-        profile.models.put(model, offset);
-    }
-
-    public static Profile create(String name, Channel... channels) {
-        return new Profile(name, channels);
+    private static ModelDesign createModel(float width, float height, float depth, float xOffset, float yOffset, float zOffset) {
+        return new ModelDesign(
+                modelBuilder.createBox(width, height, depth, new Material(ColorAttribute.createDiffuse(LightsCore.BLACK)), VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal),
+                new Vector3(xOffset, yOffset, zOffset),
+                new Vector3(width, height, depth)
+        );
     }
 }

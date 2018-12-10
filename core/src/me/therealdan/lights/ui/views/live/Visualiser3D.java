@@ -13,6 +13,7 @@ import com.badlogic.gdx.math.collision.Ray;
 import com.badlogic.gdx.utils.IntIntMap;
 import me.therealdan.lights.dmx.DMX;
 import me.therealdan.lights.fixtures.Fixture;
+import me.therealdan.lights.fixtures.Model;
 import me.therealdan.lights.programmer.Programmer;
 import me.therealdan.lights.ui.views.Hotkeys;
 import me.therealdan.lights.ui.views.Live;
@@ -47,7 +48,7 @@ public class Visualiser3D {
         environment.add(new DirectionalLight().set(0.6f, 0.6f, 0.6f, 1f, 0.8f, 0.2f));
 
         for (Fixture fixture : Patch.fixtures()) {
-            fixture.buildModel();
+            fixture.buildModels();
         }
     }
 
@@ -75,7 +76,7 @@ public class Visualiser3D {
 
         modelBatch.begin(camera);
         for (Fixture fixture : Patch.fixtures()) {
-            modelBatch.render(fixture.getModels(), environment);
+            modelBatch.render(fixture.getModelInstances(), environment);
         }
         modelBatch.end();
     }
@@ -163,8 +164,10 @@ public class Visualiser3D {
         Ray ray = camera.getPickRay(screenX, screenY);
         for (Fixture fixture : Patch.fixtures()) {
             if (fixture.getModels().size() > 0) {
-                if (Intersector.intersectRayBoundsFast(ray, fixture.getPosition(), fixture.getDimensions())) {
-                    return fixture;
+                for (Model model : fixture.getModels()) {
+                    if (Intersector.intersectRayBoundsFast(ray, model.getPosition(), model.getDimensions())) {
+                        return fixture;
+                    }
                 }
             }
         }

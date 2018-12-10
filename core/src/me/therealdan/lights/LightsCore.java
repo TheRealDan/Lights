@@ -68,6 +68,9 @@ public class LightsCore extends ApplicationAdapter {
         menuBar = new MenuBar();
 
         new Output();
+
+        Gdx.graphics.setVSync(true);
+        Gdx.graphics.setWindowedMode(1024, 768);
     }
 
     @Override

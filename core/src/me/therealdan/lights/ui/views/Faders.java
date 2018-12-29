@@ -2,6 +2,7 @@ package me.therealdan.lights.ui.views;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.files.FileHandle;
 import me.therealdan.lights.LightsCore;
 import me.therealdan.lights.controllers.Fader;
 import me.therealdan.lights.controllers.FaderBank;
@@ -29,24 +30,85 @@ public class Faders implements Tab {
     public Faders() {
         faders = this;
 
-        Fader stage = new Fader(1, "Stage", LightsCore.ORANGE);
-        stage.setSequence(Sequences.byName("Stage"));
-        add(stage);
+        FileHandle fileHandle = Gdx.files.local("Lights/Faders/");
+        if (fileHandle.exists() && fileHandle.isDirectory())
+            for (FileHandle child : fileHandle.list())
+                loadFader(child);
 
-        Fader house = new Fader(2, "House", LightsCore.ORANGE);
-        house.setSequence(Sequences.byName("House"));
-        add(house);
+        fileHandle = Gdx.files.local("Lights/FaderBanks/");
+        if (fileHandle.exists() && fileHandle.isDirectory())
+            for (FileHandle child : fileHandle.list())
+                loadBank(child);
+    }
 
-        Fader sideCans = new Fader(3, "Side Cans", LightsCore.DARK_BLUE);
-        sideCans.setSequence(Sequences.byName("Side Cans"));
-        add(sideCans);
+    private void loadFader(FileHandle fileHandle) {
+        Fader fader = new Fader(-1);
 
-        Fader stageCans = new Fader(4, "Stage Cans", LightsCore.WHITE);
-        stageCans.setType(Fader.Type.AMBIENT);
-        stageCans.setSequence(Sequences.byName("Stage Cans"));
-        add(stageCans);
+        for (String line : fileHandle.readString().split("\\r?\\n")) {
+            if (line.startsWith("ID: ")) {
+                fader = new Fader(Integer.parseInt(line.split(": ")[1]));
+            } else if (line.startsWith("Name: ")) {
+                fader.rename(line.split(": ")[1]);
+            } else if (line.startsWith("Type: ")) {
+                fader.setType(Fader.Type.valueOf(line.split(": ")[1]));
+            } else if (line.startsWith("Value: ")) {
+                fader.setValue(Float.parseFloat(line.split(": ")[1]));
+            } else if (line.startsWith("Sequence: ")) {
+                fader.setSequence(Sequences.byName(line.split(": ")[1]));
+            } else if (line.startsWith("  Red: ")) {
+                fader.setRed(Float.parseFloat(line.split(": ")[1]));
+            } else if (line.startsWith("  Green: ")) {
+                fader.setGreen(Float.parseFloat(line.split(": ")[1]));
+            } else if (line.startsWith("  Blue: ")) {
+                fader.setBlue(Float.parseFloat(line.split(": ")[1]));
+            }
+        }
 
-        getBank(1).add(stage, house, sideCans, stageCans);
+        if (fader.getID() == -1) return;
+        add(fader);
+    }
+
+    private void loadBank(FileHandle fileHandle) {
+        FaderBank bank = null;
+        for (String line : fileHandle.readString().split("\\r?\\n")) {
+            if (line.startsWith("ID: ")) {
+                bank = getBank(Integer.parseInt(line.split(": ")[1]));
+            } else if (line.startsWith("Faders:")) {
+                // do nothing
+            } else if (line.startsWith("  - ")) {
+                bank.add(Fader.byID(Integer.parseInt(line.split("- ")[1])));
+            }
+        }
+    }
+
+    @Override
+    public void save() {
+        for (Fader fader : faders()) {
+            FileHandle fileHandle = Gdx.files.local("Lights/Faders/" + fader.getName() + ".txt");
+            fileHandle.writeString("", false);
+
+            fileHandle.writeString("ID: " + fader.getID() + "\r\n", true);
+            fileHandle.writeString("Name: " + fader.getName() + "\r\n", true);
+            fileHandle.writeString("Type: " + fader.getType().toString() + "\r\n", true);
+            fileHandle.writeString("Value: " + fader.getValue() + "\r\n", true);
+            fileHandle.writeString("Sequence: " + fader.getSequence().getName() + "\r\n", true);
+
+            fileHandle.writeString("Color:\r\n", true);
+            fileHandle.writeString("  Red: " + fader.getColor().r + "\r\n", true);
+            fileHandle.writeString("  Green: " + fader.getColor().g + "\r\n", true);
+            fileHandle.writeString("  Blue: " + fader.getColor().b + "\r\n", true);
+        }
+
+        for (FaderBank bank : banks()) {
+            FileHandle fileHandle = Gdx.files.local("Lights/FaderBanks/" + "Bank " + bank.getID() + ".txt");
+            fileHandle.writeString("", false);
+
+            fileHandle.writeString("ID: " + bank.getID() + "\r\n", true);
+
+            fileHandle.writeString("Faders:\r\n", true);
+            for (Fader fader : bank.faders())
+                fileHandle.writeString("  - " + fader.getID() + "\r\n", true);
+        }
     }
 
     @Override

@@ -22,45 +22,41 @@ public class ProfileEditor implements Tab {
 
         FileHandle fileHandle = Gdx.files.local("Lights/Profiles/");
         if (fileHandle.exists() && fileHandle.isDirectory())
-            load(fileHandle);
+            for (FileHandle child : fileHandle.list())
+                load(child);
     }
 
-    private void load(FileHandle file) {
-        if (file.isDirectory()) {
-            for (FileHandle child : file.list())
-                load(child);
-        } else {
-            String name = file.name().replace(".txt", "");
-            int physicalChannels = 0;
-            List<Channel> channels = new ArrayList<>();
-            List<ModelDesign> modelDesigns = new ArrayList<>();
+    private void load(FileHandle fileHandle) {
+        String name = fileHandle.name().replace(".txt", "");
+        int physicalChannels = 0;
+        List<Channel> channels = new ArrayList<>();
+        List<ModelDesign> modelDesigns = new ArrayList<>();
 
-            boolean isChannel = false, isModel = false;
-            for (String line : file.readString().split("\\r?\\n")) {
-                if (line.startsWith("Physical Channels: ")) {
-                    physicalChannels = Integer.parseInt(line.split(": ")[1]);
-                    continue;
-                } else if (line.startsWith("Channels:")) {
-                    isChannel = true;
-                    isModel = false;
-                    continue;
-                } else if (line.startsWith("Models:")) {
-                    isChannel = false;
-                    isModel = true;
-                    continue;
-                }
-
-                if (isChannel) {
-                    channels.add(new Channel(line.substring(2)));
-                } else if (isModel) {
-                    modelDesigns.add(ModelDesign.fromString(line.substring(2)));
-                }
+        boolean isChannel = false, isModel = false;
+        for (String line : fileHandle.readString().split("\\r?\\n")) {
+            if (line.startsWith("Physical Channels: ")) {
+                physicalChannels = Integer.parseInt(line.split(": ")[1]);
+                continue;
+            } else if (line.startsWith("Channels:")) {
+                isChannel = true;
+                isModel = false;
+                continue;
+            } else if (line.startsWith("Models:")) {
+                isChannel = false;
+                isModel = true;
+                continue;
             }
 
-            Profile profile = new Profile(name, modelDesigns, channels);
-            profile.setPhysicalChannels(physicalChannels);
-            add(profile);
+            if (isChannel) {
+                channels.add(new Channel(line.substring(2)));
+            } else if (isModel) {
+                modelDesigns.add(ModelDesign.fromString(line.substring(2)));
+            }
         }
+
+        Profile profile = new Profile(name, modelDesigns, channels);
+        profile.setPhysicalChannels(physicalChannels);
+        add(profile);
     }
 
     @Override

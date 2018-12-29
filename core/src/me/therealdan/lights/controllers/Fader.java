@@ -28,6 +28,37 @@ public class Fader {
         this.sequence = sequence;
     }
 
+    public void setColor(Color color) {
+        this.color = color;
+    }
+
+    public void setRed(float red) {
+        color.set(
+                red,
+                color.g,
+                color.b,
+                color.a
+        );
+    }
+
+    public void setGreen(float green) {
+        color.set(
+                color.r,
+                green,
+                color.b,
+                color.a
+        );
+    }
+
+    public void setBlue(float blue) {
+        color.set(
+                color.r,
+                color.g,
+                blue,
+                color.a
+        );
+    }
+
     public void toggleType() {
         setType(getType().next());
     }

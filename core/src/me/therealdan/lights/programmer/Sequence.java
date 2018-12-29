@@ -10,16 +10,18 @@ public class Sequence {
     private String name;
     private int currentFrame = 0;
     private int lastFrame = 0;
-    private boolean loop = true;
-    private boolean globalFrameTime = false;
-    private boolean globalFadeTime = false;
+
+    private boolean loop;
+    private boolean globalFrameTime;
+    private boolean globalFadeTime;
+
     private boolean useTempo = false;
     private boolean playing = false;
 
     private long started = System.currentTimeMillis();
 
     public Sequence(String name) {
-        this.name = name;
+        this(name, false, false, false);
     }
 
     public Sequence(String name, boolean loop, boolean globalFrameTime, boolean globalFadeTime) {

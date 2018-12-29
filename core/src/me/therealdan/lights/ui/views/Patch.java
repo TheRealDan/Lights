@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector3;
 import me.therealdan.lights.LightsCore;
 import me.therealdan.lights.dmx.DMX;
-import me.therealdan.lights.fixtures.Channel;
 import me.therealdan.lights.fixtures.Fixture;
 import me.therealdan.lights.fixtures.Group;
 import me.therealdan.lights.fixtures.Profile;

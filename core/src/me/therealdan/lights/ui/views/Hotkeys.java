@@ -2,6 +2,7 @@ package me.therealdan.lights.ui.views;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.files.FileHandle;
 import me.therealdan.lights.LightsCore;
 import me.therealdan.lights.controllers.Button;
 import me.therealdan.lights.renderer.Renderer;
@@ -9,54 +10,41 @@ import me.therealdan.lights.ui.view.Tab;
 import me.therealdan.lights.util.Util;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 public class Hotkeys implements Tab {
 
     private static Hotkeys hotkeys;
 
-    private HashMap<String, Integer> controls = new HashMap<>();
+    private LinkedHashMap<String, Integer> controls = new LinkedHashMap<>();
     private String edit = "";
 
     public Hotkeys() {
         hotkeys = this;
 
-        set(Control.CAMERA_STRAFE_LEFT.toString(), Input.Keys.LEFT);
-        set(Control.CAMERA_STRAFE_RIGHT.toString(), Input.Keys.RIGHT);
-        set(Control.CAMERA_FORWARD.toString(), Input.Keys.UP);
-        set(Control.CAMERA_BACKWARD.toString(), Input.Keys.DOWN);
-        set(Control.CAMERA_UP.toString(), Input.Keys.COMMA);
-        set(Control.CAMERA_DOWN.toString(), Input.Keys.PERIOD);
+        load();
+    }
 
-        set("Button_1", Input.Keys.Q);
-        set("Button_2", Input.Keys.W);
-        set("Button_3", Input.Keys.E);
-        set("Button_4", Input.Keys.R);
-        set("Button_5", Input.Keys.T);
-        set("Button_6", Input.Keys.Y);
-        set("Button_7", Input.Keys.U);
-        set("Button_8", Input.Keys.I);
-        set("Button_9", Input.Keys.O);
-        set("Button_10", Input.Keys.P);
+    private void load() {
+        FileHandle fileHandle = Gdx.files.local("Lights/Settings/Controls.txt");
 
-        set("Button_11", Input.Keys.A);
-        set("Button_12", Input.Keys.S);
-        set("Button_13", Input.Keys.D);
-        set("Button_14", Input.Keys.F);
-        set("Button_15", Input.Keys.G);
-        set("Button_16", Input.Keys.H);
-        set("Button_17", Input.Keys.J);
-        set("Button_18", Input.Keys.K);
-        set("Button_19", Input.Keys.L);
+        for (String line : fileHandle.readString().split("\\r?\\n")) {
+            String[] args = line.split(": ");
+            set(
+                    args[0],
+                    Integer.parseInt(args[1])
+            );
+        }
+    }
 
-        set("Button_20", Input.Keys.Z);
-        set("Button_21", Input.Keys.X);
-        set("Button_22", Input.Keys.C);
-        set("Button_23", Input.Keys.V);
-        set("Button_24", Input.Keys.B);
-        set("Button_25", Input.Keys.N);
-        set("Button_26", Input.Keys.M);
+    @Override
+    public void save() {
+        FileHandle fileHandle = Gdx.files.local("Lights/Settings/Controls.txt");
+        fileHandle.writeString("", false);
+
+        for (String control : controls.keySet())
+            fileHandle.writeString(control + ": " + get(control) + "\r\n", true);
     }
 
     @Override

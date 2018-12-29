@@ -30,8 +30,7 @@ public class ButtonsUI implements UI {
 
         float cellHeight = 30;
 
-        float buttonWidth = getWidth() / Buttons.ROWS;
-        float buttonHeight = getHeight() / Buttons.COLUMNS;
+        float size = getWidth() / Buttons.PER_ROW;
 
         float x = getX();
         float y = Gdx.graphics.getHeight() - getY();
@@ -39,29 +38,30 @@ public class ButtonsUI implements UI {
         Util.box(renderer, x, y, getWidth(), cellHeight, LightsCore.DARK_BLUE, "Buttons");
         y -= cellHeight;
 
-        for (int position = 1; position <= Buttons.ROWS * Buttons.COLUMNS; position++) {
+        for (int position = 1; position <= Buttons.getTopPosition(); position++) {
             Button button = Buttons.getButton(position);
             if (button != null) {
-                Util.box(renderer, x, y, buttonWidth, buttonHeight, button.getColor());
-                renderer.queue(new Task(x, y - buttonHeight / 2).text(button.getName(), Task.TextPosition.LEFT_CENTER).setColor(LightsCore.text()));
-                if (Util.containsMouse(x, Gdx.graphics.getHeight() - y, buttonWidth, buttonHeight)) {
+                Util.box(renderer, x, y, size, size, button.getColor());
+                renderer.queue(new Task(x, y - size / 2).text(button.getName(), Task.TextPosition.LEFT_CENTER).setColor(LightsCore.text()));
+                if (Util.containsMouse(x, Gdx.graphics.getHeight() - y, size, size)) {
                     interacted = true;
                     if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
                         button.press();
-                        Util.box(renderer, x, y, buttonWidth, buttonHeight, new Color(button.getColor()).mul(1.2f));
+                        Util.box(renderer, x, y, size, size, new Color(button.getColor()).mul(1.2f));
                     }
                 }
             } else {
-                Util.box(renderer, x, y, buttonWidth, buttonHeight, LightsCore.dark());
+                Util.box(renderer, x, y, size, size, LightsCore.dark());
             }
-            x += buttonWidth;
+            x += size;
 
-            if (x + buttonWidth > getX() + getWidth()) {
+            if (x + size > getX() + getWidth()) {
                 x = getX();
-                y -= buttonHeight;
+                y -= size;
             }
         }
 
+        setHeight((Gdx.graphics.getHeight() - getY()) - y);
         return interacted;
     }
 }

@@ -2,10 +2,9 @@ package me.therealdan.lights.ui.views;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.files.FileHandle;
 import me.therealdan.lights.LightsCore;
 import me.therealdan.lights.fixtures.Channel;
-import me.therealdan.lights.fixtures.Fixture;
-import me.therealdan.lights.fixtures.Group;
 import me.therealdan.lights.programmer.Frame;
 import me.therealdan.lights.programmer.Sequence;
 import me.therealdan.lights.programmer.Task;
@@ -15,7 +14,6 @@ import me.therealdan.lights.util.Util;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class Sequences implements Tab {
 
@@ -41,250 +39,74 @@ public class Sequences implements Tab {
     public Sequences() {
         instance = this;
 
-        Random random = new Random();
+        FileHandle fileHandle = Gdx.files.local("Lights/Sequences/");
+        if (fileHandle.exists() && fileHandle.isDirectory())
+            for (FileHandle child : fileHandle.list())
+                load(child);
+    }
 
-        Sequence stage = new Sequence("Stage", false, true, true);
-        Frame stageFrame = new Frame(1000, 1000);
-        stageFrame.set(Patch.fixtureByName("Dimmer"), Channel.Type.INTENSITY, 255f, 1, 2, 3, 4);
-        stage.add(stageFrame);
-        add(stage);
+    private void load(FileHandle fileHandle) {
+        String name = fileHandle.name().replace(".txt", "");
+        Sequence sequence = new Sequence(name);
 
-        Sequence house = new Sequence("House", false, true, true);
-        Frame houseFrame = new Frame(1000, 1000);
-        houseFrame.set(Patch.fixtureByName("Dimmer"), Channel.Type.INTENSITY, 255f, 5, 6, 7, 8);
-        house.add(houseFrame);
-        add(house);
+        Frame frame = null;
 
-        Sequence sideCans = new Sequence("Side Cans", false, true, true);
-        Frame sideCansFrame = new Frame(1000, 1000);
-        sideCansFrame.set(Patch.fixtureByName("Dimmer"), Channel.Type.INTENSITY, 128f, 12);
-        sideCans.add(sideCansFrame);
-        add(sideCans);
+        for (String line : fileHandle.readString().split("\\r?\\n")) {
+            if (line.startsWith("Loop: ")) {
+                sequence.loop(Boolean.parseBoolean(line.split(": ")[1]));
+            } else if (line.startsWith("Global Frame Time: ")) {
+                sequence.globalFrameTime(Boolean.parseBoolean(line.split(": ")[1]));
+            } else if (line.startsWith("Global Fade Time: ")) {
+                sequence.globalFadeTime(Boolean.parseBoolean(line.split(": ")[1]));
+            } else if (line.startsWith("Use Tempo: ")) {
+                sequence.useTempo(Boolean.parseBoolean(line.split(": ")[1]));
 
-        Sequence stageCans = new Sequence("Stage Cans", false, true, true);
-        Frame stageCansFrame = new Frame(100, 0);
-        for (Fixture fixture : Patch.groupByName("Cans").fixtures()) {
-            stageCansFrame.set(fixture, Channel.Type.INTENSITY, 255f, 1);
-        }
-        stageCans.add(stageCansFrame);
-        add(stageCans);
+            } else if (line.startsWith("  Frame ")) {
+                if (frame != null) sequence.add(frame);
+                frame = new Frame();
 
-        Sequence red = new Sequence("Red", false, true, true);
-        Frame redFrame = new Frame(1000, 1000);
-        for (Fixture fixture : Patch.groupByName("Fluros").fixtures()) {
-            redFrame.set(fixture, Channel.Type.RED, 255f, 1, 2, 3);
-            redFrame.set(fixture, Channel.Type.GREEN, 0f, 1, 2, 3);
-            redFrame.set(fixture, Channel.Type.BLUE, 0f, 1, 2, 3);
-        }
-        red.add(redFrame);
-        add(red);
+            } else if (line.startsWith("    Frame Time: ")) {
+                if (frame != null) frame.setFrameTime(Long.parseLong(line.split(": ")[1]));
+            } else if (line.startsWith("    Fade Time: ")) {
+                if (frame != null) frame.setFadeTime(Long.parseLong(line.split(": ")[1]));
 
-        Sequence green = new Sequence("Green", false, true, true);
-        Frame greenFrame = new Frame(1000, 1000);
-        for (Fixture fixture : Patch.groupByName("Fluros").fixtures()) {
-            greenFrame.set(fixture, Channel.Type.RED, 0f, 1, 2, 3);
-            greenFrame.set(fixture, Channel.Type.GREEN, 255f, 1, 2, 3);
-            greenFrame.set(fixture, Channel.Type.BLUE, 0f, 1, 2, 3);
-        }
-        green.add(greenFrame);
-        add(green);
-
-        Sequence blue = new Sequence("Blue", false, true, true);
-        Frame blueFrame = new Frame(1000, 1000);
-        for (Fixture fixture : Patch.groupByName("Fluros").fixtures()) {
-            blueFrame.set(fixture, Channel.Type.RED, 0f, 1, 2, 3);
-            blueFrame.set(fixture, Channel.Type.GREEN, 0f, 1, 2, 3);
-            blueFrame.set(fixture, Channel.Type.BLUE, 255f, 1, 2, 3);
-        }
-        blue.add(blueFrame);
-        add(blue);
-
-        Sequence magenta = new Sequence("Magenta", false, true, true);
-        Frame magentaFrame = new Frame(1000, 1000);
-        for (Fixture fixture : Patch.groupByName("Fluros").fixtures()) {
-            magentaFrame.set(fixture, Channel.Type.RED, 255f, 1, 2, 3);
-            magentaFrame.set(fixture, Channel.Type.GREEN, 0f, 1, 2, 3);
-            magentaFrame.set(fixture, Channel.Type.BLUE, 255f, 1, 2, 3);
-        }
-        magenta.add(magentaFrame);
-        add(magenta);
-
-        Sequence yellow = new Sequence("Yellow", false, true, true);
-        Frame yellowFrame = new Frame(1000, 1000);
-        for (Fixture fixture : Patch.groupByName("Fluros").fixtures()) {
-            yellowFrame.set(fixture, Channel.Type.RED, 255f, 1, 2, 3);
-            yellowFrame.set(fixture, Channel.Type.GREEN, 255f, 1, 2, 3);
-            yellowFrame.set(fixture, Channel.Type.BLUE, 0f, 1, 2, 3);
-        }
-        yellow.add(yellowFrame);
-        add(yellow);
-
-        Sequence cyan = new Sequence("Cyan", false, true, true);
-        Frame cyanFrame = new Frame(1000, 1000);
-        for (Fixture fixture : Patch.groupByName("Fluros").fixtures()) {
-            cyanFrame.set(fixture, Channel.Type.RED, 0f, 1, 2, 3);
-            cyanFrame.set(fixture, Channel.Type.GREEN, 255f, 1, 2, 3);
-            cyanFrame.set(fixture, Channel.Type.BLUE, 255f, 1, 2, 3);
-        }
-        cyan.add(cyanFrame);
-        add(cyan);
-
-        Sequence purple = new Sequence("Purple", false, true, true);
-        Frame purpleFrame = new Frame(1000, 1000);
-        for (Fixture fixture : Patch.groupByName("Fluros").fixtures()) {
-            purpleFrame.set(fixture, Channel.Type.RED, 128f, 1, 2, 3);
-            purpleFrame.set(fixture, Channel.Type.GREEN, 0f, 1, 2, 3);
-            purpleFrame.set(fixture, Channel.Type.BLUE, 255f, 1, 2, 3);
-        }
-        purple.add(purpleFrame);
-        add(purple);
-
-        Sequence orange = new Sequence("Orange", false, true, true);
-        Frame orangeFrame = new Frame(1000, 1000);
-        for (Fixture fixture : Patch.groupByName("Fluros").fixtures()) {
-            orangeFrame.set(fixture, Channel.Type.RED, 255f, 1, 2, 3);
-            orangeFrame.set(fixture, Channel.Type.GREEN, 128f, 1, 2, 3);
-            orangeFrame.set(fixture, Channel.Type.BLUE, 0f, 1, 2, 3);
-        }
-        orange.add(orangeFrame);
-        add(orange);
-
-        Sequence white = new Sequence("White", false, true, true);
-        Frame whiteFrame = new Frame(1000, 1000);
-        for (Fixture fixture : Patch.groupByName("Fluros").fixtures()) {
-            whiteFrame.set(fixture, Channel.Type.RED, 255f, 1, 2, 3);
-            whiteFrame.set(fixture, Channel.Type.GREEN, 255f, 1, 2, 3);
-            whiteFrame.set(fixture, Channel.Type.BLUE, 255f, 1, 2, 3);
-        }
-        white.add(whiteFrame);
-        add(white);
-
-        Sequence black = new Sequence("Black", false, true, true);
-        Frame blackFrame = new Frame(1000, 1000);
-        for (Fixture fixture : Patch.groupByName("Fluros").fixtures()) {
-            blackFrame.set(fixture, Channel.Type.RED, 0f, 1, 2, 3);
-            blackFrame.set(fixture, Channel.Type.GREEN, 0f, 1, 2, 3);
-            blackFrame.set(fixture, Channel.Type.BLUE, 0f, 1, 2, 3);
-        }
-        black.add(blackFrame);
-        add(black);
-
-        Sequence solid = new Sequence("Solid", false, true, true);
-        for (int i = 0; i < 16; i++) {
-            Frame frame = new Frame(1000, 1000);
-            for (Fixture fixture : Patch.groupByName("Fluros").fixtures()) {
-                frame.set(fixture, Channel.Type.INTENSITY, 255f, 1, 2, 3);
+            } else if (line.startsWith("      |")) {
+                if (frame != null) {
+                    String[] args = line.split(" \\| ");
+                    frame.set(
+                            Patch.fixtureByID(Integer.parseInt(args[1])),
+                            Channel.Type.valueOf(args[2]),
+                            Float.parseFloat(args[4]),
+                            Integer.parseInt(args[3])
+                    );
+                }
             }
-            solid.add(frame);
         }
-        add(solid);
+        if (frame != null) sequence.add(frame);
+        add(sequence);
+    }
 
-        Sequence flashySubtle = new Sequence("Flashy Subtle");
-        for (int i = 0; i < 16; i++) {
-            Frame frame = new Frame(100, 0);
-            for (Fixture fixture : Patch.groupByName("Fluros").fixtures()) {
-                frame.set(fixture, Channel.Type.INTENSITY, 255f, 1);
+    @Override
+    public void save() {
+        for (Sequence sequence : sequences()) {
+            FileHandle fileHandle = Gdx.files.local("Lights/Sequences/" + sequence.getName() + ".txt");
+            fileHandle.writeString("Loop: " + sequence.doesLoop() + "\r\n", false);
+            fileHandle.writeString("Global Frame Time: " + sequence.globalFrameTime() + "\r\n", true);
+            fileHandle.writeString("Global Fade Time: " + sequence.globalFadeTime() + "\r\n", true);
+            fileHandle.writeString("Use Tempo: " + sequence.useTempo() + "\r\n", true);
+            fileHandle.writeString("Frames:\r\n", true);
+            int frameIndex = 0;
+            for (Frame frame : sequence.frames()) {
+                fileHandle.writeString("  Frame " + frameIndex + ":\r\n", true);
+                fileHandle.writeString("    Frame Time: " + frame.getFrameTime() + "\r\n", true);
+                fileHandle.writeString("    Fade Time: " + frame.getFadeTime() + "\r\n", true);
+                fileHandle.writeString("    Tasks:\r\n", true);
+                for (Task task : frame.tasks()) {
+                    fileHandle.writeString("      | " + task.getFixture().getID() + " | " + task.getChannelType().toString() + " | " + task.getParameter() + " | " + task.getValue() + "\r\n", true);
+                }
+                frameIndex++;
             }
-            for (Fixture fixture : Patch.groupByName("Mings").fixtures()) {
-                frame.set(fixture, Channel.Type.INTENSITY, random.nextBoolean() ? 255f : 0f, 1);
-                frame.set(fixture, Channel.Type.INTENSITY, random.nextBoolean() ? 255f : 0f, 2);
-                frame.set(fixture, Channel.Type.INTENSITY, random.nextBoolean() ? 255f : 0f, 3);
-            }
-            flashySubtle.add(frame);
         }
-        add(flashySubtle);
-
-        Sequence flashyx3 = new Sequence("Flashy x3");
-        for (int i = 0; i < 16; i++) {
-            Frame frame = new Frame(100, 0);
-            for (Fixture fixture : Patch.groupByName("Fluros").fixtures()) {
-                frame.set(fixture, Channel.Type.INTENSITY, random.nextBoolean() ? 255f : 0f, 1);
-                frame.set(fixture, Channel.Type.INTENSITY, random.nextBoolean() ? 255f : 0f, 2);
-                frame.set(fixture, Channel.Type.INTENSITY, random.nextBoolean() ? 255f : 0f, 3);
-            }
-            flashyx3.add(frame);
-        }
-        add(flashyx3);
-
-        Sequence flashyx1 = new Sequence("Flashy x1");
-        for (int i = 0; i < 16; i++) {
-            Frame frame = new Frame(100, 0);
-            for (Fixture fixture : Patch.groupByName("Fluros").fixtures()) {
-                frame.set(fixture, Channel.Type.INTENSITY, random.nextBoolean() ? 255f : 0f, 1, 2, 3);
-            }
-            flashyx1.add(frame);
-        }
-        add(flashyx1);
-
-        Sequence strobe = new Sequence("Strobe");
-        Frame strobeFrameOn = new Frame(100, 0);
-        Frame strobeFrameOff = new Frame(100, 0);
-        for (Fixture fixture : Patch.groupByName("Fluros").fixtures()) {
-            strobeFrameOn.set(fixture, Channel.Type.INTENSITY, 0f, 1, 2, 3);
-            strobeFrameOff.set(fixture, Channel.Type.INTENSITY, 255f, 1, 2, 3);
-        }
-        strobe.add(strobeFrameOn);
-        strobe.add(strobeFrameOff);
-        add(strobe);
-
-        Sequence ledsFlash = new Sequence("LEDs Flashy");
-        Frame ledsFlashFrame1 = new Frame(100, 0);
-        Frame ledsFlashFrame2 = new Frame(100, 0);
-        boolean alternate = true;
-        for (Fixture fixture : Patch.groupByName("LEDs").fixtures()) {
-            ledsFlashFrame1.set(fixture, Channel.Type.INTENSITY, alternate ? 255f : 0f, 1);
-            ledsFlashFrame2.set(fixture, Channel.Type.INTENSITY, alternate ? 0f : 255f, 1);
-            alternate = !alternate;
-        }
-        ledsFlash.add(ledsFlashFrame1);
-        ledsFlash.add(ledsFlashFrame2);
-        add(ledsFlash);
-
-        Sequence magentaOverlay = new Sequence("M Overlay");
-        Frame magentaOverlayFrame1 = new Frame(1000, 1000);
-        Frame magentaOverlayFrame2 = new Frame(1000, 1000);
-        Frame magentaOverlayFrame3 = new Frame(1000, 1000);
-        Frame magentaOverlayFrame4 = new Frame(1000, 1000);
-        Frame magentaOverlayFrame5 = new Frame(1000, 1000);
-        Frame magentaOverlayFrame6 = new Frame(1000, 1000);
-        Group group = Patch.groupByName("Mings");
-        magentaOverlayFrame1.set(group.fixtures().get(0), Channel.Type.RED, 255f, 1, 2, 3);
-        magentaOverlayFrame1.set(group.fixtures().get(0), Channel.Type.GREEN, 0f, 1, 2, 3);
-        magentaOverlayFrame1.set(group.fixtures().get(0), Channel.Type.BLUE, 255f, 1, 2, 3);
-        magentaOverlayFrame1.set(group.fixtures().get(6), Channel.Type.RED, 255f, 1, 2, 3);
-        magentaOverlayFrame1.set(group.fixtures().get(6), Channel.Type.GREEN, 0f, 1, 2, 3);
-        magentaOverlayFrame1.set(group.fixtures().get(6), Channel.Type.BLUE, 255f, 1, 2, 3);
-        magentaOverlayFrame2.set(group.fixtures().get(1), Channel.Type.RED, 255f, 1, 2, 3);
-        magentaOverlayFrame2.set(group.fixtures().get(1), Channel.Type.GREEN, 0f, 1, 2, 3);
-        magentaOverlayFrame2.set(group.fixtures().get(1), Channel.Type.BLUE, 255f, 1, 2, 3);
-        magentaOverlayFrame2.set(group.fixtures().get(7), Channel.Type.RED, 255f, 1, 2, 3);
-        magentaOverlayFrame2.set(group.fixtures().get(7), Channel.Type.GREEN, 0f, 1, 2, 3);
-        magentaOverlayFrame2.set(group.fixtures().get(7), Channel.Type.BLUE, 255f, 1, 2, 3);
-        magentaOverlayFrame3.set(group.fixtures().get(2), Channel.Type.RED, 255f, 1, 2, 3);
-        magentaOverlayFrame3.set(group.fixtures().get(2), Channel.Type.GREEN, 0f, 1, 2, 3);
-        magentaOverlayFrame3.set(group.fixtures().get(2), Channel.Type.BLUE, 255f, 1, 2, 3);
-        magentaOverlayFrame4.set(group.fixtures().get(3), Channel.Type.RED, 255f, 1, 2, 3);
-        magentaOverlayFrame4.set(group.fixtures().get(3), Channel.Type.GREEN, 0f, 1, 2, 3);
-        magentaOverlayFrame4.set(group.fixtures().get(3), Channel.Type.BLUE, 255f, 1, 2, 3);
-        magentaOverlayFrame5.set(group.fixtures().get(4), Channel.Type.RED, 255f, 1, 2, 3);
-        magentaOverlayFrame5.set(group.fixtures().get(4), Channel.Type.GREEN, 0f, 1, 2, 3);
-        magentaOverlayFrame5.set(group.fixtures().get(4), Channel.Type.BLUE, 255f, 1, 2, 3);
-        magentaOverlayFrame5.set(group.fixtures().get(8), Channel.Type.RED, 255f, 1, 2, 3);
-        magentaOverlayFrame5.set(group.fixtures().get(8), Channel.Type.GREEN, 0f, 1, 2, 3);
-        magentaOverlayFrame5.set(group.fixtures().get(8), Channel.Type.BLUE, 255f, 1, 2, 3);
-        magentaOverlayFrame6.set(group.fixtures().get(5), Channel.Type.RED, 255f, 1, 2, 3);
-        magentaOverlayFrame6.set(group.fixtures().get(5), Channel.Type.GREEN, 0f, 1, 2, 3);
-        magentaOverlayFrame6.set(group.fixtures().get(5), Channel.Type.BLUE, 255f, 1, 2, 3);
-        magentaOverlayFrame6.set(group.fixtures().get(9), Channel.Type.RED, 255f, 1, 2, 3);
-        magentaOverlayFrame6.set(group.fixtures().get(9), Channel.Type.GREEN, 0f, 1, 2, 3);
-        magentaOverlayFrame6.set(group.fixtures().get(9), Channel.Type.BLUE, 255f, 1, 2, 3);
-        magentaOverlay.add(magentaOverlayFrame1);
-        magentaOverlay.add(magentaOverlayFrame2);
-        magentaOverlay.add(magentaOverlayFrame3);
-        magentaOverlay.add(magentaOverlayFrame4);
-        magentaOverlay.add(magentaOverlayFrame5);
-        magentaOverlay.add(magentaOverlayFrame6);
-        add(magentaOverlay);
     }
 
     @Override

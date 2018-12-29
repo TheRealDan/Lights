@@ -2,6 +2,7 @@ package me.therealdan.lights.ui.views;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector3;
 import me.therealdan.lights.LightsCore;
@@ -42,68 +43,96 @@ public class Patch implements Tab {
     public Patch() {
         patch = this;
 
-        Profile dimmer = ProfileEditor.profileByName("Dimmer");
-        Profile ming = ProfileEditor.profileByName("Ming");
-        Profile ledStrip = ProfileEditor.profileByName("LED Strip");
-        Profile parcan = ProfileEditor.profileByName("Par Can");
+        FileHandle fileHandle = Gdx.files.local("Lights/Fixtures/");
+        if (fileHandle.exists() && fileHandle.isDirectory())
+            for (FileHandle child : fileHandle.list())
+                loadFixture(child);
 
-        add(new Fixture("Dimmer", dimmer, 1, 1, new Vector3(0, 10, 5f)));
+        fileHandle = Gdx.files.local("Lights/Groups/");
+        if (fileHandle.exists() && fileHandle.isDirectory())
+            for (FileHandle child : fileHandle.list())
+                loadGroup(child);
+    }
 
-        add(new Fixture("Ming 1", ming, 15, 2, new Vector3(-8, 5, 0)));
-        add(new Fixture("Ming 2", ming, 28, 3, new Vector3(-5.5f, 5, 0)));
-        add(new Fixture("Ming 3", ming, 41, 4, new Vector3(-3, 5, 0)));
-        add(new Fixture("Ming 4", ming, 54, 5, new Vector3(3, 5, 0)));
-        add(new Fixture("Ming 5", ming, 67, 6, new Vector3(5.5f, 5, 0)));
-        add(new Fixture("Ming 6", ming, 80, 7, new Vector3(8, 5, 0)));
-        add(new Fixture("Ming 7", ming, 93, 8, new Vector3(-8, 0, 0)));
-        add(new Fixture("Ming 8", ming, 106, 9, new Vector3(-5.5f, 0, 0)));
-        add(new Fixture("Ming 9", ming, 119, 10, new Vector3(5.5f, 0, 0)));
-        add(new Fixture("Ming 10", ming, 132, 11, new Vector3(8f, 0, 0)));
+    private void loadFixture(FileHandle fileHandle) {
+        String name = fileHandle.name().replace(".txt", "");
 
-        add(new Fixture("LED Strip 1", ledStrip, 145, 12, new Vector3(-8, 3, 0)));
-        add(new Fixture("LED Strip 2", ledStrip, 148, 13, new Vector3(-6, 3, 0)));
-        add(new Fixture("LED Strip 3", ledStrip, 151, 14, new Vector3(-4, 3, 0)));
-        add(new Fixture("LED Strip 4", ledStrip, 154, 15, new Vector3(4, 3, 0)));
-        add(new Fixture("LED Strip 5", ledStrip, 157, 16, new Vector3(6, 3, 0)));
-        add(new Fixture("LED Strip 6", ledStrip, 160, 17, new Vector3(8, 3, 0)));
+        Profile profile = null;
+        int address = 0;
+        int id = -1;
+        Vector3 position = new Vector3();
 
-        add(new Fixture("Par Can 1", parcan, 163, 18, new Vector3(-9.5f, 0, 0)));
-        add(new Fixture("Par Can 2", parcan, 172, 19, new Vector3(-4, 0, 0)));
-        add(new Fixture("Par Can 3", parcan, 181, 20, new Vector3(4, 0, 0)));
-        add(new Fixture("Par Can 4", parcan, 190, 21, new Vector3(9.5f, 0, 0)));
-        add(new Fixture("Par Can 5", parcan, 199, 22, new Vector3(0, 0, -10)));
-        add(new Fixture("Par Can 6", parcan, 208, 23, new Vector3(0, 0, -10)));
-        add(new Fixture("Par Can 7", parcan, 217, 24, new Vector3(0, 0, -10)));
-        add(new Fixture("Par Can 8", parcan, 226, 25, new Vector3(0, 0, -10)));
+        for (String line : fileHandle.readString().split("\\r?\\n")) {
+            if (line.startsWith("Name: ")) {
+                name = line.split(": ")[1];
+            } else if (line.startsWith("Profile: ")) {
+                profile = ProfileEditor.profileByName(line.split(": ")[1]);
+            } else if (line.startsWith("Address: ")) {
+                address = Integer.parseInt(line.split(": ")[1]);
+            } else if (line.startsWith("ID: ")) {
+                id = Integer.parseInt(line.split(": ")[1]);
 
-        Group fluros, mings, leds, cans;
-        add(fluros = new Group("Fluros"));
-        add(mings = new Group("Mings"));
-        add(leds = new Group("LEDs"));
-        add(cans = new Group("Cans"));
-
-        for (Fixture fixture : fixtures()) {
-            switch (fixture.getProfile()) {
-                case "Ming":
-                    mings.add(fixture);
-                    break;
-                case "LED Strip":
-                    leds.add(fixture);
-                    break;
-                case "Par Can":
-                    cans.add(fixture);
-                    break;
+            } else if (line.startsWith("  X: ")) {
+                position.set(Float.parseFloat(line.split(": ")[1]), position.y, position.z);
+            } else if (line.startsWith("  Y: ")) {
+                position.set(position.x, Float.parseFloat(line.split(": ")[1]), position.z);
+            } else if (line.startsWith("  Z: ")) {
+                position.set(position.x, position.y, Float.parseFloat(line.split(": ")[1]));
             }
         }
 
-        for (Fixture fixture : fixtures())
-            if (!fixture.getProfile().equals("Dimmer"))
-                fluros.add(fixture);
+        if (profile == null) return;
+        if (address == 0) return;
+        if (id <= -1) return;
+
+        add(new Fixture(name, profile, address, id, position));
+    }
+
+    private void loadGroup(FileHandle fileHandle) {
+        String name = fileHandle.name().replace(".txt", "");
+        Group group = new Group(name);
+
+        for (String line : fileHandle.readString().split("\\r?\\n")) {
+            if (line.startsWith("Name: ")) {
+                group.rename(line.split(": ")[1]);
+            } else if (line.startsWith("Fixtures:")) {
+                // do nothing
+            } else {
+                int id = Integer.parseInt(line.split("- ")[1]);
+                Fixture fixture = fixtureByID(id);
+                if (fixture != null) group.add(fixture);
+            }
+        }
     }
 
     @Override
     public void save() {
+        for (Fixture fixture : fixtures()) {
+            FileHandle fileHandle = Gdx.files.local("Lights/Fixtures/" + fixture.getName() + ".txt");
+            fileHandle.writeString("", false);
 
+            fileHandle.writeString("Name: " + fixture.getName() + "\r\n", true);
+            fileHandle.writeString("Profile: " + fixture.getProfile() + "\r\n", true);
+            fileHandle.writeString("Address: " + fixture.getAddress() + "\r\n", true);
+            fileHandle.writeString("ID: " + fixture.getID() + "\r\n", true);
+
+            Vector3 position = fixture.getPosition();
+            fileHandle.writeString("Position:\r\n", true);
+            fileHandle.writeString("  X: " + position.x + "\r\n", true);
+            fileHandle.writeString("  Y: " + position.y + "\r\n", true);
+            fileHandle.writeString("  Z: " + position.z + "\r\n", true);
+        }
+
+        for (Group group : groups()) {
+            FileHandle fileHandle = Gdx.files.local("Lights/Groups/" + group.getName() + ".txt");
+            fileHandle.writeString("", false);
+
+            fileHandle.writeString("Name: " + group.getName() + "\r\n", true);
+
+            fileHandle.writeString("Fixtures:\r\n", true);
+            for (Fixture fixture : group.fixtures())
+                fileHandle.writeString("  - " + fixture.getID() + "\r\n", true);
+        }
     }
 
     @Override

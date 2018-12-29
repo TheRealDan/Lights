@@ -2,6 +2,7 @@ package me.therealdan.lights.ui.views;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.files.FileHandle;
 import me.therealdan.lights.LightsCore;
 import me.therealdan.lights.controllers.Button;
 import me.therealdan.lights.programmer.Sequence;
@@ -16,8 +17,7 @@ import java.util.List;
 public class Buttons implements Tab {
 
     private static Buttons buttons;
-    public static int ROWS = 10;
-    public static int COLUMNS = 10;
+    public static final int PER_ROW = 10;
 
     private LinkedHashMap<Integer, Button> buttonMap = new LinkedHashMap<>();
 
@@ -28,73 +28,59 @@ public class Buttons implements Tab {
     public Buttons() {
         buttons = this;
 
-        Button red = new Button("Red", LightsCore.RED);
-        red.set(Sequences.byName("Red"), 1);
-        set(red);
+        FileHandle fileHandle = Gdx.files.local("Lights/Buttons/");
+        if (fileHandle.exists() && fileHandle.isDirectory())
+            for (FileHandle child : fileHandle.list())
+                load(child);
+    }
 
-        Button green = new Button("Green", LightsCore.GREEN);
-        green.set(Sequences.byName("Green"), 1);
-        set(green);
+    private void load(FileHandle fileHandle) {
+        Button button = new Button();
+        boolean sequences = false;
+        for (String line : fileHandle.readString().split("\\r?\\n")) {
+            if (line.startsWith("Name: ")) {
+                button.rename(line.split(": ")[1]);
+            } else if (line.startsWith("Position: ")) {
+                int position = Integer.parseInt(line.split(": ")[1]);
+                if (position >= 0) set(button, position);
+            } else if (line.startsWith("Color:")) {
+                sequences = false;
+            } else if (line.startsWith("  Red: ") && !sequences) {
+                button.setRed(Float.parseFloat(line.split(": ")[1]));
+            } else if (line.startsWith("  Green: ") && !sequences) {
+                button.setGreen(Float.parseFloat(line.split(": ")[1]));
+            } else if (line.startsWith("  Blue: ") && !sequences) {
+                button.setBlue(Float.parseFloat(line.split(": ")[1]));
+            } else if (line.startsWith("Sequences:")) {
+                sequences = true;
+            } else if (sequences) {
+                String[] args = line.replaceFirst("  ", "").split(": ");
+                button.set(
+                        Sequences.byName(args[0]),
+                        Integer.parseInt(args[1])
+                );
+            }
+        }
+    }
 
-        Button blue = new Button("Blue", LightsCore.BLUE);
-        blue.set(Sequences.byName("Blue"), 1);
-        set(blue);
+    @Override
+    public void save() {
+        for (Button button : buttons()) {
+            FileHandle fileHandle = Gdx.files.local("Lights/Buttons/" + button.getName() + ".txt");
+            fileHandle.writeString("", false);
 
-        Button magenta = new Button("Magenta", LightsCore.MAGENTA);
-        magenta.set(Sequences.byName("Magenta"), 1);
-        set(magenta);
-
-        Button yellow = new Button("Yellow", LightsCore.YELLOW);
-        yellow.set(Sequences.byName("Yellow"), 1);
-        set(yellow);
-
-        Button cyan = new Button("Cyan", LightsCore.CYAN);
-        cyan.set(Sequences.byName("Cyan"), 1);
-        set(cyan);
-
-        Button purple = new Button("Purple", LightsCore.PURPLE);
-        purple.set(Sequences.byName("Purple"), 1);
-        set(purple);
-
-        Button orange = new Button("Orange", LightsCore.ORANGE);
-        orange.set(Sequences.byName("Orange"), 1);
-        set(orange);
-
-        Button white = new Button("White", LightsCore.WHITE);
-        white.set(Sequences.byName("White"), 1);
-        set(white);
-
-        Button black = new Button("Black", LightsCore.BLACK);
-        black.set(Sequences.byName("Black"), 1);
-        set(black);
-
-        Button solid = new Button("Solid", LightsCore.BLACK);
-        solid.set(Sequences.byName("Solid"), 2);
-        set(solid);
-
-        Button flashySublte = new Button("Flashy Subtle", LightsCore.BLACK);
-        flashySublte.set(Sequences.byName("Flashy Subtle"), 2);
-        set(flashySublte);
-
-        Button flashyx3 = new Button("Flashy x3", LightsCore.BLACK);
-        flashyx3.set(Sequences.byName("Flashy x3"), 2);
-        set(flashyx3);
-
-        Button flashyx1 = new Button("Flashy x1", LightsCore.BLACK);
-        flashyx1.set(Sequences.byName("Flashy x1"), 2);
-        set(flashyx1);
-
-        Button ledsFlashy = new Button("LEDs Flashy", LightsCore.BLACK);
-        ledsFlashy.set(Sequences.byName("LEDs Flashy"), 3);
-        set(ledsFlashy);
-
-        Button strobe = new Button("Strobe", LightsCore.BLACK);
-        strobe.set(Sequences.byName("Strobe"), 2);
-        set(strobe);
-
-        Button mOverlay = new Button("M Overlay", LightsCore.MAGENTA);
-        mOverlay.set(Sequences.byName("M Overlay"), 4);
-        set(mOverlay);
+            fileHandle.writeString("Name: " + button.getName() + "\r\n", true);
+            fileHandle.writeString("Position: " + getPosition(button) + "\r\n", true);
+            fileHandle.writeString("Color:\r\n", true);
+            fileHandle.writeString("  Red: " + button.getColor().r + "\r\n", true);
+            fileHandle.writeString("  Green: " + button.getColor().g + "\r\n", true);
+            fileHandle.writeString("  Blue: " + button.getColor().b + "\r\n", true);
+            fileHandle.writeString("Sequences:\r\n", true);
+            for (Sequence sequence : button.sequences()) {
+                int priority = button.getPriority(sequence);
+                fileHandle.writeString("  " + sequence.getName() + ": " + priority + "\r\n", true);
+            }
+        }
     }
 
     @Override
@@ -134,34 +120,6 @@ public class Buttons implements Tab {
                         if ("1234567890".contains(string)) {
                             String position = button.getPosition() + string;
                             Buttons.set(button, Integer.parseInt(position));
-                        }
-                }
-                break;
-
-            case ROW:
-                switch (keycode) {
-                    case Input.Keys.BACKSPACE:
-                        Buttons.set(button, 0, button.getColumn());
-                        break;
-                    default:
-                        String string = Input.Keys.toString(keycode);
-                        if ("1234567890".contains(string)) {
-                            String row = button.getRow() + string;
-                            Buttons.set(button, Integer.parseInt(row), button.getColumn());
-                        }
-                }
-                break;
-
-            case COLUMN:
-                switch (keycode) {
-                    case Input.Keys.BACKSPACE:
-                        Buttons.set(button, button.getRow(), 0);
-                        break;
-                    default:
-                        String string = Input.Keys.toString(keycode);
-                        if ("1234567890".contains(string)) {
-                            String column = button.getColumn() + string;
-                            Buttons.set(button, button.getRow(), Integer.parseInt(column));
                         }
                 }
                 break;
@@ -289,18 +247,15 @@ public class Buttons implements Tab {
     public enum Section {
         NONE,
 
-        NAME, ID,
-        POSITION, ROW, COLUMN,
+        NAME,
+        POSITION,
 
         SEQUENCES;
 
         public boolean isButton() {
             switch (this) {
                 case NAME:
-                case ID:
                 case POSITION:
-                case ROW:
-                case COLUMN:
                     return true;
                 default:
                     return false;
@@ -313,19 +268,12 @@ public class Buttons implements Tab {
                     return "N/A";
                 case NAME:
                     return button.getName();
-                case ID:
-                    return Integer.toString(button.getID());
                 case POSITION:
                     return Integer.toString(button.getPosition());
-                case ROW:
-                    return Integer.toString(button.getRow());
-                case COLUMN:
-                    return Integer.toString(button.getColumn());
             }
         }
 
         public String getName() {
-            if (this.equals(ID)) return "ID";
             return this.toString().substring(0, 1).toUpperCase() + this.toString().substring(1).toLowerCase();
         }
     }
@@ -343,10 +291,6 @@ public class Buttons implements Tab {
         }
     }
 
-    public static void set(Button button, int row, int column) {
-        set(button, getPosition(row, column));
-    }
-
     public static void remove(Button button) {
         if (contains(button.getPosition()))
             buttons.buttonMap.remove(button.getPosition());
@@ -354,6 +298,14 @@ public class Buttons implements Tab {
 
     public static boolean contains(int position) {
         return buttons.buttonMap.containsKey(position);
+    }
+
+    public static int getPosition(Button button) {
+        for (int position : buttons.buttonMap.keySet())
+            if (getButton(position).equals(button))
+                return position;
+
+        return -1;
     }
 
     public static int getFreePosition() {
@@ -370,16 +322,8 @@ public class Buttons implements Tab {
         return top;
     }
 
-    public static Button getButton(int row, int column) {
-        return getButton(getPosition(row, column));
-    }
-
     public static Button getButton(int position) {
         return buttons.buttonMap.getOrDefault(position, null);
-    }
-
-    private static int getPosition(int row, int column) {
-        return (row - 1) * buttons.ROWS + column;
     }
 
     public static List<Button> buttons() {

@@ -28,13 +28,17 @@ public class ProfileEditor implements Tab {
 
     private void load(FileHandle fileHandle) {
         String name = fileHandle.name().replace(".txt", "");
+
         int physicalChannels = 0;
         List<Channel> channels = new ArrayList<>();
         List<ModelDesign> modelDesigns = new ArrayList<>();
 
         boolean isChannel = false, isModel = false;
         for (String line : fileHandle.readString().split("\\r?\\n")) {
-            if (line.startsWith("Physical Channels: ")) {
+            if (line.startsWith("Name: ")) {
+                name = line.split(": ")[1];
+                continue;
+            } else if (line.startsWith("Physical Channels: ")) {
                 physicalChannels = Integer.parseInt(line.split(": ")[1]);
                 continue;
             } else if (line.startsWith("Channels:")) {
@@ -65,6 +69,7 @@ public class ProfileEditor implements Tab {
             FileHandle fileHandle = Gdx.files.local("Lights/Profiles/" + profile.getName() + ".txt");
             fileHandle.writeString("", false);
 
+            fileHandle.writeString("Name: " + profile.getName() + "\r\n", true);
             fileHandle.writeString("Physical Channels: " + profile.getPhysicalChannels() + "\r\n", true);
 
             fileHandle.writeString("Channels:\r\n", true);

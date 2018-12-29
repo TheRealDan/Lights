@@ -54,7 +54,7 @@ public class Frame {
             } else if (distance < 0) {
                 float perMillis = Math.abs(distance) / frame.getFadeTime();
 
-                float value = 255f - (timepassed * perMillis);
+                float value = previous - (timepassed * perMillis);
 
                 if (value > previous) value = previous;
                 if (value < target) value = target;

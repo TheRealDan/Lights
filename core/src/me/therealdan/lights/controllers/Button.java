@@ -12,7 +12,6 @@ import java.util.List;
 
 public class Button {
 
-    private int id;
     private String name;
     private Color color;
     private LinkedHashMap<Sequence, Integer> sequences = new LinkedHashMap<>();
@@ -22,7 +21,6 @@ public class Button {
     }
 
     public Button(String name, Color color) {
-        this.id = getFreeID();
         this.name = name;
         this.color = new Color(color);
     }
@@ -61,26 +59,6 @@ public class Button {
         return -1;
     }
 
-    public int getRow() {
-        for (int row = 0; row <= Buttons.ROWS; row++)
-            for (int column = 0; column <= Buttons.COLUMNS; column++)
-                if (this.equals(Buttons.getButton(row, column)))
-                    return row;
-        return -1;
-    }
-
-    public int getColumn() {
-        for (int row = 0; row <= Buttons.ROWS; row++)
-            for (int column = 0; column <= Buttons.COLUMNS; column++)
-                if (this.equals(Buttons.getButton(row, column)))
-                    return column;
-        return -1;
-    }
-
-    public int getID() {
-        return id;
-    }
-
     public String getName() {
         return name;
     }
@@ -93,21 +71,4 @@ public class Button {
         return new ArrayList<>(sequences.keySet());
     }
 
-    private static int getFreeID() {
-        int id = 1;
-
-        while (true) {
-            if (byID(id) == null) return id;
-            id++;
-        }
-    }
-
-    public static Button byID(int id) {
-        for (Button button : Buttons.buttons()) {
-            if (button.getID() == id)
-                return button;
-        }
-
-        return null;
-    }
 }

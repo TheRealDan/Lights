@@ -103,6 +103,8 @@ public class Patch implements Tab {
                 if (fixture != null) group.add(fixture);
             }
         }
+
+        add(group);
     }
 
     @Override
@@ -535,6 +537,15 @@ public class Patch implements Tab {
         patch.groups.add(group);
     }
 
+    public static int getTopID() {
+        int id = 1;
+        for (Fixture fixture : patch.fixtures)
+            if (fixture.getID() > id)
+                id = fixture.getID();
+
+        return id;
+    }
+
     public static Fixture fixtureByID(int id) {
         for (Fixture fixture : patch.fixtures)
             if (fixture.getID() == id)
@@ -557,7 +568,11 @@ public class Patch implements Tab {
     }
 
     public static List<Fixture> fixtures() {
-        return new ArrayList<>(patch.fixtures);
+        List<Fixture> fixtures = new ArrayList<>();
+        for (int id = 1; id <= getTopID(); id++)
+            if (fixtureByID(id) != null)
+                fixtures.add(fixtureByID(id));
+        return fixtures;
     }
 
     public static List<Group> groups() {

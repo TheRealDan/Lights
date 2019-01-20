@@ -34,6 +34,7 @@ public class Live implements Tab {
     private long lastSet = System.currentTimeMillis();
 
     private HashMap<Integer, Sequence> sequenceStack = new HashMap<>();
+    private HashMap<Sequence, Long> clear = new HashMap<>();
 
     private long lastTempo = System.currentTimeMillis();
     private long tempo = 1000;
@@ -82,6 +83,17 @@ public class Live implements Tab {
                 for (Frame frame : sequence.frames()) {
                     frame.setFrameTime(getTempo());
                     frame.setFadeTime(getTempo());
+                }
+            }
+
+            if (sequence.doesClear() && sequence.onLastFrame()) {
+                if (!clear.containsKey(sequence)) {
+                    clear.put(sequence, System.currentTimeMillis());
+                } else if (System.currentTimeMillis() - clear.get(sequence) > sequence.getActiveFrame().getFrameTime()) {
+                    clear.remove(sequence);
+                    clearSequence(getPriority(sequence));
+                    sequence.stop();
+                    sequence.first();
                 }
             }
         }
@@ -263,6 +275,14 @@ public class Live implements Tab {
 
     public static Sequence getSequence(int priority) {
         return live.sequenceStack.getOrDefault(priority, null);
+    }
+
+    public static int getPriority(Sequence sequence) {
+        for (int priority : live.sequenceStack.keySet())
+            if (sequence.equals(getSequence(priority)))
+                return priority;
+
+        return -1;
     }
 
     public static List<Sequence> getSequences() {

@@ -54,6 +54,8 @@ public class Sequences implements Tab {
         for (String line : fileHandle.readString().split("\\r?\\n")) {
             if (line.startsWith("Loop: ")) {
                 sequence.loop(Boolean.parseBoolean(line.split(": ")[1]));
+            } else if (line.startsWith("Clear: ")) {
+                sequence.clear(Boolean.parseBoolean(line.split(": ")[1]));
             } else if (line.startsWith("Global Frame Time: ")) {
                 sequence.globalFrameTime(Boolean.parseBoolean(line.split(": ")[1]));
             } else if (line.startsWith("Global Fade Time: ")) {
@@ -91,6 +93,7 @@ public class Sequences implements Tab {
         for (Sequence sequence : sequences()) {
             FileHandle fileHandle = Gdx.files.local("Lights/Sequences/" + sequence.getName() + ".txt");
             fileHandle.writeString("Loop: " + sequence.doesLoop() + "\r\n", false);
+            fileHandle.writeString("Clear: " + sequence.doesClear() + "\r\n", true);
             fileHandle.writeString("Global Frame Time: " + sequence.globalFrameTime() + "\r\n", true);
             fileHandle.writeString("Global Fade Time: " + sequence.globalFadeTime() + "\r\n", true);
             fileHandle.writeString("Use Tempo: " + sequence.useTempo() + "\r\n", true);
@@ -280,6 +283,14 @@ public class Sequences implements Tab {
             setSection(Section.SEQUENCE);
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.actionReady(500))
                 sequence.toggleLoop();
+        }
+        y -= cellHeight;
+
+        Util.box(renderer, x, y, width, cellHeight, sequence.doesClear() ? LightsCore.DARK_RED : LightsCore.medium(), "Clear: " + (sequence.doesClear() ? "Enabled" : "Disabled"));
+        if (Util.containsMouse(x, Gdx.graphics.getHeight() - y, width, cellHeight)) {
+            setSection(Section.SEQUENCE);
+            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.actionReady(500))
+                sequence.toggleClear();
         }
         y -= cellHeight;
 

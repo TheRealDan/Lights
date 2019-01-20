@@ -12,6 +12,7 @@ public class Sequence {
     private int lastFrame = 0;
 
     private boolean loop;
+    private boolean clear;
     private boolean globalFrameTime;
     private boolean globalFadeTime;
 
@@ -21,18 +22,25 @@ public class Sequence {
     private long started = System.currentTimeMillis();
 
     public Sequence(String name) {
-        this(name, false, false, false);
+        this(name, false, false, false, false);
     }
 
-    public Sequence(String name, boolean loop, boolean globalFrameTime, boolean globalFadeTime) {
+    public Sequence(String name, boolean loop, boolean clear, boolean globalFrameTime, boolean globalFadeTime) {
         this.name = name;
         this.loop = loop;
+        this.clear = clear;
         this.globalFrameTime = globalFrameTime;
         this.globalFadeTime = globalFadeTime;
     }
 
     public void loop(boolean enabled) {
         this.loop = enabled;
+        if (enabled) this.clear = false;
+    }
+
+    public void clear(boolean enabled) {
+        this.clear = enabled;
+        if (enabled) this.loop = false;
     }
 
     public void globalFrameTime(boolean enabled) {
@@ -49,6 +57,10 @@ public class Sequence {
 
     public void toggleLoop() {
         loop(!doesLoop());
+    }
+
+    public void toggleClear() {
+        clear(!doesClear());
     }
 
     public void toggleGlobalFrameTime() {
@@ -113,6 +125,10 @@ public class Sequence {
         return loop;
     }
 
+    public boolean doesClear() {
+        return clear;
+    }
+
     public boolean globalFrameTime() {
         return globalFrameTime;
     }
@@ -127,6 +143,10 @@ public class Sequence {
 
     public boolean isPlaying() {
         return playing;
+    }
+
+    public boolean onLastFrame() {
+        return currentFrame == length() - 1;
     }
 
     public int length() {
@@ -149,7 +169,7 @@ public class Sequence {
         }
 
         if (currentFrame >= length()) {
-            if (doesLoop()) {
+            if (doesLoop() && !doesClear()) {
                 first();
                 started = System.currentTimeMillis();
             } else {
@@ -181,7 +201,7 @@ public class Sequence {
 
     @Override
     public Sequence clone() {
-        Sequence sequence = new Sequence(getName(), doesLoop(), globalFrameTime(), globalFadeTime());
+        Sequence sequence = new Sequence(getName(), doesLoop(), doesClear(), globalFrameTime(), globalFadeTime());
         for (Frame frame : frames())
             sequence.add(frame.clone());
         return sequence;

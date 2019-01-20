@@ -32,7 +32,7 @@ public class Frame {
     public void override(Sequence sequence) {
         Frame frame = sequence.getActiveFrame();
         for (Task task : frame.tasks()) {
-            float previous = Frame.previous.getOrDefault(task.getFixture().getID() + ";" + task.getChannelType().toString() + ";" + task.getParameter(), 0f);
+            float previous = getPrevious(task.getFixture(), task.getChannelType(), task.getParameter());
             float target = task.getValue();
 
             if (previous == target) {
@@ -49,7 +49,7 @@ public class Frame {
                 float value = timepassed * perMillis;
                 if (value > target) value = target;
 
-                if (value == target) Frame.previous.put(task.getFixture().getID() + ";" + task.getChannelType().toString() + ";" + task.getParameter(), target);
+                if (value == target) setPrevious(task.getFixture(), task.getChannelType(), target, task.getParameter());
                 set(task.getFixture(), task.getChannelType(), value, task.getParameter());
             } else if (distance < 0) {
                 float perMillis = Math.abs(distance) / frame.getFadeTime();
@@ -59,7 +59,7 @@ public class Frame {
                 if (value > previous) value = previous;
                 if (value < target) value = target;
 
-                if (value == target) Frame.previous.put(task.getFixture().getID() + ";" + task.getChannelType().toString() + ";" + task.getParameter(), target);
+                if (value == target) setPrevious(task.getFixture(), task.getChannelType(), target, task.getParameter());
                 set(task.getFixture(), task.getChannelType(), value, task.getParameter());
             }
         }
@@ -109,7 +109,7 @@ public class Frame {
         this.timestamp = System.currentTimeMillis();
     }
 
-    public void set(Fixture fixture, Channel.Type channelType, float value, Integer... parameters) {
+    public void set(Fixture fixture, Channel.Type channelType, float value, int... parameters) {
         for (int parameter : parameters) {
             Task task = new Task(fixture, channelType, parameter, value);
 
@@ -237,6 +237,19 @@ public class Frame {
         for (Task task : tasks())
             frame.set(task.getFixture(), task.getChannelType(), task.getValue(), task.getParameter());
         return frame;
+    }
+
+    public static void setPrevious(Fixture fixture, Channel.Type channelType, float value, int... parameters) {
+        for (int parameter : parameters)
+            Frame.previous.put(fixture.getID() + ";" + channelType.toString() + ";" + parameter, value);
+    }
+
+    public static void clearPrevious() {
+        Frame.previous.clear();
+    }
+
+    public static float getPrevious(Fixture fixture, Channel.Type channelType, int parameter) {
+        return previous.getOrDefault(fixture.getID() + ";" + channelType.toString() + ";" + parameter, 0f);
     }
 
     private static String get(String name, int total) {

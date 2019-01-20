@@ -70,7 +70,6 @@ public class LightsCore extends ApplicationAdapter {
         new Output();
 
         Gdx.graphics.setVSync(true);
-        Gdx.graphics.setWindowedMode(1024, 768);
     }
 
     @Override

@@ -36,6 +36,8 @@ public class Live implements Tab {
     private HashMap<Integer, Sequence> sequenceStack = new HashMap<>();
     private HashMap<Sequence, Long> clear = new HashMap<>();
 
+    private Frame lastFrame = null;
+
     private long lastTempo = System.currentTimeMillis();
     private long tempo = 1000;
 
@@ -106,6 +108,8 @@ public class Live implements Tab {
 
         for (Fader fader : Faders.faders())
             frame.override(fader);
+
+        this.lastFrame = frame;
 
         for (int address = 1; address <= DMX.MAX_CHANNELS; address++) {
             if (Programmer.hasValue(address)) {
@@ -271,6 +275,10 @@ public class Live implements Tab {
 
     public static boolean contains(int priority) {
         return live.sequenceStack.containsKey(priority);
+    }
+
+    public static Frame getLastFrame() {
+        return live.lastFrame;
     }
 
     public static Sequence getSequence(int priority) {

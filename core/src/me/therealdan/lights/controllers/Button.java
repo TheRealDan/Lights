@@ -27,6 +27,7 @@ public class Button {
 
     public void press() {
         for (Sequence sequence : sequences()) {
+            sequence.run();
             sequence.resetLastFrame();
             Live.setSequence(getPriority(sequence), sequence);
         }

@@ -164,6 +164,8 @@ public class Live implements Tab {
 
     @Override
     public boolean keyDown(int keycode) {
+        boolean shift = Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT);
+
         getVisualiser3D().keyDown(keycode);
 
         if (keycode == Input.Keys.SPACE) {
@@ -183,6 +185,42 @@ public class Live implements Tab {
 
         Button button = Hotkeys.getButton(keycode);
         if (button != null) button.press();
+
+        Fader fader = Fader.byID(shift ? 2 : 1);
+        if (fader != null) {
+            switch (keycode) {
+                case Input.Keys.NUM_1:
+                    fader.setValue(0.1f);
+                    break;
+                case Input.Keys.NUM_2:
+                    fader.setValue(0.2f);
+                    break;
+                case Input.Keys.NUM_3:
+                    fader.setValue(0.3f);
+                    break;
+                case Input.Keys.NUM_4:
+                    fader.setValue(0.4f);
+                    break;
+                case Input.Keys.NUM_5:
+                    fader.setValue(0.5f);
+                    break;
+                case Input.Keys.NUM_6:
+                    fader.setValue(0.6f);
+                    break;
+                case Input.Keys.NUM_7:
+                    fader.setValue(0.7f);
+                    break;
+                case Input.Keys.NUM_8:
+                    fader.setValue(0.8f);
+                    break;
+                case Input.Keys.NUM_9:
+                    fader.setValue(1.0f);
+                    break;
+                case Input.Keys.NUM_0:
+                    fader.setValue(0.0f);
+                    break;
+            }
+        }
 
         return true;
     }

@@ -88,11 +88,13 @@ public class Fixture {
     }
 
     public void move(float x, float y, float z) {
+        position.add(x, y, z);
         for (Model model : getModels())
             model.move(x, y, z);
     }
 
     public void teleport(float x, float y, float z) {
+        position.set(x, y, z);
         for (Model model : getModels())
             model.teleport(x, y, z, true);
     }

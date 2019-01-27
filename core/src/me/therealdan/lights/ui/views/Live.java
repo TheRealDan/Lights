@@ -70,6 +70,8 @@ public class Live implements Tab {
     public void save() {
         for (UI ui : uis)
             ui.save();
+
+        getVisualiser3D().save();
     }
 
     @Override

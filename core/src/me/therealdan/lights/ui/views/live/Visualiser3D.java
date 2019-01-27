@@ -2,6 +2,7 @@ package me.therealdan.lights.ui.views.live;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
@@ -20,6 +21,8 @@ import me.therealdan.lights.ui.views.Live;
 import me.therealdan.lights.ui.views.Patch;
 
 public class Visualiser3D {
+
+    public static boolean REMEMBER_CAMERA_POSITION = true;
 
     private PerspectiveCamera camera;
 
@@ -50,6 +53,39 @@ public class Visualiser3D {
         for (Fixture fixture : Patch.fixtures()) {
             fixture.buildModels();
         }
+
+
+        FileHandle fileHandle = Gdx.files.local("Lights/Settings/Camera.txt");
+        if (fileHandle.exists()) {
+            boolean position = true;
+            for (String line : fileHandle.readString().split("\\r?\\n")) {
+                if (line.startsWith("Position:")) {
+                    position = true;
+                } else if (line.startsWith("Direction:")) {
+                    position = false;
+                } else {
+                    float value = Float.parseFloat(line.substring(5));
+                    (position ? camera.position : camera.direction).set(
+                            line.startsWith("  X: ") ? value : (position ? camera.position : camera.direction).x,
+                            line.startsWith("  Y: ") ? value : (position ? camera.position : camera.direction).y,
+                            line.startsWith("  Z: ") ? value : (position ? camera.position : camera.direction).z
+                    );
+                }
+            }
+        }
+    }
+
+    public void save() {
+        FileHandle fileHandle = Gdx.files.local("Lights/Settings/Camera.txt");
+        fileHandle.writeString("", false);
+        fileHandle.writeString("Position:\r\n", true);
+        fileHandle.writeString("  X: " + camera.position.x + "\r\n", true);
+        fileHandle.writeString("  Y: " + camera.position.y + "\r\n", true);
+        fileHandle.writeString("  Z: " + camera.position.z + "\r\n", true);
+        fileHandle.writeString("Direction:\r\n", true);
+        fileHandle.writeString("  X: " + camera.direction.x + "\r\n", true);
+        fileHandle.writeString("  Y: " + camera.direction.y + "\r\n", true);
+        fileHandle.writeString("  Z: " + camera.direction.z + "\r\n", true);
     }
 
     public void update() {

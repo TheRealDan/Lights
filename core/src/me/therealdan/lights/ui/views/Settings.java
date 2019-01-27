@@ -9,6 +9,7 @@ import me.therealdan.lights.dmx.Output;
 import me.therealdan.lights.renderer.Renderer;
 import me.therealdan.lights.renderer.Task;
 import me.therealdan.lights.ui.view.Tab;
+import me.therealdan.lights.ui.views.live.Visualiser3D;
 import me.therealdan.lights.ui.views.live.ui.ButtonsUI;
 import me.therealdan.lights.util.Util;
 
@@ -177,7 +178,8 @@ public class Settings implements Tab {
         SHOW_DMX_SEND_DEBUG,
         CONTINUOUS,
         LIMIT_LED_STRIPS,
-        DRAW_DMX;
+        DRAW_DMX,
+        REMEMBER_CAMERA_POSITION;
 
         public void set(String string) {
             switch (getType()) {
@@ -287,6 +289,9 @@ public class Settings implements Tab {
                 case DRAW_DMX:
                     DMX.DRAW_DMX = !DMX.DRAW_DMX;
                     break;
+                case REMEMBER_CAMERA_POSITION:
+                    Visualiser3D.REMEMBER_CAMERA_POSITION = !Visualiser3D.REMEMBER_CAMERA_POSITION;
+                    break;
             }
         }
 
@@ -300,6 +305,8 @@ public class Settings implements Tab {
                     return DMX.LIMIT_LED_STRIPS;
                 case DRAW_DMX:
                     return DMX.DRAW_DMX;
+                case REMEMBER_CAMERA_POSITION:
+                    return Visualiser3D.REMEMBER_CAMERA_POSITION;
             }
             return false;
         }
@@ -363,6 +370,7 @@ public class Settings implements Tab {
                 case CONTINUOUS:
                 case LIMIT_LED_STRIPS:
                 case DRAW_DMX:
+                case REMEMBER_CAMERA_POSITION:
                     return Type.BOOLEAN;
             }
             return Type.BOOLEAN;

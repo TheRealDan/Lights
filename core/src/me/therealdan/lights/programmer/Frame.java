@@ -84,13 +84,13 @@ public class Frame {
                     value *= fader.getValue();
                     break;
                 case INHIBITOR:
-                    if (value > fader.getValue()) value = fader.getValue();
+                    if (value > (fader.getValue() * 255.0f)) value = (fader.getValue() * 255.0f);
                     break;
                 case AMBIENT:
-                    if (value < fader.getValue()) value = fader.getValue();
+                    if (value < (fader.getValue() * 255.0f)) value = (fader.getValue() * 255.0f);
                     break;
                 case OVERRIDE:
-                    value = fader.getValue();
+                    value = fader.getValue() * 255.0f;
                     break;
             }
 

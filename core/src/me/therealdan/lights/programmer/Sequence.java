@@ -124,6 +124,10 @@ public class Sequence {
         frames.remove(index);
     }
 
+    public void delete(Frame frame) {
+        frames.remove(frame);
+    }
+
     public void rename(String name) {
         this.name = name;
     }

@@ -29,7 +29,9 @@ public class SelectedChannelsUI implements UI {
         List<Channel.Type> channelTypes = Programmer.getSelectedChannelTypes();
         if (channelTypes.size() == 0) return interacted;
 
-        Frame frame = Programmer.getSequence().getActiveFrame();
+        Frame frame = SequenceProgrammerUI.getInstance().getSelectedFrame();
+        if (frame == null) return interacted;
+        List<Frame> frames = SequenceProgrammerUI.getInstance().getSelectedFrames();
 
         float cellHeight = 30;
 
@@ -58,7 +60,8 @@ public class SelectedChannelsUI implements UI {
                 float value = Math.min(Math.max((Gdx.graphics.getHeight() - Gdx.input.getY() - bottom) / (y - 15 - bottom), 0), 1) * 255f;
                 for (Fixture fixture : Programmer.getSelectedFixtures())
                     for (int parameter : Programmer.getSelectedParameters(channelType))
-                        frame.set(fixture, channelType, value, parameter);
+                        for (Frame each : frames)
+                            each.set(fixture, channelType, value, parameter);
             }
 
             y = Gdx.graphics.getHeight() - getY();

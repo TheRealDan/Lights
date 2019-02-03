@@ -89,6 +89,7 @@ public class Patch implements Tab {
     }
 
     private void loadGroup(FileHandle fileHandle) {
+        if (fileHandle.name().startsWith(".")) return;
         String name = fileHandle.name().replace(".txt", "");
         Group group = new Group(name);
 
@@ -97,8 +98,8 @@ public class Patch implements Tab {
                 group.rename(line.split(": ")[1]);
             } else if (line.startsWith("Fixtures:")) {
                 // do nothing
-            } else {
-                int id = Integer.parseInt(line.split("- ")[1]);
+            } else if (line.startsWith("  - ")) {
+                int id = Integer.parseInt(line.replaceFirst("  - ", ""));
                 Fixture fixture = fixtureByID(id);
                 if (fixture != null) group.add(fixture);
             }

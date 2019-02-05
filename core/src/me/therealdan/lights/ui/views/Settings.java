@@ -14,14 +14,11 @@ import me.therealdan.lights.ui.views.live.ui.ButtonsUI;
 import me.therealdan.lights.util.Util;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 
 public class Settings implements Tab {
 
     private static Settings settingsInstance;
-
-    private LinkedHashMap<Setting, Setting.Type> settings = new LinkedHashMap<>();
 
     private float dmxInterfaceWidth = 200;
     private float settingWidth = 200;
@@ -31,9 +28,6 @@ public class Settings implements Tab {
 
     public Settings() {
         settingsInstance = this;
-
-        for (Setting setting : Setting.values())
-            this.settings.put(setting, setting.getType());
 
         FileHandle fileHandle = Gdx.files.local("Lights/Settings/Settings.txt");
         if (fileHandle.exists()) {
@@ -112,7 +106,7 @@ public class Settings implements Tab {
     }
 
     private void settings(Renderer renderer, float x, float y, float width) {
-        for (Setting setting : settings.keySet()) {
+        for (Setting setting : Setting.values()) {
             switch (setting.getType()) {
                 case INT:
                 case LONG:

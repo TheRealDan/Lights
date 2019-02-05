@@ -16,7 +16,7 @@ public class Output {
 
     private List<String> openPorts = new ArrayList<>();
     private SerialPort serialPort = null;
-    private String activePort = "n/a";
+    private String activePort = "Not Connected";
     private boolean connected = false;
 
     public static long INTERVAL = 100; // milliseconds between data send
@@ -131,7 +131,7 @@ public class Output {
         }
         output.serialPort = null;
         Console.log(Console.ConsoleColor.YELLOW, "Port Disconnected");
-        output.activePort = "n/a";
+        output.activePort = "Not Connected";
         output.connected = false;
     }
 

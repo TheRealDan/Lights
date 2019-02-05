@@ -51,7 +51,6 @@ public class LightsCore extends ApplicationAdapter {
         dark = new Color(0.1f, 0.1f, 0.1f, 1);
 
         Tab.register(new Live());
-        Tab.register(new Settings());
         Tab.register(new Console());
         Tab.register(new DMXOutput());
         Tab.register(new ProfileEditor());

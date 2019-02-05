@@ -1,4 +1,4 @@
-package me.therealdan.lights.ui.views;
+package me.therealdan.lights.ui.views.live.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -7,28 +7,13 @@ import me.therealdan.lights.LightsCore;
 import me.therealdan.lights.dmx.DMX;
 import me.therealdan.lights.dmx.Output;
 import me.therealdan.lights.renderer.Renderer;
-import me.therealdan.lights.renderer.Task;
-import me.therealdan.lights.ui.view.Tab;
+import me.therealdan.lights.ui.views.Live;
 import me.therealdan.lights.ui.views.live.Visualiser3D;
-import me.therealdan.lights.ui.views.live.ui.ButtonsUI;
 import me.therealdan.lights.util.Util;
 
-import java.util.ArrayList;
-import java.util.List;
+public class SettingsUI implements UI {
 
-public class Settings implements Tab {
-
-    private static Settings settingsInstance;
-
-    private float dmxInterfaceWidth = 200;
-    private float settingWidth = 200;
-    private float checkboxSize = 15;
-
-    private List<String> debugInfo = new ArrayList<>();
-
-    public Settings() {
-        settingsInstance = this;
-
+    public SettingsUI() {
         FileHandle fileHandle = Gdx.files.local("Lights/Settings/Settings.txt");
         if (fileHandle.exists()) {
             for (String line : fileHandle.readString().split("\\r?\\n")) {
@@ -40,125 +25,58 @@ public class Settings implements Tab {
 
     @Override
     public void save() {
+        UI.super.save();
+
         FileHandle fileHandle = Gdx.files.local("Lights/Settings/Settings.txt");
         fileHandle.writeString("", false);
-        for (Setting setting : Setting.values()) {
+        for (Setting setting : Setting.values())
             fileHandle.writeString(setting.toString() + ": " + setting.getValue() + "\r\n", true);
-        }
     }
 
     @Override
-    public void draw(Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {
-        float x = X + LightsCore.edge();
-        float y = Y + HEIGHT - LightsCore.edge();
+    public boolean draw(Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {
+        if (containsMouse()) Live.setSection(Live.Section.SETTINGS);
+        boolean interacted = false;
 
-        float height = HEIGHT - (LightsCore.edge() * 2f);
+        float cellHeight = 30;
 
-        // DMX Interface
-        dmxInterface(renderer, x, y, dmxInterfaceWidth);
+        float x = getX();
+        float y = Gdx.graphics.getHeight() - getY();
+        float width = getWidth();
 
-        // Divider
-        x += dmxInterfaceWidth + LightsCore.edge();
-        divider(renderer, x, y, height);
+        Util.box(renderer, x, y, width, cellHeight, LightsCore.DARK_BLUE, setWidth(renderer, "Settings"));
+        y -= cellHeight;
 
-        // Settings
-        x += LightsCore.edge();
-        settings(renderer, x, y, settingWidth);
-
-        // Divider
-        x += settingWidth + LightsCore.edge();
-        divider(renderer, x, y, height);
-
-        // Debug Info
-        x += LightsCore.edge();
-        debugInfo(renderer, x, y);
-    }
-
-    private void dmxInterface(Renderer renderer, float x, float y, float width) {
-        String connected = "Connected: " + Output.getActivePort();
-        float stringWidth = renderer.getWidth(connected);
-        if (stringWidth > dmxInterfaceWidth) dmxInterfaceWidth = stringWidth;
-        renderer.queue(new Task(x, y).text(connected).setColor(LightsCore.text()));
-        y -= 20;
-        renderer.queue(new Task(x, y).text("BaudRate: " + Output.BAUDRATE).setColor(LightsCore.text()));
-        y -= 20;
-        if (Output.isConnected()) {
-            renderer.queue(new Task(x, y).text("Disconnect").setColor(LightsCore.RED));
-            if (Util.containsMouse(x, Gdx.graphics.getHeight() - y, width, 20))
-                if (Gdx.input.isButtonPressed(Input.Buttons.LEFT))
-                    Output.disconnect();
-        }
-        y -= 20;
-        y -= 20;
-        renderer.queue(new Task(x, y).text("Ports:").setColor(LightsCore.text()));
-        y -= 20;
-        for (String port : Output.openPorts()) {
-            if (Util.containsMouse(x, Gdx.graphics.getHeight() - y, width, 20)) {
-                renderer.queue(new Task(LightsCore.BLUE));
-                if (Gdx.input.isButtonPressed(Input.Buttons.LEFT))
-                    Output.setActivePort(port);
-            } else {
-                renderer.queue(new Task(LightsCore.text()));
-            }
-            renderer.queue(new Task(x, y).text(port));
-            y -= 20;
-        }
-    }
-
-    private void settings(Renderer renderer, float x, float y, float width) {
         for (Setting setting : Setting.values()) {
             switch (setting.getType()) {
                 case INT:
                 case LONG:
-                    y -= checkboxSize;
-                    if (Util.containsMouse(x, Gdx.graphics.getHeight() - y - checkboxSize, checkboxSize, checkboxSize))
-                        if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.actionReady(400))
-                            setting.decrement();
-                    if (Util.containsMouse(x + checkboxSize, Gdx.graphics.getHeight() - y - checkboxSize, checkboxSize, checkboxSize))
-                        if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.actionReady(400))
-                            setting.increment();
-                    renderer.queue(new Task(x, y).rect(checkboxSize, checkboxSize).setColor(LightsCore.medium()));
-                    renderer.queue(new Task(x + checkboxSize, y).rect(checkboxSize, checkboxSize).setColor(LightsCore.medium()));
-                    renderer.queue(new Task(x, y).rectOutline(checkboxSize * 2, checkboxSize).setColor(LightsCore.light()));
-                    renderer.queue(new Task(x + 8, y + checkboxSize - 1).text("- +"));
-                    renderer.queue(new Task(x + checkboxSize * 3 - checkboxSize / 2, y + (checkboxSize / 2) - 3).text(setting.getName() + ": " + (setting.getType().equals(Setting.Type.INT) ? setting.getInt() : setting.getLong()), Task.TextPosition.LEFT_CENTER).setColor(LightsCore.text()));
-                    y -= 12;
+                    Util.box(renderer, x, y, width, cellHeight, LightsCore.medium(), setWidth(renderer, setting.getName() + ": " + setting.getValue()));
+                    if (Util.containsMouse(x, Gdx.graphics.getHeight() - y, width, cellHeight)) {
+                        interacted = true;
+                        if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.actionReady(100)) {
+                            if (Util.containsMouse(x, Gdx.graphics.getHeight() - y, width / 2, cellHeight)) {
+                                setting.increment();
+                            } else {
+                                setting.decrement();
+                            }
+                        }
+                    }
                     break;
                 case BOOLEAN:
-                    y -= checkboxSize;
-                    if (Util.containsMouse(x, Gdx.graphics.getHeight() - y - checkboxSize, checkboxSize, checkboxSize))
-                        if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.actionReady(400))
+                    Util.box(renderer, x, y, width, cellHeight, setting.getBoolean() ? LightsCore.DARK_RED : LightsCore.medium(), setWidth(renderer, setting.getName()));
+                    if (Util.containsMouse(x, Gdx.graphics.getHeight() - y, width, cellHeight)) {
+                        interacted = true;
+                        if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.actionReady(250))
                             setting.toggle();
-                    renderer.queue(new Task(x, y).rect(checkboxSize, checkboxSize).setColor(setting.getBoolean() ? LightsCore.light() : LightsCore.medium()));
-                    renderer.queue(new Task(x, y).rectOutline(checkboxSize, checkboxSize).setColor(LightsCore.light()));
-                    renderer.queue(new Task(x + checkboxSize + checkboxSize / 2, y + (checkboxSize / 2) - 3).text(setting.getName(), Task.TextPosition.LEFT_CENTER).setColor(LightsCore.text()));
-                    y -= 10;
+                    }
                     break;
             }
-        }
-    }
-
-    private void debugInfo(Renderer renderer, float x, float y) {
-        for (String line : debugInfo) {
-            renderer.queue(new Task(x, y).text(line).setColor(LightsCore.text()));
-            y -= 20;
-        }
-    }
-
-    private void divider(Renderer renderer, float x, float y, float height) {
-        renderer.queue(new Task(x, y).line(x, y - height).setColor(LightsCore.light()));
-    }
-
-    public static void add(String info) {
-        settingsInstance.debugInfo.add(info);
-    }
-
-    public static void set(String info, int index) {
-        while (settingsInstance.debugInfo.size() <= index) {
-            add("");
+            y -= cellHeight;
         }
 
-        settingsInstance.debugInfo.set(index, info);
+        setHeight((Gdx.graphics.getHeight() - getY()) - y);
+        return interacted;
     }
 
     public enum Setting {
@@ -347,27 +265,27 @@ public class Settings implements Tab {
             return this.toString().substring(0, 1) + this.toString().substring(1).toLowerCase().replace("_", " ");
         }
 
-        public Type getType() {
+        public Setting.Type getType() {
             switch (this) {
                 case INTERVAL:
                 case CONNECTION_WAIT:
-                    return Type.LONG;
+                    return Setting.Type.LONG;
 
                 case NEW_READ_TIMEOUT:
                 case NEW_WRITE_TIMEOUT:
                 case CHANNELS_PER_SEND:
                 case BUTTON_PANEL_WIDTH:
                 case BUTTON_PANEL_HEIGHT:
-                    return Type.INT;
+                    return Setting.Type.INT;
 
                 case SHOW_DMX_SEND_DEBUG:
                 case CONTINUOUS:
                 case LIMIT_LED_STRIPS:
                 case DRAW_DMX:
                 case REMEMBER_CAMERA_POSITION:
-                    return Type.BOOLEAN;
+                    return Setting.Type.BOOLEAN;
             }
-            return Type.BOOLEAN;
+            return Setting.Type.BOOLEAN;
         }
 
         public enum Type {

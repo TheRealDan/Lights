@@ -44,6 +44,10 @@ public class Live implements Tab {
     public Live() {
         live = this;
 
+        // Settings
+        uis.add(new SettingsUI());
+        uis.add(new DMXInterfaceUI());
+
         // Programmer
         uis.add(new FixturesUI());
         uis.add(new GroupsUI());
@@ -258,6 +262,8 @@ public class Live implements Tab {
         DRAGGING,
 
         VISUALISER3D,
+
+        SETTINGS, DMX_INTERFACE,
 
         MASTER, BUTTONS, FADERS,
 

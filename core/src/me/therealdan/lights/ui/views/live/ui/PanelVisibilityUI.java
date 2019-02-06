@@ -44,14 +44,8 @@ public class PanelVisibilityUI implements UI {
             }
             Util.box(renderer, x, y, width, cellHeight, ui.isVisible() ? LightsCore.DARK_RED : LightsCore.medium(), setWidth(renderer, ui.getName()));
             y -= cellHeight;
-
-            if (y - cellHeight < 0) {
-                x += width;
-                y = getY();
-            }
         }
 
-        setHeightBasedOnY(y);
         return interacted;
     }
 

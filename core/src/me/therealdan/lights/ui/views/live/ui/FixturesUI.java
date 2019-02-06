@@ -24,15 +24,16 @@ public class FixturesUI implements UI {
         float cellHeight = 30;
 
         float x = getX();
-        float y = Gdx.graphics.getHeight() - getY();
+        float y = getY();
         float width = getWidth();
 
         Util.box(renderer, x, y, width, cellHeight, LightsCore.DARK_BLUE, setWidth(renderer, "Fixtures"));
+        drag(x, y, width, cellHeight);
         y -= cellHeight;
 
         for (Fixture fixture : Patch.fixtures()) {
             Util.box(renderer, x, y, width, cellHeight, Programmer.isSelected(fixture) ? LightsCore.DARK_RED : LightsCore.medium(), setWidth(renderer, fixture.getName()));
-            if (Util.containsMouse(x, Gdx.graphics.getHeight() - y, width, cellHeight)) {
+            if (Util.containsMouse(x, y, width, cellHeight) && canInteract()) {
                 interacted = true;
                 if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.actionReady(200)) {
                     if (Programmer.isSelected(fixture)) {
@@ -45,7 +46,7 @@ public class FixturesUI implements UI {
             y -= cellHeight;
         }
 
-        setHeight((Gdx.graphics.getHeight() - getY()) - y);
+        setHeightBasedOnY(y);
         return interacted;
     }
 }

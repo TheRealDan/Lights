@@ -41,10 +41,11 @@ public class SettingsUI implements UI {
         float cellHeight = 30;
 
         float x = getX();
-        float y = Gdx.graphics.getHeight() - getY();
+        float y = getY();
         float width = getWidth();
 
         Util.box(renderer, x, y, width, cellHeight, LightsCore.DARK_BLUE, setWidth(renderer, "Settings"));
+        drag(x, y, width, cellHeight);
         y -= cellHeight;
 
         for (Setting setting : Setting.values()) {
@@ -52,10 +53,10 @@ public class SettingsUI implements UI {
                 case INT:
                 case LONG:
                     Util.box(renderer, x, y, width, cellHeight, LightsCore.medium(), setWidth(renderer, setting.getName() + ": " + setting.getValue()));
-                    if (Util.containsMouse(x, Gdx.graphics.getHeight() - y, width, cellHeight)) {
+                    if (Util.containsMouse(x, y, width, cellHeight) && canInteract()) {
                         interacted = true;
                         if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.actionReady(100)) {
-                            if (Util.containsMouse(x, Gdx.graphics.getHeight() - y, width / 2, cellHeight)) {
+                            if (Util.containsMouse(x, y, width / 2, cellHeight)) {
                                 setting.increment();
                             } else {
                                 setting.decrement();
@@ -65,7 +66,7 @@ public class SettingsUI implements UI {
                     break;
                 case BOOLEAN:
                     Util.box(renderer, x, y, width, cellHeight, setting.getBoolean() ? LightsCore.DARK_RED : LightsCore.medium(), setWidth(renderer, setting.getName()));
-                    if (Util.containsMouse(x, Gdx.graphics.getHeight() - y, width, cellHeight)) {
+                    if (Util.containsMouse(x, y, width, cellHeight) && canInteract()) {
                         interacted = true;
                         if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.actionReady(250))
                             setting.toggle();
@@ -75,7 +76,7 @@ public class SettingsUI implements UI {
             y -= cellHeight;
         }
 
-        setHeight((Gdx.graphics.getHeight() - getY()) - y);
+        setHeightBasedOnY(y);
         return interacted;
     }
 
@@ -86,7 +87,6 @@ public class SettingsUI implements UI {
         NEW_WRITE_TIMEOUT,
         CHANNELS_PER_SEND,
         BUTTON_PANEL_WIDTH,
-        BUTTON_PANEL_HEIGHT,
         SHOW_DMX_SEND_DEBUG,
         CONTINUOUS,
         LIMIT_LED_STRIPS,
@@ -131,9 +131,6 @@ public class SettingsUI implements UI {
                 case BUTTON_PANEL_WIDTH:
                     ButtonsUI.WIDTH += amount;
                     break;
-                case BUTTON_PANEL_HEIGHT:
-                    ButtonsUI.HEIGHT += amount;
-                    break;
             }
         }
 
@@ -160,9 +157,6 @@ public class SettingsUI implements UI {
                     break;
                 case BUTTON_PANEL_WIDTH:
                     ButtonsUI.WIDTH -= amount;
-                    break;
-                case BUTTON_PANEL_HEIGHT:
-                    ButtonsUI.HEIGHT -= amount;
                     break;
             }
         }
@@ -233,8 +227,6 @@ public class SettingsUI implements UI {
                     return Output.CHANNELS_PER_SEND;
                 case BUTTON_PANEL_WIDTH:
                     return (int) ButtonsUI.WIDTH;
-                case BUTTON_PANEL_HEIGHT:
-                    return (int) ButtonsUI.HEIGHT;
             }
             return 0L;
         }
@@ -275,7 +267,6 @@ public class SettingsUI implements UI {
                 case NEW_WRITE_TIMEOUT:
                 case CHANNELS_PER_SEND:
                 case BUTTON_PANEL_WIDTH:
-                case BUTTON_PANEL_HEIGHT:
                     return Setting.Type.INT;
 
                 case SHOW_DMX_SEND_DEBUG:

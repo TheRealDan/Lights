@@ -21,14 +21,15 @@ public class DMXInterfaceUI implements UI {
         float cellHeight = 30;
 
         float x = getX();
-        float y = Gdx.graphics.getHeight() - getY();
+        float y = getY();
         float width = getWidth();
 
         Util.box(renderer, x, y, width, cellHeight, LightsCore.DARK_BLUE, setWidth(renderer, "DMX Interface"));
+        drag(x, y, width, cellHeight);
         y -= cellHeight;
 
         for (String port : Output.openPorts()) {
-            if (Util.containsMouse(x, Gdx.graphics.getHeight() - y, width, cellHeight)) {
+            if (Util.containsMouse(x, y, width, cellHeight) && canInteract()) {
                 if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.actionReady(500)) {
                     if (Output.getActivePort().equals(port)) {
                         Output.disconnect();
@@ -41,7 +42,7 @@ public class DMXInterfaceUI implements UI {
             y -= cellHeight;
         }
 
-        setHeight((Gdx.graphics.getHeight() - getY()) - y);
+        setHeightBasedOnY(y);
         return interacted;
     }
 }

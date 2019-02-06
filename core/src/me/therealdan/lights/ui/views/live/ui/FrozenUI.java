@@ -1,6 +1,5 @@
 package me.therealdan.lights.ui.views.live.ui;
 
-import com.badlogic.gdx.Gdx;
 import me.therealdan.lights.LightsCore;
 import me.therealdan.lights.dmx.Output;
 import me.therealdan.lights.renderer.Renderer;
@@ -16,22 +15,26 @@ public class FrozenUI implements UI {
 
         if (!Output.isFrozen()) return interacted;
 
-        setLocation(WIDTH / 2 - getWidth() / 2, HEIGHT / 2 - getHeight() - 2);
-
         float cellHeight = 30;
 
         float x = getX();
-        float y = Gdx.graphics.getHeight() - getY();
+        float y = getY();
 
         float width = getWidth();
 
-        Util.box(renderer, x, y, width, cellHeight, LightsCore.RED, setWidth(renderer, "OUTPUT FROZEN"));
+        Util.box(renderer, x, y, width, cellHeight, System.currentTimeMillis() % 1000 > 500 ? LightsCore.DARK_BLUE : LightsCore.RED, setWidth(renderer, "OUTPUT FROZEN"));
+        drag(x, y, width, cellHeight);
         y -= cellHeight;
 
         Util.box(renderer, x, y, width, cellHeight, LightsCore.medium(), setWidth(renderer, "Press Escape to unfreeze"));
         y -= cellHeight;
 
-        setHeight((Gdx.graphics.getHeight() - getY()) - y);
+        setHeightBasedOnY(y);
         return interacted;
+    }
+
+    @Override
+    public boolean ignoreVisibilityUI() {
+        return true;
     }
 }

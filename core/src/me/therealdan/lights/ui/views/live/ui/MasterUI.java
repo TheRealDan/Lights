@@ -27,22 +27,25 @@ public class MasterUI implements UI {
         float cellHeight = 30;
 
         float x = getX();
-        float y = Gdx.graphics.getHeight() - getY();
+        float y = getY();
 
         float width = getWidth();
         float height = getHeight() - cellHeight;
 
         Util.box(renderer, x, y, width, cellHeight, LightsCore.DARK_BLUE, setWidth(renderer, "Master"));
+        drag(x, y, width, height);
         y -= cellHeight;
 
         Util.box(renderer, x, y, width, height, LightsCore.medium(), setWidth(renderer, Util.getPercentage(Live.getMaster())));
         float fill = Live.getMaster() * height;
         Util.box(renderer, x, y - height + fill, width, fill, LightsCore.DARK_RED);
 
-        if (Util.containsMouse(x, Gdx.graphics.getHeight() - y, width, height) && Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
-            interacted = true;
-            float bottom = y - height + 20;
-            Live.setMaster(Math.min(Math.max((Gdx.graphics.getHeight() - Gdx.input.getY() - bottom) / (y - 20 - bottom), 0), 1));
+        if (Util.containsMouse(x, y, width, height) && canInteract()) {
+            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
+                interacted = true;
+                float bottom = y - height + 20;
+                Live.setMaster(Math.min(Math.max((Gdx.graphics.getHeight() - Gdx.input.getY() - bottom) / (y - 20 - bottom), 0), 1));
+            }
         }
 
         return interacted;

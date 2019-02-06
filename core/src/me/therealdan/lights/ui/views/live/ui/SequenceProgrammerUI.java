@@ -120,14 +120,15 @@ public class SequenceProgrammerUI implements UI {
         float cellHeight = 30;
 
         float x = getX();
-        float y = Gdx.graphics.getHeight() - getY();
+        float y = getY();
         float width = getWidth();
 
         Util.box(renderer, x, y, getWidth(), cellHeight, LightsCore.DARK_BLUE, setWidth(renderer, "Sequence Programmer"));
+        drag(x, y, getWidth(), cellHeight);
         y -= cellHeight;
 
         Util.box(renderer, x, y, getWidth(), cellHeight, selected.equals(Selected.NAME) ? LightsCore.DARK_RED : LightsCore.medium(), setWidth(renderer, sequence.getName()));
-        if (Util.containsMouse(x, Gdx.graphics.getHeight() - y, width, cellHeight)) {
+        if (Util.containsMouse(x, y, width, cellHeight) && canInteract()) {
             interacted = true;
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT))
                 setSelected(Selected.NAME);
@@ -141,7 +142,7 @@ public class SequenceProgrammerUI implements UI {
                         "Frame time: " + Frame.format(getSelectedFrame().getFrameTime()) :
                         "N/A"
                 , 2));
-        if (Util.containsMouse(x, Gdx.graphics.getHeight() - y, width, cellHeight)) {
+        if (Util.containsMouse(x, y, width, cellHeight) && canInteract()) {
             interacted = true;
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT))
                 setSelected(Selected.FRAME);
@@ -152,7 +153,7 @@ public class SequenceProgrammerUI implements UI {
                         "Fade time: " + Frame.format(getSelectedFrame().getFadeTime()) :
                         "N/A"
                 , 2));
-        if (Util.containsMouse(x, Gdx.graphics.getHeight() - y, width, cellHeight)) {
+        if (Util.containsMouse(x, y, width, cellHeight) && canInteract()) {
             interacted = true;
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT))
                 setSelected(Selected.FADE);
@@ -166,7 +167,7 @@ public class SequenceProgrammerUI implements UI {
             if (button.equals(Button.LOOP)) highlight = sequence.doesLoop();
             setWidth((renderer.getWidth(button.getName()) + 10) * Button.values().length, true);
             Util.box(renderer, x, y, width, cellHeight, highlight ? LightsCore.DARK_RED : LightsCore.medium(), button.getName());
-            if (Util.containsMouse(x, Gdx.graphics.getHeight() - y, width, cellHeight)) {
+            if (Util.containsMouse(x, y, width, cellHeight) && canInteract()) {
                 interacted = true;
                 if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.actionReady(500))
                     button.press();
@@ -190,7 +191,7 @@ public class SequenceProgrammerUI implements UI {
                 if (color == LightsCore.medium()) color = LightsCore.light();
                 frame.draw(renderer, x, y, width, cellHeight, color);
             }
-            if (Util.containsMouse(x, Gdx.graphics.getHeight() - y, width, cellHeight)) {
+            if (Util.containsMouse(x, y, width, cellHeight) && canInteract()) {
                 interacted = true;
                 if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
                     if (shift) {
@@ -210,7 +211,7 @@ public class SequenceProgrammerUI implements UI {
             index++;
         }
 
-        setHeight((Gdx.graphics.getHeight() - getY()) - y);
+        setHeightBasedOnY(y);
         return interacted;
     }
 

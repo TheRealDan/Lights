@@ -14,7 +14,6 @@ import me.therealdan.lights.util.Util;
 public class ButtonsUI implements UI {
 
     public static float WIDTH = 800;
-    public static float HEIGHT = 800;
 
     public ButtonsUI() {
         setLocation(460, 500);
@@ -26,16 +25,16 @@ public class ButtonsUI implements UI {
         boolean interacted = false;
 
         setWidth(ButtonsUI.WIDTH);
-        setHeight(ButtonsUI.HEIGHT);
 
         float cellHeight = 30;
 
         float size = getWidth() / Buttons.PER_ROW;
 
         float x = getX();
-        float y = Gdx.graphics.getHeight() - getY();
+        float y = getY();
 
         Util.box(renderer, x, y, getWidth(), cellHeight, LightsCore.DARK_BLUE, "Buttons");
+        drag(x, y, getWidth(), cellHeight);
         y -= cellHeight;
 
         for (int position = 1; position <= Buttons.getTopPosition(); position++) {
@@ -43,7 +42,7 @@ public class ButtonsUI implements UI {
             if (button != null) {
                 Util.box(renderer, x, y, size, size, button.getColor());
                 renderer.queue(new Task(x, y - size / 2).text(button.getName(), Task.TextPosition.LEFT_CENTER).setColor(LightsCore.text()));
-                if (Util.containsMouse(x, Gdx.graphics.getHeight() - y, size, size)) {
+                if (Util.containsMouse(x, y, size, size) && canInteract()) {
                     interacted = true;
                     if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
                         button.press();
@@ -61,7 +60,7 @@ public class ButtonsUI implements UI {
             }
         }
 
-        setHeight((Gdx.graphics.getHeight() - getY()) - y);
+        setHeightBasedOnY(y);
         return interacted;
     }
 }

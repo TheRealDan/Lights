@@ -30,22 +30,25 @@ public class FadersUI implements UI {
         float cellHeight = 30;
 
         float x = getX();
-        float y = Gdx.graphics.getHeight() - getY();
+        float y = getY();
 
         float faderWidth = 80;
         float height = getHeight() - cellHeight;
 
         Util.box(renderer, x, y, getWidth(), cellHeight, LightsCore.DARK_BLUE, setWidth(renderer, "Faders - Bank " + getBank().getID()));
+        drag(x, y, getWidth(), cellHeight);
         y -= cellHeight;
 
         for (Fader fader : getBank().faders()) {
             Util.box(renderer, x, y, faderWidth, height, LightsCore.medium(), Util.getPercentage(fader.getValue()));
             float fill = fader.getValue() * height;
             Util.box(renderer, x, y - height + fill, faderWidth, fill, fader.getColor());
-            if (Util.containsMouse(x, Gdx.graphics.getHeight() - y, faderWidth, height) && Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
-                interacted = true;
-                float bottom = y - height + 20;
-                fader.setValue(Math.min(Math.max((Gdx.graphics.getHeight() - Gdx.input.getY() - bottom) / (y - 20 - bottom), 0), 1));
+            if (Util.containsMouse(x, y, faderWidth, height) && canInteract()) {
+                if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
+                    interacted = true;
+                    float bottom = y - height + 20;
+                    fader.setValue(Math.min(Math.max((Gdx.graphics.getHeight() - Gdx.input.getY() - bottom) / (y - 20 - bottom), 0), 1));
+                }
             }
             x += faderWidth;
         }

@@ -25,17 +25,18 @@ public class AvailableParametersUI implements UI {
         float cellHeight = 30;
 
         float x = getX();
-        float y = Gdx.graphics.getHeight() - getY();
+        float y = getY();
         float width = getWidth();
 
         Util.box(renderer, x, y, width, cellHeight, LightsCore.DARK_BLUE, setWidth(renderer, "Available Parameters"));
+        drag(x, y, width, cellHeight);
         y -= cellHeight;
 
         HashMap<Channel.Type, Integer> parameters = Programmer.getAvailableParameters();
         for (Channel.Type channelType : parameters.keySet()) {
             for (int parameter = 1; parameter <= parameters.get(channelType); parameter++) {
                 Util.box(renderer, x, y, width, cellHeight, Programmer.isSelected(channelType, parameter) ? LightsCore.DARK_RED : LightsCore.medium(), setWidth(renderer, channelType.getName() + " " + parameter));
-                if (Util.containsMouse(x, Gdx.graphics.getHeight() - y, width, cellHeight)) {
+                if (Util.containsMouse(x, y, width, cellHeight) && canInteract()) {
                     interacted = true;
                     if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.actionReady(500)) {
                         if (Programmer.isSelected(channelType, parameter)) {
@@ -49,7 +50,7 @@ public class AvailableParametersUI implements UI {
             }
         }
 
-        setHeight((Gdx.graphics.getHeight() - getY()) - y);
+        setHeightBasedOnY(y);
         return interacted;
     }
 }

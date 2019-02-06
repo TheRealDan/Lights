@@ -22,10 +22,11 @@ public class ActiveSequencesUI implements UI {
         float cellHeight = 30;
 
         float x = getX();
-        float y = Gdx.graphics.getHeight() - getY();
+        float y = getY();
         float width = getWidth();
 
         Util.box(renderer, x, y, width, cellHeight, LightsCore.DARK_BLUE, setWidth(renderer, "Active Sequences"));
+        drag(x, y, width, cellHeight);
         y -= cellHeight;
 
         for (int priority = 0; priority <= Live.getTopPriority(); priority++) {
@@ -33,14 +34,14 @@ public class ActiveSequencesUI implements UI {
             if (sequence == null) continue;
             float priorityWidth = renderer.getWidth(Integer.toString(priority)) + 10;
             Util.box(renderer, x, y, priorityWidth, cellHeight, LightsCore.medium(), Integer.toString(priority));
-            if (Util.containsMouse(x, Gdx.graphics.getHeight() - y, priorityWidth, cellHeight)) {
+            if (Util.containsMouse(x, y, priorityWidth, cellHeight) && canInteract()) {
                 interacted = true;
                 if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.actionReady(500)) {
                     Live.clearSequence(priority);
                 }
             }
             Util.box(renderer, x + priorityWidth, y, width - priorityWidth, cellHeight, LightsCore.medium(), sequence.getName());
-            if (Util.containsMouse(x, Gdx.graphics.getHeight() - y, width - priorityWidth, cellHeight)) {
+            if (Util.containsMouse(x, y, width - priorityWidth, cellHeight) && canInteract()) {
                 interacted = true;
                 if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.actionReady(500)) {
                     Live.clearSequence(priority);
@@ -52,7 +53,7 @@ public class ActiveSequencesUI implements UI {
                 setWidth(width + 1);
         }
 
-        setHeight((Gdx.graphics.getHeight() - getY()) - y);
+        setHeight(getY() - y);
         return interacted;
     }
 }

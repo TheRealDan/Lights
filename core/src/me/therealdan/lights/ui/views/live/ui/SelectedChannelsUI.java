@@ -36,13 +36,14 @@ public class SelectedChannelsUI implements UI {
         float cellHeight = 30;
 
         float x = getX();
-        float y = Gdx.graphics.getHeight() - getY();
+        float y = getY();
         float width = 0;
         float height = getHeight() - cellHeight;
 
         for (Channel.Type channelType : channelTypes) {
             width = Math.max(width, renderer.getWidth(channelType.getName()) + 10);
             Util.box(renderer, x, y, width, cellHeight, LightsCore.DARK_BLUE, channelType.getName());
+            drag(x, y, width, cellHeight);
             y -= cellHeight;
 
             float percentage = 0;
@@ -54,17 +55,19 @@ public class SelectedChannelsUI implements UI {
             float fill = (percentage * height);
             Util.box(renderer, x, y - height + fill, width, fill, LightsCore.DARK_RED);
 
-            if (Util.containsMouse(x, Gdx.graphics.getHeight() - y, width, height) && Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
-                interacted = true;
-                float bottom = y - height + 15;
-                float value = Math.min(Math.max((Gdx.graphics.getHeight() - Gdx.input.getY() - bottom) / (y - 15 - bottom), 0), 1) * 255f;
-                for (Fixture fixture : Programmer.getSelectedFixtures())
-                    for (int parameter : Programmer.getSelectedParameters(channelType))
-                        for (Frame each : frames)
-                            each.set(fixture, channelType, value, parameter);
+            if (Util.containsMouse(x, y, width, height) && canInteract()) {
+                if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
+                    interacted = true;
+                    float bottom = y - height + 15;
+                    float value = Math.min(Math.max((Gdx.graphics.getHeight() - Gdx.input.getY() - bottom) / (y - 15 - bottom), 0), 1) * 255f;
+                    for (Fixture fixture : Programmer.getSelectedFixtures())
+                        for (int parameter : Programmer.getSelectedParameters(channelType))
+                            for (Frame each : frames)
+                                each.set(fixture, channelType, value, parameter);
+                }
             }
 
-            y = Gdx.graphics.getHeight() - getY();
+            y = getY();
             x += width;
         }
 

@@ -44,6 +44,9 @@ public class Live implements Tab {
     public Live() {
         live = this;
 
+        // Menu
+        uis.add(new PanelVisibilityUI());
+
         // Settings
         uis.add(new SettingsUI());
         uis.add(new DMXInterfaceUI());
@@ -66,13 +69,13 @@ public class Live implements Tab {
         uis.add(new FadersUI());
         uis.add(new ButtonsUI());
 
-        for (UI ui : uis)
+        for (UI ui : UIs())
             ui.load();
     }
 
     @Override
     public void save() {
-        for (UI ui : uis)
+        for (UI ui : UIs())
             ui.save();
 
         getVisualiser3D().save();
@@ -136,14 +139,16 @@ public class Live implements Tab {
     public void draw(Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {
         getVisualiser3D().draw(Gdx.graphics.getDeltaTime());
 
-        for (UI ui : uis)
-            if (ui.isVisible())
-                if (ui.draw(renderer, X, Y, WIDTH, HEIGHT))
-                    dragging = null;
+        for (UI ui : UIs()) {
+            if (ui.isVisible()) {
+                ui.setAllowInteract(!isDragging());
+                boolean interacted = ui.draw(renderer, X, Y, WIDTH, HEIGHT);
+            }
+        }
 
-        if (dragging != null) {
-            dragging.setLocation(Gdx.input.getX() - xDifference, Gdx.input.getY() - yDifference);
-            if (!dragging.containsMouse()) dragging = null;
+        if (isDragging()) {
+            getDragging().setLocation(Gdx.input.getX() - xDifference, Gdx.input.getY() - yDifference);
+            if (!getDragging().containsMouse()) drag(null);
         }
     }
 
@@ -154,21 +159,7 @@ public class Live implements Tab {
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        dragging = null;
-
-        return true;
-    }
-
-    @Override
-    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        for (UI ui : uis) {
-            if (ui.isVisible() && ui.containsMouse()) {
-                xDifference = Math.abs(ui.getX() - screenX);
-                yDifference = Math.abs(ui.getY() - screenY);
-                dragging = ui;
-                break;
-            }
-        }
+        drag(null);
 
         return true;
     }
@@ -177,9 +168,8 @@ public class Live implements Tab {
     public boolean keyUp(int keycode) {
         getVisualiser3D().keyUp(keycode);
 
-        for (UI ui : uis)
+        for (UI ui : UIs())
             ui.keyUp(keycode);
-
 
         return true;
     }
@@ -195,15 +185,15 @@ public class Live implements Tab {
             lastTempo = System.currentTimeMillis();
         }
 
+        if (Input.Keys.ESCAPE == keycode) Output.toggleFreeze();
+
         boolean containsMouse = false;
-        for (UI ui : uis) {
+        for (UI ui : UIs()) {
             ui.keyDown(keycode);
             if (ui.containsMouse())
                 containsMouse = true;
         }
         if (containsMouse) return true;
-
-        if (Input.Keys.ESCAPE == keycode) Output.toggleFreeze();
 
         Button button = Hotkeys.getButton(keycode);
         if (button != null) button.press();
@@ -263,6 +253,8 @@ public class Live implements Tab {
 
         VISUALISER3D,
 
+        PANEL_VISIBILITY,
+
         SETTINGS, DMX_INTERFACE,
 
         MASTER, BUTTONS, FADERS,
@@ -271,6 +263,24 @@ public class Live implements Tab {
 
         ACTIVE_SEQUENCES,
         FIXTURES, GROUPS, SELECTED_FIXTURES, AVAILABLE_PARAMETERS, SELECTED_CHANNELS, COLOR_WHEEL,
+    }
+
+    public static void drag(UI ui) {
+        if (live.dragging == null && ui != null) {
+            live.xDifference = Math.abs(ui.getX() - Gdx.input.getX());
+            live.yDifference = Math.abs(ui.getYString() - Gdx.input.getY());
+            moveToTop(ui);
+        }
+
+        live.dragging = ui;
+    }
+
+    public static boolean isDragging() {
+        return getDragging() != null;
+    }
+
+    public static UI getDragging() {
+        return live.dragging;
     }
 
     public static void clearSequence(int priority) {
@@ -309,6 +319,15 @@ public class Live implements Tab {
         return sequences;
     }
 
+    public static void moveToTop(UI ui) {
+        live.uis.remove(ui);
+        live.uis.add(ui);
+    }
+
+    public static List<UI> UIs() {
+        return new ArrayList<>(live.uis);
+    }
+
     public static long getTempo() {
         return live.tempo;
     }
@@ -334,7 +353,7 @@ public class Live implements Tab {
     }
 
     public static Section getSection() {
-        if (live.dragging != null) return Section.DRAGGING;
+        if (isDragging()) return Section.DRAGGING;
         if (System.currentTimeMillis() - live.lastSet > 500)
             live.section = Section.VISUALISER3D;
         return live.section;

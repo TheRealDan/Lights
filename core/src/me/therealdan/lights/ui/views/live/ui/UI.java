@@ -1,9 +1,11 @@
 package me.therealdan.lights.ui.views.live.ui;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.files.FileHandle;
 import me.therealdan.lights.LightsCore;
 import me.therealdan.lights.renderer.Renderer;
+import me.therealdan.lights.ui.views.Live;
 import me.therealdan.lights.util.Util;
 
 import java.util.HashMap;
@@ -12,6 +14,7 @@ import java.util.HashSet;
 public interface UI {
 
     HashSet<String> hidden = new HashSet<>();
+    HashSet<String> allowInteract = new HashSet<>();
     HashMap<String, Float> uiLocation = new HashMap<>();
 
     default void load() {
@@ -20,14 +23,15 @@ public interface UI {
             String[] lines = fileHandle.readString().split("\\r?\\n");
             setLocation(
                     Float.parseFloat(lines[0].replace("X: ", "")),
-                    Float.parseFloat(lines[1].replace("Y: ", ""))
-            );
+                    Float.parseFloat(lines[1].replace("Y: ", "")));
+            if (!ignoreVisibilityUI() && lines.length > 2) setVisible(Boolean.parseBoolean(lines[2].replace("Visible: ", "")));
         }
     }
 
     default void save() {
         Gdx.files.local("Lights/UI/" + getName() + ".txt").writeString("X: " + getX() + "\r\n", false);
-        Gdx.files.local("Lights/UI/" + getName() + ".txt").writeString("Y: " + getY(), true);
+        Gdx.files.local("Lights/UI/" + getName() + ".txt").writeString("Y: " + getYString() + "\r\n", true);
+        if (!ignoreVisibilityUI()) Gdx.files.local("Lights/UI/" + getName() + ".txt").writeString("Visible: " + isVisible(), true);
     }
 
     default void keyUp(int keycode) {
@@ -81,8 +85,44 @@ public interface UI {
         return Util.containsMouse(getX(), getY(), getWidth(), getHeight());
     }
 
+    default void toggleVisibility() {
+        setVisible(!isVisible());
+    }
+
+    default void setVisible(boolean visibile) {
+        if (visibile) {
+            hidden.remove(getName());
+        } else {
+            hidden.add(getName());
+        }
+    }
+
     default boolean isVisible() {
         return !hidden.contains(getName());
+    }
+
+    default boolean ignoreVisibilityUI() {
+        return false;
+    }
+
+    default void setAllowInteract(boolean allowInteract) {
+        if (allowInteract) {
+            UI.allowInteract.add(getName());
+        } else {
+            UI.allowInteract.remove(getName());
+        }
+    }
+
+    default boolean canInteract() {
+        return allowInteract.contains(getName());
+    }
+
+    default void drag(float x, float y, float width, float cellHeight) {
+        if (isVisible() && Util.containsMouse(x, y, width, cellHeight) && Gdx.input.isButtonPressed(Input.Buttons.LEFT)) Live.drag(this);
+    }
+
+    default boolean isDragging() {
+        return Live.getDragging().equals(this);
     }
 
     default String getName() {
@@ -94,6 +134,10 @@ public interface UI {
     }
 
     default float getY() {
+        return Gdx.graphics.getHeight() - get(getName() + "_Y", 10);
+    }
+
+    default float getYString() {
         return get(getName() + "_Y", 10);
     }
 

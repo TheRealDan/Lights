@@ -19,6 +19,8 @@ public class Util {
     }
 
     public static boolean containsMouse(float x, float y, float width, float height) {
+        y = Gdx.graphics.getHeight() - y;
+
         float mouseX = Gdx.input.getX();
         float mouseY = Gdx.input.getY();
 

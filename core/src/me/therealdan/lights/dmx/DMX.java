@@ -5,9 +5,9 @@ import me.therealdan.lights.fixtures.Fixture;
 import me.therealdan.lights.fixtures.Group;
 import me.therealdan.lights.renderer.Renderer;
 import me.therealdan.lights.renderer.Task;
-import me.therealdan.lights.ui.views.live.ui.ConsoleUI;
 import me.therealdan.lights.ui.views.Live;
 import me.therealdan.lights.ui.views.Patch;
+import me.therealdan.lights.ui.views.live.ui.ConsoleUI;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -136,6 +136,10 @@ public class DMX {
     public static DMX get(String level) {
         if (!dmx.containsKey(level)) dmx.put(level, new DMX(level));
         return dmx.get(level);
+    }
+
+    public static List<String> levels() {
+        return new ArrayList<>(dmx.keySet());
     }
 
     public static void draw(Renderer renderer, float x, float y, float width, float height, Color color, List<Integer> originalValues) {

@@ -78,6 +78,10 @@ public interface UI {
         setWidth(width);
     }
 
+    default void setWidthBasedOnX(float x) {
+        setWidth(getX() - x);
+    }
+
     default void setHeight(float height) {
         set(getName() + "_HEIGHT", height);
     }

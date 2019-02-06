@@ -131,7 +131,7 @@ public interface UI {
     }
 
     default String getName() {
-        return getClass().getSimpleName();
+        return getClass().getSimpleName().substring(0, getClass().getSimpleName().length() - 2);
     }
 
     default float getX() {

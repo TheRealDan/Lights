@@ -87,7 +87,10 @@ public class LightsCore extends ApplicationAdapter {
 
     private void controls() {
         // Cycle Tabs
-        if (Gdx.input.isKeyJustPressed(Input.Keys.TAB)) getViewBar().nextTab(Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT));
+        if (Gdx.input.isKeyJustPressed(Input.Keys.GRAVE))
+            getViewBar().nextTab(Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT));
+
+        // Handle current Tab
         Gdx.graphics.setTitle(getViewBar().getActiveTab().getName());
         Gdx.input.setInputProcessor(getViewBar().getActiveTab());
 

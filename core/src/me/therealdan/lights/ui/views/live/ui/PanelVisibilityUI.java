@@ -46,6 +46,7 @@ public class PanelVisibilityUI implements UI {
             y -= cellHeight;
         }
 
+        setHeightBasedOnY(y);
         return interacted;
     }
 

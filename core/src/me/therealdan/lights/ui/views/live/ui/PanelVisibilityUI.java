@@ -7,6 +7,8 @@ import me.therealdan.lights.renderer.Renderer;
 import me.therealdan.lights.ui.views.Live;
 import me.therealdan.lights.util.Util;
 
+import java.util.List;
+
 public class PanelVisibilityUI implements UI {
 
     @Override
@@ -24,7 +26,16 @@ public class PanelVisibilityUI implements UI {
         drag(x, y, width, cellHeight);
         y -= cellHeight;
 
-        for (UI ui : Live.UIs()) {
+        List<UI> UIs = Live.UIs();
+        while (UIs.size() > 0) {
+            UI ui = null;
+            for (UI each : UIs) {
+                if (ui == null || ui.getName().compareTo(each.getName()) > 0) {
+                    ui = each;
+                }
+            }
+
+            UIs.remove(ui);
             if (ui.ignoreVisibilityUI()) continue;
             if (Util.containsMouse(x, y, width, cellHeight) && canInteract()) {
                 interacted = true;

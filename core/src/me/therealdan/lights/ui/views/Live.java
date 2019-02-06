@@ -198,7 +198,7 @@ public class Live implements Tab {
         if (Input.Keys.ESCAPE == keycode) Output.toggleFreeze();
 
         for (UI ui : UIs()) {
-            if (ui.containsMouse()) {
+            if (ui.isVisible() && ui.containsMouse() && ui.canInteract()) {
                 if (ui.keyDown(keycode)) return true;
             }
         }

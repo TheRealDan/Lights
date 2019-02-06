@@ -142,7 +142,8 @@ public class Live implements Tab {
         for (UI ui : UIs()) {
             if (ui.isVisible()) {
                 ui.setAllowInteract(!isDragging());
-                boolean interacted = ui.draw(renderer, X, Y, WIDTH, HEIGHT);
+                ui.draw(renderer, X, Y, WIDTH, HEIGHT);
+                renderer.draw();
             }
         }
 

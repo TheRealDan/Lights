@@ -9,8 +9,12 @@ import me.therealdan.lights.renderer.Task;
 public class Util {
 
     public static void box(Renderer renderer, float x, float y, float width, float height, Color background, String text) {
+        box(renderer, x, y, width, height, background, LightsCore.text(), text);
+    }
+
+    public static void box(Renderer renderer, float x, float y, float width, float height, Color background, Color textColor, String text) {
         box(renderer, x, y, width, height, background);
-        renderer.queue(new Task(x + 4, y - 3 - height / 2f).text(text, Task.TextPosition.LEFT_CENTER).setColor(LightsCore.text()));
+        renderer.queue(new Task(x + 4, y - 3 - height / 2f).text(text, Task.TextPosition.LEFT_CENTER).setColor(textColor));
     }
 
     public static void box(Renderer renderer, float x, float y, float width, float height, Color background) {

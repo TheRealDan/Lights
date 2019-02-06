@@ -5,7 +5,7 @@ import me.therealdan.lights.fixtures.Fixture;
 import me.therealdan.lights.fixtures.Group;
 import me.therealdan.lights.renderer.Renderer;
 import me.therealdan.lights.renderer.Task;
-import me.therealdan.lights.ui.views.Console;
+import me.therealdan.lights.ui.views.live.ui.ConsoleUI;
 import me.therealdan.lights.ui.views.Live;
 import me.therealdan.lights.ui.views.Patch;
 
@@ -120,11 +120,11 @@ public class DMX {
         }
 
         if (data.length() == 0) return null;
-        if (Output.SHOW_DMX_SEND_DEBUG) Console.log("Preparing to send: " + data.toString());
+        if (Output.SHOW_DMX_SEND_DEBUG) ConsoleUI.log("Preparing to send: " + data.toString());
         try {
             return data.toString().getBytes("UTF-8");
         } catch (Exception e) {
-            Console.log("Unsupported encoding");
+            ConsoleUI.log("Unsupported encoding");
             return data.toString().getBytes();
         }
     }

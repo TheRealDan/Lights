@@ -1,15 +1,15 @@
 package me.therealdan.lights.commands;
 
-import me.therealdan.lights.ui.views.Console;
+import me.therealdan.lights.ui.views.live.ui.ConsoleUI;
 
 public class HelpCommand implements Command {
 
     @Override
-    public boolean onCommand(Console console, String command, String[] args) {
+    public boolean onCommand(ConsoleUI console, String command, String[] args) {
         if (!isCommand(command)) return false;
 
         for (Command each : console.getCommands()) {
-            Console.print(Console.ConsoleColor.WHITE, each.getCommand() + " - " + each.getDescription());
+            ConsoleUI.print(ConsoleUI.ConsoleColor.WHITE, each.getCommand() + " - " + each.getDescription());
         }
 
         return true;

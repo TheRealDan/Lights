@@ -1,4 +1,4 @@
-package me.therealdan.lights.ui.views;
+package me.therealdan.lights.ui.views.live.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -6,8 +6,7 @@ import com.badlogic.gdx.graphics.Color;
 import me.therealdan.lights.LightsCore;
 import me.therealdan.lights.commands.*;
 import me.therealdan.lights.renderer.Renderer;
-import me.therealdan.lights.renderer.Task;
-import me.therealdan.lights.ui.view.Tab;
+import me.therealdan.lights.ui.views.Live;
 import me.therealdan.lights.util.Util;
 
 import java.text.SimpleDateFormat;
@@ -16,11 +15,10 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Console implements Tab {
+public class ConsoleUI implements UI {
 
-    private static Console console;
+    private static ConsoleUI console;
     private static SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm:ss");
-    private static boolean FORGET = false;
 
     private List<Command> commands = new LinkedList<>();
 
@@ -30,7 +28,7 @@ public class Console implements Tab {
     private boolean commandHistoryActive = false;
     private String input = "";
 
-    public Console() {
+    public ConsoleUI() {
         console = this;
 
         register(new HelpCommand());
@@ -41,28 +39,36 @@ public class Console implements Tab {
     }
 
     @Override
-    public void draw(Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {
-        // Input
-        float x = X + LightsCore.edge();
-        float y = Y + LightsCore.edge();
-        float width = WIDTH - LightsCore.edge() * 2;
-        float height = 30;
-        Util.box(renderer, x, y + height, width, height, LightsCore.medium(), input);
+    public boolean draw(Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {
+        Live.setSection(Live.Section.CONSOLE);
+        boolean interacted = false;
 
-        // Log
-        y += height + LightsCore.edge();
-        height = HEIGHT - height - (LightsCore.edge() * 3);
-        Util.box(renderer, x, y + height, width, height, LightsCore.medium());
+        float x = getX();
+        float y = getY();
+        float width = getWidth();
+        float cellHeight = 30;
+
+        Util.box(renderer, x, y, width, cellHeight, LightsCore.DARK_BLUE, setWidth(renderer, "Console"));
+        drag(x, y, width, cellHeight);
+        y -= cellHeight;
+
         for (String line : getLog()) {
             String colorCode = "";
             if (line.startsWith("%")) {
                 colorCode = line.substring(1, 2);
                 line = line.substring(2);
             }
-            if (y > HEIGHT - (LightsCore.edge() * 3)) break;
-            renderer.queue(new Task(x + 5, y + 3).text(line, Task.TextPosition.BOTTOM_LEFT).setColor(getColor(colorCode)));
-            y += 20;
+            Util.box(renderer, x, y, width, cellHeight, LightsCore.medium(), getColor(colorCode), setWidth(renderer, line));
+            drag(x, y, width, cellHeight);
+            y -= cellHeight;
         }
+
+        Util.box(renderer, x, y, width, cellHeight, LightsCore.medium(), setWidth(renderer, input));
+        drag(x, y, width, cellHeight);
+        y -= cellHeight;
+
+        setHeightBasedOnY(y);
+        return interacted;
     }
 
     @Override
@@ -202,9 +208,8 @@ public class Console implements Tab {
     }
 
     public static void print(ConsoleColor color, String... message) {
-        if (FORGET) clearLog();
         for (String line : message)
-            console.log.addFirst(color.getCode() + line);
+            console.log.addLast(color.getCode() + line);
     }
 
     public static void clearLog() {

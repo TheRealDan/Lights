@@ -1,7 +1,7 @@
 package me.therealdan.lights.dmx;
 
 import com.fazecast.jSerialComm.SerialPort;
-import me.therealdan.lights.ui.views.Console;
+import me.therealdan.lights.ui.views.live.ui.ConsoleUI;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,7 +50,7 @@ public class Output {
 
         if (this.serialPort != null && !this.serialPort.getSystemPortName().equals(activePort)) {
             this.serialPort = null;
-            if (SHOW_DMX_SEND_DEBUG) Console.log(Console.ConsoleColor.YELLOW, "Port dropped");
+            if (SHOW_DMX_SEND_DEBUG) ConsoleUI.log(ConsoleUI.ConsoleColor.YELLOW, "Port dropped");
         }
 
         boolean connected = false;
@@ -64,7 +64,7 @@ public class Output {
                     this.serialPort.setBaudRate(BAUDRATE);
                     this.serialPort.setComPortTimeouts(SerialPort.TIMEOUT_WRITE_BLOCKING, NEW_READ_TIMEOUT, NEW_WRITE_TIMEOUT);
                     this.lastConnect = System.currentTimeMillis();
-                    if (SHOW_DMX_SEND_DEBUG) Console.log(Console.ConsoleColor.YELLOW, "Port Connected");
+                    if (SHOW_DMX_SEND_DEBUG) ConsoleUI.log(ConsoleUI.ConsoleColor.YELLOW, "Port Connected");
                     break;
                 } else if (this.serialPort != null) {
                     connected = true;
@@ -79,7 +79,7 @@ public class Output {
         if (!serialPort.isOpen()) {
             serialPort.openPort();
             this.lastConnect = System.currentTimeMillis();
-            if (SHOW_DMX_SEND_DEBUG) Console.log(Console.ConsoleColor.YELLOW, "Port Opened");
+            if (SHOW_DMX_SEND_DEBUG) ConsoleUI.log(ConsoleUI.ConsoleColor.YELLOW, "Port Opened");
         }
 
         if (System.currentTimeMillis() - lastConnect < CONNECTION_WAIT) return;
@@ -90,10 +90,10 @@ public class Output {
             if (bytes == null) return;
             serialPort.getOutputStream().write(bytes);
             serialPort.getOutputStream().flush();
-            if (SHOW_DMX_SEND_DEBUG) Console.log(Console.ConsoleColor.YELLOW, "DMX Sent");
+            if (SHOW_DMX_SEND_DEBUG) ConsoleUI.log(ConsoleUI.ConsoleColor.YELLOW, "DMX Sent");
         } catch (Exception e) {
             serialPort = null;
-            Console.log(Console.ConsoleColor.RED, e.getMessage());
+            ConsoleUI.log(ConsoleUI.ConsoleColor.RED, e.getMessage());
             e.printStackTrace();
         }
     }
@@ -108,7 +108,7 @@ public class Output {
 
     public static void toggleFreeze() {
         FROZEN = !FROZEN;
-        Console.log(Console.ConsoleColor.CYAN, Output.isFrozen() ?
+        ConsoleUI.log(ConsoleUI.ConsoleColor.CYAN, Output.isFrozen() ?
                 "DMX Output frozen." :
                 "DMX Output unfrozen."
         );
@@ -126,11 +126,11 @@ public class Output {
         try {
             output.serialPort.closePort();
         } catch (Exception e) {
-            Console.log(Console.ConsoleColor.RED, e.getMessage());
+            ConsoleUI.log(ConsoleUI.ConsoleColor.RED, e.getMessage());
             e.printStackTrace();
         }
         output.serialPort = null;
-        Console.log(Console.ConsoleColor.YELLOW, "Port Disconnected");
+        ConsoleUI.log(ConsoleUI.ConsoleColor.YELLOW, "Port Disconnected");
         output.activePort = "Not Connected";
         output.connected = false;
     }

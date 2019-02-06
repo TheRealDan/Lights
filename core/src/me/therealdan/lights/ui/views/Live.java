@@ -51,6 +51,9 @@ public class Live implements Tab {
         uis.add(new SettingsUI());
         uis.add(new DMXInterfaceUI());
 
+        // Util
+        uis.add(new ConsoleUI());
+
         // Programmer
         uis.add(new FixturesUI());
         uis.add(new GroupsUI());

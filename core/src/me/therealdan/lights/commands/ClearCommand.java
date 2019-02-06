@@ -1,14 +1,14 @@
 package me.therealdan.lights.commands;
 
-import me.therealdan.lights.ui.views.Console;
+import me.therealdan.lights.ui.views.live.ui.ConsoleUI;
 
 public class ClearCommand implements Command {
 
     @Override
-    public boolean onCommand(Console console, String command, String[] args) {
+    public boolean onCommand(ConsoleUI console, String command, String[] args) {
         if (!command.equalsIgnoreCase(getCommand())) return false;
 
-        Console.clearLog();
+        ConsoleUI.clearLog();
 
         return true;
     }

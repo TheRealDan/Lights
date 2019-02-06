@@ -36,7 +36,7 @@ public class SequenceProgrammerUI implements UI {
     }
 
     @Override
-    public void keyDown(int keycode) {
+    public boolean keyDown(int keycode) {
         boolean shift = Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT);
 
         switch (getSelected()) {
@@ -89,6 +89,8 @@ public class SequenceProgrammerUI implements UI {
                 }
                 break;
         }
+
+        return true;
     }
 
     private void update() {

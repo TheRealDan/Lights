@@ -60,7 +60,6 @@ public class Live implements Tab {
         uis.add(new SelectedFixturesUI());
         uis.add(new AvailableParametersUI());
         uis.add(new SelectedChannelsUI());
-//        uis.add(new ColorWheelUI());
         uis.add(new SequenceProgrammerUI());
 
         // Info
@@ -142,9 +141,16 @@ public class Live implements Tab {
     public void draw(Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {
         getVisualiser3D().draw(Gdx.graphics.getDeltaTime());
 
+        UI allowInteract = null;
+        for (UI ui : UIs()) {
+            ui.setAllowInteract(false);
+            if (ui.isVisible() && ui.containsMouse() && !isDragging())
+                allowInteract = ui;
+        }
+        if (allowInteract != null) allowInteract.setAllowInteract(true);
+
         for (UI ui : UIs()) {
             if (ui.isVisible()) {
-                ui.setAllowInteract(!isDragging());
                 ui.draw(renderer, X, Y, WIDTH, HEIGHT);
                 renderer.draw();
             }
@@ -191,13 +197,11 @@ public class Live implements Tab {
 
         if (Input.Keys.ESCAPE == keycode) Output.toggleFreeze();
 
-        boolean containsMouse = false;
         for (UI ui : UIs()) {
-            ui.keyDown(keycode);
-            if (ui.containsMouse())
-                containsMouse = true;
+            if (ui.containsMouse()) {
+                if (ui.keyDown(keycode)) return true;
+            }
         }
-        if (containsMouse) return true;
 
         Button button = Hotkeys.getButton(keycode);
         if (button != null) button.press();
@@ -260,12 +264,13 @@ public class Live implements Tab {
         PANEL_VISIBILITY,
 
         SETTINGS, DMX_INTERFACE,
+        CONSOLE,
 
         MASTER, BUTTONS, FADERS,
+        ACTIVE_SEQUENCES,
 
         SEQUENCE_PROGRAMMER, FROZEN,
 
-        ACTIVE_SEQUENCES,
         FIXTURES, GROUPS, SELECTED_FIXTURES, AVAILABLE_PARAMETERS, SELECTED_CHANNELS, COLOR_WHEEL,
     }
 

@@ -37,7 +37,8 @@ public interface UI {
     default void keyUp(int keycode) {
     }
 
-    default void keyDown(int keycode) {
+    default boolean keyDown(int keycode) {
+        return false;
     }
 
     default boolean draw(Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {

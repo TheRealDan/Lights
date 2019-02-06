@@ -33,7 +33,7 @@ public class MasterUI implements UI {
         float height = getHeight() - cellHeight;
 
         Util.box(renderer, x, y, width, cellHeight, LightsCore.DARK_BLUE, setWidth(renderer, "Master"));
-        drag(x, y, width, height);
+        drag(x, y, width, cellHeight);
         y -= cellHeight;
 
         Util.box(renderer, x, y, width, height, LightsCore.medium(), setWidth(renderer, Util.getPercentage(Live.getMaster())));

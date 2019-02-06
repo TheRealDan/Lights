@@ -1,6 +1,5 @@
 package me.therealdan.lights.ui.views.live.ui;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import me.therealdan.lights.LightsCore;
 import me.therealdan.lights.programmer.Frame;
@@ -31,7 +30,7 @@ public class ColorWheelUI implements UI {
         float cellHeight = 30;
 
         float x = getX();
-        float y = Gdx.graphics.getHeight() - getY();
+        float y = getY();
         float width = getWidth();
         float height = getHeight() - cellHeight;
 

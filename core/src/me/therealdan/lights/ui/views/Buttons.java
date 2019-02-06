@@ -162,7 +162,7 @@ public class Buttons implements Tab {
 
         for (Button button : buttons()) {
             Util.box(renderer, x, y, width, cellHeight, button.equals(getButton()) ? LightsCore.DARK_RED : LightsCore.medium(), button.getName());
-            if (Util.containsMouse(x, Gdx.graphics.getHeight() - y, width, cellHeight)) {
+            if (Util.containsMouse(x,  y, width, cellHeight)) {
                 if (Gdx.input.isButtonPressed(Input.Buttons.LEFT))
                     select(button);
             }
@@ -170,7 +170,7 @@ public class Buttons implements Tab {
         }
 
         Util.box(renderer, x, y, width, cellHeight, LightsCore.DARK_BLUE, "Add Button");
-        if (Util.containsMouse(x, Gdx.graphics.getHeight() - y, width, cellHeight)) {
+        if (Util.containsMouse(x,  y, width, cellHeight)) {
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.actionReady(500))
                 set(new Button());
         }
@@ -186,7 +186,7 @@ public class Buttons implements Tab {
         for (Section section : Section.values()) {
             if (!section.isButton()) continue;
             Util.box(renderer, x, y, width, cellHeight, section.equals(getSection()) ? LightsCore.DARK_RED : LightsCore.medium(), section.getName() + ": " + section.getValue(button));
-            if (Util.containsMouse(x, Gdx.graphics.getHeight() - y, width, cellHeight))
+            if (Util.containsMouse(x, y, width, cellHeight))
                 if (Gdx.input.isButtonPressed(Input.Buttons.LEFT))
                     setSection(section);
             y -= cellHeight;
@@ -204,7 +204,7 @@ public class Buttons implements Tab {
         for (Sequence sequence : Sequences.sequences()) {
             Util.box(renderer, x, y, width, cellHeight, button.contains(sequence) ? LightsCore.DARK_RED : alternate ? LightsCore.medium() : LightsCore.dark(), sequence.getName() + " " + (button.contains(sequence) ? button.getPriority(sequence) : ""))
             ;
-            if (Util.containsMouse(x, Gdx.graphics.getHeight() - y, width, cellHeight)) {
+            if (Util.containsMouse(x, y, width, cellHeight)) {
                 setSection(Section.SEQUENCES);
                 select(sequence);
                 if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.actionReady(500)) {

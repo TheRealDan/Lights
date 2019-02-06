@@ -92,7 +92,7 @@ public class Hotkeys implements Tab {
         for (Button button : Buttons.buttons()) {
             String key = "Button_" + button.getPosition();
             Util.box(renderer, x, y, width, cellHeight, getEdit().equalsIgnoreCase(key) ? LightsCore.DARK_RED : LightsCore.medium(), contains(key) ? button.getName() + " - " + format(key) : button.getName());
-            if (Util.containsMouse(x, Gdx.graphics.getHeight() - y, width, cellHeight))
+            if (Util.containsMouse(x, y, width, cellHeight))
                 if (Gdx.input.isButtonPressed(Input.Buttons.LEFT))
                     setEdit(key);
             y -= cellHeight;
@@ -106,7 +106,7 @@ public class Hotkeys implements Tab {
         for (Control control : Category.VISUALISER.getControls()) {
             String key = control.toString();
             Util.box(renderer, x, y, width, cellHeight, getEdit().equalsIgnoreCase(key) ? LightsCore.DARK_RED : LightsCore.medium(), contains(key) ? control.getName() + " - " + format(key) : control.getName());
-            if (Util.containsMouse(x, Gdx.graphics.getHeight() - y, width, cellHeight))
+            if (Util.containsMouse(x, y, width, cellHeight))
                 if (Gdx.input.isButtonPressed(Input.Buttons.LEFT))
                     setEdit(key);
             y -= cellHeight;

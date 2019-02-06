@@ -242,7 +242,7 @@ public class Patch implements Tab {
             if (current >= fixtureStart) {
                 y -= cellHeight;
 
-                if (Util.containsMouse(x, Gdx.graphics.getHeight() - y, width, cellHeight)) {
+                if (Util.containsMouse(x, y, width, cellHeight)) {
                     section = Section.FIXTURES;
                     if (Gdx.input.isButtonPressed(Input.Keys.LEFT))
                         select(fixture);
@@ -327,7 +327,7 @@ public class Patch implements Tab {
                 renderer.queue(new Task(X, Y - cellHeight).rectOutline(WIDTH, cellHeight).setColor(LightsCore.light()));
                 renderer.queue(new Task(X + 5, Y - 3 - cellHeight / 2f).text(group.getName(), Task.TextPosition.LEFT_CENTER).setColor(LightsCore.text()));
 
-                if (Util.containsMouse(X, Gdx.graphics.getHeight() - Y, WIDTH, cellHeight)) {
+                if (Util.containsMouse(X, Y, WIDTH, cellHeight)) {
                     section = Section.GROUPS;
                     if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
                         selectedGroup = group;
@@ -346,7 +346,7 @@ public class Patch implements Tab {
         renderer.queue(new Task(X, Y - cellHeight).rectOutline(WIDTH, cellHeight).setColor(LightsCore.light()));
         renderer.queue(new Task(X + 5, Y - 3 - cellHeight / 2).text("Create New Group", Task.TextPosition.LEFT_CENTER).setColor(LightsCore.text()));
 
-        if (Util.containsMouse(X, Gdx.graphics.getHeight() - Y, WIDTH, cellHeight)) {
+        if (Util.containsMouse(X, Y, WIDTH, cellHeight)) {
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && this.mouseUp) {
                 this.mouseUp = false;
                 add(new Group("Group " + (groups().size() + 1)));
@@ -385,7 +385,7 @@ public class Patch implements Tab {
             ));
             renderer.queue(new Task(x, y).rectOutline(cellSize, cellSize).setColor(LightsCore.light()));
             y += cellSize;
-            if (Util.containsMouse(x, Gdx.graphics.getHeight() - y, cellSize, cellSize)) {
+            if (Util.containsMouse(x, y, cellSize, cellSize)) {
                 section = Section.PATCH;
                 if (Gdx.input.isButtonPressed(Input.Buttons.LEFT))
                     selectedFixture.setAddress(address);

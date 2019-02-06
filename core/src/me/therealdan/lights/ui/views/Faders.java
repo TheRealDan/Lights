@@ -169,7 +169,7 @@ public class Faders implements Tab {
 
         for (FaderBank bank : banks()) {
             Util.box(renderer, x, y, width, cellHeight, bank.equals(getBank()) ? LightsCore.DARK_RED : LightsCore.medium(), "Bank " + bank.getID());
-            if (Util.containsMouse(x, Gdx.graphics.getHeight() - y, width, cellHeight)) {
+            if (Util.containsMouse(x, y, width, cellHeight)) {
                 setSection(Section.FADER_BANKS);
                 if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.actionReady(500))
                     setBank(bank);
@@ -178,7 +178,7 @@ public class Faders implements Tab {
         }
 
         Util.box(renderer, x, y, width, cellHeight, LightsCore.DARK_BLUE, "Create New Bank");
-        if (Util.containsMouse(x, Gdx.graphics.getHeight() - y, width, cellHeight)) {
+        if (Util.containsMouse(x, y, width, cellHeight)) {
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
                 getBank(banks().size() + 1);
             }
@@ -193,7 +193,7 @@ public class Faders implements Tab {
             boolean highlight = fader.equals(getFader());
             if (getBank() != null) highlight = getBank().contains(fader);
             Util.box(renderer, x, y, width, cellHeight, highlight ? LightsCore.DARK_RED : LightsCore.medium(), fader.getName());
-            if (Util.containsMouse(x, Gdx.graphics.getHeight() - y, width, cellHeight)) {
+            if (Util.containsMouse(x, y, width, cellHeight)) {
                 setSection(Section.FADERS);
                 if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
                     if (getBank() == null) {
@@ -211,7 +211,7 @@ public class Faders implements Tab {
         }
 
         Util.box(renderer, x, y, width, cellHeight, LightsCore.DARK_BLUE, "Create New Fader");
-        if (Util.containsMouse(x, Gdx.graphics.getHeight() - y, width, cellHeight)) {
+        if (Util.containsMouse(x, y, width, cellHeight)) {
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
                 add(new Fader(Fader.getFreeID()));
             }
@@ -226,7 +226,7 @@ public class Faders implements Tab {
         y -= cellHeight;
 
         Util.box(renderer, x, y, width, cellHeight, getEdit().equals(Edit.FADER_NAME) ? LightsCore.DARK_RED : LightsCore.medium(), "Name: " + fader.getName());
-        if (Util.containsMouse(x, Gdx.graphics.getHeight() - y, width, cellHeight)) {
+        if (Util.containsMouse(x, y, width, cellHeight)) {
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.actionReady(500)) {
                 setEdit(Edit.FADER_NAME);
             }
@@ -234,7 +234,7 @@ public class Faders implements Tab {
         y -= cellHeight;
 
         Util.box(renderer, x, y, width, cellHeight, LightsCore.medium(), "Type: " + fader.getType().getName());
-        if (Util.containsMouse(x, Gdx.graphics.getHeight() - y, width, cellHeight)) {
+        if (Util.containsMouse(x, y, width, cellHeight)) {
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.actionReady(500)) {
                 fader.toggleType();
             }
@@ -257,7 +257,7 @@ public class Faders implements Tab {
 
         for (Sequence sequence : Sequences.sequences()) {
             Util.box(renderer, x, y, width, cellHeight, fader.getSequence() != null && fader.getSequence().equals(sequence) ? LightsCore.DARK_RED : LightsCore.medium(), sequence.getName());
-            if (Util.containsMouse(x, Gdx.graphics.getHeight() - y, width, cellHeight)) {
+            if (Util.containsMouse(x, y, width, cellHeight)) {
                 setSection(Section.SEQUENCES);
                 if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.actionReady(500)) {
                     fader.setSequence(sequence);

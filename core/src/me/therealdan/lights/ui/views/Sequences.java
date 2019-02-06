@@ -251,7 +251,7 @@ public class Sequences implements Tab {
             if (current - sequenceStart >= maxRows) break;
             if (current >= sequenceStart) {
                 Util.box(renderer, x, y, width, cellHeight, sequence.equals(getSequence()) ? LightsCore.DARK_RED : alternate ? LightsCore.medium() : LightsCore.dark(), sequence.getName());
-                if (Util.containsMouse(x, Gdx.graphics.getHeight() - y, width, cellHeight)) {
+                if (Util.containsMouse(x, y, width, cellHeight)) {
                     setSection(Section.SEQUENCES);
                     if (Gdx.input.isButtonPressed(Input.Buttons.LEFT))
                         select(sequence);
@@ -271,7 +271,7 @@ public class Sequences implements Tab {
         y -= cellHeight;
 
         Util.box(renderer, x, y, width, cellHeight, getEdit().equals(Edit.SEQUENCE_NAME) ? LightsCore.DARK_RED : LightsCore.medium(), "Name: " + sequence.getName());
-        if (Util.containsMouse(x, Gdx.graphics.getHeight() - y, width, cellHeight)) {
+        if (Util.containsMouse(x, y, width, cellHeight)) {
             setSection(Section.SEQUENCE);
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT))
                 setEdit(Edit.SEQUENCE_NAME);
@@ -279,7 +279,7 @@ public class Sequences implements Tab {
         y -= cellHeight;
 
         Util.box(renderer, x, y, width, cellHeight, sequence.doesLoop() ? LightsCore.DARK_RED : LightsCore.medium(), "Loop: " + (sequence.doesLoop() ? "Enabled" : "Disabled"));
-        if (Util.containsMouse(x, Gdx.graphics.getHeight() - y, width, cellHeight)) {
+        if (Util.containsMouse(x, y, width, cellHeight)) {
             setSection(Section.SEQUENCE);
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.actionReady(500))
                 sequence.toggleLoop();
@@ -287,7 +287,7 @@ public class Sequences implements Tab {
         y -= cellHeight;
 
         Util.box(renderer, x, y, width, cellHeight, sequence.doesClear() ? LightsCore.DARK_RED : LightsCore.medium(), "Clear: " + (sequence.doesClear() ? "Enabled" : "Disabled"));
-        if (Util.containsMouse(x, Gdx.graphics.getHeight() - y, width, cellHeight)) {
+        if (Util.containsMouse(x, y, width, cellHeight)) {
             setSection(Section.SEQUENCE);
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.actionReady(500))
                 sequence.toggleClear();
@@ -295,7 +295,7 @@ public class Sequences implements Tab {
         y -= cellHeight;
 
         Util.box(renderer, x, y, width, cellHeight, sequence.useTempo() ? LightsCore.DARK_RED : LightsCore.medium(), "Use Global Tempo: " + (sequence.useTempo() ? "Enabled" : "Disabled"));
-        if (Util.containsMouse(x, Gdx.graphics.getHeight() - y, width, cellHeight)) {
+        if (Util.containsMouse(x, y, width, cellHeight)) {
             setSection(Section.SEQUENCE);
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.actionReady(500))
                 sequence.toggleUseTempo();
@@ -303,7 +303,7 @@ public class Sequences implements Tab {
         y -= cellHeight;
 
         Util.box(renderer, x, y, width, cellHeight, sequence.globalFrameTime() ? LightsCore.DARK_RED : LightsCore.medium(), "Global Frame Time: " + (sequence.globalFrameTime() ? "Enabled" : "Disabled"));
-        if (Util.containsMouse(x, Gdx.graphics.getHeight() - y, width, cellHeight)) {
+        if (Util.containsMouse(x, y, width, cellHeight)) {
             setSection(Section.SEQUENCE);
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.actionReady(500))
                 sequence.toggleGlobalFrameTime();
@@ -311,7 +311,7 @@ public class Sequences implements Tab {
         y -= cellHeight;
 
         Util.box(renderer, x, y, width, cellHeight, sequence.globalFadeTime() ? LightsCore.DARK_RED : LightsCore.medium(), "Global Fade Time: " + (sequence.globalFadeTime() ? "Enabled" : "Disabled"));
-        if (Util.containsMouse(x, Gdx.graphics.getHeight() - y, width, cellHeight)) {
+        if (Util.containsMouse(x, y, width, cellHeight)) {
             setSection(Section.SEQUENCE);
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.actionReady(500))
                 sequence.toggleGlobalFadeTime();
@@ -332,7 +332,7 @@ public class Sequences implements Tab {
             if (current - frameStart >= maxRows) break;
             if (current >= frameStart) {
                 Util.box(renderer, x, y, width, cellHeight, frame.equals(getFrame()) ? LightsCore.DARK_RED : alternate ? LightsCore.medium() : LightsCore.dark(), frame.getInfo());
-                if (Util.containsMouse(x, Gdx.graphics.getHeight() - y, width, cellHeight)) {
+                if (Util.containsMouse(x, y, width, cellHeight)) {
                     setSection(Section.FRAMES);
                     if (Gdx.input.isButtonPressed(Input.Buttons.LEFT))
                         select(frame);
@@ -354,14 +354,14 @@ public class Sequences implements Tab {
         y -= cellHeight;
 
         Util.box(renderer, x, y, width, cellHeight, getEdit().equals(Edit.FRAME_TIME) ? LightsCore.DARK_RED : LightsCore.medium(), "Frame Time: " + Frame.format(frame.getFrameTime()));
-        if (Util.containsMouse(x, Gdx.graphics.getHeight() - y, width, cellHeight)) {
+        if (Util.containsMouse(x, y, width, cellHeight)) {
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT))
                 setEdit(Edit.FRAME_TIME);
         }
         y -= cellHeight;
 
         Util.box(renderer, x, y, width, cellHeight, getEdit().equals(Edit.FADE_TIME) ? LightsCore.DARK_RED : LightsCore.medium(), "Fade Time: " + Frame.format(frame.getFadeTime()));
-        if (Util.containsMouse(x, Gdx.graphics.getHeight() - y, width, cellHeight)) {
+        if (Util.containsMouse(x, y, width, cellHeight)) {
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT))
                 setEdit(Edit.FADE_TIME);
         }
@@ -383,7 +383,7 @@ public class Sequences implements Tab {
             if (current - taskStart >= maxRows) break;
             if (current >= taskStart) {
                 Util.box(renderer, x, y, width, cellHeight, alternate ? LightsCore.medium() : LightsCore.dark(), task.getInfo());
-                if (Util.containsMouse(x, Gdx.graphics.getHeight() - y, width, cellHeight)) {
+                if (Util.containsMouse(x, y, width, cellHeight)) {
                     setSection(Section.TASKS);
                 }
                 y -= cellHeight;

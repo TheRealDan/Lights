@@ -41,7 +41,7 @@ public interface UI {
     }
 
     default boolean draw(Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {
-        Util.box(renderer, getX(), Gdx.graphics.getHeight() - getY(), getWidth(), getHeight(), LightsCore.medium());
+        Util.box(renderer, getX(), getY(), getWidth(), getHeight(), LightsCore.medium());
         return true;
     }
 
@@ -79,6 +79,10 @@ public interface UI {
 
     default void setHeight(float height) {
         set(getName() + "_HEIGHT", height);
+    }
+
+    default void setHeightBasedOnY(float y) {
+        setHeight(getY() - y);
     }
 
     default boolean containsMouse() {

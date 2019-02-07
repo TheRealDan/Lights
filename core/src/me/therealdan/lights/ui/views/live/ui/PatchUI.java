@@ -163,8 +163,12 @@ public class PatchUI implements UI {
         for (Fixture fixture : fixtures()) {
             if (Util.containsMouse(x, y, width, cellHeight) && canInteract()) {
                 interacted = true;
-                if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
-                    select(fixture);
+                if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.actionReady(500)) {
+                    if (fixture.equals(getSelectedFixture())) {
+                        select(null);
+                    } else {
+                        select(fixture);
+                    }
                 }
             }
             Color color = fixture.equals(getSelectedFixture()) ? LightsCore.DARK_GREEN : LightsCore.medium();

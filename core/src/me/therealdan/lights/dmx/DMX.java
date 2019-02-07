@@ -6,8 +6,8 @@ import me.therealdan.lights.fixtures.Group;
 import me.therealdan.lights.renderer.Renderer;
 import me.therealdan.lights.renderer.Task;
 import me.therealdan.lights.ui.views.Live;
-import me.therealdan.lights.ui.views.Patch;
 import me.therealdan.lights.ui.views.live.ui.ConsoleUI;
+import me.therealdan.lights.ui.views.live.ui.PatchUI;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -69,7 +69,7 @@ public class DMX {
 
     private int pget(int channel) {
         if (DMX.LIMIT_LED_STRIPS) {
-            Group group = Patch.groupByName("LEDs");
+            Group group = PatchUI.groupByName("LEDs");
             if (group != null) {
                 for (Fixture fixture : group.fixtures()) {
                     for (int address : fixture.getAddresses()) {

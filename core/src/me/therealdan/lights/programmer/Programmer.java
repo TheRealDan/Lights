@@ -3,8 +3,8 @@ package me.therealdan.lights.programmer;
 import me.therealdan.lights.fixtures.Channel;
 import me.therealdan.lights.fixtures.Fixture;
 import me.therealdan.lights.fixtures.Group;
-import me.therealdan.lights.ui.views.Patch;
 import me.therealdan.lights.ui.views.Sequences;
+import me.therealdan.lights.ui.views.live.ui.PatchUI;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,7 +23,7 @@ public class Programmer {
     }
 
     public static void set(float address, float value) {
-        for (Fixture fixture : Patch.fixtures()) {
+        for (Fixture fixture : PatchUI.fixtures()) {
             HashMap<String, Integer> parameters = new HashMap<>();
             for (Channel channel : fixture.channels()) {
                 parameters.put(channel.getType().toString(), parameters.getOrDefault(channel.getType().toString(), 0) + 1);
@@ -91,7 +91,7 @@ public class Programmer {
     }
 
     public static void deselectAllGroups() {
-        for (Group group : Patch.groups())
+        for (Group group : PatchUI.groups())
             deselect(group);
     }
 

@@ -54,7 +54,6 @@ public class LightsCore extends ApplicationAdapter {
         dark = new Color(0.1f, 0.1f, 0.1f, 1);
 
         Tab.register(new Live());
-        Tab.register(new Patch());
         Tab.register(new Sequences());
         Tab.register(new Faders());
         Tab.register(new Buttons());

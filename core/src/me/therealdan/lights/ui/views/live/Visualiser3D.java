@@ -18,7 +18,7 @@ import me.therealdan.lights.fixtures.Model;
 import me.therealdan.lights.programmer.Programmer;
 import me.therealdan.lights.ui.views.Hotkeys;
 import me.therealdan.lights.ui.views.Live;
-import me.therealdan.lights.ui.views.Patch;
+import me.therealdan.lights.ui.views.live.ui.PatchUI;
 
 public class Visualiser3D {
 
@@ -50,7 +50,7 @@ public class Visualiser3D {
         environment.add(new DirectionalLight().set(0.8f, 0.8f, 0.8f, -1f, -0.8f, -0.2f));
         environment.add(new DirectionalLight().set(0.6f, 0.6f, 0.6f, 1f, 0.8f, 0.2f));
 
-        for (Fixture fixture : Patch.fixtures()) {
+        for (Fixture fixture : PatchUI.fixtures()) {
             fixture.buildModels();
         }
 
@@ -98,7 +98,7 @@ public class Visualiser3D {
         }
 
         DMX visualiser = DMX.get("VISUALISER");
-        for (Fixture fixture : Patch.fixtures()) {
+        for (Fixture fixture : PatchUI.fixtures()) {
             fixture.updateColor(visualiser);
         }
     }
@@ -111,7 +111,7 @@ public class Visualiser3D {
         camera.update();
 
         modelBatch.begin(camera);
-        for (Fixture fixture : Patch.fixtures()) {
+        for (Fixture fixture : PatchUI.fixtures()) {
             modelBatch.render(fixture.getModelInstances(), environment);
         }
         modelBatch.end();
@@ -198,7 +198,7 @@ public class Visualiser3D {
 
     public Fixture getFixture(int screenX, int screenY) {
         Ray ray = camera.getPickRay(screenX, screenY);
-        for (Fixture fixture : Patch.fixtures()) {
+        for (Fixture fixture : PatchUI.fixtures()) {
             if (fixture.getModels().size() > 0) {
                 for (Model model : fixture.getModels()) {
                     if (Intersector.intersectRayBoundsFast(ray, model.getPosition(), model.getDimensions())) {

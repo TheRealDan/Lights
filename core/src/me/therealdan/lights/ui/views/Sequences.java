@@ -10,6 +10,7 @@ import me.therealdan.lights.programmer.Sequence;
 import me.therealdan.lights.programmer.Task;
 import me.therealdan.lights.renderer.Renderer;
 import me.therealdan.lights.ui.view.Tab;
+import me.therealdan.lights.ui.views.live.ui.PatchUI;
 import me.therealdan.lights.util.Util;
 
 import java.util.ArrayList;
@@ -76,7 +77,7 @@ public class Sequences implements Tab {
                 if (frame != null) {
                     String[] args = line.split(" \\| ");
                     frame.set(
-                            Patch.fixtureByID(Integer.parseInt(args[1])),
+                            PatchUI.fixtureByID(Integer.parseInt(args[1])),
                             Channel.Type.valueOf(args[2]),
                             Float.parseFloat(args[4]),
                             Integer.parseInt(args[3])

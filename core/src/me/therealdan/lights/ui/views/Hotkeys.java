@@ -7,6 +7,7 @@ import me.therealdan.lights.LightsCore;
 import me.therealdan.lights.controllers.Button;
 import me.therealdan.lights.renderer.Renderer;
 import me.therealdan.lights.ui.view.Tab;
+import me.therealdan.lights.ui.views.live.ui.ButtonsUI;
 import me.therealdan.lights.util.Util;
 
 import java.util.ArrayList;
@@ -89,7 +90,7 @@ public class Hotkeys implements Tab {
         Util.box(renderer, x, y, width, cellHeight, LightsCore.DARK_BLUE, "Buttons");
         y -= cellHeight;
 
-        for (Button button : Buttons.buttons()) {
+        for (Button button : ButtonsUI.buttons()) {
             String key = "Button_" + button.getPosition();
             Util.box(renderer, x, y, width, cellHeight, getEdit().equalsIgnoreCase(key) ? LightsCore.DARK_RED : LightsCore.medium(), contains(key) ? button.getName() + " - " + format(key) : button.getName());
             if (Util.containsMouse(x, y, width, cellHeight))
@@ -202,7 +203,7 @@ public class Hotkeys implements Tab {
     }
 
     public static Button getButton(int keycode) {
-        for (Button button : Buttons.buttons()) {
+        for (Button button : ButtonsUI.buttons()) {
             if (contains("Button_" + button.getPosition())) {
                 if (get("Button_" + button.getPosition()) == keycode) {
                     return button;

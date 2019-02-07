@@ -54,6 +54,8 @@ public class Live implements Tab {
         // Setup
         uis.add(new ProfilesUI());
         uis.add(new PatchUI());
+        uis.add(new ButtonEditUI());
+        uis.add(new SequencesUI());
 
         // Util
         uis.add(new ConsoleUI());
@@ -173,6 +175,14 @@ public class Live implements Tab {
     }
 
     @Override
+    public boolean scrolled(int amount) {
+        for (UI ui : UIs())
+            ui.scrolled(amount);
+
+        return true;
+    }
+
+    @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
         drag(null);
 
@@ -269,7 +279,7 @@ public class Live implements Tab {
         PANEL_VISIBILITY,
 
         SETTINGS, DMX_INTERFACE,
-        PROFILES, PATCH,
+        PROFILES, PATCH, BUTTON_EDIT, SEQUENCES,
         CONSOLE, DMX_OUTPUT,
 
         MASTER, BUTTONS, FADERS,

@@ -34,6 +34,8 @@ public interface UI {
         if (!ignoreVisibilityUI()) Gdx.files.local("Lights/UI/" + getName() + ".txt").writeString("Visible: " + isVisible(), true);
     }
 
+    default void scrolled(int amount) {}
+
     default void keyUp(int keycode) {
     }
 

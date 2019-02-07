@@ -56,7 +56,6 @@ public class LightsCore extends ApplicationAdapter {
         Tab.register(new Live());
         Tab.register(new Sequences());
         Tab.register(new Faders());
-        Tab.register(new Buttons());
         Tab.register(new Hotkeys());
 
         viewBar = new ViewBar();
@@ -121,6 +120,12 @@ public class LightsCore extends ApplicationAdapter {
     }
 
     public static boolean actionReady(long milliseconds) {
+        if (milliseconds == -1) {
+            if (mouseUp) return true;
+            mouseUp = false;
+            return false;
+        }
+
         if (mouseUp || System.currentTimeMillis() - lastAction > milliseconds) {
             mouseUp = false;
             lastAction = System.currentTimeMillis();

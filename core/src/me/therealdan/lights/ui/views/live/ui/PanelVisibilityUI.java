@@ -42,7 +42,7 @@ public class PanelVisibilityUI implements UI {
                 if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.actionReady(200))
                     ui.toggleVisibility();
             }
-            Util.box(renderer, x, y, width, cellHeight, ui.isVisible() ? LightsCore.DARK_RED : LightsCore.medium(), setWidth(renderer, ui.getName()));
+            Util.box(renderer, x, y, width, cellHeight, ui.isVisible() ? LightsCore.DARK_GREEN : LightsCore.medium(), setWidth(renderer, ui.getName()));
             y -= cellHeight;
         }
 

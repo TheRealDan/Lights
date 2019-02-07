@@ -36,6 +36,9 @@ public class LightsCore extends ApplicationAdapter {
     public static Color DARK_RED = new Color(0.5f, 0.1f, 0.1f, 1);
     public static Color DARK_GREEN = new Color(0.1f, 0.5f, 0.1f, 1);
     public static Color DARK_BLUE = new Color(0.1f, 0.1f, 0.5f, 1);
+    public static Color DARK_MAGENTA = new Color(0.5f, 0.1f, 0.5f, 1);
+    public static Color DARK_YELLOW = new Color(0.5f, 0.5f, 0.1f, 1);
+    public static Color DARK_CYAN = new Color(0.1f, 0.5f, 0.5f, 1);
 
     private static boolean mouseUp = true;
     private static long lastAction = System.currentTimeMillis();

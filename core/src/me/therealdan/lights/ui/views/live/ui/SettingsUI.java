@@ -65,7 +65,7 @@ public class SettingsUI implements UI {
                     }
                     break;
                 case BOOLEAN:
-                    Util.box(renderer, x, y, width, cellHeight, setting.getBoolean() ? LightsCore.DARK_RED : LightsCore.medium(), setWidth(renderer, setting.getName()));
+                    Util.box(renderer, x, y, width, cellHeight, setting.getBoolean() ? LightsCore.DARK_GREEN : LightsCore.medium(), setWidth(renderer, setting.getName()));
                     if (Util.containsMouse(x, y, width, cellHeight) && canInteract()) {
                         interacted = true;
                         if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.actionReady(250))

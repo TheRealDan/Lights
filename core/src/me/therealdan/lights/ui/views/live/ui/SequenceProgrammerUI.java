@@ -168,7 +168,7 @@ public class SequenceProgrammerUI implements UI {
             boolean highlight = false;
             if (button.equals(Button.LOOP)) highlight = sequence.doesLoop();
             setWidth((renderer.getWidth(button.getName()) + 10) * Button.values().length, true);
-            Util.box(renderer, x, y, width, cellHeight, highlight ? LightsCore.DARK_RED : LightsCore.medium(), button.getName());
+            Util.box(renderer, x, y, width, cellHeight, highlight ? LightsCore.DARK_GREEN : LightsCore.medium(), button.getName());
             if (Util.containsMouse(x, y, width, cellHeight) && canInteract()) {
                 interacted = true;
                 if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.actionReady(500))
@@ -186,7 +186,7 @@ public class SequenceProgrammerUI implements UI {
             if (isSelected(frame)) color = LightsCore.DARK_RED;
             if (sequence.getCurrentFrame() == index) {
                 color = LightsCore.DARK_GREEN;
-                if (isSelected(frame)) color = LightsCore.YELLOW;
+                if (isSelected(frame)) color = LightsCore.DARK_YELLOW;
             }
             Util.box(renderer, x, y, width, cellHeight, color, setWidth(renderer, frame.getInfo()));
             if (DMX.DRAW_DMX) {

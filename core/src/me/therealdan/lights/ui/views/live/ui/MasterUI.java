@@ -38,7 +38,7 @@ public class MasterUI implements UI {
 
         Util.box(renderer, x, y, width, height, LightsCore.medium(), setWidth(renderer, Util.getPercentage(Live.getMaster())));
         float fill = Live.getMaster() * height;
-        Util.box(renderer, x, y - height + fill, width, fill, LightsCore.DARK_RED);
+        Util.box(renderer, x, y - height + fill, width, fill, LightsCore.BLACK);
 
         if (Util.containsMouse(x, y, width, height) && canInteract()) {
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {

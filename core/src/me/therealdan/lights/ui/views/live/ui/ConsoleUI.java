@@ -63,7 +63,7 @@ public class ConsoleUI implements UI {
             y -= cellHeight;
         }
 
-        Util.box(renderer, x, y, width, cellHeight, LightsCore.medium(), setWidth(renderer, input));
+        Util.box(renderer, x, y, width, cellHeight, canInteract() ? LightsCore.DARK_RED : LightsCore.medium(), setWidth(renderer, input));
         drag(x, y, width, cellHeight);
         y -= cellHeight;
 

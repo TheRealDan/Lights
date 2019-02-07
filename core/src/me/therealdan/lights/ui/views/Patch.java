@@ -13,6 +13,7 @@ import me.therealdan.lights.fixtures.Profile;
 import me.therealdan.lights.renderer.Renderer;
 import me.therealdan.lights.renderer.Task;
 import me.therealdan.lights.ui.view.Tab;
+import me.therealdan.lights.ui.views.live.ui.ProfilesUI;
 import me.therealdan.lights.util.Util;
 
 import java.util.ArrayList;
@@ -66,7 +67,7 @@ public class Patch implements Tab {
             if (line.startsWith("Name: ")) {
                 name = line.split(": ")[1];
             } else if (line.startsWith("Profile: ")) {
-                profile = ProfileEditor.profileByName(line.split(": ")[1]);
+                profile = ProfilesUI.profileByName(line.split(": ")[1]);
             } else if (line.startsWith("Address: ")) {
                 address = Integer.parseInt(line.split(": ")[1]);
             } else if (line.startsWith("ID: ")) {

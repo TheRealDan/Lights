@@ -51,6 +51,9 @@ public class Live implements Tab {
         uis.add(new SettingsUI());
         uis.add(new DMXInterfaceUI());
 
+        // Setup
+        uis.add(new ProfilesUI());
+
         // Util
         uis.add(new ConsoleUI());
         uis.add(new DMXOutputUI());
@@ -265,6 +268,7 @@ public class Live implements Tab {
         PANEL_VISIBILITY,
 
         SETTINGS, DMX_INTERFACE,
+        PROFILES,
         CONSOLE, DMX_OUTPUT,
 
         MASTER, BUTTONS, FADERS,

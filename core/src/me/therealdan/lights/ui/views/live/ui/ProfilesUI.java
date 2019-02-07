@@ -1,29 +1,33 @@
-package me.therealdan.lights.ui.views;
+package me.therealdan.lights.ui.views.live.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import me.therealdan.lights.LightsCore;
 import me.therealdan.lights.fixtures.Channel;
 import me.therealdan.lights.fixtures.ModelDesign;
 import me.therealdan.lights.fixtures.Profile;
 import me.therealdan.lights.renderer.Renderer;
-import me.therealdan.lights.ui.view.Tab;
+import me.therealdan.lights.ui.views.Live;
+import me.therealdan.lights.util.Util;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProfileEditor implements Tab {
+public class ProfilesUI implements UI {
 
-    private static ProfileEditor profileEditor;
+    private static ProfilesUI profilesUI;
 
     private List<Profile> profiles = new ArrayList<>();
 
-    public ProfileEditor() {
-        profileEditor = this;
+    public ProfilesUI() {
+        profilesUI = this;
 
         FileHandle fileHandle = Gdx.files.local("Lights/Profiles/");
         if (fileHandle.exists() && fileHandle.isDirectory())
             for (FileHandle child : fileHandle.list())
                 load(child);
+
+        // TODO - Need a way to list, create, edit and delete profiles
     }
 
     private void load(FileHandle fileHandle) {
@@ -65,6 +69,8 @@ public class ProfileEditor implements Tab {
 
     @Override
     public void save() {
+        UI.super.save();
+
         for (Profile profile : profiles()) {
             FileHandle fileHandle = Gdx.files.local("Lights/Profiles/" + profile.getName() + ".txt");
             fileHandle.writeString("", false);
@@ -89,11 +95,25 @@ public class ProfileEditor implements Tab {
     }
 
     @Override
-    public void draw(Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {
+    public boolean draw(Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {
+        Live.setSection(Live.Section.PROFILES);
+        boolean interacted = false;
+
+        float x = getX();
+        float y = getY();
+        float width = getWidth();
+        float cellHeight = 30;
+
+        Util.box(renderer, x, y, width, cellHeight, LightsCore.DARK_BLUE, setWidth(renderer, "Profiles"));
+        drag(x, y, width, cellHeight);
+        y -= cellHeight;
+
+        setHeightBasedOnY(y);
+        return interacted;
     }
 
     public static void add(Profile profile) {
-        profileEditor.profiles.add(profile);
+        profilesUI.profiles.add(profile);
     }
 
     public static Profile profileByName(String name) {
@@ -105,6 +125,6 @@ public class ProfileEditor implements Tab {
     }
 
     public static List<Profile> profiles() {
-        return new ArrayList<>(profileEditor.profiles);
+        return new ArrayList<>(profilesUI.profiles);
     }
 }

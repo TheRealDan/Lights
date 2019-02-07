@@ -6,6 +6,7 @@ import me.therealdan.lights.controllers.Button;
 import me.therealdan.lights.controllers.Fader;
 import me.therealdan.lights.dmx.DMX;
 import me.therealdan.lights.dmx.Output;
+import me.therealdan.lights.programmer.CondensedFrame;
 import me.therealdan.lights.programmer.Frame;
 import me.therealdan.lights.programmer.Programmer;
 import me.therealdan.lights.programmer.Sequence;
@@ -36,10 +37,11 @@ public class Live implements Tab {
     private HashMap<Integer, Sequence> sequenceStack = new HashMap<>();
     private HashMap<Sequence, Long> clear = new HashMap<>();
 
-    private Frame lastFrame = null;
-
     private long lastTempo = System.currentTimeMillis();
     private long tempo = 1000;
+
+    private CondensedFrame targetCondensedFrame, currentCondensedFrame, previousCondensedFrame;
+    private long condensedFrameTimestamp = System.currentTimeMillis();
 
     public Live() {
         live = this;
@@ -118,24 +120,34 @@ public class Live implements Tab {
             }
         }
 
-        Frame frame = new Frame();
-
+        CondensedFrame newCondensedFrame = new CondensedFrame();
         for (int priority = 0; priority <= getTopPriority(); priority++)
             if (contains(priority))
-                frame.override(getSequence(priority));
-
+                newCondensedFrame.merge(getSequence(priority));
         for (Fader fader : Faders.faders())
-            frame.override(fader);
+            newCondensedFrame.merge(fader);
 
-        this.lastFrame = frame;
+        if (targetCondensedFrame == null) {
+            targetCondensedFrame = newCondensedFrame.clone();
+            currentCondensedFrame = newCondensedFrame.clone();
+            previousCondensedFrame = newCondensedFrame.clone();
+        }
+
+        if (!newCondensedFrame.equals(targetCondensedFrame)) {
+            targetCondensedFrame = newCondensedFrame.clone();
+            previousCondensedFrame = currentCondensedFrame.clone();
+            condensedFrameTimestamp = System.currentTimeMillis();
+        }
+
+        if (!currentCondensedFrame.equals(targetCondensedFrame)) {
+            currentCondensedFrame.calculate(targetCondensedFrame, previousCondensedFrame, condensedFrameTimestamp);
+        }
 
         for (int address = 1; address <= DMX.MAX_CHANNELS; address++) {
             if (Programmer.hasValue(address)) {
                 visualiser.set(address, (int) Programmer.getValue(address));
-            } else if (frame.hasValue(address)) {
-                visualiser.set(address, (int) frame.getValue(address));
             } else {
-                visualiser.set(address, 0);
+                visualiser.set(address, currentCondensedFrame.getValue(address));
             }
         }
 
@@ -318,10 +330,6 @@ public class Live implements Tab {
 
     public static boolean contains(int priority) {
         return live.sequenceStack.containsKey(priority);
-    }
-
-    public static Frame getLastFrame() {
-        return live.lastFrame;
     }
 
     public static Sequence getSequence(int priority) {

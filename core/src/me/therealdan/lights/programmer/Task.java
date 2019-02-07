@@ -40,6 +40,21 @@ public class Task {
         return value;
     }
 
+    public boolean equals(Task task) {
+        return equals(task, false);
+    }
+
+    public boolean equals(Task task, boolean ignoreValue) {
+        if (task.fixture.getID() != fixture.getID()) return false;
+        if (!task.channelType.getName().equals(channelType.getName())) return false;
+        if (task.parameter != parameter) return false;
+
+        if (!ignoreValue)
+            if (task.value != value) return false;
+
+        return true;
+    }
+
     public List<Integer> getAddresses() {
         return fixture.getAddresses(channelType, parameter);
     }
@@ -64,5 +79,9 @@ public class Task {
                 Integer.parseInt(args[2]),
                 Float.parseFloat(args[3])
         );
+    }
+
+    public Task clone() {
+        return new Task(fixture, channelType, parameter, value);
     }
 }

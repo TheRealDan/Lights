@@ -1,7 +1,5 @@
 package me.therealdan.lights.programmer;
 
-import me.therealdan.lights.ui.views.Live;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -97,15 +95,6 @@ public class Sequence {
         first();
         started = System.currentTimeMillis();
         playing = true;
-
-        run();
-    }
-
-    public void run() {
-        for (Task task : getActiveFrame().tasks()) {
-            float value = Live.getLastFrame().getValue(task.getFixture(), task.getChannelType(), task.getParameter());
-            Frame.setPrevious(task.getFixture(), task.getChannelType(), value, task.getParameter());
-        }
     }
 
     public void stop() {

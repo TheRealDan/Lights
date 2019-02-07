@@ -44,7 +44,7 @@ public class ButtonsUI implements UI {
                 renderer.queue(new Task(x, y - size / 2).text(button.getName(), Task.TextPosition.LEFT_CENTER).setColor(LightsCore.text()));
                 if (Util.containsMouse(x, y, size, size) && canInteract()) {
                     interacted = true;
-                    if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
+                    if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.actionReady(1000)) {
                         button.press();
                         Util.box(renderer, x, y, size, size, new Color(button.getColor()).mul(1.2f));
                     }
@@ -59,6 +59,7 @@ public class ButtonsUI implements UI {
                 y -= size;
             }
         }
+        y -= size;
 
         setHeightBasedOnY(y);
         return interacted;

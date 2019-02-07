@@ -9,6 +9,7 @@ import me.therealdan.lights.controllers.FaderBank;
 import me.therealdan.lights.programmer.Sequence;
 import me.therealdan.lights.renderer.Renderer;
 import me.therealdan.lights.ui.view.Tab;
+import me.therealdan.lights.ui.views.live.ui.SequencesUI;
 import me.therealdan.lights.util.Util;
 
 import java.util.ArrayList;
@@ -54,7 +55,7 @@ public class Faders implements Tab {
             } else if (line.startsWith("Value: ")) {
                 fader.setValue(Float.parseFloat(line.split(": ")[1]));
             } else if (line.startsWith("Sequence: ")) {
-                fader.setSequence(Sequences.byName(line.split(": ")[1]));
+                fader.setSequence(SequencesUI.byName(line.split(": ")[1]));
             } else if (line.startsWith("  Red: ")) {
                 fader.setRed(Float.parseFloat(line.split(": ")[1]));
             } else if (line.startsWith("  Green: ")) {
@@ -255,7 +256,7 @@ public class Faders implements Tab {
         Util.box(renderer, x, y, width, cellHeight, LightsCore.DARK_BLUE, "Sequences");
         y -= cellHeight;
 
-        for (Sequence sequence : Sequences.sequences(true)) {
+        for (Sequence sequence : SequencesUI.sequences(true)) {
             Util.box(renderer, x, y, width, cellHeight, fader.getSequence() != null && fader.getSequence().equals(sequence) ? LightsCore.DARK_RED : LightsCore.medium(), sequence.getName());
             if (Util.containsMouse(x, y, width, cellHeight)) {
                 setSection(Section.SEQUENCES);

@@ -7,7 +7,6 @@ import me.therealdan.lights.controllers.Button;
 import me.therealdan.lights.programmer.Sequence;
 import me.therealdan.lights.renderer.Renderer;
 import me.therealdan.lights.ui.views.Live;
-import me.therealdan.lights.ui.views.Sequences;
 import me.therealdan.lights.util.Util;
 
 import java.text.DecimalFormat;
@@ -129,7 +128,7 @@ public class ButtonEditUI implements UI {
 
         if (canEdit(Section.SEQUENCE)) {
             float sequencesWidth = renderer.getWidth("Selected Sequences") + 25;
-            for (Sequence sequence : Sequences.sequences())
+            for (Sequence sequence : SequencesUI.sequences())
                 sequencesWidth = Math.max(sequencesWidth, renderer.getWidth(sequence.getName()) + 25);
 
             x += width;
@@ -141,7 +140,7 @@ public class ButtonEditUI implements UI {
 
             int i = 0;
             boolean display = false;
-            for (Sequence sequence : Sequences.sequences(true)) {
+            for (Sequence sequence : SequencesUI.sequences(true)) {
                 if (sequence.equals(getScroll())) display = true;
                 if (display) {
                     Util.box(renderer, x, y, sequencesWidth, cellHeight, getButton().contains(sequence) ? LightsCore.DARK_GREEN : LightsCore.medium(), sequence.getName());
@@ -197,8 +196,8 @@ public class ButtonEditUI implements UI {
             if (amount > 0) {
                 boolean next = false;
                 int i = 0;
-                for (Sequence sequence : Sequences.sequences(true)) {
-                    if (i++ > Sequences.sequences().size() - 8) return;
+                for (Sequence sequence : SequencesUI.sequences(true)) {
+                    if (i++ > SequencesUI.sequences().size() - 8) return;
                     if (next) {
                         setScroll(sequence);
                         return;
@@ -207,7 +206,7 @@ public class ButtonEditUI implements UI {
                 }
             } else {
                 Sequence previous = null;
-                for (Sequence sequence : Sequences.sequences(true)) {
+                for (Sequence sequence : SequencesUI.sequences(true)) {
                     if (sequence.equals(getScroll()) && previous != null) {
                         setScroll(previous);
                         return;
@@ -259,7 +258,7 @@ public class ButtonEditUI implements UI {
     }
 
     private Sequence getScroll() {
-        if (scroll == null) setScroll(Sequences.sequences(true).get(0));
+        if (scroll == null) setScroll(SequencesUI.sequences(true).get(0));
         return scroll;
     }
 

@@ -201,7 +201,7 @@ public class Buttons implements Tab {
         y -= cellHeight;
 
         boolean alternate = true;
-        for (Sequence sequence : Sequences.sequences()) {
+        for (Sequence sequence : Sequences.sequences(true)) {
             Util.box(renderer, x, y, width, cellHeight, button.contains(sequence) ? LightsCore.DARK_RED : alternate ? LightsCore.medium() : LightsCore.dark(), sequence.getName() + " " + (button.contains(sequence) ? button.getPriority(sequence) : ""))
             ;
             if (Util.containsMouse(x, y, width, cellHeight)) {

@@ -248,7 +248,7 @@ public class Sequences implements Tab {
 
         int current = 0;
         boolean alternate = true;
-        for (Sequence sequence : sequences()) {
+        for (Sequence sequence : sequences(true)) {
             if (current - sequenceStart >= maxRows) break;
             if (current >= sequenceStart) {
                 Util.box(renderer, x, y, width, cellHeight, sequence.equals(getSequence()) ? LightsCore.DARK_RED : alternate ? LightsCore.medium() : LightsCore.dark(), sequence.getName());
@@ -473,6 +473,22 @@ public class Sequences implements Tab {
     }
 
     public static List<Sequence> sequences() {
-        return new ArrayList<>(instance.sequences);
+        return sequences(false);
+    }
+
+    public static List<Sequence> sequences(boolean alphabeticalOrder) {
+        if (!alphabeticalOrder) return new ArrayList<>(instance.sequences);
+
+        List<Sequence> sequences = sequences(false);
+        List<Sequence> alphabetical = new ArrayList<>();
+        while (sequences.size() > 0) {
+            Sequence first = null;
+            for (Sequence sequence : sequences)
+                if (first == null || first.getName().compareTo(sequence.getName()) > 0)
+                    first = sequence;
+            sequences.remove(first);
+            alphabetical.add(first);
+        }
+        return alphabetical;
     }
 }

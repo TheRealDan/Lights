@@ -255,7 +255,7 @@ public class Faders implements Tab {
         Util.box(renderer, x, y, width, cellHeight, LightsCore.DARK_BLUE, "Sequences");
         y -= cellHeight;
 
-        for (Sequence sequence : Sequences.sequences()) {
+        for (Sequence sequence : Sequences.sequences(true)) {
             Util.box(renderer, x, y, width, cellHeight, fader.getSequence() != null && fader.getSequence().equals(sequence) ? LightsCore.DARK_RED : LightsCore.medium(), sequence.getName());
             if (Util.containsMouse(x, y, width, cellHeight)) {
                 setSection(Section.SEQUENCES);

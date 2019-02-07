@@ -100,7 +100,23 @@ public class Button {
     }
 
     public List<Sequence> sequences() {
-        return new ArrayList<>(sequences.keySet());
+        return sequences(false);
+    }
+
+    public List<Sequence> sequences(boolean alphabeticalOrder) {
+        if (!alphabeticalOrder) return new ArrayList<>(sequences.keySet());
+
+        List<Sequence> sequences = sequences(false);
+        List<Sequence> alphabetical = new ArrayList<>();
+        while (sequences.size() > 0) {
+            Sequence first = null;
+            for (Sequence sequence : sequences)
+                if (first == null || first.getName().compareTo(sequence.getName()) > 0)
+                    first = sequence;
+            sequences.remove(first);
+            alphabetical.add(first);
+        }
+        return alphabetical;
     }
 
 }

@@ -40,7 +40,7 @@ public class ConsoleUI implements UI {
 
     @Override
     public boolean draw(Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {
-        Live.setSection(Live.Section.CONSOLE);
+        if (containsMouse()) Live.setSection(Live.Section.CONSOLE);
         boolean interacted = false;
 
         float x = getX();

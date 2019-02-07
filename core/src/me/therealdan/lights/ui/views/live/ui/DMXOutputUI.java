@@ -19,7 +19,7 @@ public class DMXOutputUI implements UI {
 
     @Override
     public boolean draw(Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {
-        Live.setSection(Live.Section.DMX_OUTPUT);
+        if (containsMouse()) Live.setSection(Live.Section.DMX_OUTPUT);
         boolean interacted = false;
         boolean heightSet = false;
 

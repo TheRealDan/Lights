@@ -13,7 +13,7 @@ public class PanelVisibilityUI implements UI {
 
     @Override
     public boolean draw(Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {
-        Live.setSection(Live.Section.PANEL_VISIBILITY);
+        if (containsMouse()) Live.setSection(Live.Section.PANEL_VISIBILITY);
         boolean interacted = false;
 
         float cellHeight = 30;

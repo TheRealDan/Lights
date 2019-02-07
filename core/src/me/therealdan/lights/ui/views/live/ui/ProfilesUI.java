@@ -96,7 +96,7 @@ public class ProfilesUI implements UI {
 
     @Override
     public boolean draw(Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {
-        Live.setSection(Live.Section.PROFILES);
+        if (containsMouse()) Live.setSection(Live.Section.PROFILES);
         boolean interacted = false;
 
         float x = getX();

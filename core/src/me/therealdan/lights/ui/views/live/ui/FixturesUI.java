@@ -7,13 +7,14 @@ import me.therealdan.lights.fixtures.Fixture;
 import me.therealdan.lights.programmer.Programmer;
 import me.therealdan.lights.renderer.Renderer;
 import me.therealdan.lights.ui.views.Live;
-import me.therealdan.lights.ui.views.Patch;
 import me.therealdan.lights.util.Util;
 
 public class FixturesUI implements UI {
 
+    public static float WIDTH = 800;
+    public static int FIXTURES_PER_ROW = 10;
+
     public FixturesUI() {
-        setLocation(20, 20);
     }
 
     @Override
@@ -21,7 +22,10 @@ public class FixturesUI implements UI {
         if (containsMouse()) Live.setSection(Live.Section.FIXTURES);
         boolean interacted = false;
 
+        setWidth(FixturesUI.WIDTH);
+
         float cellHeight = 30;
+        float cellSize = FixturesUI.WIDTH / FixturesUI.FIXTURES_PER_ROW;
 
         float x = getX();
         float y = getY();
@@ -31,11 +35,11 @@ public class FixturesUI implements UI {
         drag(x, y, width, cellHeight);
         y -= cellHeight;
 
-        for (Fixture fixture : Patch.fixtures()) {
-            Util.box(renderer, x, y, width, cellHeight, Programmer.isSelected(fixture) ? LightsCore.DARK_RED : LightsCore.medium(), setWidth(renderer, fixture.getName()));
-            if (Util.containsMouse(x, y, width, cellHeight) && canInteract()) {
+        for (Fixture fixture : PatchUI.fixtures()) {
+            Util.box(renderer, x, y, cellSize, cellSize, Programmer.isSelected(fixture) ? LightsCore.DARK_RED : LightsCore.medium(), fixture.getName());
+            if (Util.containsMouse(x, y, cellSize, cellSize) && canInteract()) {
                 interacted = true;
-                if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.actionReady(200)) {
+                if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.actionReady(500)) {
                     if (Programmer.isSelected(fixture)) {
                         Programmer.deselect(fixture);
                     } else {
@@ -43,8 +47,14 @@ public class FixturesUI implements UI {
                     }
                 }
             }
-            y -= cellHeight;
+            x += cellSize;
+
+            if (x + cellSize > getX() + getWidth()) {
+                x = getX();
+                y -= cellSize;
+            }
         }
+        y -= cellSize;
 
         setHeightBasedOnY(y);
         return interacted;

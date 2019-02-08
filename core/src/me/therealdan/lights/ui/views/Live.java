@@ -67,7 +67,6 @@ public class Live implements Tab {
         // Programmer
         uis.add(new FixturesUI());
         uis.add(new GroupsUI());
-        uis.add(new SelectedFixturesUI());
         uis.add(new AvailableParametersUI());
         uis.add(new SelectedChannelsUI());
         uis.add(new SequenceProgrammerUI());

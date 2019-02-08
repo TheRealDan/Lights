@@ -37,6 +37,7 @@ public class SequencesUI implements UI {
 
     private void load(FileHandle fileHandle) {
         String name = fileHandle.name().replace(".txt", "");
+        if (name.equals(".DS_Store")) return;
         Sequence sequence = new Sequence(name);
 
         Frame frame = null;

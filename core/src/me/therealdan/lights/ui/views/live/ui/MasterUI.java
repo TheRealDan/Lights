@@ -11,10 +11,13 @@ public class MasterUI implements UI {
 
     public static float HEIGHT = 250;
 
-    public MasterUI() {
-        setLocation(20, 500);
+    private long fadeTime = 2000;
+    private long timestamp = System.currentTimeMillis();
+    private float startingValue = 1.0f;
+    private boolean fadeToMax = false;
+    private boolean fadeToZero = false;
 
-        setWidth(80);
+    public MasterUI() {
     }
 
     @Override
@@ -28,14 +31,25 @@ public class MasterUI implements UI {
 
         float x = getX();
         float y = getY();
-
         float width = getWidth();
-        float height = getHeight() - cellHeight;
 
         Util.box(renderer, x, y, width, cellHeight, LightsCore.DARK_BLUE, setWidth(renderer, "Master"));
         drag(x, y, width, cellHeight);
         y -= cellHeight;
 
+        String currentAction = Live.getMaster() > 0.0 ? "Fade to Zero" : "Fade to Max";
+        if (isFadeToMax()) currentAction = "Fading to Max..";
+        if (isFadeToZero()) currentAction = "Fading to Zero..";
+        Util.box(renderer, x, y, width, cellHeight, LightsCore.medium(), setWidth(renderer, currentAction));
+        if (Util.containsMouse(x, y, width, cellHeight) && canInteract()) {
+            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.actionReady(1000)) {
+                interacted = true;
+                toggle();
+            }
+        }
+        y -= cellHeight;
+
+        float height = getHeight() - cellHeight - cellHeight;
         Util.box(renderer, x, y, width, height, LightsCore.medium(), setWidth(renderer, Util.getPercentage(Live.getMaster())));
         float fill = Live.getMaster() * height;
         Util.box(renderer, x, y - height + fill, width, fill, LightsCore.BLACK);
@@ -48,6 +62,53 @@ public class MasterUI implements UI {
             }
         }
 
+        if (isFadeToZero() || isFadeToMax()) {
+            double timepassed = System.currentTimeMillis() - timestamp;
+            double percentage = 0;
+            if (timepassed > 0 && getFadeTime() > 0) percentage = timepassed / getFadeTime();
+            if (percentage > 1) percentage = 1;
+
+            if (isFadeToMax()) {
+                Live.setMaster(startingValue + (float) percentage);
+                if (Live.getMaster() == 1.0) fadeToMax = false;
+            } else {
+                Live.setMaster(startingValue - (float) percentage);
+                if (Live.getMaster() == 0.0) fadeToZero = false;
+            }
+        }
+
         return interacted;
+    }
+
+    public void toggle() {
+        if (isFadeToMax() || isFadeToZero()) {
+            fadeToMax = false;
+            fadeToZero = false;
+            return;
+        }
+
+        if (Live.getMaster() == 0.0) {
+            timestamp = System.currentTimeMillis();
+            startingValue = Live.getMaster();
+            fadeToMax = true;
+            fadeToZero = false;
+        } else {
+            timestamp = System.currentTimeMillis();
+            startingValue = Live.getMaster();
+            fadeToMax = false;
+            fadeToZero = true;
+        }
+    }
+
+    public long getFadeTime() {
+        return fadeTime;
+    }
+
+    public boolean isFadeToMax() {
+        return fadeToMax;
+    }
+
+    public boolean isFadeToZero() {
+        return fadeToZero;
     }
 }

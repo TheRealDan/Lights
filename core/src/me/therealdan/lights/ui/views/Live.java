@@ -68,6 +68,7 @@ public class Live implements Tab {
         uis.add(new SequenceProgrammerUI());
         uis.add(new FixturesUI());
         uis.add(new GroupsUI());
+        uis.add(new ParametersUI());
 
         // Info
         uis.add(new FrozenUI());
@@ -303,6 +304,7 @@ public class Live implements Tab {
 
         SEQUENCE_PROGRAMMER,
         FIXTURES, GROUPS, COLOR_WHEEL,
+        PARAMETERS,
 
         FROZEN,
         ACTIVE_SEQUENCES,

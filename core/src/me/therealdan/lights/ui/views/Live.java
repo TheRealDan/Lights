@@ -56,24 +56,22 @@ public class Live implements Tab {
         // Setup
         uis.add(new ProfilesUI());
         uis.add(new PatchUI());
-        uis.add(new ButtonEditUI());
-        uis.add(new FaderEditUI());
         uis.add(new SequencesUI());
+        uis.add(new FaderEditUI());
+        uis.add(new ButtonEditUI());
 
         // Util
         uis.add(new ConsoleUI());
         uis.add(new DMXOutputUI());
 
         // Programmer
+        uis.add(new SequenceProgrammerUI());
         uis.add(new FixturesUI());
         uis.add(new GroupsUI());
-        uis.add(new AvailableParametersUI());
-        uis.add(new SelectedChannelsUI());
-        uis.add(new SequenceProgrammerUI());
 
         // Info
-        uis.add(new ActiveSequencesUI());
         uis.add(new FrozenUI());
+        uis.add(new ActiveSequencesUI());
 
         // Panels
         uis.add(new MasterUI());
@@ -297,15 +295,19 @@ public class Live implements Tab {
         PANEL_VISIBILITY,
 
         SETTINGS, DMX_INTERFACE,
-        PROFILES, PATCH, BUTTON_EDIT, FADER_EDIT, SEQUENCES,
+
+        PROFILES, PATCH,
+        SEQUENCES, FADER_EDIT, BUTTON_EDIT,
+
         CONSOLE, DMX_OUTPUT,
 
-        MASTER, BUTTONS, FADERS,
+        SEQUENCE_PROGRAMMER,
+        FIXTURES, GROUPS, COLOR_WHEEL,
+
+        FROZEN,
         ACTIVE_SEQUENCES,
 
-        SEQUENCE_PROGRAMMER, FROZEN,
-
-        FIXTURES, GROUPS, AVAILABLE_PARAMETERS, SELECTED_CHANNELS, COLOR_WHEEL,
+        MASTER, FADERS, BUTTONS,
     }
 
     public static void drag(UI ui) {

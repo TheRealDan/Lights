@@ -2,6 +2,7 @@ package me.therealdan.lights.dmx;
 
 import com.fazecast.jSerialComm.SerialPort;
 import me.therealdan.lights.ui.views.live.ui.ConsoleUI;
+import me.therealdan.lights.ui.views.live.ui.TimingsUI;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,8 +38,11 @@ public class Output {
         thread = new Thread("Output") {
             @Override
             public void run() {
-                while (true)
+                while (true) {
+                    long timestamp = System.currentTimeMillis();
                     tick();
+                    TimingsUI.set("Output.tick()", "Output tick(): " + (System.currentTimeMillis() - timestamp) + "ms");
+                }
             }
         };
         thread.start();

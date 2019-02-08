@@ -73,6 +73,7 @@ public class Live implements Tab {
         // Info
         uis.add(new FrozenUI());
         uis.add(new ActiveSequencesUI());
+        uis.add(new TimingsUI());
 
         // Panels
         uis.add(new MasterUI());
@@ -308,6 +309,7 @@ public class Live implements Tab {
 
         FROZEN,
         ACTIVE_SEQUENCES,
+        TIMINGS,
 
         MASTER, FADERS, BUTTONS,
     }

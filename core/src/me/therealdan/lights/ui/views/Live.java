@@ -170,8 +170,12 @@ public class Live implements Tab {
 
         for (UI ui : UIs()) {
             if (ui.isVisible()) {
+                long timestamp = System.currentTimeMillis();
                 ui.draw(renderer, X, Y, WIDTH, HEIGHT);
                 renderer.draw();
+                TimingsUI.set(ui.getName(), ui.getName() + " draw(): " + (System.currentTimeMillis() - timestamp) + "ms");
+            } else {
+                TimingsUI.clear(ui.getName());
             }
         }
 

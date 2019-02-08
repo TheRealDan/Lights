@@ -44,4 +44,12 @@ public class TimingsUI implements UI {
     public static void set(String id, String text) {
         timingsUI.timings.put(id, text);
     }
+
+    public static void clear(String id) {
+        timingsUI.timings.remove(id);
+    }
+
+    public static void clear() {
+        timingsUI.timings.clear();
+    }
 }

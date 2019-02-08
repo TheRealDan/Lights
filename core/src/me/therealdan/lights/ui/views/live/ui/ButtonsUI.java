@@ -138,6 +138,13 @@ public class ButtonsUI implements UI {
                 y -= size;
             }
         }
+        Util.box(renderer, x, y, size, size, LightsCore.dark(), "Add New");
+        if (Util.containsMouse(x, y, size, size) && canInteract()) {
+            interacted = true;
+            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.actionReady(1000)) {
+                set(new Button());
+            }
+        }
         y -= size;
 
         setHeightBasedOnY(y);

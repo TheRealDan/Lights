@@ -2,22 +2,81 @@ package me.therealdan.lights.ui.views.live.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.files.FileHandle;
 import me.therealdan.lights.LightsCore;
 import me.therealdan.lights.controllers.Fader;
 import me.therealdan.lights.controllers.FaderBank;
 import me.therealdan.lights.renderer.Renderer;
-import me.therealdan.lights.ui.views.Faders;
 import me.therealdan.lights.ui.views.Live;
 import me.therealdan.lights.util.Util;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+
 public class FadersUI implements UI {
 
+    private static FadersUI fadersUI;
+
     private static float HEIGHT = 250;
+
+    private LinkedHashMap<Integer, Fader> faderMap = new LinkedHashMap<>();
+    private LinkedHashMap<Integer, FaderBank> bankMap = new LinkedHashMap<>();
 
     private int bank = 1;
 
     public FadersUI() {
-        setLocation(120, 500);
+        fadersUI = this;
+
+        FileHandle fileHandle = Gdx.files.local("Lights/Faders/");
+        if (fileHandle.exists() && fileHandle.isDirectory())
+            for (FileHandle child : fileHandle.list())
+                loadFader(child);
+
+        fileHandle = Gdx.files.local("Lights/FaderBanks/");
+        if (fileHandle.exists() && fileHandle.isDirectory())
+            for (FileHandle child : fileHandle.list())
+                loadBank(child);
+    }
+
+    private void loadFader(FileHandle fileHandle) {
+        Fader fader = new Fader(-1);
+
+        for (String line : fileHandle.readString().split("\\r?\\n")) {
+            if (line.startsWith("ID: ")) {
+                fader = new Fader(Integer.parseInt(line.split(": ")[1]));
+            } else if (line.startsWith("Name: ")) {
+                fader.rename(line.split(": ")[1]);
+            } else if (line.startsWith("Type: ")) {
+                fader.setType(Fader.Type.valueOf(line.split(": ")[1]));
+            } else if (line.startsWith("Value: ")) {
+                fader.setValue(Float.parseFloat(line.split(": ")[1]));
+            } else if (line.startsWith("Sequence: ")) {
+                fader.setSequence(SequencesUI.byName(line.split(": ")[1]));
+            } else if (line.startsWith("  Red: ")) {
+                fader.setRed(Float.parseFloat(line.split(": ")[1]));
+            } else if (line.startsWith("  Green: ")) {
+                fader.setGreen(Float.parseFloat(line.split(": ")[1]));
+            } else if (line.startsWith("  Blue: ")) {
+                fader.setBlue(Float.parseFloat(line.split(": ")[1]));
+            }
+        }
+
+        if (fader.getID() == -1) return;
+        add(fader);
+    }
+
+    private void loadBank(FileHandle fileHandle) {
+        FaderBank bank = null;
+        for (String line : fileHandle.readString().split("\\r?\\n")) {
+            if (line.startsWith("ID: ")) {
+                bank = getBank(Integer.parseInt(line.split(": ")[1]));
+            } else if (line.startsWith("Faders:")) {
+                // do nothing
+            } else if (line.startsWith("  - ")) {
+                bank.add(Fader.byID(Integer.parseInt(line.split("- ")[1])));
+            }
+        }
     }
 
     @Override
@@ -62,6 +121,23 @@ public class FadersUI implements UI {
     }
 
     public FaderBank getBank() {
-        return Faders.getBank(bank);
+        return getBank(bank);
+    }
+
+    public static void add(Fader fader) {
+        fadersUI.faderMap.put(fader.getID(), fader);
+    }
+
+    public static FaderBank getBank(int bank) {
+        if (!fadersUI.bankMap.containsKey(bank)) fadersUI.bankMap.put(bank, new FaderBank(bank));
+        return fadersUI.bankMap.get(bank);
+    }
+
+    public static List<Fader> faders() {
+        return new ArrayList<>(fadersUI.faderMap.values());
+    }
+
+    public static List<FaderBank> banks() {
+        return new ArrayList<>(fadersUI.bankMap.values());
     }
 }

@@ -124,7 +124,7 @@ public class Live implements Tab {
         for (int priority = 0; priority <= getTopPriority(); priority++)
             if (contains(priority))
                 newCondensedFrame.merge(getSequence(priority));
-        for (Fader fader : Faders.faders())
+        for (Fader fader : FadersUI.faders())
             newCondensedFrame.merge(fader);
 
         if (targetCondensedFrame == null) {

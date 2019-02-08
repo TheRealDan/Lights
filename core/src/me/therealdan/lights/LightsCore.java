@@ -9,7 +9,8 @@ import me.therealdan.lights.dmx.Output;
 import me.therealdan.lights.renderer.Renderer;
 import me.therealdan.lights.ui.ViewBar;
 import me.therealdan.lights.ui.view.Tab;
-import me.therealdan.lights.ui.views.*;
+import me.therealdan.lights.ui.views.Hotkeys;
+import me.therealdan.lights.ui.views.Live;
 
 public class LightsCore extends ApplicationAdapter {
 
@@ -54,7 +55,6 @@ public class LightsCore extends ApplicationAdapter {
         dark = new Color(0.1f, 0.1f, 0.1f, 1);
 
         Tab.register(new Live());
-        Tab.register(new Faders());
         Tab.register(new Hotkeys());
 
         viewBar = new ViewBar();

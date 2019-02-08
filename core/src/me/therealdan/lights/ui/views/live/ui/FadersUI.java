@@ -87,16 +87,28 @@ public class FadersUI implements UI {
 
         setHeight(FadersUI.HEIGHT);
 
-        float cellHeight = 30;
-
         float x = getX();
         float y = getY();
-
         float faderWidth = 80;
-        float height = getHeight() - cellHeight;
+        float cellHeight = 30;
 
-        Util.box(renderer, x, y, getWidth(), cellHeight, LightsCore.DARK_BLUE, setWidth(renderer, "Faders - Bank " + getBank().getID()));
+        float height = getHeight() - cellHeight - cellHeight;
+
+        Util.box(renderer, x, y, getWidth(), cellHeight, LightsCore.DARK_BLUE, setWidth(renderer, "Faders"));
         drag(x, y, getWidth(), cellHeight);
+        y -= cellHeight;
+
+        Util.box(renderer, x, y, getWidth(), cellHeight, LightsCore.medium(), setWidth(renderer, "Bank: " + getBank().getID()));
+        if (Util.containsMouse(x, y, getWidth(), cellHeight) && canInteract()) {
+            interacted = true;
+            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.actionReady(1000)) {
+                if (Util.containsMouse(x, y, getWidth() / 2, cellHeight)) {
+                    setBank(getBank().getID() + 1);
+                } else {
+                    setBank(getBank().getID() - 1);
+                }
+            }
+        }
         y -= cellHeight;
 
         for (Fader fader : getBank().faders()) {
@@ -115,11 +127,12 @@ public class FadersUI implements UI {
             x += faderWidth;
         }
 
-        setWidth(x - getX());
+        setWidth(Math.max(faderWidth, x - getX()));
         return interacted;
     }
 
     public void setBank(int bank) {
+        if (bank <= 0) return;
         this.bank = bank;
     }
 

@@ -144,6 +144,10 @@ public class ButtonsUI implements UI {
         return interacted;
     }
 
+    public static boolean isButtonToMove() {
+        return getButtonToMove() != null;
+    }
+
     public static Button getButtonToMove() {
         return buttonsUI.buttonToMove;
     }
@@ -193,6 +197,12 @@ public class ButtonsUI implements UI {
         int top = -1;
         for (int position : buttonsUI.buttonMap.keySet())
             if (position > top) top = position;
+
+        if (isButtonToMove()) {
+            while (top % PER_ROW != 0) top++;
+            top += PER_ROW;
+        }
+
         return top;
     }
 

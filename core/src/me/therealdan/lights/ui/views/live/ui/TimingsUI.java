@@ -11,7 +11,7 @@ public class TimingsUI implements UI {
 
     private static TimingsUI timingsUI;
 
-    private LinkedHashMap<Integer, String> timings = new LinkedHashMap<>();
+    private LinkedHashMap<String, String> timings = new LinkedHashMap<>();
 
     public TimingsUI() {
         timingsUI = this;
@@ -31,8 +31,8 @@ public class TimingsUI implements UI {
         drag(x, y, width, cellHeight);
         y -= cellHeight;
 
-        for (int line : timings.keySet()) {
-            Util.box(renderer, x, y, width, cellHeight, LightsCore.medium(), setWidth(renderer, timings.get(line)));
+        for (String id : timings.keySet()) {
+            Util.box(renderer, x, y, width, cellHeight, LightsCore.medium(), setWidth(renderer, timings.get(id)));
             drag(x, y, width, cellHeight);
             y -= cellHeight;
         }
@@ -41,7 +41,7 @@ public class TimingsUI implements UI {
         return interacted;
     }
 
-    public static void set(int line, String text) {
-        timingsUI.timings.put(line, text);
+    public static void set(String id, String text) {
+        timingsUI.timings.put(id, text);
     }
 }

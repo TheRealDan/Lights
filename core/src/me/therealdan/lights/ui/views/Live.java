@@ -57,6 +57,7 @@ public class Live implements Tab {
         uis.add(new ProfilesUI());
         uis.add(new PatchUI());
         uis.add(new ButtonEditUI());
+        uis.add(new FaderEditUI());
         uis.add(new SequencesUI());
 
         // Util
@@ -291,7 +292,7 @@ public class Live implements Tab {
         PANEL_VISIBILITY,
 
         SETTINGS, DMX_INTERFACE,
-        PROFILES, PATCH, BUTTON_EDIT, SEQUENCES,
+        PROFILES, PATCH, BUTTON_EDIT, FADER_EDIT, SEQUENCES,
         CONSOLE, DMX_OUTPUT,
 
         MASTER, BUTTONS, FADERS,

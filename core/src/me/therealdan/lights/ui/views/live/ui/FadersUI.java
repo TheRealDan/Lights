@@ -23,6 +23,7 @@ public class FadersUI implements UI {
     private LinkedHashMap<Integer, Fader> faderMap = new LinkedHashMap<>();
     private LinkedHashMap<Integer, FaderBank> bankMap = new LinkedHashMap<>();
 
+    private Fader faderToMove = null;
     private int bank = 1;
 
     public FadersUI() {
@@ -107,6 +108,8 @@ public class FadersUI implements UI {
                     interacted = true;
                     float bottom = y - height + 20;
                     fader.setValue(Math.min(Math.max((Gdx.graphics.getHeight() - Gdx.input.getY() - bottom) / (y - 20 - bottom), 0), 1));
+                } else if (Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) {
+                    FaderEditUI.edit(fader);
                 }
             }
             x += faderWidth;
@@ -122,6 +125,14 @@ public class FadersUI implements UI {
 
     public FaderBank getBank() {
         return getBank(bank);
+    }
+
+    public static void move(Fader fader) {
+        fadersUI.faderToMove = fader;
+    }
+
+    public static void remove(Fader fader) {
+        fadersUI.faderMap.remove(fader.getID());
     }
 
     public static void add(Fader fader) {

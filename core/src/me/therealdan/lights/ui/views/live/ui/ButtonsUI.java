@@ -19,6 +19,7 @@ import java.util.List;
 public class ButtonsUI implements UI {
 
     private static ButtonsUI buttonsUI;
+
     public static float WIDTH = 800;
     public static final int PER_ROW = 10;
 

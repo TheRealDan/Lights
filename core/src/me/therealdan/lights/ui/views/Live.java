@@ -237,6 +237,12 @@ public class Live implements Tab {
         Fader fader = Fader.byID(shift ? 2 : 1);
         if (fader != null) {
             switch (keycode) {
+                case Input.Keys.MINUS:
+                    MasterUI.fadeToZero();
+                    break;
+                case Input.Keys.EQUALS:
+                    MasterUI.fadeToMax();
+                    break;
                 case Input.Keys.NUM_1:
                     fader.setValue(0.1f);
                     break;

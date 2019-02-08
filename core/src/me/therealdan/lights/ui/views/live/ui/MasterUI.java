@@ -9,15 +9,18 @@ import me.therealdan.lights.util.Util;
 
 public class MasterUI implements UI {
 
+    private static MasterUI masterUI;
+
     public static float HEIGHT = 250;
 
-    private long fadeTime = 2000;
+    private long fadeTime = 1200;
     private long timestamp = System.currentTimeMillis();
     private float startingValue = 1.0f;
     private boolean fadeToMax = false;
     private boolean fadeToZero = false;
 
     public MasterUI() {
+        masterUI = this;
     }
 
     @Override
@@ -88,16 +91,24 @@ public class MasterUI implements UI {
         }
 
         if (Live.getMaster() == 0.0) {
-            timestamp = System.currentTimeMillis();
-            startingValue = Live.getMaster();
-            fadeToMax = true;
-            fadeToZero = false;
+            fadeToMax();
         } else {
-            timestamp = System.currentTimeMillis();
-            startingValue = Live.getMaster();
-            fadeToMax = false;
-            fadeToZero = true;
+            fadeToZero();
         }
+    }
+
+    public static void fadeToZero() {
+        masterUI.timestamp = System.currentTimeMillis();
+        masterUI.startingValue = Live.getMaster();
+        masterUI.fadeToMax = false;
+        masterUI.fadeToZero = true;
+    }
+
+    public static void fadeToMax() {
+        masterUI.timestamp = System.currentTimeMillis();
+        masterUI.startingValue = Live.getMaster();
+        masterUI.fadeToMax = true;
+        masterUI.fadeToZero = false;
     }
 
     public long getFadeTime() {

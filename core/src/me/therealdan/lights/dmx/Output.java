@@ -41,7 +41,7 @@ public class Output {
                 while (true) {
                     long timestamp = System.currentTimeMillis();
                     tick();
-                    TimingsUI.set("Output.tick()", "Output tick(): " + (System.currentTimeMillis() - timestamp) + "ms");
+                    TimingsUI.set("Output.tick()", "Output tick(): %mms %zms %ams", System.currentTimeMillis() - timestamp);
                 }
             }
         };

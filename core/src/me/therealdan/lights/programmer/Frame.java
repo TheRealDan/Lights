@@ -170,15 +170,11 @@ public class Frame {
     }
 
     public float getValue(Fixture fixture, Channel.Type channelType, int parameter) {
-        for (Task task : tasks()) {
-            if (task.getFixture().equals(fixture)) {
-                if (task.getChannelType().equals(channelType)) {
-                    if (task.getParameter() == parameter) {
+        for (Task task : tasks())
+            if (task.getFixture().equals(fixture))
+                if (task.getChannelType().equals(channelType))
+                    if (task.getParameter() == parameter)
                         return task.getValue();
-                    }
-                }
-            }
-        }
 
         return 0;
     }
@@ -202,6 +198,16 @@ public class Frame {
         for (Task task : tasks())
             if (task.getAddresses().contains(address))
                 return true;
+
+        return false;
+    }
+
+    public boolean hasValue(Fixture fixture, Channel.Type channelType, int parameter) {
+        for (Task task : tasks())
+            if (task.getFixture().equals(fixture))
+                if (task.getChannelType().equals(channelType))
+                    if (task.getParameter() == parameter)
+                        return true;
 
         return false;
     }

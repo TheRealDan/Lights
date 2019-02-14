@@ -4,12 +4,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import me.therealdan.lights.LightsCore;
 import me.therealdan.lights.fixtures.Channel;
+import me.therealdan.lights.fixtures.Fixture;
+import me.therealdan.lights.programmer.Programmer;
 import me.therealdan.lights.renderer.Renderer;
 import me.therealdan.lights.ui.views.Live;
 import me.therealdan.lights.util.Util;
 
 import java.text.DecimalFormat;
-import java.util.HashMap;
 
 public class ParametersUI implements UI {
 
@@ -21,7 +22,6 @@ public class ParametersUI implements UI {
     private DecimalFormat decimalFormat = new DecimalFormat("#.##");
 
     private Channel.Type section = null;
-    private HashMap<Channel.Type, Float> level = new HashMap<>();
 
     public ParametersUI() {
         parametersUI = this;
@@ -31,6 +31,8 @@ public class ParametersUI implements UI {
     public boolean draw(Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {
         Live.setSection(Live.Section.PARAMETERS);
         boolean interacted = false;
+
+        int parameter = 1;
 
         setWidth(ParametersUI.WIDTH);
         setHeight(ParametersUI.HEIGHT);
@@ -57,11 +59,11 @@ public class ParametersUI implements UI {
 
             for (float percentage = 1.0f; percentage >= -0.01f; percentage -= 0.05f) {
                 float level = Float.parseFloat(decimalFormat.format(percentage * 100.0));
-                Util.box(renderer, x, y, width, cellHeight, isSet(channelType) && getLevel(channelType) == level ? LightsCore.DARK_RED : LightsCore.medium(), Float.toString(level).replace("-", "").replace(".0", "") + "%");
+                Util.box(renderer, x, y, width, cellHeight, isSet(channelType, parameter) && getLevel(channelType, parameter) == level ? LightsCore.DARK_RED : LightsCore.medium(), Float.toString(level).replace("-", "").replace(".0", "") + "%");
                 if (Util.containsMouse(x, y, width, cellHeight) && canInteract()) {
                     interacted = true;
                     if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.actionReady(-1)) {
-                        setLevel(channelType, level);
+                        setValue(channelType, parameter, percentage * 255.0f);
                     }
                 }
                 y -= cellHeight;
@@ -74,17 +76,34 @@ public class ParametersUI implements UI {
         return interacted;
     }
 
-    public void setLevel(Channel.Type channelType, float level) {
-        this.level.put(channelType, level);
+    public void setValue(Channel.Type channelType, int parameter, float value) {
+        for (Fixture fixture : Programmer.getSelectedFixtures()) {
+            Programmer.set(fixture, channelType, value, parameter);
+        }
     }
 
-    public boolean isSet(Channel.Type channelType) {
-        return level.containsKey(channelType);
+    public boolean isSet(Channel.Type channelType, int parameter) {
+        for (Fixture fixture : Programmer.getSelectedFixtures()) {
+            if (Programmer.hasValue(fixture, channelType, parameter)) {
+                return true;
+            }
+        }
+        return false;
     }
 
-    public float getLevel(Channel.Type channelType) {
-        if (!level.containsKey(channelType)) return 0;
-        return level.get(channelType);
+    public float getLevel(Channel.Type channelType, int parameter) {
+        float value = getValue(channelType, parameter);
+        float percentage = value / 255.0f;
+        return Float.parseFloat(decimalFormat.format(percentage * 100.0));
+    }
+
+    public float getValue(Channel.Type channelType, int parameter) {
+        for (Fixture fixture : Programmer.getSelectedFixtures()) {
+            if (Programmer.hasValue(fixture, channelType, parameter)) {
+                return Programmer.getValue(fixture, channelType, parameter);
+            }
+        }
+        return 0;
     }
 
     public void setSection(Channel.Type section) {

@@ -16,7 +16,7 @@ public class Programmer {
 
     private static Sequence sequence = null;
 
-    public static void set(Sequence sequence) {
+    public static void edit(Sequence sequence) {
         Programmer.sequence = sequence;
     }
 
@@ -30,11 +30,16 @@ public class Programmer {
                 for (int addressOffset : channel.addressOffsets()) {
                     int physical = fixture.getAddress() + addressOffset;
                     if (physical == address) {
-                        sequence.getActiveFrame().set(fixture, channel.getType(), value, parameter);
+                        set(fixture, channel.getType(), value, parameter);
                     }
                 }
             }
         }
+    }
+
+    public static void set(Fixture fixture, Channel.Type channelType, float value, int... parameters) {
+        for (int parameter : parameters)
+            getSequence().getActiveFrame().set(fixture, channelType, value, parameter);
     }
 
     public static void save() {
@@ -65,11 +70,19 @@ public class Programmer {
     }
 
     public static float getValue(int address) {
-        return sequence.getActiveFrame().getValue(address);
+        return getSequence().getActiveFrame().getValue(address);
+    }
+
+    public static float getValue(Fixture fixture, Channel.Type channelType, int parameter) {
+        return getSequence().getActiveFrame().getValue(fixture, channelType, parameter);
     }
 
     public static boolean hasValue(int address) {
         return getSequence().getActiveFrame().hasValue(address);
+    }
+
+    public static boolean hasValue(Fixture fixture, Channel.Type channelType, int parameter) {
+        return getSequence().getActiveFrame().hasValue(fixture, channelType, parameter);
     }
 
     public static boolean isSelected(Fixture fixture) {

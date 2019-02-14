@@ -20,8 +20,6 @@ public class SequenceProgrammerUI implements UI {
     private static SequenceProgrammerUI sequenceProgrammerUI;
     private static Selected selected = Selected.NONE;
 
-    private List<Frame> selectedFrames = new ArrayList<>();
-
     private final long delay = 1000;
 
     private String frameMilliseconds = "";
@@ -62,7 +60,7 @@ public class SequenceProgrammerUI implements UI {
             case FRAME:
                 switch (keycode) {
                     case Input.Keys.BACKSPACE:
-                        for (Frame frame : getSelectedFrames())
+                        for (Frame frame : Programmer.getSelectedFrames())
                             frame.setFrameTime(0);
                         break;
                     default:
@@ -77,7 +75,7 @@ public class SequenceProgrammerUI implements UI {
             case FADE:
                 switch (keycode) {
                     case Input.Keys.BACKSPACE:
-                        for (Frame frame : getSelectedFrames())
+                        for (Frame frame : Programmer.getSelectedFrames())
                             frame.setFadeTime(0);
                         break;
                     default:
@@ -97,13 +95,13 @@ public class SequenceProgrammerUI implements UI {
         if (Programmer.getSequence() == null) return;
 
         if (System.currentTimeMillis() - frameTimestamp > delay && frameMilliseconds.length() > 0) {
-            for (Frame frame : getSelectedFrames())
+            for (Frame frame : Programmer.getSelectedFrames())
                 frame.setFrameTime(Long.parseLong(frameMilliseconds));
             frameMilliseconds = "";
         }
 
         if (System.currentTimeMillis() - fadeTimestamp > delay && fadeMilliseconds.length() > 0) {
-            for (Frame frame : getSelectedFrames())
+            for (Frame frame : Programmer.getSelectedFrames())
                 frame.setFadeTime(Long.parseLong(fadeMilliseconds));
             fadeMilliseconds = "";
         }
@@ -118,6 +116,7 @@ public class SequenceProgrammerUI implements UI {
         boolean shift = Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT);
 
         Sequence sequence = Programmer.getSequence();
+        Frame firstSelectedFrame = Programmer.getFirstSelectedFrame();
 
         float cellHeight = 30;
 
@@ -140,8 +139,8 @@ public class SequenceProgrammerUI implements UI {
         x = getX();
         width = getWidth() / 2f;
         Util.box(renderer, x, y, width, cellHeight, selected.equals(Selected.FRAME) ? LightsCore.DARK_RED : LightsCore.medium(), setWidth(renderer,
-                hasSelectedFrame() ?
-                        "Frame time: " + Frame.format(getSelectedFrame().getFrameTime()) :
+                firstSelectedFrame != null ?
+                        "Frame time: " + Frame.format(firstSelectedFrame.getFrameTime()) :
                         "N/A"
                 , 2));
         if (Util.containsMouse(x, y, width, cellHeight) && canInteract()) {
@@ -151,8 +150,8 @@ public class SequenceProgrammerUI implements UI {
         }
         x += width;
         Util.box(renderer, x, y, width, cellHeight, selected.equals(Selected.FADE) ? LightsCore.DARK_RED : LightsCore.medium(), setWidth(renderer,
-                hasSelectedFrame() ?
-                        "Fade time: " + Frame.format(getSelectedFrame().getFadeTime()) :
+                firstSelectedFrame != null ?
+                        "Fade time: " + Frame.format(firstSelectedFrame.getFadeTime()) :
                         "N/A"
                 , 2));
         if (Util.containsMouse(x, y, width, cellHeight) && canInteract()) {
@@ -183,10 +182,10 @@ public class SequenceProgrammerUI implements UI {
         int index = 0;
         for (Frame frame : sequence.frames()) {
             Color color = LightsCore.medium();
-            if (isSelected(frame)) color = LightsCore.DARK_RED;
+            if (Programmer.isSelected(frame)) color = LightsCore.DARK_RED;
             if (sequence.getCurrentFrame() == index) {
                 color = LightsCore.DARK_GREEN;
-                if (isSelected(frame)) color = LightsCore.DARK_YELLOW;
+                if (Programmer.isSelected(frame)) color = LightsCore.DARK_YELLOW;
             }
             Util.box(renderer, x, y, width, cellHeight, color, setWidth(renderer, frame.getInfo()));
             if (DMX.DRAW_DMX) {
@@ -200,10 +199,10 @@ public class SequenceProgrammerUI implements UI {
                         sequence.set(index);
                     } else {
                         if (LightsCore.actionReady(400)) {
-                            if (isSelected(frame)) {
-                                deselect(frame);
+                            if (Programmer.isSelected(frame)) {
+                                Programmer.deselect(frame);
                             } else {
-                                select(frame);
+                                Programmer.select(frame);
                             }
                         }
                     }
@@ -215,31 +214,6 @@ public class SequenceProgrammerUI implements UI {
 
         setHeightBasedOnY(y);
         return interacted;
-    }
-
-    public void select(Frame frame) {
-        selectedFrames.add(frame);
-    }
-
-    public void deselect(Frame frame) {
-        selectedFrames.remove(frame);
-    }
-
-    public Frame getSelectedFrame() {
-        if (getSelectedFrames().size() > 0) return getSelectedFrames().get(0);
-        return null;
-    }
-
-    public boolean hasSelectedFrame() {
-        return getSelectedFrames().size() > 0;
-    }
-
-    public boolean isSelected(Frame frame) {
-        return getSelectedFrames().contains(frame);
-    }
-
-    public List<Frame> getSelectedFrames() {
-        return new ArrayList<>(selectedFrames);
     }
 
     public enum Button {
@@ -268,20 +242,20 @@ public class SequenceProgrammerUI implements UI {
 
                 case CLONE:
                     List<Frame> newFrames = new ArrayList<>();
-                    for (Frame frame : sequenceProgrammerUI.getSelectedFrames()) {
+                    for (Frame frame : Programmer.getSelectedFrames()) {
                         Frame newFrame = frame.clone();
                         Programmer.getSequence().add(newFrame);
                         newFrames.add(newFrame);
                     }
-                    sequenceProgrammerUI.selectedFrames.clear();
+                    Programmer.deselectAllFrames();
                     for (Frame frame : newFrames)
-                        sequenceProgrammerUI.select(frame);
+                        Programmer.select(frame);
                     break;
 
                 case REMOVE:
-                    for (Frame frame : sequenceProgrammerUI.getSelectedFrames())
+                    for (Frame frame : Programmer.getSelectedFrames())
                         Programmer.getSequence().delete(frame);
-                    sequenceProgrammerUI.selectedFrames.clear();
+                    Programmer.deselectAllFrames();
                     break;
 
                 case SAVE:

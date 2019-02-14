@@ -13,6 +13,7 @@ import java.util.List;
 public class Programmer {
 
     private static List<Fixture> selectedFixtures = new ArrayList<>();
+    private static List<Frame> selectedFrames = new ArrayList<>();
 
     private static Sequence sequence = null;
 
@@ -60,6 +61,10 @@ public class Programmer {
             select(fixture);
     }
 
+    public static void select(Frame frame) {
+        selectedFrames.add(frame);
+    }
+
     public static void deselect(Fixture fixture) {
         selectedFixtures.remove(fixture);
     }
@@ -67,6 +72,22 @@ public class Programmer {
     public static void deselect(Group group) {
         for (Fixture fixture : group.fixtures())
             deselect(fixture);
+    }
+
+    public static void deselect(Frame frame) {
+        selectedFrames.remove(frame);
+    }
+
+    public static void deselectAllFrames() {
+        selectedFrames.clear();
+    }
+
+    public static int countSelectedFixtures() {
+        return selectedFixtures.size();
+    }
+
+    public static int countSelectedFrames() {
+        return selectedFrames.size();
     }
 
     public static float getValue(int address) {
@@ -97,12 +118,25 @@ public class Programmer {
         return true;
     }
 
+    public static boolean isSelected(Frame frame) {
+        return selectedFrames.contains(frame);
+    }
+
     public static Sequence getSequence() {
         if (sequence == null) clear();
         return sequence;
     }
 
+    public static Frame getFirstSelectedFrame() {
+        if (countSelectedFrames() > 0) return getSelectedFrames().get(0);
+        return null;
+    }
+
     public static List<Fixture> getSelectedFixtures() {
         return new ArrayList<>(selectedFixtures);
+    }
+
+    public static List<Frame> getSelectedFrames() {
+        return new ArrayList<>(selectedFrames);
     }
 }

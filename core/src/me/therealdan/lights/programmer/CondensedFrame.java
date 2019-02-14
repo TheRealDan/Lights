@@ -184,6 +184,17 @@ public class CondensedFrame {
             if (!foundMatch) return false;
         }
 
+        for (Task task : condensedFrame.tasks()) {
+            boolean foundMatch = false;
+            for (Task task1 : tasks()) {
+                if (task.equals(task1)) {
+                    foundMatch = true;
+                    break;
+                }
+            }
+            if (!foundMatch) return false;
+        }
+
         return true;
     }
 

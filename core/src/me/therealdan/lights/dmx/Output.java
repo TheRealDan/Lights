@@ -39,9 +39,7 @@ public class Output {
             @Override
             public void run() {
                 while (true) {
-                    long timestamp = System.currentTimeMillis();
                     tick();
-                    TimingsUI.set("Output.tick()", "Output tick(): %mms %zms %ams", System.currentTimeMillis() - timestamp);
                 }
             }
         };
@@ -50,6 +48,7 @@ public class Output {
 
     private void tick() {
         if (System.currentTimeMillis() - lastSend < INTERVAL) return;
+        long timestamp = System.currentTimeMillis();
         lastSend = System.currentTimeMillis();
 
         if (this.serialPort != null && !this.serialPort.getSystemPortName().equals(activePort)) {
@@ -97,8 +96,9 @@ public class Output {
         } catch (Exception e) {
             serialPort = null;
             ConsoleUI.log(ConsoleUI.ConsoleColor.RED, e.getMessage());
-            e.printStackTrace();
         }
+        long timeTaken = System.currentTimeMillis() - timestamp;
+        TimingsUI.set("Output.tick()", "Output tick(): %mms %zms %ams", timeTaken);
     }
 
     public static void freeze() {

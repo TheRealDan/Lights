@@ -93,7 +93,6 @@ public class Output {
             byte[] bytes = DMX.get("OUTPUT").getNext();
             if (bytes == null) return;
             serialPort.getOutputStream().write(bytes);
-            serialPort.getOutputStream().flush();
             if (SHOW_DMX_SEND_DEBUG) ConsoleUI.log(ConsoleUI.ConsoleColor.YELLOW, "DMX Sent");
         } catch (Exception e) {
             serialPort = null;

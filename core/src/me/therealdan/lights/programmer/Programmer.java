@@ -40,7 +40,8 @@ public class Programmer {
 
     public static void set(Fixture fixture, Channel.Type channelType, float value, int... parameters) {
         for (int parameter : parameters)
-            getSequence().getActiveFrame().set(fixture, channelType, value, parameter);
+            for (Frame frame : getSelectedFrames())
+                frame.set(fixture, channelType, value, parameter);
     }
 
     public static void save() {
@@ -90,20 +91,26 @@ public class Programmer {
         return selectedFrames.size();
     }
 
-    public static float getValue(int address) {
-        return getSequence().getActiveFrame().getValue(address);
+    public static float getActiveFrameValueFor(int address) {
+        return getSequence().getActiveFrame().getValueFor(address);
     }
 
-    public static float getValue(Fixture fixture, Channel.Type channelType, int parameter) {
-        return getSequence().getActiveFrame().getValue(fixture, channelType, parameter);
+    public static float getSelectedFramesValueFor(Fixture fixture, Channel.Type channelType, int parameter) {
+        for (Frame frame : getSelectedFrames())
+            if (frame.hasValueFor(fixture, channelType, parameter))
+                return frame.getValueFor(fixture, channelType, parameter);
+        return 0;
     }
 
-    public static boolean hasValue(int address) {
-        return getSequence().getActiveFrame().hasValue(address);
+    public static boolean activeFrameHasValueFor(int address) {
+        return getSequence().getActiveFrame().hasValueFor(address);
     }
 
-    public static boolean hasValue(Fixture fixture, Channel.Type channelType, int parameter) {
-        return getSequence().getActiveFrame().hasValue(fixture, channelType, parameter);
+    public static boolean selectedFramesHaveValueFor(Fixture fixture, Channel.Type channelType, int parameter) {
+        for (Frame frame : getSelectedFrames())
+            if (frame.hasValueFor(fixture, channelType, parameter))
+                return true;
+        return false;
     }
 
     public static boolean isSelected(Fixture fixture) {

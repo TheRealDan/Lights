@@ -144,8 +144,8 @@ public class Live implements Tab {
         }
 
         for (int address = 1; address <= DMX.MAX_CHANNELS; address++) {
-            if (Programmer.hasValue(address)) {
-                visualiser.set(address, (int) Programmer.getValue(address));
+            if (Programmer.activeFrameHasValueFor(address)) {
+                visualiser.set(address, (int) Programmer.getActiveFrameValueFor(address));
             } else {
                 visualiser.set(address, currentCondensedFrame.getValue(address));
             }

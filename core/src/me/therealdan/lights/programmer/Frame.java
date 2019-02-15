@@ -101,7 +101,7 @@ public class Frame {
     public void draw(Renderer renderer, float x, float y, float width, float height, Color color) {
         List<Integer> values = new ArrayList<>();
         for (int address = 1; address <= DMX.MAX_CHANNELS; address++)
-            values.add((int) getValue(address));
+            values.add((int) getValueFor(address));
         DMX.draw(renderer, x, y, width, height, color, values);
     }
 
@@ -169,7 +169,7 @@ public class Frame {
         return fadeTime;
     }
 
-    public float getValue(Fixture fixture, Channel.Type channelType, int parameter) {
+    public float getValueFor(Fixture fixture, Channel.Type channelType, int parameter) {
         for (Task task : tasks())
             if (task.getFixture().equals(fixture))
                 if (task.getChannelType().equals(channelType))
@@ -179,7 +179,7 @@ public class Frame {
         return 0;
     }
 
-    public float getValue(int address) {
+    public float getValueFor(int address) {
         float value = 255f;
         boolean exists = false;
 
@@ -194,7 +194,7 @@ public class Frame {
         return value;
     }
 
-    public boolean hasValue(int address) {
+    public boolean hasValueFor(int address) {
         for (Task task : tasks())
             if (task.getAddresses().contains(address))
                 return true;
@@ -202,7 +202,7 @@ public class Frame {
         return false;
     }
 
-    public boolean hasValue(Fixture fixture, Channel.Type channelType, int parameter) {
+    public boolean hasValueFor(Fixture fixture, Channel.Type channelType, int parameter) {
         for (Task task : tasks())
             if (task.getFixture().equals(fixture))
                 if (task.getChannelType().equals(channelType))

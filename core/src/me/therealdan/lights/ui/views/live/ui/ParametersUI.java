@@ -84,7 +84,7 @@ public class ParametersUI implements UI {
 
     public boolean isSet(Channel.Type channelType, int parameter) {
         for (Fixture fixture : Programmer.getSelectedFixtures()) {
-            if (Programmer.hasValue(fixture, channelType, parameter)) {
+            if (Programmer.selectedFramesHaveValueFor(fixture, channelType, parameter)) {
                 return true;
             }
         }
@@ -99,8 +99,8 @@ public class ParametersUI implements UI {
 
     public float getValue(Channel.Type channelType, int parameter) {
         for (Fixture fixture : Programmer.getSelectedFixtures()) {
-            if (Programmer.hasValue(fixture, channelType, parameter)) {
-                return Programmer.getValue(fixture, channelType, parameter);
+            if (Programmer.selectedFramesHaveValueFor(fixture, channelType, parameter)) {
+                return Programmer.getSelectedFramesValueFor(fixture, channelType, parameter);
             }
         }
         return 0;

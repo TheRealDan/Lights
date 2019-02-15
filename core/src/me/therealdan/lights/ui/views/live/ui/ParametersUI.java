@@ -21,7 +21,9 @@ public class ParametersUI implements UI {
 
     private DecimalFormat decimalFormat = new DecimalFormat("#.##");
 
-    private Channel.Type section = null;
+    private int page = 1;
+    private Channel.Category category;
+    private Channel.Type channelType = null;
 
     public ParametersUI() {
         parametersUI = this;
@@ -32,46 +34,72 @@ public class ParametersUI implements UI {
         Live.setSection(Live.Section.PARAMETERS);
         boolean interacted = false;
 
-        int parameter = 1;
-
         setWidth(ParametersUI.WIDTH);
         setHeight(ParametersUI.HEIGHT);
 
         float x = getX();
         float y = getY();
-        float width = getWidth() / (Channel.Type.values().length + 1);
+        float width = getWidth() / 4;
         float cellHeight = 30;
 
         Util.box(renderer, x, y, getWidth(), getHeight(), LightsCore.dark());
-
         Util.box(renderer, x, y, getWidth(), cellHeight, LightsCore.DARK_BLUE, "Parameters");
         drag(x, y, getWidth(), cellHeight);
+        y -= cellHeight;
+
+        for (Channel.Category category : Programmer.availableChannelTypeCategories()) {
+            Util.box(renderer, x, y, width, cellHeight, category.equals(getCategory()) ? LightsCore.DARK_GREEN : LightsCore.medium(), category.getName());
+            if (Util.containsMouse(x, y, width, cellHeight) && canInteract()) {
+                interacted = true;
+                if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.actionReady(500)) {
+                    if (category.equals(getCategory())) {
+                        setPage(getPage() + 1);
+                    } else {
+                        setCategory(category);
+                    }
+                }
+            }
+            y -= cellHeight;
+        }
 
         y = getY() - cellHeight;
         x += width;
 
+        int seen = 0;
+        int skipped = 0;
         float parameterHeight = getHeight() - cellHeight - cellHeight;
-        for (Channel.Type channelType : Channel.Type.values()) {
-            if (Util.containsMouse(x, y, width, parameterHeight) && canInteract()) setSection(channelType);
-            Util.box(renderer, x, y, width, cellHeight, LightsCore.DARK_BLUE, channelType.getName());
-            drag(x, y, width, cellHeight);
-            y -= cellHeight;
-
-            for (float percentage = 1.0f; percentage >= -0.01f; percentage -= 0.05f) {
-                float level = Float.parseFloat(decimalFormat.format(percentage * 100.0));
-                Util.box(renderer, x, y, width, cellHeight, isSet(channelType, parameter) && getLevel(channelType, parameter) == level ? LightsCore.DARK_RED : LightsCore.medium(), Float.toString(level).replace("-", "").replace(".0", "") + "%");
-                if (Util.containsMouse(x, y, width, cellHeight) && canInteract()) {
-                    interacted = true;
-                    if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.actionReady(-1)) {
-                        setValue(channelType, parameter, percentage * 255.0f);
-                    }
+        for (Channel.Type channelType : Programmer.availableChannelTypes()) {
+            if (seen >= 3) break;
+            if (!channelType.getCategory().equals(getCategory())) continue;
+            for (int parameter : Programmer.availableParameters(channelType)) {
+                if (seen >= 3) break;
+                if (skipped < getPage() * 3 - 3) {
+                    skipped++;
+                    continue;
                 }
+                seen++;
+                if (Util.containsMouse(x, y, width, parameterHeight) && canInteract()) setChannelType(channelType);
+                Util.box(renderer, x, y, width, cellHeight, LightsCore.DARK_BLUE, channelType.getName());
+                drag(x, y, width, cellHeight);
                 y -= cellHeight;
-            }
 
-            x += width;
-            y = getY() - cellHeight;
+                for (float percentage = 1.0f; percentage >= -0.01f; percentage -= 0.05f) {
+                    float level = Float.parseFloat(decimalFormat.format(percentage * 100.0));
+                    Util.box(renderer, x, y, width, cellHeight, isSet(channelType, parameter) && getLevel(channelType, parameter) == level ? LightsCore.DARK_RED : LightsCore.medium(), Float.toString(level).replace("-", "").replace(".0", "") + "%");
+                    if (Util.containsMouse(x, y, width, cellHeight) && canInteract()) {
+                        interacted = true;
+                        if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.actionReady(-1)) {
+                            setValue(channelType, parameter, percentage * 255.0f);
+                        }
+                    }
+                    y -= cellHeight;
+                }
+
+                x += width;
+                y = getY() - cellHeight;
+            }
         }
+        if (seen == 0) setPage(1);
 
         return interacted;
     }
@@ -106,11 +134,27 @@ public class ParametersUI implements UI {
         return 0;
     }
 
-    public void setSection(Channel.Type section) {
-        this.section = section;
+    public void setPage(int page) {
+        this.page = page;
     }
 
-    public Channel.Type getSection() {
-        return section;
+    public int getPage() {
+        return page;
+    }
+
+    public void setCategory(Channel.Category category) {
+        this.category = category;
+    }
+
+    public Channel.Category getCategory() {
+        return category;
+    }
+
+    public void setChannelType(Channel.Type channelType) {
+        this.channelType = channelType;
+    }
+
+    public Channel.Type getChannelType() {
+        return channelType;
     }
 }

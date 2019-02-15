@@ -18,7 +18,7 @@ public class Programmer {
     private static Sequence sequence = null;
 
     public static void edit(Sequence sequence) {
-        Programmer.sequence = sequence;
+        Programmer.sequence = sequence.clone();
     }
 
     public static void set(float address, float value) {
@@ -51,6 +51,7 @@ public class Programmer {
     public static void clear() {
         sequence = new Sequence("New Sequence");
         getSequence().add(new Frame());
+        deselectAllFrames();
     }
 
     public static void select(Fixture fixture) {
@@ -129,6 +130,13 @@ public class Programmer {
         return selectedFrames.contains(frame);
     }
 
+    public static boolean selectedFixturesContain(Channel.Type channelType, int parameter) {
+        for (Fixture fixture : getSelectedFixtures())
+            if (fixture.hasChannel(channelType) && fixture.getParameters(channelType).contains(parameter))
+                return true;
+        return false;
+    }
+
     public static Sequence getSequence() {
         if (sequence == null) clear();
         return sequence;
@@ -145,5 +153,32 @@ public class Programmer {
 
     public static List<Frame> getSelectedFrames() {
         return new ArrayList<>(selectedFrames);
+    }
+
+    public static List<Channel.Category> availableChannelTypeCategories() {
+        List<Channel.Category> categories = new ArrayList<>();
+        for (Fixture fixture : getSelectedFixtures())
+            for (Channel channel : fixture.channels())
+                if (!categories.contains(channel.getType().getCategory()))
+                    categories.add(channel.getType().getCategory());
+        return categories;
+    }
+
+    public static List<Channel.Type> availableChannelTypes() {
+        List<Channel.Type> channelTypes = new ArrayList<>();
+        for (Fixture fixture : getSelectedFixtures())
+            for (Channel channel : fixture.channels())
+                if (!channelTypes.contains(channel.getType()))
+                    channelTypes.add(channel.getType());
+        return channelTypes;
+    }
+
+    public static List<Integer> availableParameters(Channel.Type channelType) {
+        List<Integer> parameters = new ArrayList<>();
+        for (Fixture fixture : getSelectedFixtures())
+            for (int parameter : fixture.getParameters(channelType))
+                if (!parameters.contains(parameter))
+                    parameters.add(parameter);
+        return parameters;
     }
 }

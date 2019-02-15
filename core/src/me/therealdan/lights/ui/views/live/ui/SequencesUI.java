@@ -6,6 +6,7 @@ import com.badlogic.gdx.files.FileHandle;
 import me.therealdan.lights.LightsCore;
 import me.therealdan.lights.fixtures.Channel;
 import me.therealdan.lights.programmer.Frame;
+import me.therealdan.lights.programmer.Programmer;
 import me.therealdan.lights.programmer.Sequence;
 import me.therealdan.lights.programmer.Task;
 import me.therealdan.lights.renderer.Renderer;
@@ -206,6 +207,29 @@ public class SequencesUI implements UI {
         }
         y -= cellHeight;
 
+        Util.box(renderer, x, y, optionsWidth, cellHeight, hasAllSelected() ? LightsCore.DARK_GREEN : LightsCore.medium(), !hasAllSelected() ? "Select All" : "Deselect All");
+        if (Util.containsMouse(x, y, optionsWidth, cellHeight) && canInteract()) {
+            interacted = true;
+            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.actionReady(500)) {
+                if (!hasAllSelected()) {
+                    for (Frame frame : getSelectedSequence().frames())
+                        select(frame);
+                } else {
+                    deselectAllFrames();
+                }
+            }
+        }
+        y -= cellHeight;
+
+        Util.box(renderer, x, y, optionsWidth, cellHeight, LightsCore.medium(), "Edit Sequence");
+        if (Util.containsMouse(x, y, optionsWidth, cellHeight) && canInteract()) {
+            interacted = true;
+            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.actionReady(500)) {
+                Programmer.edit(getSelectedSequence());
+            }
+        }
+        y -= cellHeight;
+
         Util.box(renderer, x, y, optionsWidth, cellHeight, LightsCore.medium(), LightsCore.RED, "Delete Sequence");
         if (Util.containsMouse(x, y, optionsWidth, cellHeight) && canInteract()) {
             interacted = true;
@@ -372,6 +396,14 @@ public class SequencesUI implements UI {
         return getSelectedSequence() != null;
     }
 
+    private boolean hasAllSelected() {
+        for (Frame frame : getSelectedSequence().frames())
+            if (!isSelected(frame))
+                return false;
+
+        return true;
+    }
+
     private void edit(Section section) {
         this.section = section;
     }
@@ -401,6 +433,10 @@ public class SequencesUI implements UI {
     }
 
     public static void add(Sequence sequence) {
+        for (Sequence each : sequences())
+            if (each.getName().equals(sequence.getName()))
+                remove(each);
+
         sequencesUI.sequences.add(sequence);
     }
 

@@ -207,7 +207,7 @@ public class SequencesUI implements UI {
         }
         y -= cellHeight;
 
-        Util.box(renderer, x, y, optionsWidth, cellHeight, hasAllSelected() ? LightsCore.DARK_GREEN : LightsCore.medium(), !hasAllSelected() ? "Select All" : "Deselect All");
+        Util.box(renderer, x, y, optionsWidth, cellHeight, LightsCore.medium(), !hasAllSelected() ? "Select All" : "Deselect All");
         if (Util.containsMouse(x, y, optionsWidth, cellHeight) && canInteract()) {
             interacted = true;
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.actionReady(500)) {
@@ -239,7 +239,7 @@ public class SequencesUI implements UI {
         }
         y -= cellHeight;
 
-        if (selectedFrames().size() > 0) {
+        if (countSelectedFrames() > 0) {
             Util.box(renderer, x, y, optionsWidth, cellHeight, LightsCore.DARK_BLUE, "Frame Options");
             drag(x, y, optionsWidth, cellHeight);
             y -= cellHeight;
@@ -283,7 +283,7 @@ public class SequencesUI implements UI {
             }
             y -= cellHeight;
 
-            Util.box(renderer, x, y, optionsWidth, cellHeight, LightsCore.medium(), LightsCore.RED, "Delete Frame" + (selectedFrames().size() > 1 ? "s" : ""));
+            Util.box(renderer, x, y, optionsWidth, cellHeight, LightsCore.medium(), LightsCore.RED, "Delete Frame" + (countSelectedFrames() > 1 ? "s" : ""));
             if (Util.containsMouse(x, y, optionsWidth, cellHeight) && canInteract()) {
                 interacted = true;
                 if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && shift && LightsCore.actionReady(500)) {
@@ -298,7 +298,7 @@ public class SequencesUI implements UI {
 
         x += optionsWidth;
         y = getY();
-        Util.box(renderer, x, y, framesWidth, cellHeight, LightsCore.DARK_BLUE, "Frames: " + getSelectedSequence().frames().size());
+        Util.box(renderer, x, y, framesWidth, cellHeight, LightsCore.DARK_BLUE, "Frames: " + countSelectedFrames() + " / " + getSelectedSequence().frames().size());
         drag(x, y, framesWidth, cellHeight);
         y -= cellHeight;
 
@@ -317,7 +317,7 @@ public class SequencesUI implements UI {
             y -= cellHeight;
         }
 
-        if (selectedFrames().size() != 1) {
+        if (countSelectedFrames() != 1) {
             setWidth(sequencesWidth + optionsWidth + framesWidth);
             return interacted;
         }
@@ -368,6 +368,7 @@ public class SequencesUI implements UI {
     }
 
     private void select(Frame frame) {
+        if (isSelected(frame)) return;
         this.selectedFrames.add(frame);
     }
 
@@ -381,6 +382,10 @@ public class SequencesUI implements UI {
 
     private boolean isSelected(Frame frame) {
         return selectedFrames().contains(frame);
+    }
+
+    private int countSelectedFrames() {
+        return selectedFrames.size();
     }
 
     private List<Frame> selectedFrames() {

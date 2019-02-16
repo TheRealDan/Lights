@@ -7,6 +7,7 @@ import me.therealdan.lights.fixtures.Channel;
 import me.therealdan.lights.fixtures.Fixture;
 import me.therealdan.lights.programmer.Programmer;
 import me.therealdan.lights.renderer.Renderer;
+import me.therealdan.lights.renderer.Task;
 import me.therealdan.lights.ui.views.Live;
 import me.therealdan.lights.util.Util;
 
@@ -43,12 +44,12 @@ public class ParametersUI implements UI {
         float cellHeight = 30;
 
         Util.box(renderer, x, y, getWidth(), getHeight(), LightsCore.dark());
-        Util.box(renderer, x, y, getWidth(), cellHeight, LightsCore.DARK_BLUE, "Parameters");
+        Util.box(renderer, x, y, getWidth(), cellHeight, LightsCore.DARK_BLUE, "Parameters", Task.TextPosition.CENTER);
         drag(x, y, getWidth(), cellHeight);
         y -= cellHeight;
 
         for (Channel.Category category : Programmer.availableChannelTypeCategories()) {
-            Util.box(renderer, x, y, width, cellHeight, category.equals(getCategory()) ? LightsCore.DARK_GREEN : LightsCore.medium(), category.getName());
+            Util.box(renderer, x, y, width, cellHeight, category.equals(getCategory()) ? LightsCore.DARK_GREEN : LightsCore.medium(), category.getName(), Task.TextPosition.CENTER);
             if (Util.containsMouse(x, y, width, cellHeight) && canInteract()) {
                 interacted = true;
                 if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.actionReady(500)) {
@@ -79,13 +80,13 @@ public class ParametersUI implements UI {
                 }
                 seen++;
                 if (Util.containsMouse(x, y, width, parameterHeight) && canInteract()) setChannelType(channelType);
-                Util.box(renderer, x, y, width, cellHeight, LightsCore.DARK_BLUE, channelType.getName());
+                Util.box(renderer, x, y, width, cellHeight, LightsCore.DARK_BLUE, channelType.getName(), Task.TextPosition.CENTER);
                 drag(x, y, width, cellHeight);
                 y -= cellHeight;
 
                 for (float percentage = 1.0f; percentage >= -0.01f; percentage -= 0.05f) {
                     float level = Float.parseFloat(decimalFormat.format(percentage * 100.0));
-                    Util.box(renderer, x, y, width, cellHeight, isSet(channelType, parameter) && getLevel(channelType, parameter) == level ? LightsCore.DARK_RED : LightsCore.medium(), Float.toString(level).replace("-", "").replace(".0", "") + "%");
+                    Util.box(renderer, x, y, width, cellHeight, isSet(channelType, parameter) && getLevel(channelType, parameter) == level ? LightsCore.DARK_RED : LightsCore.medium(), Float.toString(level).replace("-", "").replace(".0", "") + "%", Task.TextPosition.CENTER);
                     if (Util.containsMouse(x, y, width, cellHeight) && canInteract()) {
                         interacted = true;
                         if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.actionReady(-1)) {

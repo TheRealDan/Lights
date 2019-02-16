@@ -11,6 +11,7 @@ import me.therealdan.lights.fixtures.Fixture;
 import me.therealdan.lights.fixtures.Group;
 import me.therealdan.lights.fixtures.Profile;
 import me.therealdan.lights.renderer.Renderer;
+import me.therealdan.lights.renderer.Task;
 import me.therealdan.lights.ui.views.Live;
 import me.therealdan.lights.util.Util;
 
@@ -149,14 +150,14 @@ public class PatchUI implements UI {
             width = Math.max(width, idWidth + nameWidth + profileWidth + addressWidth);
         }
 
-        Util.box(renderer, x, y, uiWidth, cellHeight, LightsCore.DARK_BLUE, "Patch");
+        Util.box(renderer, x, y, uiWidth, cellHeight, LightsCore.DARK_BLUE, "Patch", Task.TextPosition.CENTER);
         drag(x, y, uiWidth, cellHeight);
         y -= cellHeight;
 
-        Util.box(renderer, x, y, idWidth, cellHeight, LightsCore.DARK_BLUE, "ID");
-        Util.box(renderer, x + idWidth, y, nameWidth, cellHeight, LightsCore.DARK_BLUE, "Name");
-        Util.box(renderer, x + idWidth + nameWidth, y, profileWidth, cellHeight, LightsCore.DARK_BLUE, "Profile");
-        Util.box(renderer, x + idWidth + nameWidth + profileWidth, y, addressWidth, cellHeight, LightsCore.DARK_BLUE, "Address");
+        Util.box(renderer, x, y, idWidth, cellHeight, LightsCore.DARK_BLUE, "ID", Task.TextPosition.CENTER);
+        Util.box(renderer, x + idWidth, y, nameWidth, cellHeight, LightsCore.DARK_BLUE, "Name", Task.TextPosition.CENTER);
+        Util.box(renderer, x + idWidth + nameWidth, y, profileWidth, cellHeight, LightsCore.DARK_BLUE, "Profile", Task.TextPosition.CENTER);
+        Util.box(renderer, x + idWidth + nameWidth + profileWidth, y, addressWidth, cellHeight, LightsCore.DARK_BLUE, "Address", Task.TextPosition.CENTER);
         drag(x, y, width, cellHeight);
         y -= cellHeight;
 
@@ -172,7 +173,7 @@ public class PatchUI implements UI {
                 }
             }
             Color color = fixture.equals(getSelectedFixture()) ? LightsCore.DARK_GREEN : LightsCore.medium();
-            Util.box(renderer, x, y, idWidth, cellHeight, color, setWidth(renderer, Integer.toString(fixture.getID())));
+            Util.box(renderer, x, y, idWidth, cellHeight, color, setWidth(renderer, Integer.toString(fixture.getID())), Task.TextPosition.CENTER);
             Util.box(renderer, x + idWidth, y, nameWidth, cellHeight, color, setWidth(renderer, fixture.getName()));
             Util.box(renderer, x + idWidth + nameWidth, y, profileWidth, cellHeight, color, setWidth(renderer, fixture.getProfile()));
             Util.box(renderer, x + idWidth + nameWidth + profileWidth, y, addressWidth, cellHeight, color, setWidth(renderer, Integer.toString(fixture.getAddress())));

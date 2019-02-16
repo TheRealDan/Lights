@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import me.therealdan.lights.LightsCore;
 import me.therealdan.lights.renderer.Renderer;
+import me.therealdan.lights.renderer.Task;
 import me.therealdan.lights.ui.views.Live;
 import me.therealdan.lights.util.Util;
 
@@ -22,7 +23,7 @@ public class PanelVisibilityUI implements UI {
         float y = getY();
         float width = getWidth();
 
-        Util.box(renderer, x, y, width, cellHeight, LightsCore.DARK_BLUE, setWidth(renderer, "Panel Visibility"));
+        Util.box(renderer, x, y, width, cellHeight, LightsCore.DARK_BLUE, setWidth(renderer, "Panel Visibility"), Task.TextPosition.CENTER);
         drag(x, y, width, cellHeight);
         y -= cellHeight;
 

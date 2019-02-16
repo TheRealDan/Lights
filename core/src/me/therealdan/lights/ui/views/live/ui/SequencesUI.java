@@ -128,7 +128,7 @@ public class SequencesUI implements UI {
             sequencesWidth = Math.max(sequencesWidth, renderer.getWidth(sequence.getName()) + 25);
 
         Util.box(renderer, x, y, getWidth(), getHeight(), LightsCore.dark());
-        Util.box(renderer, x, y, sequencesWidth, cellHeight, LightsCore.DARK_BLUE, "Sequences: " + countSequences());
+        Util.box(renderer, x, y, sequencesWidth, cellHeight, LightsCore.DARK_BLUE, "Sequences: " + countSequences(), me.therealdan.lights.renderer.Task.TextPosition.CENTER);
         drag(x, y, sequencesWidth, cellHeight);
         y -= cellHeight;
         canScrollSequences = Util.containsMouse(x, y, sequencesWidth, getHeight());
@@ -160,7 +160,7 @@ public class SequencesUI implements UI {
 
         x += sequencesWidth;
         y = getY();
-        Util.box(renderer, x, y, optionsWidth, cellHeight, LightsCore.DARK_BLUE, "Sequence Options");
+        Util.box(renderer, x, y, optionsWidth, cellHeight, LightsCore.DARK_BLUE, "Sequence Options", me.therealdan.lights.renderer.Task.TextPosition.CENTER);
         drag(x, y, optionsWidth, cellHeight);
         y -= cellHeight;
 
@@ -258,7 +258,7 @@ public class SequencesUI implements UI {
         y -= cellHeight;
 
         if (countSelectedFrames() > 0) {
-            Util.box(renderer, x, y, optionsWidth, cellHeight, LightsCore.DARK_BLUE, "Frame Options");
+            Util.box(renderer, x, y, optionsWidth, cellHeight, LightsCore.DARK_BLUE, "Frame Options", me.therealdan.lights.renderer.Task.TextPosition.CENTER);
             drag(x, y, optionsWidth, cellHeight);
             y -= cellHeight;
 
@@ -316,7 +316,7 @@ public class SequencesUI implements UI {
 
         x += optionsWidth;
         y = getY();
-        Util.box(renderer, x, y, framesWidth, cellHeight, LightsCore.DARK_BLUE, "Frames: " + countSelectedFrames() + " / " + getSelectedSequence().countFrames());
+        Util.box(renderer, x, y, framesWidth, cellHeight, LightsCore.DARK_BLUE, "Frames: " + countSelectedFrames() + " / " + getSelectedSequence().countFrames(), me.therealdan.lights.renderer.Task.TextPosition.CENTER);
         drag(x, y, framesWidth, cellHeight);
         y -= cellHeight;
         canScrollFrames = Util.containsMouse(x, y, framesWidth, getHeight());
@@ -354,7 +354,7 @@ public class SequencesUI implements UI {
 
         x += framesWidth;
         y = getY();
-        Util.box(renderer, x, y, tasksWidth, cellHeight, LightsCore.DARK_BLUE, "Tasks: " + frame.tasks().size());
+        Util.box(renderer, x, y, tasksWidth, cellHeight, LightsCore.DARK_BLUE, "Tasks: " + frame.tasks().size(), me.therealdan.lights.renderer.Task.TextPosition.CENTER);
         drag(x, y, tasksWidth, cellHeight);
         y -= cellHeight;
         canScrollTasks = Util.containsMouse(x, y, tasksWidth, getHeight());

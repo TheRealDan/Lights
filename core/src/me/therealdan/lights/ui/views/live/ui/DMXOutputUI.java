@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import me.therealdan.lights.LightsCore;
 import me.therealdan.lights.dmx.DMX;
 import me.therealdan.lights.renderer.Renderer;
+import me.therealdan.lights.renderer.Task;
 import me.therealdan.lights.ui.views.Live;
 import me.therealdan.lights.util.Util;
 
@@ -30,7 +31,7 @@ public class DMXOutputUI implements UI {
 
         if (!displayInCells()) setWidth(0);
 
-        Util.box(renderer, x, y, width, cellHeight, LightsCore.DARK_BLUE, setWidth(renderer, "DMX Output"));
+        Util.box(renderer, x, y, width, cellHeight, LightsCore.DARK_BLUE, setWidth(renderer, "DMX Output"), Task.TextPosition.CENTER);
         drag(x, y, width, cellHeight);
         y -= cellHeight;
 

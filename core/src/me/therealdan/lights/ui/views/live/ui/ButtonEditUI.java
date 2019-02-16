@@ -6,6 +6,7 @@ import me.therealdan.lights.LightsCore;
 import me.therealdan.lights.controllers.Button;
 import me.therealdan.lights.programmer.Sequence;
 import me.therealdan.lights.renderer.Renderer;
+import me.therealdan.lights.renderer.Task;
 import me.therealdan.lights.ui.views.Live;
 import me.therealdan.lights.util.Util;
 
@@ -35,7 +36,7 @@ public class ButtonEditUI implements UI {
         float width = 250;
         float cellHeight = 30;
 
-        Util.box(renderer, x, y, uiWidth, cellHeight, LightsCore.DARK_BLUE, "Button Editor");
+        Util.box(renderer, x, y, width, cellHeight, LightsCore.DARK_BLUE, "Button Editor", Task.TextPosition.CENTER);
         drag(x, y, uiWidth, cellHeight);
         y -= cellHeight;
 
@@ -134,7 +135,7 @@ public class ButtonEditUI implements UI {
             x += width;
             y = getY();
 
-            Util.box(renderer, x, y, sequencesWidth, cellHeight, LightsCore.DARK_BLUE, "All Sequences");
+            Util.box(renderer, x, y, sequencesWidth, cellHeight, LightsCore.DARK_BLUE, "All Sequences", Task.TextPosition.CENTER);
             drag(x, y, sequencesWidth, cellHeight);
             y -= cellHeight;
 
@@ -162,7 +163,7 @@ public class ButtonEditUI implements UI {
             x += sequencesWidth;
             y = getY();
 
-            Util.box(renderer, x, y, sequencesWidth, cellHeight, LightsCore.DARK_BLUE, "Selected Sequences");
+            Util.box(renderer, x, y, sequencesWidth, cellHeight, LightsCore.DARK_BLUE, "Selected Sequences", Task.TextPosition.CENTER);
             drag(x, y, sequencesWidth, cellHeight);
             y -= cellHeight;
 

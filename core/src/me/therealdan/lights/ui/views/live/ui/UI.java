@@ -34,7 +34,8 @@ public interface UI {
         if (!ignoreVisibilityUI()) Gdx.files.local("Lights/UI/" + getName() + ".txt").writeString("Visible: " + isVisible(), true);
     }
 
-    default void scrolled(int amount) {}
+    default void scrolled(int amount) {
+    }
 
     default void keyUp(int keycode) {
     }
@@ -129,7 +130,7 @@ public interface UI {
     }
 
     default void drag(float x, float y, float width, float cellHeight) {
-        if (isVisible() && Util.containsMouse(x, y, width, cellHeight) && Gdx.input.isButtonPressed(Input.Buttons.LEFT)) Live.drag(this);
+        if (canInteract() && isVisible() && Util.containsMouse(x, y, width, cellHeight) && Gdx.input.isButtonPressed(Input.Buttons.LEFT)) Live.drag(this);
     }
 
     default boolean isDragging() {

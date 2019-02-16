@@ -27,6 +27,13 @@ public class SequencesUI implements UI {
 
     private List<Frame> selectedFrames = new ArrayList<>();
 
+    private Sequence sequencesScroll = null;
+    private boolean canScrollSequences = false;
+    private int framesScroll = 0;
+    private boolean canScrollFrames = false;
+    private int tasksScroll = 0;
+    private boolean canScrollTasks = false;
+
     public SequencesUI() {
         sequencesUI = this;
 
@@ -120,19 +127,27 @@ public class SequencesUI implements UI {
         for (Sequence sequence : sequences())
             sequencesWidth = Math.max(sequencesWidth, renderer.getWidth(sequence.getName()) + 25);
 
+        Util.box(renderer, x, y, getWidth(), getHeight(), LightsCore.dark());
         Util.box(renderer, x, y, sequencesWidth, cellHeight, LightsCore.DARK_BLUE, "Sequences");
         drag(x, y, sequencesWidth, cellHeight);
         y -= cellHeight;
+        canScrollSequences = Util.containsMouse(x, y, sequencesWidth, getHeight());
 
+        int i = 0;
+        boolean display = false;
         for (Sequence sequence : sequences(true)) {
-            Util.box(renderer, x, y, sequencesWidth, cellHeight, sequence.equals(getSelectedSequence()) ? LightsCore.DARK_GREEN : LightsCore.medium(), setWidth(renderer, sequence.getName()));
-            if (Util.containsMouse(x, y, sequencesWidth, cellHeight) && canInteract()) {
-                interacted = true;
-                if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
-                    select(sequence);
+            if (sequence.equals(getSequencesScroll())) display = true;
+            if (display) {
+                Util.box(renderer, x, y, sequencesWidth, cellHeight, sequence.equals(getSelectedSequence()) ? LightsCore.DARK_GREEN : LightsCore.medium(), setWidth(renderer, sequence.getName()));
+                if (Util.containsMouse(x, y, sequencesWidth, cellHeight) && canInteract()) {
+                    interacted = true;
+                    if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
+                        select(sequence);
+                    }
                 }
+                y -= cellHeight;
+                if (++i == 13) break;
             }
-            y -= cellHeight;
         }
 
         setHeightBasedOnY(y);
@@ -294,27 +309,36 @@ public class SequencesUI implements UI {
             y -= cellHeight;
         }
 
-        float framesWidth = 400;
+        float framesWidth = 360;
 
         x += optionsWidth;
         y = getY();
         Util.box(renderer, x, y, framesWidth, cellHeight, LightsCore.DARK_BLUE, "Frames: " + countSelectedFrames() + " / " + getSelectedSequence().frames().size());
         drag(x, y, framesWidth, cellHeight);
         y -= cellHeight;
+        canScrollFrames = Util.containsMouse(x, y, framesWidth, getHeight());
 
+        i = 0;
+        display = false;
+        int current = 0;
         for (Frame frame : getSelectedSequence().frames()) {
-            Util.box(renderer, x, y, framesWidth, cellHeight, isSelected(frame) ? LightsCore.DARK_RED : LightsCore.medium(), frame.getInfo());
-            if (Util.containsMouse(x, y, framesWidth, cellHeight) && canInteract()) {
-                interacted = true;
-                if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.actionReady(500)) {
-                    if (isSelected(frame)) {
-                        deselect(frame);
-                    } else {
-                        select(frame);
+            if (current == getFramesScroll()) display = true;
+            current++;
+            if (display) {
+                Util.box(renderer, x, y, framesWidth, cellHeight, isSelected(frame) ? LightsCore.DARK_RED : LightsCore.medium(), frame.getInfo());
+                if (Util.containsMouse(x, y, framesWidth, cellHeight) && canInteract()) {
+                    interacted = true;
+                    if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.actionReady(500)) {
+                        if (isSelected(frame)) {
+                            deselect(frame);
+                        } else {
+                            select(frame);
+                        }
                     }
                 }
+                y -= cellHeight;
+                if (++i == 13) break;
             }
-            y -= cellHeight;
         }
 
         if (countSelectedFrames() != 1) {
@@ -330,11 +354,20 @@ public class SequencesUI implements UI {
         Util.box(renderer, x, y, tasksWidth, cellHeight, LightsCore.DARK_BLUE, "Tasks: " + frame.tasks().size());
         drag(x, y, tasksWidth, cellHeight);
         y -= cellHeight;
+        canScrollTasks = Util.containsMouse(x, y, tasksWidth, getHeight());
 
+        i = 0;
+        display = false;
+        current = 0;
         for (Task task : frame.tasks()) {
-            Util.box(renderer, x, y, tasksWidth, cellHeight, LightsCore.medium(), task.getInfo());
-            drag(x, y, tasksWidth, cellHeight);
-            y -= cellHeight;
+            if (current == getTasksScroll()) display = true;
+            current++;
+            if (display) {
+                Util.box(renderer, x, y, tasksWidth, cellHeight, LightsCore.medium(), task.getInfo());
+                drag(x, y, tasksWidth, cellHeight);
+                y -= cellHeight;
+                if (++i == 13) break;
+            }
         }
 
         setWidth(sequencesWidth + optionsWidth + framesWidth + tasksWidth);
@@ -367,6 +400,51 @@ public class SequencesUI implements UI {
         return true;
     }
 
+    @Override
+    public void scrolled(int amount) {
+        if (canScrollSequences()) {
+            if (amount > 0) {
+                boolean next = false;
+                int i = 0;
+                for (Sequence sequence : sequences(true)) {
+                    if (i++ > sequences().size() - 13) return;
+                    if (next) {
+                        setSequencesScroll(sequence);
+                        return;
+                    }
+                    if (sequence.equals(getSequencesScroll())) next = true;
+                }
+            } else {
+                Sequence previous = null;
+                for (Sequence sequence : sequences(true)) {
+                    if (sequence.equals(getSequencesScroll()) && previous != null) {
+                        setSequencesScroll(previous);
+                        return;
+                    }
+                    previous = sequence;
+                }
+            }
+        }
+
+        if (canScrollFrames()) {
+            if (amount > 0) {
+                if (getFramesScroll() < getSelectedSequence().frames().size() - 13) setFramesScroll(getFramesScroll() + 1);
+            } else {
+                setFramesScroll(getFramesScroll() - 1);
+                if (getFramesScroll() < 0) setFramesScroll(0);
+            }
+        }
+
+        if (canScrollTasks()) {
+            if (amount > 0) {
+                if (getTasksScroll() < selectedFrames().get(0).tasks().size() - 13) setTasksScroll(getTasksScroll() + 1);
+            } else {
+                setTasksScroll(getTasksScroll() - 1);
+                if (getTasksScroll() < 0) setTasksScroll(0);
+            }
+        }
+    }
+
     private void select(Frame frame) {
         if (isSelected(frame)) return;
         this.selectedFrames.add(frame);
@@ -395,6 +473,9 @@ public class SequencesUI implements UI {
     private void select(Sequence sequence) {
         this.selectedSequence = sequence;
         deselectAllFrames();
+
+        setFramesScroll(0);
+        setTasksScroll(0);
     }
 
     private boolean hasSelectedSequence() {
@@ -415,6 +496,43 @@ public class SequencesUI implements UI {
 
     private Sequence getSelectedSequence() {
         return selectedSequence;
+    }
+
+    public void setSequencesScroll(Sequence sequence) {
+        this.sequencesScroll = sequence;
+    }
+
+    private Sequence getSequencesScroll() {
+        if (sequencesScroll == null) setSequencesScroll(sequences(true).get(0));
+        return sequencesScroll;
+    }
+
+    public boolean canScrollSequences() {
+        return canScrollSequences;
+    }
+
+    public void setFramesScroll(int frame) {
+        this.framesScroll = frame;
+    }
+
+    public int getFramesScroll() {
+        return framesScroll;
+    }
+
+    public boolean canScrollFrames() {
+        return canScrollFrames;
+    }
+
+    public void setTasksScroll(int task) {
+        this.tasksScroll = task;
+    }
+
+    public int getTasksScroll() {
+        return tasksScroll;
+    }
+
+    public boolean canScrollTasks() {
+        return canScrollTasks;
     }
 
     private boolean canEdit(Section section) {

@@ -182,10 +182,6 @@ public class Sequence {
         }
         if (currentFrame < 0) first();
 
-        if (currentFrame != lastFrame)
-            for (Frame frame : frames())
-                frame.reset();
-
         lastFrame = currentFrame;
         return currentFrame;
     }

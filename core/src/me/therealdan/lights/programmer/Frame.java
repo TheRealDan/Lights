@@ -1,24 +1,22 @@
 package me.therealdan.lights.programmer;
 
 import com.badlogic.gdx.graphics.Color;
-import me.therealdan.lights.controllers.Fader;
 import me.therealdan.lights.dmx.DMX;
 import me.therealdan.lights.fixtures.Channel;
 import me.therealdan.lights.fixtures.Fixture;
 import me.therealdan.lights.renderer.Renderer;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.List;
 
 public class Frame {
-
-    private static HashMap<String, Float> previous = new HashMap<>();
 
     private LinkedHashSet<Task> tasks = new LinkedHashSet<>();
 
     private long frameTime = 500;
     private long fadeTime = 0;
-
-    private long timestamp = System.currentTimeMillis();
 
     public Frame() {
 
@@ -29,84 +27,11 @@ public class Frame {
         this.fadeTime = fadeTime;
     }
 
-    public void override(Sequence sequence) {
-        Frame frame = sequence.getActiveFrame();
-        for (Task task : frame.tasks()) {
-            float previous = getPrevious(task.getFixture(), task.getChannelType(), task.getParameter());
-            float target = task.getValue();
-
-            if (previous == target) {
-                set(task.getFixture(), task.getChannelType(), target, task.getParameter());
-                continue;
-            }
-
-            float distance = target - previous;
-            float timepassed = System.currentTimeMillis() - frame.timestamp;
-
-            if (distance > 0) {
-                float perMillis = distance / frame.getFadeTime();
-
-                float value = timepassed * perMillis;
-                if (value > target) value = target;
-
-                if (value == target) setPrevious(task.getFixture(), task.getChannelType(), target, task.getParameter());
-                set(task.getFixture(), task.getChannelType(), value, task.getParameter());
-            } else if (distance < 0) {
-                float perMillis = Math.abs(distance) / frame.getFadeTime();
-
-                float value = previous - (timepassed * perMillis);
-
-                if (value > previous) value = previous;
-                if (value < target) value = target;
-
-                if (value == target) setPrevious(task.getFixture(), task.getChannelType(), target, task.getParameter());
-                set(task.getFixture(), task.getChannelType(), value, task.getParameter());
-            }
-        }
-    }
-
-    public void override(Fader fader) {
-        Frame frame = fader.getSequence().getActiveFrame();
-
-        for (Task task : frame.tasks()) {
-            float value = task.getValue();
-
-            for (Task existing : tasks()) {
-                if (existing.getFixture().equals(task.getFixture()) &&
-                        existing.getChannelType().equals(task.getChannelType()) &&
-                        existing.getParameter() == task.getParameter()) {
-                    value = existing.getValue();
-                }
-            }
-
-            switch (fader.getType()) {
-                case MASTER:
-                    value *= fader.getValue();
-                    break;
-                case INHIBITOR:
-                    if (value > (fader.getValue() * 255.0f)) value = (fader.getValue() * 255.0f);
-                    break;
-                case AMBIENT:
-                    if (value < (fader.getValue() * 255.0f)) value = (fader.getValue() * 255.0f);
-                    break;
-                case OVERRIDE:
-                    value = fader.getValue() * 255.0f;
-                    break;
-            }
-
-            set(task.getFixture(), task.getChannelType(), value, task.getParameter());
-        }
-    }
-
     public void draw(Renderer renderer, float x, float y, float width, float height, Color color) {
         List<Integer> values = new ArrayList<>();
         for (int address = 1; address <= DMX.MAX_CHANNELS; address++)
             values.add((int) getValueFor(address));
         DMX.draw(renderer, x, y, width, height, color, values);
-    }
-
-    public void reset() {
-        this.timestamp = System.currentTimeMillis();
     }
 
     public void set(Fixture fixture, Channel.Type channelType, float value, int... parameters) {
@@ -237,25 +162,41 @@ public class Frame {
         return new ArrayList<>(tasks);
     }
 
+    public boolean equals(Frame frame) {
+        if (frameTime != frame.frameTime) return false;
+        if (fadeTime != frame.fadeTime) return false;
+
+        for (Task task : tasks()) {
+            boolean foundMatch = false;
+            for (Task otherTask : frame.tasks()) {
+                if (task.equals(otherTask)) {
+                    foundMatch = true;
+                    break;
+                }
+            }
+            if (!foundMatch) return false;
+        }
+
+        for (Task task : frame.tasks()) {
+            boolean foundMatch = false;
+            for (Task otherTask : tasks()) {
+                if (task.equals(otherTask)) {
+                    foundMatch = true;
+                    break;
+                }
+            }
+            if (!foundMatch) return false;
+        }
+
+        return true;
+    }
+
     @Override
     public Frame clone() {
         Frame frame = new Frame(getFrameTime(), getFadeTime());
         for (Task task : tasks())
             frame.set(task.getFixture(), task.getChannelType(), task.getValue(), task.getParameter());
         return frame;
-    }
-
-    public static void setPrevious(Fixture fixture, Channel.Type channelType, float value, int... parameters) {
-        for (int parameter : parameters)
-            Frame.previous.put(fixture.getID() + ";" + channelType.toString() + ";" + parameter, value);
-    }
-
-    public static void clearPrevious() {
-        Frame.previous.clear();
-    }
-
-    public static float getPrevious(Fixture fixture, Channel.Type channelType, int parameter) {
-        return previous.getOrDefault(fixture.getID() + ";" + channelType.toString() + ";" + parameter, 0f);
     }
 
     private static String get(String name, int total) {

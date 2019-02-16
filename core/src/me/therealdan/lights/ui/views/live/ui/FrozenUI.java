@@ -3,6 +3,7 @@ package me.therealdan.lights.ui.views.live.ui;
 import me.therealdan.lights.LightsCore;
 import me.therealdan.lights.dmx.Output;
 import me.therealdan.lights.renderer.Renderer;
+import me.therealdan.lights.renderer.Task;
 import me.therealdan.lights.ui.views.Live;
 import me.therealdan.lights.util.Util;
 
@@ -22,11 +23,14 @@ public class FrozenUI implements UI {
 
         float width = getWidth();
 
-        Util.box(renderer, x, y, width, cellHeight, System.currentTimeMillis() % 1000 > 500 ? LightsCore.DARK_BLUE : LightsCore.RED, setWidth(renderer, "OUTPUT FROZEN"));
+        Util.box(renderer, x, y, width, cellHeight,
+                System.currentTimeMillis() % 1000 > 500 ? LightsCore.DARK_BLUE : LightsCore.RED,
+                System.currentTimeMillis() % 1000 > 500 ? LightsCore.text() : LightsCore.BLACK,
+                setWidth(renderer, "OUTPUT FROZEN"), Task.TextPosition.CENTER);
         drag(x, y, width, cellHeight);
         y -= cellHeight;
 
-        Util.box(renderer, x, y, width, cellHeight, LightsCore.medium(), setWidth(renderer, "Press Escape to unfreeze"));
+        Util.box(renderer, x, y, width, cellHeight, LightsCore.medium(), setWidth(renderer, "Press Escape to unfreeze"), Task.TextPosition.CENTER);
         y -= cellHeight;
 
         setHeightBasedOnY(y);

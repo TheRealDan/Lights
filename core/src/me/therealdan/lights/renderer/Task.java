@@ -109,10 +109,10 @@ public class Task {
                     bitmapFont.draw(spriteBatch, text, x, y + bitmapFont.getLineHeight());
                     break;
                 case LEFT_CENTER:
-                    bitmapFont.draw(spriteBatch, text, x, y + bitmapFont.getLineHeight() / 2);
+                    bitmapFont.draw(spriteBatch, text, x + 4, y - textHeight / 2 + bitmapFont.getCapHeight() / 2);
                     break;
                 case CENTER:
-                    bitmapFont.draw(spriteBatch, text, x + textWidth / 2 - renderer.getWidth(text) / 2, y - textHeight / 2 + bitmapFont.getLineHeight() / 2);
+                    bitmapFont.draw(spriteBatch, text, x + textWidth / 2 - renderer.getWidth(text) / 2, y - textHeight / 2 + bitmapFont.getCapHeight() / 2);
                     break;
             }
         }

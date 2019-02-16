@@ -22,7 +22,7 @@ public class Util {
 
     public static void box(Renderer renderer, float x, float y, float width, float height, Color background, Color textColor, String text, Task.TextPosition textPosition) {
         box(renderer, x, y, width, height, background);
-        renderer.queue(new Task(x + 4, y - 3 - height / 2f).text(text, textPosition, width, height).setColor(textColor));
+        renderer.queue(new Task(x, y).text(text, textPosition, width, height).setColor(textColor));
     }
 
     public static void box(Renderer renderer, float x, float y, float width, float height, Color background) {

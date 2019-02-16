@@ -7,6 +7,7 @@ import me.therealdan.lights.LightsCore;
 import me.therealdan.lights.controllers.Fader;
 import me.therealdan.lights.controllers.FaderBank;
 import me.therealdan.lights.renderer.Renderer;
+import me.therealdan.lights.renderer.Task;
 import me.therealdan.lights.ui.views.Live;
 import me.therealdan.lights.util.Util;
 
@@ -94,7 +95,7 @@ public class FadersUI implements UI {
 
         float height = getHeight() - cellHeight - cellHeight;
 
-        Util.box(renderer, x, y, getWidth(), cellHeight, LightsCore.DARK_BLUE, setWidth(renderer, "Faders"));
+        Util.box(renderer, x, y, getWidth(), cellHeight, LightsCore.DARK_BLUE, setWidth(renderer, "Faders"), Task.TextPosition.CENTER);
         drag(x, y, getWidth(), cellHeight);
         y -= cellHeight;
 
@@ -112,7 +113,7 @@ public class FadersUI implements UI {
         y -= cellHeight;
 
         for (Fader fader : getBank().faders()) {
-            Util.box(renderer, x, y, faderWidth, height, LightsCore.medium(), Util.getPercentage(fader.getValue()));
+            Util.box(renderer, x, y, faderWidth, height, LightsCore.medium(), Util.getPercentage(fader.getValue()), Task.TextPosition.CENTER);
             float fill = fader.getValue() * height;
             Util.box(renderer, x, y - height + fill, faderWidth, fill, fader.getColor());
             if (Util.containsMouse(x, y, faderWidth, height) && canInteract()) {

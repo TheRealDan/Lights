@@ -15,6 +15,7 @@ public class Task {
     private float r, g, b, a;
     private float x, y, x1, y1;
     private float width, height;
+    private float textWidth, textHeight;
     private String text;
     private TextPosition textPosition;
 
@@ -49,8 +50,14 @@ public class Task {
     }
 
     public Task text(String text, TextPosition textPosition) {
+        return text(text, textPosition, 0, 0);
+    }
+
+    public Task text(String text, TextPosition textPosition, float width, float height) {
         this.text = text;
         this.textPosition = textPosition;
+        this.textWidth = width;
+        this.textHeight = height;
         return this;
     }
 
@@ -91,7 +98,7 @@ public class Task {
         }
     }
 
-    public void perform(BitmapFont bitmapFont, SpriteBatch spriteBatch) {
+    public void perform(Renderer renderer, BitmapFont bitmapFont, SpriteBatch spriteBatch) {
         if (color) bitmapFont.setColor(r, g, b, a);
         if (text != null) {
             switch (textPosition) {
@@ -104,6 +111,9 @@ public class Task {
                 case LEFT_CENTER:
                     bitmapFont.draw(spriteBatch, text, x, y + bitmapFont.getLineHeight() / 2);
                     break;
+                case CENTER:
+                    bitmapFont.draw(spriteBatch, text, x + textWidth / 2 - renderer.getWidth(text) / 2, y - textHeight / 2 + bitmapFont.getLineHeight() / 2);
+                    break;
             }
         }
     }
@@ -111,6 +121,7 @@ public class Task {
     public enum TextPosition {
         DEFAULT,
         BOTTOM_LEFT,
-        LEFT_CENTER
+        LEFT_CENTER,
+        CENTER,
     }
 }

@@ -37,7 +37,7 @@ public class Renderer {
 
         spriteBatch.begin();
         for (Task task : tasks)
-            task.perform(bitmapFont, spriteBatch);
+            task.perform(this, bitmapFont, spriteBatch);
         spriteBatch.end();
 
         tasks.clear();
@@ -62,7 +62,7 @@ public class Renderer {
     }
 
     public float getWidth(String text) {
-        if (!textBegun) {
+        if (!textBegun && !spriteBatch.isDrawing()) {
             spriteBatch.begin();
             textBegun = true;
         }

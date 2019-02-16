@@ -109,7 +109,7 @@ public class ButtonsUI implements UI {
             Button button = ButtonsUI.getButton(position);
             if (button != null) {
                 Util.box(renderer, x, y, size, size, button.getColor());
-                renderer.queue(new Task(x, y - size / 2).text(button.getName(), Task.TextPosition.LEFT_CENTER).setColor(LightsCore.text()));
+                renderer.queue(new Task(x, y).text(button.getName(), Task.TextPosition.CENTER, size, size).setColor(LightsCore.text()));
                 if (Util.containsMouse(x, y, size, size) && canInteract()) {
                     interacted = true;
                     if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.actionReady(1000)) {

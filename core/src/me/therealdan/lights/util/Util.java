@@ -12,9 +12,17 @@ public class Util {
         box(renderer, x, y, width, height, background, LightsCore.text(), text);
     }
 
+    public static void box(Renderer renderer, float x, float y, float width, float height, Color background, String text, Task.TextPosition textPosition) {
+        box(renderer, x, y, width, height, background, LightsCore.text(), text, textPosition);
+    }
+
     public static void box(Renderer renderer, float x, float y, float width, float height, Color background, Color textColor, String text) {
+        box(renderer, x, y, width, height, background, textColor, text, Task.TextPosition.LEFT_CENTER);
+    }
+
+    public static void box(Renderer renderer, float x, float y, float width, float height, Color background, Color textColor, String text, Task.TextPosition textPosition) {
         box(renderer, x, y, width, height, background);
-        renderer.queue(new Task(x + 4, y - 3 - height / 2f).text(text, Task.TextPosition.LEFT_CENTER).setColor(textColor));
+        renderer.queue(new Task(x + 4, y - 3 - height / 2f).text(text, textPosition, width, height).setColor(textColor));
     }
 
     public static void box(Renderer renderer, float x, float y, float width, float height, Color background) {

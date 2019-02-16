@@ -9,6 +9,7 @@ import me.therealdan.lights.programmer.Frame;
 import me.therealdan.lights.programmer.Programmer;
 import me.therealdan.lights.programmer.Sequence;
 import me.therealdan.lights.renderer.Renderer;
+import me.therealdan.lights.renderer.Task;
 import me.therealdan.lights.ui.views.Live;
 import me.therealdan.lights.util.Util;
 
@@ -124,11 +125,11 @@ public class SequenceProgrammerUI implements UI {
         float y = getY();
         float width = getWidth();
 
-        Util.box(renderer, x, y, getWidth(), cellHeight, LightsCore.DARK_BLUE, setWidth(renderer, "Sequence Programmer"));
+        Util.box(renderer, x, y, getWidth(), cellHeight, LightsCore.DARK_BLUE, setWidth(renderer, "Sequence Programmer"), Task.TextPosition.CENTER);
         drag(x, y, getWidth(), cellHeight);
         y -= cellHeight;
 
-        Util.box(renderer, x, y, getWidth(), cellHeight, selected.equals(Selected.NAME) ? LightsCore.DARK_RED : LightsCore.medium(), setWidth(renderer, sequence.getName()));
+        Util.box(renderer, x, y, getWidth(), cellHeight, selected.equals(Selected.NAME) ? LightsCore.DARK_RED : LightsCore.medium(), setWidth(renderer, sequence.getName()), Task.TextPosition.CENTER);
         if (Util.containsMouse(x, y, width, cellHeight) && canInteract()) {
             interacted = true;
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT))
@@ -142,7 +143,7 @@ public class SequenceProgrammerUI implements UI {
                 firstSelectedFrame != null ?
                         "Frame time: " + Frame.format(firstSelectedFrame.getFrameTime()) :
                         "N/A"
-                , 2));
+                , 2), Task.TextPosition.CENTER);
         if (Util.containsMouse(x, y, width, cellHeight) && canInteract()) {
             interacted = true;
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT))
@@ -153,7 +154,7 @@ public class SequenceProgrammerUI implements UI {
                 firstSelectedFrame != null ?
                         "Fade time: " + Frame.format(firstSelectedFrame.getFadeTime()) :
                         "N/A"
-                , 2));
+                , 2), Task.TextPosition.CENTER);
         if (Util.containsMouse(x, y, width, cellHeight) && canInteract()) {
             interacted = true;
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT))
@@ -167,7 +168,7 @@ public class SequenceProgrammerUI implements UI {
             boolean highlight = false;
             if (button.equals(Button.LOOP)) highlight = sequence.doesLoop();
             setWidth((renderer.getWidth(button.getName()) + 10) * Button.values().length, true);
-            Util.box(renderer, x, y, width, cellHeight, highlight ? LightsCore.DARK_GREEN : LightsCore.medium(), button.getName());
+            Util.box(renderer, x, y, width, cellHeight, highlight ? LightsCore.DARK_GREEN : LightsCore.medium(), button.getName(), Task.TextPosition.CENTER);
             if (Util.containsMouse(x, y, width, cellHeight) && canInteract()) {
                 interacted = true;
                 if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.actionReady(500))

@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Color;
 import me.therealdan.lights.LightsCore;
 import me.therealdan.lights.commands.*;
 import me.therealdan.lights.renderer.Renderer;
+import me.therealdan.lights.renderer.Task;
 import me.therealdan.lights.ui.views.Live;
 import me.therealdan.lights.util.Util;
 
@@ -48,7 +49,7 @@ public class ConsoleUI implements UI {
         float width = getWidth();
         float cellHeight = 30;
 
-        Util.box(renderer, x, y, width, cellHeight, LightsCore.DARK_BLUE, setWidth(renderer, "Console"));
+        Util.box(renderer, x, y, width, cellHeight, LightsCore.DARK_BLUE, setWidth(renderer, "Console"), Task.TextPosition.CENTER);
         drag(x, y, width, cellHeight);
         y -= cellHeight;
 

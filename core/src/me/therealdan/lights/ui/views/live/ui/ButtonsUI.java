@@ -101,7 +101,7 @@ public class ButtonsUI implements UI {
         float x = getX();
         float y = getY();
 
-        Util.box(renderer, x, y, getWidth(), cellHeight, LightsCore.DARK_BLUE, "Buttons");
+        Util.box(renderer, x, y, getWidth(), cellHeight, LightsCore.DARK_BLUE, "Buttons", Task.TextPosition.CENTER);
         drag(x, y, getWidth(), cellHeight);
         y -= cellHeight;
 
@@ -137,7 +137,7 @@ public class ButtonsUI implements UI {
                 y -= size;
             }
         }
-        Util.box(renderer, x, y, size, size, LightsCore.dark(), "Add New");
+        Util.box(renderer, x, y, size, size, LightsCore.dark(), "Add New", Task.TextPosition.CENTER);
         if (Util.containsMouse(x, y, size, size) && canInteract()) {
             interacted = true;
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.actionReady(1000)) {

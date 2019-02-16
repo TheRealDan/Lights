@@ -170,7 +170,7 @@ public class FaderEditUI implements UI {
                 boolean next = false;
                 int i = 0;
                 for (Sequence sequence : SequencesUI.sequences(true)) {
-                    if (i++ > SequencesUI.sequences().size() - 8) return;
+                    if (i++ > SequencesUI.countSequences() - 8) return;
                     if (next) {
                         setScroll(sequence);
                         return;

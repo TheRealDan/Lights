@@ -128,7 +128,7 @@ public class SequencesUI implements UI {
             sequencesWidth = Math.max(sequencesWidth, renderer.getWidth(sequence.getName()) + 25);
 
         Util.box(renderer, x, y, getWidth(), getHeight(), LightsCore.dark());
-        Util.box(renderer, x, y, sequencesWidth, cellHeight, LightsCore.DARK_BLUE, "Sequences");
+        Util.box(renderer, x, y, sequencesWidth, cellHeight, LightsCore.DARK_BLUE, "Sequences: " + countSequences());
         drag(x, y, sequencesWidth, cellHeight);
         y -= cellHeight;
         canScrollSequences = Util.containsMouse(x, y, sequencesWidth, getHeight());
@@ -410,7 +410,7 @@ public class SequencesUI implements UI {
                 boolean next = false;
                 int i = 0;
                 for (Sequence sequence : sequences(true)) {
-                    if (i++ > sequences().size() - 13) return;
+                    if (i++ > countSequences() - 13) return;
                     if (next) {
                         setSequencesScroll(sequence);
                         return;
@@ -565,6 +565,10 @@ public class SequencesUI implements UI {
                 remove(each);
 
         sequencesUI.sequences.add(sequence);
+    }
+
+    public static int countSequences() {
+        return sequencesUI.sequences.size();
     }
 
     public static Sequence byName(String name) {

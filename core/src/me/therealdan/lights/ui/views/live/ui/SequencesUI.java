@@ -249,7 +249,10 @@ public class SequencesUI implements UI {
         if (Util.containsMouse(x, y, optionsWidth, cellHeight) && canInteract()) {
             interacted = true;
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && shift && LightsCore.actionReady(500)) {
-                if (hasSelectedSequence()) remove(getSelectedSequence());
+                if (hasSelectedSequence()) {
+                    remove(getSelectedSequence());
+                    return interacted;
+                }
             }
         }
         y -= cellHeight;
@@ -313,7 +316,7 @@ public class SequencesUI implements UI {
 
         x += optionsWidth;
         y = getY();
-        Util.box(renderer, x, y, framesWidth, cellHeight, LightsCore.DARK_BLUE, "Frames: " + countSelectedFrames() + " / " + getSelectedSequence().frames().size());
+        Util.box(renderer, x, y, framesWidth, cellHeight, LightsCore.DARK_BLUE, "Frames: " + countSelectedFrames() + " / " + getSelectedSequence().countFrames());
         drag(x, y, framesWidth, cellHeight);
         y -= cellHeight;
         canScrollFrames = Util.containsMouse(x, y, framesWidth, getHeight());
@@ -553,6 +556,7 @@ public class SequencesUI implements UI {
 
     public static void remove(Sequence sequence) {
         sequencesUI.sequences.remove(sequence);
+        sequencesUI.select((Sequence) null);
     }
 
     public static void add(Sequence sequence) {

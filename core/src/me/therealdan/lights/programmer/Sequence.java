@@ -80,7 +80,7 @@ public class Sequence {
     }
 
     public void last() {
-        set(length() - 1);
+        set(countFrames() - 1);
     }
 
     public void previous() {
@@ -150,10 +150,10 @@ public class Sequence {
     }
 
     public boolean onLastFrame() {
-        return currentFrame == length() - 1;
+        return currentFrame == countFrames() - 1;
     }
 
-    public int length() {
+    public int countFrames() {
         return frames.size();
     }
 
@@ -172,7 +172,7 @@ public class Sequence {
             }
         }
 
-        if (currentFrame >= length()) {
+        if (currentFrame >= countFrames()) {
             if (doesLoop() && !doesClear()) {
                 first();
                 started = System.currentTimeMillis();
@@ -191,7 +191,7 @@ public class Sequence {
     }
 
     public Frame getActiveFrame() {
-        if (length() == 0) return new Frame();
+        if (countFrames() == 0) return new Frame();
         return frames.get(getCurrentFrame());
     }
 

@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import me.therealdan.lights.LightsCore;
 import me.therealdan.lights.renderer.Renderer;
+import me.therealdan.lights.renderer.Task;
 import me.therealdan.lights.ui.views.Live;
 import me.therealdan.lights.util.Util;
 
@@ -36,14 +37,14 @@ public class MasterUI implements UI {
         float y = getY();
         float width = getWidth();
 
-        Util.box(renderer, x, y, width, cellHeight, LightsCore.DARK_BLUE, setWidth(renderer, "Master"));
+        Util.box(renderer, x, y, width, cellHeight, LightsCore.DARK_BLUE, setWidth(renderer, "Master"), Task.TextPosition.CENTER);
         drag(x, y, width, cellHeight);
         y -= cellHeight;
 
         String currentAction = Live.getMaster() > 0.0 ? "Fade to Zero" : "Fade to Max";
         if (isFadeToMax()) currentAction = "Fading to Max..";
         if (isFadeToZero()) currentAction = "Fading to Zero..";
-        Util.box(renderer, x, y, width, cellHeight, LightsCore.medium(), setWidth(renderer, currentAction));
+        Util.box(renderer, x, y, width, cellHeight, LightsCore.medium(), setWidth(renderer, currentAction), Task.TextPosition.CENTER);
         if (Util.containsMouse(x, y, width, cellHeight) && canInteract()) {
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.actionReady(1000)) {
                 interacted = true;
@@ -53,7 +54,7 @@ public class MasterUI implements UI {
         y -= cellHeight;
 
         float height = getHeight() - cellHeight - cellHeight;
-        Util.box(renderer, x, y, width, height, LightsCore.medium(), setWidth(renderer, Util.getPercentage(Live.getMaster())));
+        Util.box(renderer, x, y, width, height, LightsCore.medium(), setWidth(renderer, Util.getPercentage(Live.getMaster())), Task.TextPosition.CENTER);
         float fill = Live.getMaster() * height;
         Util.box(renderer, x, y - height + fill, width, fill, LightsCore.BLACK);
 

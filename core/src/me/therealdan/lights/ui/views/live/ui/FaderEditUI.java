@@ -165,6 +165,8 @@ public class FaderEditUI implements UI {
 
     @Override
     public void scrolled(int amount) {
+        if (!containsMouse()) return;
+
         if (canEdit(Section.SEQUENCE)) {
             if (amount > 0) {
                 boolean next = false;

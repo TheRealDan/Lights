@@ -119,7 +119,7 @@ public class ConsoleUI implements UI {
             return;
         }
 
-        String command = input.split(" ")[0];
+        String command = input.contains(" ") ? input.split(" ")[0] : input;
         String[] args = input.replaceFirst(command + " ", "").split(" ");
 
         boolean commandExists = false;

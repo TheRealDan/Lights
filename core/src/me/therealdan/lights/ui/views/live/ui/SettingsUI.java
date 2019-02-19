@@ -87,6 +87,7 @@ public class SettingsUI implements UI {
         NEW_READ_TIMEOUT,
         NEW_WRITE_TIMEOUT,
         CHANNELS_PER_SEND,
+        CHANNELS_PER_TIME,
         BUTTON_PANEL_WIDTH,
         SHOW_DMX_SEND_DEBUG,
         CONTINUOUS,
@@ -129,6 +130,9 @@ public class SettingsUI implements UI {
                 case CHANNELS_PER_SEND:
                     Output.CHANNELS_PER_SEND += amount;
                     break;
+                case CHANNELS_PER_TIME:
+                    Output.CHANNELS_PER_TIME += amount;
+                    break;
                 case BUTTON_PANEL_WIDTH:
                     ButtonsUI.WIDTH += amount;
                     break;
@@ -155,6 +159,9 @@ public class SettingsUI implements UI {
                     break;
                 case CHANNELS_PER_SEND:
                     Output.CHANNELS_PER_SEND -= amount;
+                    break;
+                case CHANNELS_PER_TIME:
+                    Output.CHANNELS_PER_TIME -= amount;
                     break;
                 case BUTTON_PANEL_WIDTH:
                     ButtonsUI.WIDTH -= amount;
@@ -226,6 +233,8 @@ public class SettingsUI implements UI {
                     return Output.NEW_WRITE_TIMEOUT;
                 case CHANNELS_PER_SEND:
                     return Output.CHANNELS_PER_SEND;
+                case CHANNELS_PER_TIME:
+                    return Output.CHANNELS_PER_TIME;
                 case BUTTON_PANEL_WIDTH:
                     return (int) ButtonsUI.WIDTH;
             }
@@ -267,6 +276,7 @@ public class SettingsUI implements UI {
                 case NEW_READ_TIMEOUT:
                 case NEW_WRITE_TIMEOUT:
                 case CHANNELS_PER_SEND:
+                case CHANNELS_PER_TIME:
                 case BUTTON_PANEL_WIDTH:
                     return Setting.Type.INT;
 

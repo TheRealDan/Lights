@@ -26,6 +26,39 @@ void loop() {
     switch(incoming) {
       case 32:
         if (dmxBuffer.length() > 3) {
+          value = dmxBuffer.substring(0, 3).toInt();
+          for (int i = 3; i < dmxBuffer.length(); i += 3) {
+            address = dmxBuffer.substring(i, i + 3).toInt();
+            dmx(address, value);
+          }
+        }
+        dmxBuffer = "";
+        break;
+
+      case 48:
+      case 49:
+      case 50:
+      case 51:
+      case 52:
+      case 53:
+      case 54:
+      case 55:
+      case 56:
+      case 57:
+        c = incoming;
+        dmxBuffer.concat(c);
+        break;
+    }
+  }
+}
+
+void loopV1() {
+  if (rx.available() > 0) {
+    incoming = rx.read();
+
+    switch(incoming) {
+      case 32:
+        if (dmxBuffer.length() > 3) {
           address = dmxBuffer.substring(0, 3).toInt();
           value = dmxBuffer.substring(3, min(dmxBuffer.length(), 6)).toInt();
           dmx(address, value);

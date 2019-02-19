@@ -26,6 +26,7 @@ public class Output {
     public static int NEW_READ_TIMEOUT = 0;
     public static int NEW_WRITE_TIMEOUT = 0;
     public static int CHANNELS_PER_SEND = 512;
+    public static int CHANNELS_PER_TIME = 512;
     public static boolean SHOW_DMX_SEND_DEBUG = true;
     public static boolean CONTINUOUS = false;
 

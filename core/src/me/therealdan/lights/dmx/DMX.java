@@ -24,6 +24,8 @@ public class DMX {
     private HashMap<Integer, Integer> channels = new HashMap<>();
     private HashMap<Integer, Integer> lastSent = new HashMap<>();
 
+    private ArrayList<Long> channelsPerSecondCounter = new ArrayList<>();
+
     private String level;
 
     private int next = 1;
@@ -93,33 +95,50 @@ public class DMX {
 
         if (Output.CONTINUOUS) {
             for (int address = next; address < next + Output.CHANNELS_PER_SEND; address++) {
+                int value = get(address);
+                if (value < 10) data.append("0");
+                if (value < 100) data.append("0");
+                data.append(Double.toString(value).replace(".0", ""));
                 if (address < 10) data.append("0");
                 if (address < 100) data.append("0");
                 data.append(Double.toString(address).replace(".0", ""));
-                data.append(Double.toString(get(address)).replace(".0", ""));
                 data.append(" ");
             }
 
             next += Output.CHANNELS_PER_SEND;
             if (next > MAX_CHANNELS) next = 1;
         } else {
+            int currentValue = -1;
             int queued = 0;
             for (int address = 1; address <= MAX_CHANNELS; address++) {
                 if (queued >= Output.CHANNELS_PER_SEND) break;
-                if (!channels.get(address).equals(lastSent.get(address))) {
-                    int value = channels.get(address);
+                if (channelsPerSecondCounter.size() > Output.CHANNELS_PER_TIME) break;
+                int value = channels.get(address);
+                if ((!lastSent.containsKey(address) || value != lastSent.get(address)) && (currentValue == -1 || value == currentValue)) {
+                    if (currentValue == -1) {
+                        if (value < 10) data.append("0");
+                        if (value < 100) data.append("0");
+                        data.append(Double.toString(value).replace(".0", ""));
+                    }
+                    currentValue = value;
                     lastSent.put(address, value);
                     if (address < 10) data.append("0");
                     if (address < 100) data.append("0");
                     data.append(Double.toString(address).replace(".0", ""));
-                    data.append(Double.toString(value).replace(".0", ""));
-                    data.append(" ");
                     queued++;
+                    channelsPerSecondCounter.add(System.currentTimeMillis());
+                }
+            }
+            data.append(" ");
+
+            for (long timestamp : new ArrayList<>(channelsPerSecondCounter)) {
+                if (System.currentTimeMillis() - timestamp > 250) {
+                    channelsPerSecondCounter.remove(timestamp);
                 }
             }
         }
 
-        if (data.length() == 0) return null;
+        if (data.length() <= 1) return null;
         if (Output.SHOW_DMX_SEND_DEBUG) ConsoleUI.log("Preparing to send: " + data.toString());
         try {
             return data.toString().getBytes("UTF-8");

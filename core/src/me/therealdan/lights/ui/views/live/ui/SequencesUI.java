@@ -20,6 +20,8 @@ public class SequencesUI implements UI {
 
     private static SequencesUI sequencesUI;
 
+    private final int MAX_ROWS = 13;
+
     private List<Sequence> sequences = new ArrayList<>();
 
     private Sequence selectedSequence;
@@ -146,7 +148,7 @@ public class SequencesUI implements UI {
                     }
                 }
                 y -= cellHeight;
-                if (++i == 13) break;
+                if (++i == MAX_ROWS) break;
             }
         }
 
@@ -312,6 +314,8 @@ public class SequencesUI implements UI {
             y -= cellHeight;
         }
 
+        if (countSequences() < MAX_ROWS) setHeightBasedOnY(y);
+
         float framesWidth = 360;
 
         x += optionsWidth;
@@ -340,7 +344,8 @@ public class SequencesUI implements UI {
                     }
                 }
                 y -= cellHeight;
-                if (++i == 13) break;
+                if (++i == MAX_ROWS) break;
+                if (++i == MAX_ROWS) break;
             }
         }
 
@@ -369,7 +374,7 @@ public class SequencesUI implements UI {
                 Util.box(renderer, x, y, tasksWidth, cellHeight, LightsCore.medium(), task.getInfo());
                 drag(x, y, tasksWidth, cellHeight);
                 y -= cellHeight;
-                if (++i == 13) break;
+                if (++i == MAX_ROWS) break;
             }
         }
 
@@ -410,7 +415,7 @@ public class SequencesUI implements UI {
                 boolean next = false;
                 int i = 0;
                 for (Sequence sequence : sequences(true)) {
-                    if (i++ > countSequences() - 13) return;
+                    if (i++ > countSequences() - MAX_ROWS) return;
                     if (next) {
                         setSequencesScroll(sequence);
                         return;
@@ -431,7 +436,7 @@ public class SequencesUI implements UI {
 
         if (canScrollFrames()) {
             if (amount > 0) {
-                if (getFramesScroll() < getSelectedSequence().frames().size() - 13) setFramesScroll(getFramesScroll() + 1);
+                if (getFramesScroll() < getSelectedSequence().frames().size() - MAX_ROWS) setFramesScroll(getFramesScroll() + 1);
             } else {
                 setFramesScroll(getFramesScroll() - 1);
                 if (getFramesScroll() < 0) setFramesScroll(0);
@@ -440,7 +445,7 @@ public class SequencesUI implements UI {
 
         if (canScrollTasks()) {
             if (amount > 0) {
-                if (getTasksScroll() < selectedFrames().get(0).tasks().size() - 13) setTasksScroll(getTasksScroll() + 1);
+                if (getTasksScroll() < selectedFrames().get(0).tasks().size() - MAX_ROWS) setTasksScroll(getTasksScroll() + 1);
             } else {
                 setTasksScroll(getTasksScroll() - 1);
                 if (getTasksScroll() < 0) setTasksScroll(0);
@@ -507,6 +512,7 @@ public class SequencesUI implements UI {
 
     private Sequence getSequencesScroll() {
         if (sequencesScroll == null) setSequencesScroll(sequences(true).get(0));
+        if (!sequences().contains(sequencesScroll)) setSequencesScroll(sequences(true).get(0));
         return sequencesScroll;
     }
 

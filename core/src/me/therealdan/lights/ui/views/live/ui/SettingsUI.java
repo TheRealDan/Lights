@@ -19,7 +19,11 @@ public class SettingsUI implements UI {
         if (fileHandle.exists()) {
             for (String line : fileHandle.readString().split("\\r?\\n")) {
                 String[] args = line.split(": ");
-                Setting.valueOf(args[0]).set(args[1]);
+                try {
+                    Setting.valueOf(args[0]).set(args[1]);
+                } catch (Exception e) {
+                    //
+                }
             }
         }
     }

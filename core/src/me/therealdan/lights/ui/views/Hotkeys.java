@@ -29,6 +29,7 @@ public class Hotkeys implements Tab {
 
     private void load() {
         FileHandle fileHandle = Gdx.files.local("Lights/Settings/Controls.txt");
+        if (!fileHandle.exists()) return;
 
         for (String line : fileHandle.readString().split("\\r?\\n")) {
             String[] args = line.split(": ");

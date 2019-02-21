@@ -116,6 +116,10 @@ public class ProfilesUI implements UI {
         profilesUI.profiles.add(profile);
     }
 
+    public static int countProfiles() {
+        return profilesUI.profiles.size();
+    }
+
     public static Profile profileByName(String name) {
         for (Profile profile : profiles())
             if (profile.getName().equalsIgnoreCase(name))
@@ -125,6 +129,22 @@ public class ProfilesUI implements UI {
     }
 
     public static List<Profile> profiles() {
-        return new ArrayList<>(profilesUI.profiles);
+        return profiles(false);
+    }
+
+    public static List<Profile> profiles(boolean alphabeticalOrder) {
+        if (!alphabeticalOrder) return new ArrayList<>(profilesUI.profiles);
+
+        List<Profile> profiles = profiles(false);
+        List<Profile> alphabetical = new ArrayList<>();
+        while (profiles.size() > 0) {
+            Profile first = null;
+            for (Profile profile : profiles)
+                if (first == null || first.getName().compareTo(profile.getName()) > 0)
+                    first = profile;
+            profiles.remove(first);
+            alphabetical.add(first);
+        }
+        return alphabetical;
     }
 }

@@ -33,10 +33,14 @@ public class Hotkeys implements Tab {
 
         for (String line : fileHandle.readString().split("\\r?\\n")) {
             String[] args = line.split(": ");
-            set(
-                    args[0],
-                    Integer.parseInt(args[1])
-            );
+            try {
+                set(
+                        args[0],
+                        Integer.parseInt(args[1])
+                );
+            } catch (Exception e) {
+                //
+            }
         }
     }
 

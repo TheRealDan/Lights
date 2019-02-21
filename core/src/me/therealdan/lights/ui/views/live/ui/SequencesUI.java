@@ -121,7 +121,7 @@ public class SequencesUI implements UI {
 
         float x = getX();
         float y = getY();
-        float sequencesWidth = 0;
+        float sequencesWidth = renderer.getWidth("Sequences: 0") + 10;
         float cellHeight = 30;
 
         for (Sequence sequence : sequences())

@@ -25,6 +25,8 @@ public interface UI {
                     Float.parseFloat(lines[0].replace("X: ", "")),
                     Float.parseFloat(lines[1].replace("Y: ", "")));
             if (!ignoreVisibilityUI() && lines.length > 2) setVisible(Boolean.parseBoolean(lines[2].replace("Visible: ", "")));
+        } else {
+            if (!ignoreVisibilityUI()) setVisible(false);
         }
     }
 

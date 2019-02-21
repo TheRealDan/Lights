@@ -141,7 +141,7 @@ public class PatchUI implements UI {
         float nameWidth = renderer.getWidth("Name") + 10;
         float profileWidth = renderer.getWidth("Profile") + 10;
         float addressWidth = renderer.getWidth("Address") + 10;
-        float width = 0;
+        float width = idWidth + nameWidth + profileWidth + addressWidth;
         for (Fixture fixture : fixtures()) {
             idWidth = Math.max(idWidth, renderer.getWidth(Integer.toString(fixture.getID())) + 10);
             nameWidth = Math.max(nameWidth, renderer.getWidth(fixture.getName()) + 10);

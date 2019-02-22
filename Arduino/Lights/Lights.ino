@@ -11,8 +11,8 @@ char c;
 int led = 13;
 
 void setup() {
-  ArduinoDmx0.set_tx_address(1);      
-  ArduinoDmx0.set_tx_channels(512);   
+  ArduinoDmx0.set_tx_address(1);
+  ArduinoDmx0.set_tx_channels(512);
   ArduinoDmx0.init_tx(0);
 
   rx.begin(74880);
@@ -65,7 +65,7 @@ void loopV1() {
         }
         dmxBuffer = "";
         break;
-      
+
       case 48:
       case 49:
       case 50:

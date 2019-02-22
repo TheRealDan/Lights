@@ -108,6 +108,11 @@ public class ProfilesUI implements UI {
         drag(x, y, width, cellHeight);
         y -= cellHeight;
 
+        for (Profile profile : profiles(true)) {
+            Util.box(renderer, x, y, width, cellHeight, LightsCore.medium(), setWidth(renderer, profile.getName()));
+            y -= cellHeight;
+        }
+
         setHeightBasedOnY(y);
         return interacted;
     }

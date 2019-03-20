@@ -53,6 +53,12 @@ public class Profile {
         this.physicalChannels = physicalChannels;
     }
 
+    public void rename(String name) {
+        this.name = name;
+
+        // TODO - Will probably cause issues. Need to scan through things and update the name or use different system
+    }
+
     public String getName() {
         return name;
     }
@@ -67,6 +73,14 @@ public class Profile {
 
     public int getPhysicalChannels() {
         return physicalChannels;
+    }
+
+    public int countChannels() {
+        return channels.size();
+    }
+
+    public int countModels() {
+        return modelDesigns.size();
     }
 
     public boolean hasVirtualIntensity() {

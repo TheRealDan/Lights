@@ -151,6 +151,8 @@ public class Live implements Tab {
             }
         }
 
+        visualiser.set(13, SettingsUI.HAZE ? 255 : 0);
+
         if (!Output.isFrozen()) output.copy(visualiser);
 
         if (!getSection().equals(Section.SEQUENCE_PROGRAMMER)) SequenceProgrammerUI.setSelected(SequenceProgrammerUI.Selected.NONE);

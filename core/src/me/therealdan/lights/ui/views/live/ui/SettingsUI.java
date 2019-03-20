@@ -14,6 +14,8 @@ import me.therealdan.lights.util.Util;
 
 public class SettingsUI implements UI {
 
+    public static boolean HAZE = false;
+
     public SettingsUI() {
         FileHandle fileHandle = Gdx.files.local("Lights/Settings/Settings.txt");
         if (fileHandle.exists()) {
@@ -97,7 +99,8 @@ public class SettingsUI implements UI {
         CONTINUOUS,
         LIMIT_LED_STRIPS,
         DRAW_DMX,
-        REMEMBER_CAMERA_POSITION;
+        REMEMBER_CAMERA_POSITION,
+        HAZE;
 
         public void set(String string) {
             switch (getType()) {
@@ -210,6 +213,9 @@ public class SettingsUI implements UI {
                 case REMEMBER_CAMERA_POSITION:
                     Visualiser3D.REMEMBER_CAMERA_POSITION = !Visualiser3D.REMEMBER_CAMERA_POSITION;
                     break;
+                case HAZE:
+                    SettingsUI.HAZE = !SettingsUI.HAZE;
+                    break;
             }
         }
 
@@ -225,6 +231,8 @@ public class SettingsUI implements UI {
                     return DMX.DRAW_DMX;
                 case REMEMBER_CAMERA_POSITION:
                     return Visualiser3D.REMEMBER_CAMERA_POSITION;
+                case HAZE:
+                    return SettingsUI.HAZE;
             }
             return false;
         }
@@ -289,6 +297,7 @@ public class SettingsUI implements UI {
                 case LIMIT_LED_STRIPS:
                 case DRAW_DMX:
                 case REMEMBER_CAMERA_POSITION:
+                case HAZE:
                     return Setting.Type.BOOLEAN;
             }
             return Setting.Type.BOOLEAN;

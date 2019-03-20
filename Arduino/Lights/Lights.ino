@@ -8,8 +8,6 @@ int address, value;
 int incoming;
 char c;
 
-int led = 13;
-
 void setup() {
   ArduinoDmx0.set_tx_address(1);
   ArduinoDmx0.set_tx_channels(512);
@@ -23,7 +21,7 @@ void loop() {
   if (rx.available() > 0) {
     incoming = rx.read();
 
-    switch(incoming) {
+    switch (incoming) {
       case 32:
         if (dmxBuffer.length() > 3) {
           value = dmxBuffer.substring(0, 3).toInt();
@@ -59,9 +57,5 @@ void dmx(int address, int value) {
   if (value < 0) value = 0;
 
   ArduinoDmx0.TxBuffer[address - 1] = value;
-}
-
-int getdmx(int address) {
-  return ArduinoDmx0.TxBuffer[address - 1];
 }
 

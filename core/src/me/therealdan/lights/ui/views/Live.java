@@ -11,6 +11,7 @@ import me.therealdan.lights.programmer.Frame;
 import me.therealdan.lights.programmer.Programmer;
 import me.therealdan.lights.programmer.Sequence;
 import me.therealdan.lights.renderer.Renderer;
+import me.therealdan.lights.settings.Setting;
 import me.therealdan.lights.ui.view.Tab;
 import me.therealdan.lights.ui.views.live.Visualiser3D;
 import me.therealdan.lights.ui.views.live.ui.*;
@@ -151,7 +152,7 @@ public class Live implements Tab {
             }
         }
 
-        visualiser.set(13, SettingsUI.HAZE ? 255 : 0);
+        visualiser.set(13, Setting.byName(Setting.Name.HAZE).isTrue() ? 255 : 0);
 
         if (!Output.isFrozen()) output.copy(visualiser);
 

@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import me.therealdan.lights.dmx.Output;
 import me.therealdan.lights.renderer.Renderer;
+import me.therealdan.lights.settings.Setting;
 import me.therealdan.lights.ui.ViewBar;
 import me.therealdan.lights.ui.view.Tab;
 import me.therealdan.lights.ui.views.Hotkeys;
@@ -53,6 +54,9 @@ public class LightsCore extends ApplicationAdapter {
         light = new Color(0.6f, 0.6f, 0.6f, 1);
         medium = new Color(0.2f, 0.2f, 0.2f, 1);
         dark = new Color(0.1f, 0.1f, 0.1f, 1);
+
+        Setting.createSettings();
+        Setting.loadFromFile();
 
         Tab.register(new Live());
         Tab.register(new Hotkeys());
@@ -105,6 +109,8 @@ public class LightsCore extends ApplicationAdapter {
     public void dispose() {
         menuBar.dispose();
         renderer.dispose();
+
+        Setting.saveToFile();
 
         for (Tab tab : Tab.values())
             tab.save();

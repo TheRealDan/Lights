@@ -1,6 +1,7 @@
 package me.therealdan.lights.dmx;
 
 import com.fazecast.jSerialComm.SerialPort;
+import me.therealdan.lights.settings.Setting;
 import me.therealdan.lights.ui.views.live.ui.ConsoleUI;
 import me.therealdan.lights.ui.views.live.ui.TimingsUI;
 
@@ -20,15 +21,7 @@ public class Output {
     private String activePort = "Not Connected";
     private boolean connected = false;
 
-    public static long INTERVAL = 100; // milliseconds between data send
-    public static long CONNECTION_WAIT = 2000; // milliseconds since last connection before data is allowed to send
     public static int BAUDRATE = 74880;
-    public static int NEW_READ_TIMEOUT = 0;
-    public static int NEW_WRITE_TIMEOUT = 0;
-    public static int CHANNELS_PER_SEND = 512;
-    public static int CHANNELS_PER_TIME = 512;
-    public static boolean SHOW_DMX_SEND_DEBUG = true;
-    public static boolean CONTINUOUS = false;
 
     private long lastConnect = System.currentTimeMillis();
     private long lastSend = System.currentTimeMillis();
@@ -48,13 +41,14 @@ public class Output {
     }
 
     private void tick() {
-        if (System.currentTimeMillis() - lastSend < INTERVAL) return;
+        if (System.currentTimeMillis() - lastSend < Setting.byName(Setting.Name.INTERVAL).getLong()) return;
         long timestamp = System.currentTimeMillis();
         lastSend = System.currentTimeMillis();
 
         if (this.serialPort != null && !this.serialPort.getSystemPortName().equals(activePort)) {
             this.serialPort = null;
-            if (SHOW_DMX_SEND_DEBUG) ConsoleUI.log(ConsoleUI.ConsoleColor.YELLOW, "Port dropped");
+            if (Setting.byName(Setting.Name.SHOW_DMX_SEND_DEBUG).isTrue())
+                ConsoleUI.log(ConsoleUI.ConsoleColor.YELLOW, "Port dropped");
         }
 
         boolean connected = false;
@@ -66,9 +60,10 @@ public class Output {
                     this.serialPort = openPort;
                     this.serialPort.openPort();
                     this.serialPort.setBaudRate(BAUDRATE);
-                    this.serialPort.setComPortTimeouts(SerialPort.TIMEOUT_WRITE_BLOCKING, NEW_READ_TIMEOUT, NEW_WRITE_TIMEOUT);
+                    this.serialPort.setComPortTimeouts(SerialPort.TIMEOUT_WRITE_BLOCKING, Setting.byName(Setting.Name.NEW_READ_TIMEOUT).getInt(), Setting.byName(Setting.Name.NEW_WRITE_TIMEOUT).getInt());
                     this.lastConnect = System.currentTimeMillis();
-                    if (SHOW_DMX_SEND_DEBUG) ConsoleUI.log(ConsoleUI.ConsoleColor.YELLOW, "Port Connected");
+                    if (Setting.byName(Setting.Name.SHOW_DMX_SEND_DEBUG).isTrue())
+                        ConsoleUI.log(ConsoleUI.ConsoleColor.YELLOW, "Port Connected");
                     break;
                 } else if (this.serialPort != null) {
                     connected = true;
@@ -83,17 +78,19 @@ public class Output {
         if (!serialPort.isOpen()) {
             serialPort.openPort();
             this.lastConnect = System.currentTimeMillis();
-            if (SHOW_DMX_SEND_DEBUG) ConsoleUI.log(ConsoleUI.ConsoleColor.YELLOW, "Port Opened");
+            if (Setting.byName(Setting.Name.SHOW_DMX_SEND_DEBUG).isTrue())
+                ConsoleUI.log(ConsoleUI.ConsoleColor.YELLOW, "Port Opened");
         }
 
-        if (System.currentTimeMillis() - lastConnect < CONNECTION_WAIT) return;
+        if (System.currentTimeMillis() - lastConnect < Setting.byName(Setting.Name.CONNECTION_WAIT).getLong()) return;
         if (isFrozen()) return;
 
         try {
             byte[] bytes = DMX.get("OUTPUT").getNext();
             if (bytes == null) return;
             serialPort.getOutputStream().write(bytes);
-            if (SHOW_DMX_SEND_DEBUG) ConsoleUI.log(ConsoleUI.ConsoleColor.YELLOW, "DMX Sent");
+            if (Setting.byName(Setting.Name.SHOW_DMX_SEND_DEBUG).isTrue())
+                ConsoleUI.log(ConsoleUI.ConsoleColor.YELLOW, "DMX Sent");
         } catch (Exception e) {
             serialPort = null;
             ConsoleUI.log(ConsoleUI.ConsoleColor.RED, e.getMessage());

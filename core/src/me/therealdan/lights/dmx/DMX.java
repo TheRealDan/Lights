@@ -5,6 +5,7 @@ import me.therealdan.lights.fixtures.Fixture;
 import me.therealdan.lights.fixtures.Group;
 import me.therealdan.lights.renderer.Renderer;
 import me.therealdan.lights.renderer.Task;
+import me.therealdan.lights.settings.Setting;
 import me.therealdan.lights.ui.views.Live;
 import me.therealdan.lights.ui.views.live.ui.ConsoleUI;
 import me.therealdan.lights.ui.views.live.ui.PatchUI;
@@ -93,8 +94,8 @@ public class DMX {
     public byte[] getNext() {
         StringBuilder data = new StringBuilder();
 
-        if (Output.CONTINUOUS) {
-            for (int address = next; address < next + Output.CHANNELS_PER_SEND; address++) {
+        if (Setting.byName(Setting.Name.CONTINUOUS).isTrue()) {
+            for (int address = next; address < next + Setting.byName(Setting.Name.CHANNELS_PER_SEND).getInt(); address++) {
                 int value = get(address);
                 if (value < 10) data.append("0");
                 if (value < 100) data.append("0");
@@ -105,14 +106,14 @@ public class DMX {
                 data.append(" ");
             }
 
-            next += Output.CHANNELS_PER_SEND;
+            next += Setting.byName(Setting.Name.CHANNELS_PER_SEND).getInt();
             if (next > MAX_CHANNELS) next = 1;
         } else {
             int currentValue = -1;
             int queued = 0;
             for (int address = 1; address <= MAX_CHANNELS; address++) {
-                if (queued >= Output.CHANNELS_PER_SEND) break;
-                if (channelsPerSecondCounter.size() > Output.CHANNELS_PER_TIME) break;
+                if (queued >= Setting.byName(Setting.Name.CHANNELS_PER_SEND).getInt()) break;
+                if (channelsPerSecondCounter.size() > Setting.byName(Setting.Name.CHANNELS_PER_TIME).getInt()) break;
                 int value = channels.get(address);
                 if ((!lastSent.containsKey(address) || value != lastSent.get(address)) && (currentValue == -1 || value == currentValue)) {
                     if (currentValue == -1) {
@@ -139,7 +140,7 @@ public class DMX {
         }
 
         if (data.length() <= 1) return null;
-        if (Output.SHOW_DMX_SEND_DEBUG) ConsoleUI.log("Preparing to send: " + data.toString());
+        if (Setting.byName(Setting.Name.SHOW_DMX_SEND_DEBUG).isTrue()) ConsoleUI.log("Preparing to send: " + data.toString());
         try {
             return data.toString().getBytes("UTF-8");
         } catch (Exception e) {

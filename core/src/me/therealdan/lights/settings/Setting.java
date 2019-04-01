@@ -60,7 +60,8 @@ public class Setting {
     }
 
     public void register() {
-        if (settings.containsKey(getName().toUpperCase()) || settings.containsValue(this)) return;
+        if (settings.containsKey(getName().toUpperCase())) return;
+        if (settings.containsValue(this)) return;
 
         settings.put(getName().toUpperCase(), this);
     }

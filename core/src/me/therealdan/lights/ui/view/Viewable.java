@@ -75,10 +75,6 @@ public interface Viewable extends InputProcessor {
             if (tab.getName().equals(name))
                 return tab;
 
-        for (View view : View.values())
-            if (view.getName().equals(name))
-                return view;
-
         return null;
     }
 

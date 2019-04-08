@@ -16,6 +16,7 @@ public class ControlsUI implements UI {
     // TODO - Implement way to change key bindings
 
     private Control.Category selectedCategory;
+    private Control selectedControl = null;
 
     public ControlsUI() {
 
@@ -48,8 +49,14 @@ public class ControlsUI implements UI {
 
         for (Control control : getSelectedCategory().getControls()) {
             setWidth(renderer, control.getName().formatString(), 2);
-            Util.box(renderer, x, y, width / 2, cellHeight, LightsCore.medium(), control.getName().formatString());
-            Util.box(renderer, x + width / 2, y, width / 2, cellHeight, LightsCore.medium(), control.formatKeycode());
+            Util.box(renderer, x, y, width / 2, cellHeight, isSelected(control) ? LightsCore.DARK_RED : LightsCore.medium(), control.getName().formatString());
+            Util.box(renderer, x + width / 2, y, width / 2, cellHeight, isSelected(control) ? LightsCore.DARK_RED : LightsCore.medium(), control.formatKeycode());
+            if (Util.containsMouse(x, y, width, cellHeight) && canInteract()) {
+                interacted = true;
+                if (LightsCore.leftMouseClicked(500, getSelectedControl() != null && !control.equals(getSelectedControl()))) {
+                    select(isSelected(control) ? null : control);
+                }
+            }
             y -= cellHeight;
         }
 
@@ -76,8 +83,24 @@ public class ControlsUI implements UI {
         this.selectedCategory = category;
     }
 
+    public void select(Control control) {
+        this.selectedControl = control;
+    }
+
+    public void deselectControl() {
+        this.selectedControl = null;
+    }
+
+    public boolean isSelected(Control control) {
+        return control.equals(getSelectedControl());
+    }
+
     public Control.Category getSelectedCategory() {
         if (selectedCategory == null) selectedCategory = Control.Category.GLOBAL;
         return selectedCategory;
+    }
+
+    public Control getSelectedControl() {
+        return selectedControl;
     }
 }

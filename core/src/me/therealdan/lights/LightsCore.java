@@ -129,6 +129,12 @@ public class LightsCore extends ApplicationAdapter {
         return 15;
     }
 
+    public static boolean leftMouseClicked(long milliseconds, boolean override) {
+        if (!Gdx.input.isButtonPressed(Input.Buttons.LEFT)) return false;
+        if (override) milliseconds = 0;
+        return leftMouseReady(milliseconds);
+    }
+
     public static boolean leftMouseReady(long milliseconds) {
         if (milliseconds == -1) return LEFT_MOUSE_UP;
 
@@ -138,6 +144,12 @@ public class LightsCore extends ApplicationAdapter {
             return true;
         }
         return false;
+    }
+
+    public static boolean rightMouseClicked(long milliseconds, boolean override) {
+        if (!Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) return false;
+        if (override) milliseconds = 0;
+        return rightMouseReady(milliseconds);
     }
 
     public static boolean rightMouseReady(long milliseconds) {

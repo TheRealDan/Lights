@@ -2,7 +2,6 @@ package me.therealdan.lights.ui.views;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import me.therealdan.lights.controllers.Button;
 import me.therealdan.lights.controllers.Fader;
 import me.therealdan.lights.dmx.DMX;
 import me.therealdan.lights.dmx.Output;
@@ -52,6 +51,7 @@ public class Live implements Tab {
 
         // Settings
         uis.add(new SettingsUI());
+        uis.add(new ControlsUI());
         uis.add(new DMXInterfaceUI());
 
         // Setup
@@ -156,7 +156,8 @@ public class Live implements Tab {
 
         if (!Output.isFrozen()) output.copy(visualiser);
 
-        if (!getSection().equals(Section.SEQUENCE_PROGRAMMER)) SequenceProgrammerUI.setSelected(SequenceProgrammerUI.Selected.NONE);
+        if (!getSection().equals(Section.SEQUENCE_PROGRAMMER))
+            SequenceProgrammerUI.setSelected(SequenceProgrammerUI.Selected.NONE);
     }
 
     @Override
@@ -237,8 +238,9 @@ public class Live implements Tab {
             }
         }
 
-        Button button = Hotkeys.getButton(keycode);
-        if (button != null) button.press();
+        // TODO - keyDown() for Buttons!
+//        Button button = Hotkeys.getButton(keycode);
+//        if (button != null) button.press();
 
         switch (keycode) {
             case Input.Keys.MINUS:
@@ -306,7 +308,7 @@ public class Live implements Tab {
 
         PANEL_VISIBILITY,
 
-        SETTINGS, DMX_INTERFACE,
+        SETTINGS, CONTROLS, DMX_INTERFACE,
 
         PROFILES, PATCH,
         SEQUENCES, FADER_EDIT, BUTTON_EDIT,

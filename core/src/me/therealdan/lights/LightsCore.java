@@ -7,10 +7,10 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import me.therealdan.lights.dmx.Output;
 import me.therealdan.lights.renderer.Renderer;
+import me.therealdan.lights.settings.Control;
 import me.therealdan.lights.settings.Setting;
 import me.therealdan.lights.ui.ViewBar;
 import me.therealdan.lights.ui.view.Tab;
-import me.therealdan.lights.ui.views.Hotkeys;
 import me.therealdan.lights.ui.views.Live;
 
 public class LightsCore extends ApplicationAdapter {
@@ -58,8 +58,10 @@ public class LightsCore extends ApplicationAdapter {
         Setting.createSettings();
         Setting.loadFromFile();
 
+        Control.createControls();
+        Control.loadFromFile();
+
         Tab.register(new Live());
-        Tab.register(new Hotkeys());
 
         viewBar = new ViewBar();
         for (Tab tab : Tab.values()) getViewBar().register(tab);
@@ -111,6 +113,7 @@ public class LightsCore extends ApplicationAdapter {
         renderer.dispose();
 
         Setting.saveToFile();
+        Control.saveToFile();
 
         for (Tab tab : Tab.values())
             tab.save();

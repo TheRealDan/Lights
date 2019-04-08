@@ -16,7 +16,7 @@ import me.therealdan.lights.dmx.DMX;
 import me.therealdan.lights.fixtures.Fixture;
 import me.therealdan.lights.fixtures.Model;
 import me.therealdan.lights.programmer.Programmer;
-import me.therealdan.lights.ui.views.Hotkeys;
+import me.therealdan.lights.settings.Control;
 import me.therealdan.lights.ui.views.Live;
 import me.therealdan.lights.ui.views.live.ui.PatchUI;
 
@@ -123,49 +123,31 @@ public class Visualiser3D {
 
         if (Programmer.getSelectedFixtures().size() == 1) {
             Fixture fixture = Programmer.getSelectedFixtures().get(0);
-            if (Hotkeys.contains(Hotkeys.Control.CAMERA_FORWARD) && keys.containsKey(Hotkeys.get(Hotkeys.Control.CAMERA_FORWARD))) {
+            if (keys.containsKey(Control.byName(Control.Name.CAMERA_FORWARD).getKeycode()))
                 fixture.move(0, 0, -fixtureVelocity);
-            }
-            if (Hotkeys.contains(Hotkeys.Control.CAMERA_BACKWARD) && keys.containsKey(Hotkeys.get(Hotkeys.Control.CAMERA_BACKWARD))) {
+            if (keys.containsKey(Control.byName(Control.Name.CAMERA_BACKWARD).getKeycode()))
                 fixture.move(0, 0, fixtureVelocity);
-            }
-            if (Hotkeys.contains(Hotkeys.Control.CAMERA_STRAFE_LEFT) && keys.containsKey(Hotkeys.get(Hotkeys.Control.CAMERA_STRAFE_LEFT))) {
+            if (keys.containsKey(Control.byName(Control.Name.CAMERA_STRAFE_LEFT).getKeycode()))
                 fixture.move(-fixtureVelocity, 0, 0);
-            }
-            if (Hotkeys.contains(Hotkeys.Control.CAMERA_STRAFE_RIGHT) && keys.containsKey(Hotkeys.get(Hotkeys.Control.CAMERA_STRAFE_RIGHT))) {
+            if (keys.containsKey(Control.byName(Control.Name.CAMERA_STRAFE_RIGHT).getKeycode()))
                 fixture.move(fixtureVelocity, 0, 0);
-            }
-            if (Hotkeys.contains(Hotkeys.Control.CAMERA_UP) && keys.containsKey(Hotkeys.get(Hotkeys.Control.CAMERA_UP))) {
+            if (keys.containsKey(Control.byName(Control.Name.CAMERA_UP).getKeycode()))
                 fixture.move(0, fixtureVelocity, 0);
-            }
-            if (Hotkeys.contains(Hotkeys.Control.CAMERA_DOWN) && keys.containsKey(Hotkeys.get(Hotkeys.Control.CAMERA_DOWN))) {
+            if (keys.containsKey(Control.byName(Control.Name.CAMERA_DOWN).getKeycode()))
                 fixture.move(0, -fixtureVelocity, 0);
-            }
         } else {
-            if (Hotkeys.contains(Hotkeys.Control.CAMERA_FORWARD) && keys.containsKey(Hotkeys.get(Hotkeys.Control.CAMERA_FORWARD))) {
-                tmp.set(camera.direction).nor().scl(deltaTime * velocity);
-                camera.position.add(tmp);
-            }
-            if (Hotkeys.contains(Hotkeys.Control.CAMERA_BACKWARD) && keys.containsKey(Hotkeys.get(Hotkeys.Control.CAMERA_BACKWARD))) {
-                tmp.set(camera.direction).nor().scl(-deltaTime * velocity);
-                camera.position.add(tmp);
-            }
-            if (Hotkeys.contains(Hotkeys.Control.CAMERA_STRAFE_LEFT) && keys.containsKey(Hotkeys.get(Hotkeys.Control.CAMERA_STRAFE_LEFT))) {
-                tmp.set(camera.direction).crs(camera.up).nor().scl(-deltaTime * velocity);
-                camera.position.add(tmp);
-            }
-            if (Hotkeys.contains(Hotkeys.Control.CAMERA_STRAFE_RIGHT) && keys.containsKey(Hotkeys.get(Hotkeys.Control.CAMERA_STRAFE_RIGHT))) {
-                tmp.set(camera.direction).crs(camera.up).nor().scl(deltaTime * velocity);
-                camera.position.add(tmp);
-            }
-            if (Hotkeys.contains(Hotkeys.Control.CAMERA_UP) && keys.containsKey(Hotkeys.get(Hotkeys.Control.CAMERA_UP))) {
-                tmp.set(camera.up).nor().scl(deltaTime * velocity);
-                camera.position.add(tmp);
-            }
-            if (Hotkeys.contains(Hotkeys.Control.CAMERA_DOWN) && keys.containsKey(Hotkeys.get(Hotkeys.Control.CAMERA_DOWN))) {
-                tmp.set(camera.up).nor().scl(-deltaTime * velocity);
-                camera.position.add(tmp);
-            }
+            if (keys.containsKey(Control.byName(Control.Name.CAMERA_FORWARD).getKeycode()))
+                camera.position.add(tmp.set(camera.direction).nor().scl(deltaTime * velocity));
+            if (keys.containsKey(Control.byName(Control.Name.CAMERA_BACKWARD).getKeycode()))
+                camera.position.add(tmp.set(camera.direction).nor().scl(-deltaTime * velocity));
+            if (keys.containsKey(Control.byName(Control.Name.CAMERA_STRAFE_LEFT).getKeycode()))
+                camera.position.add(tmp.set(camera.direction).crs(camera.up).nor().scl(-deltaTime * velocity));
+            if (keys.containsKey(Control.byName(Control.Name.CAMERA_STRAFE_RIGHT).getKeycode()))
+                camera.position.add(tmp.set(camera.direction).crs(camera.up).nor().scl(deltaTime * velocity));
+            if (keys.containsKey(Control.byName(Control.Name.CAMERA_UP).getKeycode()))
+                camera.position.add(tmp.set(camera.up).nor().scl(deltaTime * velocity));
+            if (keys.containsKey(Control.byName(Control.Name.CAMERA_DOWN).getKeycode()))
+                camera.position.add(tmp.set(camera.up).nor().scl(-deltaTime * velocity));
         }
     }
 

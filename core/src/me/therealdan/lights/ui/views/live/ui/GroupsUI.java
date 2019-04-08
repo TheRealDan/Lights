@@ -40,7 +40,7 @@ public class GroupsUI implements UI {
             Util.box(renderer, x, y, cellSize, cellSize, Programmer.isSelected(group) ? LightsCore.DARK_RED : LightsCore.medium(), setWidth(renderer, group.getName()), Task.TextPosition.CENTER);
             if (Util.containsMouse(x, y, cellSize, cellSize) && canInteract()) {
                 interacted = true;
-                if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.actionReady(500)) {
+                if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.leftMouseReady(500)) {
                     if (Programmer.isSelected(group)) {
                         Programmer.deselect(group);
                     } else {

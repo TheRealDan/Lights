@@ -42,7 +42,8 @@ public class LightsCore extends ApplicationAdapter {
     public static Color DARK_YELLOW = new Color(0.5f, 0.5f, 0.1f, 1);
     public static Color DARK_CYAN = new Color(0.1f, 0.5f, 0.5f, 1);
 
-    private static boolean mouseUp = true;
+    private static boolean LEFT_MOUSE_UP = true;
+    private static boolean RIGHT_MOUSE_UP = true;
     private static long lastAction = System.currentTimeMillis();
 
     @Override
@@ -98,7 +99,8 @@ public class LightsCore extends ApplicationAdapter {
         Gdx.input.setInputProcessor(getViewBar().getActiveTab());
 
         // Mouse up
-        if (!Gdx.input.isButtonPressed(Input.Buttons.LEFT)) mouseUp = true;
+        if (!Gdx.input.isButtonPressed(Input.Buttons.LEFT)) LEFT_MOUSE_UP = true;
+        if (!Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) RIGHT_MOUSE_UP = true;
     }
 
     @Override
@@ -127,15 +129,22 @@ public class LightsCore extends ApplicationAdapter {
         return 15;
     }
 
-    public static boolean actionReady(long milliseconds) {
-        if (milliseconds == -1) {
-            if (mouseUp) return true;
-            mouseUp = false;
-            return false;
-        }
+    public static boolean leftMouseReady(long milliseconds) {
+        if (milliseconds == -1) return LEFT_MOUSE_UP;
 
-        if (mouseUp || System.currentTimeMillis() - lastAction > milliseconds) {
-            mouseUp = false;
+        if (LEFT_MOUSE_UP || System.currentTimeMillis() - lastAction > milliseconds) {
+            LEFT_MOUSE_UP = false;
+            lastAction = System.currentTimeMillis();
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean rightMouseReady(long milliseconds) {
+        if (milliseconds == -1) return RIGHT_MOUSE_UP;
+
+        if (RIGHT_MOUSE_UP || System.currentTimeMillis() - lastAction > milliseconds) {
+            RIGHT_MOUSE_UP = false;
             lastAction = System.currentTimeMillis();
             return true;
         }

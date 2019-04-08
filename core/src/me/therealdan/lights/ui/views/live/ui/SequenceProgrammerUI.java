@@ -171,7 +171,7 @@ public class SequenceProgrammerUI implements UI {
             Util.box(renderer, x, y, width, cellHeight, highlight ? LightsCore.DARK_GREEN : LightsCore.medium(), button.getName(), Task.TextPosition.CENTER);
             if (Util.containsMouse(x, y, width, cellHeight) && canInteract()) {
                 interacted = true;
-                if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.actionReady(500))
+                if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.leftMouseReady(500))
                     button.press();
             }
             x += width;
@@ -199,7 +199,7 @@ public class SequenceProgrammerUI implements UI {
                     if (shift) {
                         sequence.set(index);
                     } else {
-                        if (LightsCore.actionReady(400)) {
+                        if (LightsCore.leftMouseReady(400)) {
                             if (Programmer.isSelected(frame)) {
                                 Programmer.deselect(frame);
                             } else {

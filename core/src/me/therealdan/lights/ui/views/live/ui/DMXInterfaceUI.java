@@ -31,7 +31,7 @@ public class DMXInterfaceUI implements UI {
 
         for (String port : Output.openPorts()) {
             if (Util.containsMouse(x, y, width, cellHeight) && canInteract()) {
-                if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.actionReady(500)) {
+                if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.leftMouseReady(500)) {
                     if (Output.getActivePort().equals(port)) {
                         Output.disconnect();
                     } else {

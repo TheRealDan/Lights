@@ -149,7 +149,7 @@ public class ProfilesUI implements UI {
         Util.box(renderer, x, y, profilesWidth, cellHeight, LightsCore.medium(), "Add New");
         if (Util.containsMouse(x, y, profilesWidth, cellHeight) && canInteract()) {
             interacted = true;
-            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.actionReady(500)) {
+            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.leftMouseReady(500)) {
                 add(new Profile("New Profile", new ArrayList<>(), new ArrayList<>()));
             }
         }
@@ -179,7 +179,7 @@ public class ProfilesUI implements UI {
         Util.box(renderer, x, y, optionsWidth, cellHeight, canEdit(Section.NAME) ? LightsCore.DARK_GREEN : LightsCore.medium(), "Name: " + getSelectedProfile().getName());
         if (Util.containsMouse(x, y, optionsWidth, cellHeight) && canInteract()) {
             interacted = true;
-            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.actionReady(500)) {
+            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.leftMouseReady(500)) {
                 toggleEdit(Section.NAME);
             }
         }
@@ -188,7 +188,7 @@ public class ProfilesUI implements UI {
         Util.box(renderer, x, y, optionsWidth, cellHeight, canEdit(Section.PHYSICAL_CHANNELS) ? LightsCore.DARK_GREEN : LightsCore.medium(), "Physical Channels: " + getSelectedProfile().getPhysicalChannels());
         if (Util.containsMouse(x, y, optionsWidth, cellHeight) && canInteract()) {
             interacted = true;
-            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.actionReady(500)) {
+            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.leftMouseReady(500)) {
                 toggleEdit(Section.PHYSICAL_CHANNELS);
             }
         }
@@ -197,7 +197,7 @@ public class ProfilesUI implements UI {
         Util.box(renderer, x, y, optionsWidth, cellHeight, canEdit(Section.CHANNELS) ? LightsCore.DARK_GREEN : LightsCore.medium(), "Channels");
         if (Util.containsMouse(x, y, optionsWidth, cellHeight) && canInteract()) {
             interacted = true;
-            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.actionReady(500)) {
+            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.leftMouseReady(500)) {
                 toggleEdit(Section.CHANNELS);
             }
         }
@@ -206,7 +206,7 @@ public class ProfilesUI implements UI {
         Util.box(renderer, x, y, optionsWidth, cellHeight, canEdit(Section.MODELS) ? LightsCore.DARK_GREEN : LightsCore.medium(), "Models");
         if (Util.containsMouse(x, y, optionsWidth, cellHeight) && canInteract()) {
             interacted = true;
-            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.actionReady(500)) {
+            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.leftMouseReady(500)) {
                 toggleEdit(Section.MODELS);
             }
         }
@@ -215,7 +215,7 @@ public class ProfilesUI implements UI {
         Util.box(renderer, x, y, optionsWidth, cellHeight, LightsCore.medium(), LightsCore.RED, "Delete");
         if (Util.containsMouse(x, y, optionsWidth, cellHeight) && canInteract() && shift) {
             interacted = true;
-            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.actionReady(500)) {
+            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.leftMouseReady(500)) {
                 delete(getSelectedProfile());
                 select(null);
             }

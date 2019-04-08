@@ -52,7 +52,7 @@ public class ParametersUI implements UI {
             Util.box(renderer, x, y, width, cellHeight, category.equals(getCategory()) ? LightsCore.DARK_GREEN : LightsCore.medium(), category.getName(), Task.TextPosition.CENTER);
             if (Util.containsMouse(x, y, width, cellHeight) && canInteract()) {
                 interacted = true;
-                if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.actionReady(500)) {
+                if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.leftMouseReady(500)) {
                     if (category.equals(getCategory())) {
                         setPage(getPage() + 1);
                     } else {
@@ -89,7 +89,7 @@ public class ParametersUI implements UI {
                     Util.box(renderer, x, y, width, cellHeight, isSet(channelType, parameter) && getLevel(channelType, parameter) == level ? LightsCore.DARK_RED : LightsCore.medium(), Float.toString(level).replace("-", "").replace(".0", "") + "%", Task.TextPosition.CENTER);
                     if (Util.containsMouse(x, y, width, cellHeight) && canInteract()) {
                         interacted = true;
-                        if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.actionReady(-1)) {
+                        if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.leftMouseReady(-1)) {
                             setValue(channelType, parameter, percentage * 255.0f);
                         }
                     }

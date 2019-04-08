@@ -40,6 +40,8 @@ public class ControlsUI implements UI {
             interacted = true;
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.leftMouseReady(500)) {
                 select(true);
+            } else if (Gdx.input.isButtonPressed(Input.Buttons.RIGHT) && LightsCore.rightMouseReady(500)) {
+                select(false);
             }
         }
         y -= cellHeight;

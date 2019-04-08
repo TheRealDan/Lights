@@ -76,6 +76,7 @@ public class Fixture {
                 break;
 
             case "Par Can":
+            default:
                 float intensity = getValue(visualiser, Channel.Type.INTENSITY, 1) / 255f;
                 setColor(new Color(
                         intensity * (getValue(visualiser, Channel.Type.RED, 1) / 255f),

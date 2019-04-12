@@ -1,7 +1,7 @@
 package me.therealdan.lights.commands;
 
 import me.therealdan.lights.dmx.DMX;
-import me.therealdan.lights.ui.views.live.ui.ConsoleUI;
+import me.therealdan.lights.ui.ui.ConsoleUI;
 import me.therealdan.lights.programmer.Programmer;
 
 import java.util.ArrayList;

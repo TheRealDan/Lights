@@ -2,7 +2,7 @@ package me.therealdan.lights.programmer;
 
 import me.therealdan.lights.fixtures.Channel;
 import me.therealdan.lights.fixtures.Fixture;
-import me.therealdan.lights.ui.views.live.ui.PatchUI;
+import me.therealdan.lights.ui.ui.PatchUI;
 
 import java.util.List;
 

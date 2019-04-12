@@ -1,10 +1,10 @@
-package me.therealdan.lights.ui.views.live.ui;
+package me.therealdan.lights.ui.ui;
 
 import me.therealdan.lights.LightsCore;
 import me.therealdan.lights.dmx.Output;
 import me.therealdan.lights.renderer.Renderer;
 import me.therealdan.lights.renderer.Task;
-import me.therealdan.lights.ui.views.Live;
+import me.therealdan.lights.ui.Live;
 import me.therealdan.lights.util.Util;
 
 public class FrozenUI implements UI {

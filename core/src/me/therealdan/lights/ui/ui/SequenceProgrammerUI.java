@@ -1,4 +1,4 @@
-package me.therealdan.lights.ui.views.live.ui;
+package me.therealdan.lights.ui.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -10,7 +10,7 @@ import me.therealdan.lights.programmer.Programmer;
 import me.therealdan.lights.programmer.Sequence;
 import me.therealdan.lights.renderer.Renderer;
 import me.therealdan.lights.renderer.Task;
-import me.therealdan.lights.ui.views.Live;
+import me.therealdan.lights.ui.Live;
 import me.therealdan.lights.util.Util;
 
 import java.util.ArrayList;

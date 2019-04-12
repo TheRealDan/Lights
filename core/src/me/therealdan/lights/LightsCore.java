@@ -9,17 +9,19 @@ import me.therealdan.lights.dmx.Output;
 import me.therealdan.lights.renderer.Renderer;
 import me.therealdan.lights.settings.Control;
 import me.therealdan.lights.settings.Setting;
-import me.therealdan.lights.ui.ViewBar;
-import me.therealdan.lights.ui.view.Tab;
-import me.therealdan.lights.ui.views.Live;
+import me.therealdan.lights.ui.DefaultInputProcessor;
+import me.therealdan.lights.ui.Live;
+import me.therealdan.lights.ui.Visualiser3D;
 
-public class LightsCore extends ApplicationAdapter {
-
-    private static LightsCore lightsCore;
-    private static Color text, light, medium, dark;
+public class LightsCore extends ApplicationAdapter implements DefaultInputProcessor {
 
     private Renderer renderer;
-    private ViewBar viewBar;
+    private Visualiser3D visualiser3D;
+    private Live live;
+
+    // COLORS
+
+    private static Color text, light, medium, dark;
 
     public static Color BLACK = new Color(0f, 0f, 0f, 1);
     public static Color WHITE = new Color(1f, 1f, 1f, 1);
@@ -41,15 +43,14 @@ public class LightsCore extends ApplicationAdapter {
     public static Color DARK_YELLOW = new Color(0.5f, 0.5f, 0.1f, 1);
     public static Color DARK_CYAN = new Color(0.1f, 0.5f, 0.5f, 1);
 
+    // CLICK DETECTION
+
     private static boolean LEFT_MOUSE_UP = true;
     private static boolean RIGHT_MOUSE_UP = true;
-    private static long lastAction = System.currentTimeMillis();
+    private static long LAST_ACTION = System.currentTimeMillis();
 
     @Override
     public void create() {
-        lightsCore = this;
-
-        renderer = new Renderer();
         text = new Color(1, 1, 1, 1);
         light = new Color(0.6f, 0.6f, 0.6f, 1);
         medium = new Color(0.2f, 0.2f, 0.2f, 1);
@@ -61,15 +62,14 @@ public class LightsCore extends ApplicationAdapter {
         Control.createControls();
         Control.loadFromFile();
 
-        Tab.register(new Live());
-
-        viewBar = new ViewBar();
-        for (Tab tab : Tab.values()) getViewBar().register(tab);
-        getViewBar().setActiveTab(getViewBar().getFirstTab());
+        renderer = new Renderer();
+        live = new Live();
+        visualiser3D = new Visualiser3D();
 
         new Output();
 
         Gdx.graphics.setVSync(true);
+        Gdx.input.setInputProcessor(this);
     }
 
     @Override
@@ -79,22 +79,15 @@ public class LightsCore extends ApplicationAdapter {
 
         controls();
 
-        for (Tab tab : Tab.values())
-            tab.update();
+        live.update();
 
-        getViewBar().getActiveTab().draw(renderer, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        visualiser3D.draw(Gdx.graphics.getDeltaTime());
+        live.draw(renderer, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+
         renderer.draw();
     }
 
     private void controls() {
-        // Cycle Tabs
-        if (Gdx.input.isKeyJustPressed(Input.Keys.GRAVE))
-            getViewBar().nextTab(Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT));
-
-        // Handle current Tab
-        Gdx.graphics.setTitle(getViewBar().getActiveTab().getName());
-        Gdx.input.setInputProcessor(getViewBar().getActiveTab());
-
         // Mouse up
         if (!Gdx.input.isButtonPressed(Input.Buttons.LEFT)) LEFT_MOUSE_UP = true;
         if (!Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) RIGHT_MOUSE_UP = true;
@@ -103,7 +96,7 @@ public class LightsCore extends ApplicationAdapter {
     @Override
     public void resize(int width, int height) {
         renderer.resize();
-        for (Tab tab : Tab.values()) tab.resize(width, height);
+        visualiser3D.resize(width, height);
     }
 
     @Override
@@ -113,16 +106,31 @@ public class LightsCore extends ApplicationAdapter {
         Setting.saveToFile();
         Control.saveToFile();
 
-        for (Tab tab : Tab.values())
-            tab.save();
+        live.save();
+        visualiser3D.save();
     }
 
-    public ViewBar getViewBar() {
-        return viewBar;
+    @Override
+    public boolean keyUp(int keycode) {
+        visualiser3D.keyUp(keycode);
+        live.keyUp(keycode);
+
+        return true;
     }
 
-    public static float edge() {
-        return 15;
+    @Override
+    public boolean keyDown(int keycode) {
+        visualiser3D.keyDown(keycode);
+        live.keyDown(keycode);
+
+        return true;
+    }
+
+    @Override
+    public boolean touchDragged(int screenX, int screenY, int pointer) {
+        visualiser3D.touchDragged(screenX, screenY, pointer);
+
+        return true;
     }
 
     public static boolean leftMouseClicked(long milliseconds, boolean override) {
@@ -134,9 +142,9 @@ public class LightsCore extends ApplicationAdapter {
     public static boolean leftMouseReady(long milliseconds) {
         if (milliseconds == -1) return LEFT_MOUSE_UP;
 
-        if (LEFT_MOUSE_UP || System.currentTimeMillis() - lastAction > milliseconds) {
+        if (LEFT_MOUSE_UP || System.currentTimeMillis() - LAST_ACTION > milliseconds) {
             LEFT_MOUSE_UP = false;
-            lastAction = System.currentTimeMillis();
+            LAST_ACTION = System.currentTimeMillis();
             return true;
         }
         return false;
@@ -151,9 +159,9 @@ public class LightsCore extends ApplicationAdapter {
     public static boolean rightMouseReady(long milliseconds) {
         if (milliseconds == -1) return RIGHT_MOUSE_UP;
 
-        if (RIGHT_MOUSE_UP || System.currentTimeMillis() - lastAction > milliseconds) {
+        if (RIGHT_MOUSE_UP || System.currentTimeMillis() - LAST_ACTION > milliseconds) {
             RIGHT_MOUSE_UP = false;
-            lastAction = System.currentTimeMillis();
+            LAST_ACTION = System.currentTimeMillis();
             return true;
         }
         return false;
@@ -174,9 +182,4 @@ public class LightsCore extends ApplicationAdapter {
     public static Color dark() {
         return dark;
     }
-
-    public static LightsCore getInstance() {
-        return lightsCore;
-    }
-
 }

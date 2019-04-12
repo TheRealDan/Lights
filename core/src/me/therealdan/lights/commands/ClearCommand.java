@@ -1,6 +1,6 @@
 package me.therealdan.lights.commands;
 
-import me.therealdan.lights.ui.views.live.ui.ConsoleUI;
+import me.therealdan.lights.ui.ui.ConsoleUI;
 
 public class ClearCommand implements Command {
 

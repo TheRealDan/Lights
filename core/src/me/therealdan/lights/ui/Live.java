@@ -1,4 +1,4 @@
-package me.therealdan.lights.ui.views;
+package me.therealdan.lights.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -11,19 +11,15 @@ import me.therealdan.lights.programmer.Programmer;
 import me.therealdan.lights.programmer.Sequence;
 import me.therealdan.lights.renderer.Renderer;
 import me.therealdan.lights.settings.Setting;
-import me.therealdan.lights.ui.view.Tab;
-import me.therealdan.lights.ui.views.live.Visualiser3D;
-import me.therealdan.lights.ui.views.live.ui.*;
+import me.therealdan.lights.ui.ui.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class Live implements Tab {
+public class Live {
 
     private static Live live;
-
-    private Visualiser3D visualiser3D;
 
     private List<UI> uis = new ArrayList<>();
     private UI dragging = null;
@@ -85,15 +81,11 @@ public class Live implements Tab {
             ui.load();
     }
 
-    @Override
     public void save() {
         for (UI ui : UIs())
             ui.save();
-
-        getVisualiser3D().save();
     }
 
-    @Override
     public void update() {
         DMX output = DMX.get("OUTPUT");
         DMX visualiser = DMX.get("VISUALISER");
@@ -160,10 +152,7 @@ public class Live implements Tab {
             SequenceProgrammerUI.setSelected(SequenceProgrammerUI.Selected.NONE);
     }
 
-    @Override
     public void draw(Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {
-        getVisualiser3D().draw(Gdx.graphics.getDeltaTime());
-
         UI allowInteract = null;
         for (UI ui : UIs()) {
             ui.setAllowInteract(false);
@@ -189,12 +178,6 @@ public class Live implements Tab {
         }
     }
 
-    @Override
-    public void resize(int width, int height) {
-        getVisualiser3D().resize(width, height);
-    }
-
-    @Override
     public boolean scrolled(int amount) {
         for (UI ui : UIs())
             ui.scrolled(amount);
@@ -202,28 +185,21 @@ public class Live implements Tab {
         return true;
     }
 
-    @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
         drag(null);
 
         return true;
     }
 
-    @Override
     public boolean keyUp(int keycode) {
-        getVisualiser3D().keyUp(keycode);
-
         for (UI ui : UIs())
             ui.keyUp(keycode);
 
         return true;
     }
 
-    @Override
     public boolean keyDown(int keycode) {
         boolean shift = Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT);
-
-        getVisualiser3D().keyDown(keycode);
 
         if (keycode == Input.Keys.SPACE) {
             tempo = System.currentTimeMillis() - lastTempo;
@@ -288,17 +264,6 @@ public class Live implements Tab {
         }
 
         return true;
-    }
-
-    @Override
-    public boolean touchDragged(int screenX, int screenY, int pointer) {
-        getVisualiser3D().touchDragged(screenX, screenY, pointer);
-        return true;
-    }
-
-    private Visualiser3D getVisualiser3D() {
-        if (visualiser3D == null) visualiser3D = new Visualiser3D();
-        return visualiser3D;
     }
 
     public enum Section {

@@ -2,8 +2,8 @@ package me.therealdan.lights.dmx;
 
 import com.fazecast.jSerialComm.SerialPort;
 import me.therealdan.lights.settings.Setting;
-import me.therealdan.lights.ui.views.live.ui.ConsoleUI;
-import me.therealdan.lights.ui.views.live.ui.TimingsUI;
+import me.therealdan.lights.ui.ui.ConsoleUI;
+import me.therealdan.lights.ui.ui.TimingsUI;
 
 import java.util.ArrayList;
 import java.util.List;

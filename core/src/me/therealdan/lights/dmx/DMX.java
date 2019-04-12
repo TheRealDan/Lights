@@ -6,9 +6,9 @@ import me.therealdan.lights.fixtures.Group;
 import me.therealdan.lights.renderer.Renderer;
 import me.therealdan.lights.renderer.Task;
 import me.therealdan.lights.settings.Setting;
-import me.therealdan.lights.ui.views.Live;
-import me.therealdan.lights.ui.views.live.ui.ConsoleUI;
-import me.therealdan.lights.ui.views.live.ui.PatchUI;
+import me.therealdan.lights.ui.Live;
+import me.therealdan.lights.ui.ui.ConsoleUI;
+import me.therealdan.lights.ui.ui.PatchUI;
 
 import java.util.ArrayList;
 import java.util.HashMap;

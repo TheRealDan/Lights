@@ -1,4 +1,4 @@
-package me.therealdan.lights.ui.views.live;
+package me.therealdan.lights.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -17,8 +17,7 @@ import me.therealdan.lights.fixtures.Fixture;
 import me.therealdan.lights.fixtures.Model;
 import me.therealdan.lights.programmer.Programmer;
 import me.therealdan.lights.settings.Control;
-import me.therealdan.lights.ui.views.Live;
-import me.therealdan.lights.ui.views.live.ui.PatchUI;
+import me.therealdan.lights.ui.ui.PatchUI;
 
 public class Visualiser3D {
 

@@ -3,7 +3,7 @@ package me.therealdan.lights.controllers;
 import com.badlogic.gdx.graphics.Color;
 import me.therealdan.lights.LightsCore;
 import me.therealdan.lights.programmer.Sequence;
-import me.therealdan.lights.ui.views.live.ui.FadersUI;
+import me.therealdan.lights.ui.ui.FadersUI;
 
 public class Fader {
 

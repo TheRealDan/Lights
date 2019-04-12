@@ -3,8 +3,8 @@ package me.therealdan.lights.controllers;
 import com.badlogic.gdx.graphics.Color;
 import me.therealdan.lights.LightsCore;
 import me.therealdan.lights.programmer.Sequence;
-import me.therealdan.lights.ui.views.Live;
-import me.therealdan.lights.ui.views.live.ui.ButtonsUI;
+import me.therealdan.lights.ui.Live;
+import me.therealdan.lights.ui.ui.ButtonsUI;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;

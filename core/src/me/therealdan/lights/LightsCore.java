@@ -19,7 +19,6 @@ public class LightsCore extends ApplicationAdapter {
     private static Color text, light, medium, dark;
 
     private Renderer renderer;
-    private MenuBar menuBar;
     private ViewBar viewBar;
 
     public static Color BLACK = new Color(0f, 0f, 0f, 1);
@@ -68,8 +67,6 @@ public class LightsCore extends ApplicationAdapter {
         for (Tab tab : Tab.values()) getViewBar().register(tab);
         getViewBar().setActiveTab(getViewBar().getFirstTab());
 
-        menuBar = new MenuBar();
-
         new Output();
 
         Gdx.graphics.setVSync(true);
@@ -111,7 +108,6 @@ public class LightsCore extends ApplicationAdapter {
 
     @Override
     public void dispose() {
-        menuBar.dispose();
         renderer.dispose();
 
         Setting.saveToFile();

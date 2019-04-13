@@ -18,6 +18,10 @@ public class Mouse {
         if (!Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) rightMouseUp = true;
     }
 
+    public boolean leftClicked() {
+        return leftClicked(0);
+    }
+
     public boolean leftClicked(long milliseconds) {
         return leftClicked(milliseconds, false);
     }
@@ -37,6 +41,10 @@ public class Mouse {
             return true;
         }
         return false;
+    }
+
+    public boolean rightClicked() {
+        return rightClicked(0);
     }
 
     public boolean rightClicked(long milliseconds) {

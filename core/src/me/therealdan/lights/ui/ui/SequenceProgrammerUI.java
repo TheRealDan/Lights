@@ -3,7 +3,7 @@ package me.therealdan.lights.ui.ui;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
-import me.therealdan.lights.LightsCore;
+import me.therealdan.lights.Lights;
 import me.therealdan.lights.dmx.DMX;
 import me.therealdan.lights.programmer.Frame;
 import me.therealdan.lights.programmer.Programmer;
@@ -125,11 +125,11 @@ public class SequenceProgrammerUI implements UI {
         float y = getY();
         float width = getWidth();
 
-        Util.box(renderer, x, y, getWidth(), cellHeight, LightsCore.DARK_BLUE, setWidth(renderer, "Sequence Programmer"), Task.TextPosition.CENTER);
+        Util.box(renderer, x, y, getWidth(), cellHeight, Lights.DARK_BLUE, setWidth(renderer, "Sequence Programmer"), Task.TextPosition.CENTER);
         drag(x, y, getWidth(), cellHeight);
         y -= cellHeight;
 
-        Util.box(renderer, x, y, getWidth(), cellHeight, selected.equals(Selected.NAME) ? LightsCore.DARK_RED : LightsCore.medium(), setWidth(renderer, sequence.getName()), Task.TextPosition.CENTER);
+        Util.box(renderer, x, y, getWidth(), cellHeight, selected.equals(Selected.NAME) ? Lights.DARK_RED : Lights.medium(), setWidth(renderer, sequence.getName()), Task.TextPosition.CENTER);
         if (Util.containsMouse(x, y, width, cellHeight) && canInteract()) {
             interacted = true;
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT))
@@ -139,7 +139,7 @@ public class SequenceProgrammerUI implements UI {
 
         x = getX();
         width = getWidth() / 2f;
-        Util.box(renderer, x, y, width, cellHeight, selected.equals(Selected.FRAME) ? LightsCore.DARK_RED : LightsCore.medium(), setWidth(renderer,
+        Util.box(renderer, x, y, width, cellHeight, selected.equals(Selected.FRAME) ? Lights.DARK_RED : Lights.medium(), setWidth(renderer,
                 firstSelectedFrame != null ?
                         "Frame time: " + Frame.format(firstSelectedFrame.getFrameTime()) :
                         "N/A"
@@ -150,7 +150,7 @@ public class SequenceProgrammerUI implements UI {
                 setSelected(Selected.FRAME);
         }
         x += width;
-        Util.box(renderer, x, y, width, cellHeight, selected.equals(Selected.FADE) ? LightsCore.DARK_RED : LightsCore.medium(), setWidth(renderer,
+        Util.box(renderer, x, y, width, cellHeight, selected.equals(Selected.FADE) ? Lights.DARK_RED : Lights.medium(), setWidth(renderer,
                 firstSelectedFrame != null ?
                         "Fade time: " + Frame.format(firstSelectedFrame.getFadeTime()) :
                         "N/A"
@@ -168,10 +168,10 @@ public class SequenceProgrammerUI implements UI {
             boolean highlight = false;
             if (button.equals(Button.LOOP)) highlight = sequence.doesLoop();
             setWidth((renderer.getWidth(button.getName()) + 10) * Button.values().length, true);
-            Util.box(renderer, x, y, width, cellHeight, highlight ? LightsCore.DARK_GREEN : LightsCore.medium(), button.getName(), Task.TextPosition.CENTER);
+            Util.box(renderer, x, y, width, cellHeight, highlight ? Lights.DARK_GREEN : Lights.medium(), button.getName(), Task.TextPosition.CENTER);
             if (Util.containsMouse(x, y, width, cellHeight) && canInteract()) {
                 interacted = true;
-                if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.leftMouseReady(500))
+                if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.leftMouseReady(500))
                     button.press();
             }
             x += width;
@@ -182,15 +182,15 @@ public class SequenceProgrammerUI implements UI {
         width = getWidth();
         int index = 0;
         for (Frame frame : sequence.frames()) {
-            Color color = LightsCore.medium();
-            if (Programmer.isSelected(frame)) color = LightsCore.DARK_RED;
+            Color color = Lights.medium();
+            if (Programmer.isSelected(frame)) color = Lights.DARK_RED;
             if (sequence.getCurrentFrame() == index) {
-                color = LightsCore.DARK_GREEN;
-                if (Programmer.isSelected(frame)) color = LightsCore.DARK_YELLOW;
+                color = Lights.DARK_GREEN;
+                if (Programmer.isSelected(frame)) color = Lights.DARK_YELLOW;
             }
             Util.box(renderer, x, y, width, cellHeight, color, setWidth(renderer, frame.getInfo()));
             if (DMX.DRAW_DMX) {
-                if (color == LightsCore.medium()) color = LightsCore.light();
+                if (color == Lights.medium()) color = Lights.light();
                 frame.draw(renderer, x, y, width, cellHeight, color);
             }
             if (Util.containsMouse(x, y, width, cellHeight) && canInteract()) {
@@ -199,7 +199,7 @@ public class SequenceProgrammerUI implements UI {
                     if (shift) {
                         sequence.set(index);
                     } else {
-                        if (LightsCore.leftMouseReady(400)) {
+                        if (Lights.leftMouseReady(400)) {
                             if (Programmer.isSelected(frame)) {
                                 Programmer.deselect(frame);
                             } else {

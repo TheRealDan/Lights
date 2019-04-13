@@ -1,7 +1,7 @@
 package me.therealdan.lights.ui.ui;
 
 import com.badlogic.gdx.graphics.Color;
-import me.therealdan.lights.LightsCore;
+import me.therealdan.lights.Lights;
 import me.therealdan.lights.programmer.Frame;
 import me.therealdan.lights.programmer.Programmer;
 import me.therealdan.lights.renderer.Renderer;
@@ -34,7 +34,7 @@ public class ColorWheelUI implements UI {
         float width = getWidth();
         float height = getHeight() - cellHeight;
 
-        Util.box(renderer, x, y, width, cellHeight, LightsCore.DARK_BLUE, setWidth(renderer, "Color Wheel"));
+        Util.box(renderer, x, y, width, cellHeight, Lights.DARK_BLUE, setWidth(renderer, "Color Wheel"));
 
         float third = width / 3f;
         float seventh = width / 7f;

@@ -3,7 +3,7 @@ package me.therealdan.lights.ui.ui;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.files.FileHandle;
-import me.therealdan.lights.LightsCore;
+import me.therealdan.lights.Lights;
 import me.therealdan.lights.renderer.Renderer;
 import me.therealdan.lights.ui.Live;
 import me.therealdan.lights.util.Util;
@@ -47,7 +47,7 @@ public interface UI {
     }
 
     default boolean draw(Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {
-        Util.box(renderer, getX(), getY(), getWidth(), getHeight(), LightsCore.medium());
+        Util.box(renderer, getX(), getY(), getWidth(), getHeight(), Lights.medium());
         return true;
     }
 

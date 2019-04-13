@@ -1,7 +1,7 @@
 package me.therealdan.lights.controllers;
 
 import com.badlogic.gdx.graphics.Color;
-import me.therealdan.lights.LightsCore;
+import me.therealdan.lights.Lights;
 import me.therealdan.lights.programmer.Sequence;
 import me.therealdan.lights.ui.ui.FadersUI;
 
@@ -15,7 +15,7 @@ public class Fader {
     private Sequence sequence = new Sequence("No Sequence");
 
     public Fader(int id) {
-        this(id, "New fader", LightsCore.medium());
+        this(id, "New fader", Lights.medium());
     }
 
     public Fader(int id, String name, Color color) {

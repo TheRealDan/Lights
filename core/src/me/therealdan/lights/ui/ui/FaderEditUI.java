@@ -2,7 +2,7 @@ package me.therealdan.lights.ui.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import me.therealdan.lights.LightsCore;
+import me.therealdan.lights.Lights;
 import me.therealdan.lights.controllers.Fader;
 import me.therealdan.lights.programmer.Sequence;
 import me.therealdan.lights.renderer.Renderer;
@@ -36,33 +36,33 @@ public class FaderEditUI implements UI {
         float width = 250;
         float cellHeight = 30;
 
-        Util.box(renderer, x, y, width, cellHeight, LightsCore.DARK_BLUE, "Fader Editor", Task.TextPosition.CENTER);
+        Util.box(renderer, x, y, width, cellHeight, Lights.DARK_BLUE, "Fader Editor", Task.TextPosition.CENTER);
         drag(x, y, uiWidth, cellHeight);
         y -= cellHeight;
 
-        Util.box(renderer, x, y, width, cellHeight, canEdit(Section.NAME) ? LightsCore.DARK_RED : LightsCore.medium(), "Name: " + getFader().getName());
+        Util.box(renderer, x, y, width, cellHeight, canEdit(Section.NAME) ? Lights.DARK_RED : Lights.medium(), "Name: " + getFader().getName());
         if (Util.containsMouse(x, y, width, cellHeight) && canInteract()) {
             interacted = true;
-            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.leftMouseReady(-1)) {
+            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.leftMouseReady(-1)) {
                 edit(Section.NAME);
             }
         }
         y -= cellHeight;
 
-        Util.box(renderer, x, y, width, cellHeight, canEdit(Section.SEQUENCE) ? LightsCore.DARK_RED : LightsCore.medium(), "Sequence: " + getFader().getSequence().getName());
+        Util.box(renderer, x, y, width, cellHeight, canEdit(Section.SEQUENCE) ? Lights.DARK_RED : Lights.medium(), "Sequence: " + getFader().getSequence().getName());
         if (Util.containsMouse(x, y, width, cellHeight) && canInteract()) {
             interacted = true;
-            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.leftMouseReady(-1)) {
+            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.leftMouseReady(-1)) {
                 edit(Section.SEQUENCE);
             }
         }
         y -= cellHeight;
 
-        Util.box(renderer, x, y, width, cellHeight, LightsCore.medium(), "Red: " + getFader().getColor().r);
-        Util.box(renderer, x, y, getFader().getColor().r * width, cellHeight, canEdit(Section.RED) ? LightsCore.RED : getFader().getColor());
+        Util.box(renderer, x, y, width, cellHeight, Lights.medium(), "Red: " + getFader().getColor().r);
+        Util.box(renderer, x, y, getFader().getColor().r * width, cellHeight, canEdit(Section.RED) ? Lights.RED : getFader().getColor());
         if (Util.containsMouse(x, y, width, cellHeight) && canInteract()) {
             interacted = true;
-            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.leftMouseReady(-1)) {
+            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.leftMouseReady(-1)) {
                 edit(Section.RED);
                 float start = x + 20;
                 getFader().getColor().r = Float.parseFloat(decimalFormat.format(Math.min(Math.max((Gdx.input.getX() - start) / ((x + width - 20) - start), 0), 1)));
@@ -70,11 +70,11 @@ public class FaderEditUI implements UI {
         }
         y -= cellHeight;
 
-        Util.box(renderer, x, y, width, cellHeight, LightsCore.medium(), "Green: " + getFader().getColor().g);
-        Util.box(renderer, x, y, getFader().getColor().g * width, cellHeight, canEdit(Section.GREEN) ? LightsCore.GREEN : getFader().getColor());
+        Util.box(renderer, x, y, width, cellHeight, Lights.medium(), "Green: " + getFader().getColor().g);
+        Util.box(renderer, x, y, getFader().getColor().g * width, cellHeight, canEdit(Section.GREEN) ? Lights.GREEN : getFader().getColor());
         if (Util.containsMouse(x, y, width, cellHeight) && canInteract()) {
             interacted = true;
-            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.leftMouseReady(-1)) {
+            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.leftMouseReady(-1)) {
                 edit(Section.GREEN);
                 float start = x + 20;
                 getFader().getColor().g = Float.parseFloat(decimalFormat.format(Math.min(Math.max((Gdx.input.getX() - start) / ((x + width - 20) - start), 0), 1)));
@@ -82,11 +82,11 @@ public class FaderEditUI implements UI {
         }
         y -= cellHeight;
 
-        Util.box(renderer, x, y, width, cellHeight, LightsCore.medium(), "Blue: " + getFader().getColor().b);
-        Util.box(renderer, x, y, getFader().getColor().b * width, cellHeight, canEdit(Section.BLUE) ? LightsCore.BLUE : getFader().getColor());
+        Util.box(renderer, x, y, width, cellHeight, Lights.medium(), "Blue: " + getFader().getColor().b);
+        Util.box(renderer, x, y, getFader().getColor().b * width, cellHeight, canEdit(Section.BLUE) ? Lights.BLUE : getFader().getColor());
         if (Util.containsMouse(x, y, width, cellHeight) && canInteract()) {
             interacted = true;
-            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.leftMouseReady(-1)) {
+            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.leftMouseReady(-1)) {
                 edit(Section.BLUE);
                 float start = x + 20;
                 getFader().getColor().b = Float.parseFloat(decimalFormat.format(Math.min(Math.max((Gdx.input.getX() - start) / ((x + width - 20) - start), 0), 1)));
@@ -94,20 +94,20 @@ public class FaderEditUI implements UI {
         }
         y -= cellHeight;
 
-        Util.box(renderer, x, y, width, cellHeight, LightsCore.medium(), "Move");
+        Util.box(renderer, x, y, width, cellHeight, Lights.medium(), "Move");
         if (Util.containsMouse(x, y, width, cellHeight) && canInteract()) {
             interacted = true;
-            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.leftMouseReady(-1)) {
+            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.leftMouseReady(-1)) {
                 FadersUI.move(getFader());
                 return interacted;
             }
         }
         y -= cellHeight;
 
-        Util.box(renderer, x, y, width, cellHeight, LightsCore.medium(), LightsCore.RED, "Delete");
+        Util.box(renderer, x, y, width, cellHeight, Lights.medium(), Lights.RED, "Delete");
         if (Util.containsMouse(x, y, width, cellHeight) && canInteract()) {
             interacted = true;
-            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && shift && LightsCore.leftMouseReady(-1)) {
+            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && shift && Lights.leftMouseReady(-1)) {
                 FadersUI.remove(getFader());
                 edit((Fader) null);
                 return interacted;
@@ -115,10 +115,10 @@ public class FaderEditUI implements UI {
         }
         y -= cellHeight;
 
-        Util.box(renderer, x, y, width, cellHeight, LightsCore.medium(), "Close");
+        Util.box(renderer, x, y, width, cellHeight, Lights.medium(), "Close");
         if (Util.containsMouse(x, y, width, cellHeight) && canInteract()) {
             interacted = true;
-            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.leftMouseReady(-1)) {
+            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.leftMouseReady(-1)) {
                 edit((Fader) null);
                 return interacted;
             }
@@ -135,7 +135,7 @@ public class FaderEditUI implements UI {
             x += width;
             y = getY();
 
-            Util.box(renderer, x, y, sequencesWidth, cellHeight, LightsCore.DARK_BLUE, "All Sequences", Task.TextPosition.CENTER);
+            Util.box(renderer, x, y, sequencesWidth, cellHeight, Lights.DARK_BLUE, "All Sequences", Task.TextPosition.CENTER);
             drag(x, y, sequencesWidth, cellHeight);
             y -= cellHeight;
 
@@ -144,7 +144,7 @@ public class FaderEditUI implements UI {
             for (Sequence sequence : SequencesUI.sequences(true)) {
                 if (sequence.equals(getScroll())) display = true;
                 if (display) {
-                    Util.box(renderer, x, y, sequencesWidth, cellHeight, sequence.equals(getFader().getSequence()) ? LightsCore.DARK_GREEN : LightsCore.medium(), sequence.getName());
+                    Util.box(renderer, x, y, sequencesWidth, cellHeight, sequence.equals(getFader().getSequence()) ? Lights.DARK_GREEN : Lights.medium(), sequence.getName());
                     if (Util.containsMouse(x, y, sequencesWidth, cellHeight) && canInteract()) {
                         interacted = true;
                         if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {

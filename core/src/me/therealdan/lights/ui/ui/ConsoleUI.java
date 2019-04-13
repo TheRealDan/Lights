@@ -3,7 +3,7 @@ package me.therealdan.lights.ui.ui;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
-import me.therealdan.lights.LightsCore;
+import me.therealdan.lights.Lights;
 import me.therealdan.lights.commands.*;
 import me.therealdan.lights.renderer.Renderer;
 import me.therealdan.lights.renderer.Task;
@@ -49,7 +49,7 @@ public class ConsoleUI implements UI {
         float width = getWidth();
         float cellHeight = 30;
 
-        Util.box(renderer, x, y, width, cellHeight, LightsCore.DARK_BLUE, setWidth(renderer, "Console"), Task.TextPosition.CENTER);
+        Util.box(renderer, x, y, width, cellHeight, Lights.DARK_BLUE, setWidth(renderer, "Console"), Task.TextPosition.CENTER);
         drag(x, y, width, cellHeight);
         y -= cellHeight;
 
@@ -59,12 +59,12 @@ public class ConsoleUI implements UI {
                 colorCode = line.substring(1, 2);
                 line = line.substring(2);
             }
-            Util.box(renderer, x, y, width, cellHeight, LightsCore.medium(), getColor(colorCode), setWidth(renderer, line));
+            Util.box(renderer, x, y, width, cellHeight, Lights.medium(), getColor(colorCode), setWidth(renderer, line));
             drag(x, y, width, cellHeight);
             y -= cellHeight;
         }
 
-        Util.box(renderer, x, y, width, cellHeight, canInteract() ? LightsCore.DARK_RED : LightsCore.medium(), setWidth(renderer, input));
+        Util.box(renderer, x, y, width, cellHeight, canInteract() ? Lights.DARK_RED : Lights.medium(), setWidth(renderer, input));
         drag(x, y, width, cellHeight);
         y -= cellHeight;
 
@@ -162,21 +162,21 @@ public class ConsoleUI implements UI {
     private Color getColor(String colorCode) {
         switch (colorCode.toUpperCase()) {
             case "R":
-                return LightsCore.RED;
+                return Lights.RED;
             case "G":
-                return LightsCore.GREEN;
+                return Lights.GREEN;
             case "B":
-                return LightsCore.BLUE;
+                return Lights.BLUE;
             case "M":
-                return LightsCore.MAGENTA;
+                return Lights.MAGENTA;
             case "Y":
-                return LightsCore.YELLOW;
+                return Lights.YELLOW;
             case "C":
-                return LightsCore.CYAN;
+                return Lights.CYAN;
 
             case "W":
             default:
-                return LightsCore.text();
+                return Lights.text();
         }
     }
 

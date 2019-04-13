@@ -1,6 +1,6 @@
 package me.therealdan.lights.ui.ui;
 
-import me.therealdan.lights.LightsCore;
+import me.therealdan.lights.Lights;
 import me.therealdan.lights.renderer.Renderer;
 import me.therealdan.lights.renderer.Task;
 import me.therealdan.lights.ui.Live;
@@ -32,12 +32,12 @@ public class TimingsUI implements UI {
         float width = getWidth();
         float cellHeight = 30;
 
-        Util.box(renderer, x, y, width, cellHeight, LightsCore.DARK_BLUE, setWidth(renderer, "Timings"), Task.TextPosition.CENTER);
+        Util.box(renderer, x, y, width, cellHeight, Lights.DARK_BLUE, setWidth(renderer, "Timings"), Task.TextPosition.CENTER);
         drag(x, y, width, cellHeight);
         y -= cellHeight;
 
         for (String id : timings.keySet()) {
-            Util.box(renderer, x, y, width, cellHeight, LightsCore.medium(), setWidth(renderer, timings.get(id)
+            Util.box(renderer, x, y, width, cellHeight, Lights.medium(), setWidth(renderer, timings.get(id)
                     .replace("%m", Long.toString(max.getOrDefault(id, 0L)))
                     .replace("%z", Long.toString(nonZero.getOrDefault(id, 0L)))
                     .replace("%a", Long.toString(average.getOrDefault(id, 0L)))

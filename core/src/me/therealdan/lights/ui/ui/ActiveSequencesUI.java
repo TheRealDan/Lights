@@ -2,7 +2,7 @@ package me.therealdan.lights.ui.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import me.therealdan.lights.LightsCore;
+import me.therealdan.lights.Lights;
 import me.therealdan.lights.programmer.Sequence;
 import me.therealdan.lights.renderer.Renderer;
 import me.therealdan.lights.renderer.Task;
@@ -26,7 +26,7 @@ public class ActiveSequencesUI implements UI {
         float y = getY();
         float width = getWidth();
 
-        Util.box(renderer, x, y, width, cellHeight, LightsCore.DARK_BLUE, setWidth(renderer, "Active Sequences"), Task.TextPosition.CENTER);
+        Util.box(renderer, x, y, width, cellHeight, Lights.DARK_BLUE, setWidth(renderer, "Active Sequences"), Task.TextPosition.CENTER);
         drag(x, y, width, cellHeight);
         y -= cellHeight;
 
@@ -34,17 +34,17 @@ public class ActiveSequencesUI implements UI {
             Sequence sequence = Live.getSequence(priority);
             if (sequence == null) continue;
             float priorityWidth = renderer.getWidth(Integer.toString(priority)) + 10;
-            Util.box(renderer, x, y, priorityWidth, cellHeight, LightsCore.medium(), Integer.toString(priority));
+            Util.box(renderer, x, y, priorityWidth, cellHeight, Lights.medium(), Integer.toString(priority));
             if (Util.containsMouse(x, y, priorityWidth, cellHeight) && canInteract()) {
                 interacted = true;
-                if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.leftMouseReady(500)) {
+                if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.leftMouseReady(500)) {
                     Live.clearSequence(priority);
                 }
             }
-            Util.box(renderer, x + priorityWidth, y, width - priorityWidth, cellHeight, LightsCore.medium(), sequence.getName());
+            Util.box(renderer, x + priorityWidth, y, width - priorityWidth, cellHeight, Lights.medium(), sequence.getName());
             if (Util.containsMouse(x, y, width - priorityWidth, cellHeight) && canInteract()) {
                 interacted = true;
-                if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.leftMouseReady(500)) {
+                if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.leftMouseReady(500)) {
                     Live.clearSequence(priority);
                 }
             }

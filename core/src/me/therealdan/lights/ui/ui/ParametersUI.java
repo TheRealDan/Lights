@@ -2,7 +2,7 @@ package me.therealdan.lights.ui.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import me.therealdan.lights.LightsCore;
+import me.therealdan.lights.Lights;
 import me.therealdan.lights.fixtures.Channel;
 import me.therealdan.lights.fixtures.Fixture;
 import me.therealdan.lights.programmer.Programmer;
@@ -43,16 +43,16 @@ public class ParametersUI implements UI {
         float width = getWidth() / 4;
         float cellHeight = 30;
 
-        Util.box(renderer, x, y, getWidth(), getHeight(), LightsCore.dark());
-        Util.box(renderer, x, y, getWidth(), cellHeight, LightsCore.DARK_BLUE, "Parameters", Task.TextPosition.CENTER);
+        Util.box(renderer, x, y, getWidth(), getHeight(), Lights.dark());
+        Util.box(renderer, x, y, getWidth(), cellHeight, Lights.DARK_BLUE, "Parameters", Task.TextPosition.CENTER);
         drag(x, y, getWidth(), cellHeight);
         y -= cellHeight;
 
         for (Channel.Category category : Programmer.availableChannelTypeCategories()) {
-            Util.box(renderer, x, y, width, cellHeight, category.equals(getCategory()) ? LightsCore.DARK_GREEN : LightsCore.medium(), category.getName(), Task.TextPosition.CENTER);
+            Util.box(renderer, x, y, width, cellHeight, category.equals(getCategory()) ? Lights.DARK_GREEN : Lights.medium(), category.getName(), Task.TextPosition.CENTER);
             if (Util.containsMouse(x, y, width, cellHeight) && canInteract()) {
                 interacted = true;
-                if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.leftMouseReady(500)) {
+                if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.leftMouseReady(500)) {
                     if (category.equals(getCategory())) {
                         setPage(getPage() + 1);
                     } else {
@@ -80,16 +80,16 @@ public class ParametersUI implements UI {
                 }
                 seen++;
                 if (Util.containsMouse(x, y, width, parameterHeight) && canInteract()) setChannelType(channelType);
-                Util.box(renderer, x, y, width, cellHeight, LightsCore.DARK_BLUE, channelType.getName(), Task.TextPosition.CENTER);
+                Util.box(renderer, x, y, width, cellHeight, Lights.DARK_BLUE, channelType.getName(), Task.TextPosition.CENTER);
                 drag(x, y, width, cellHeight);
                 y -= cellHeight;
 
                 for (float percentage = 1.0f; percentage >= -0.01f; percentage -= 0.05f) {
                     float level = Float.parseFloat(decimalFormat.format(percentage * 100.0));
-                    Util.box(renderer, x, y, width, cellHeight, isSet(channelType, parameter) && getLevel(channelType, parameter) == level ? LightsCore.DARK_RED : LightsCore.medium(), Float.toString(level).replace("-", "").replace(".0", "") + "%", Task.TextPosition.CENTER);
+                    Util.box(renderer, x, y, width, cellHeight, isSet(channelType, parameter) && getLevel(channelType, parameter) == level ? Lights.DARK_RED : Lights.medium(), Float.toString(level).replace("-", "").replace(".0", "") + "%", Task.TextPosition.CENTER);
                     if (Util.containsMouse(x, y, width, cellHeight) && canInteract()) {
                         interacted = true;
-                        if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.leftMouseReady(-1)) {
+                        if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.leftMouseReady(-1)) {
                             setValue(channelType, parameter, percentage * 255.0f);
                         }
                     }

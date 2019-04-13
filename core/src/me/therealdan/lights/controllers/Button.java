@@ -1,7 +1,7 @@
 package me.therealdan.lights.controllers;
 
 import com.badlogic.gdx.graphics.Color;
-import me.therealdan.lights.LightsCore;
+import me.therealdan.lights.Lights;
 import me.therealdan.lights.programmer.Sequence;
 import me.therealdan.lights.ui.Live;
 import me.therealdan.lights.ui.ui.ButtonsUI;
@@ -17,7 +17,7 @@ public class Button {
     private LinkedHashMap<Sequence, Integer> sequences = new LinkedHashMap<>();
 
     public Button() {
-        this("New Button", LightsCore.medium());
+        this("New Button", Lights.medium());
     }
 
     public Button(String name, Color color) {

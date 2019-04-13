@@ -3,7 +3,7 @@ package me.therealdan.lights.ui.ui;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.files.FileHandle;
-import me.therealdan.lights.LightsCore;
+import me.therealdan.lights.Lights;
 import me.therealdan.lights.fixtures.Channel;
 import me.therealdan.lights.programmer.Frame;
 import me.therealdan.lights.programmer.Programmer;
@@ -129,8 +129,8 @@ public class SequencesUI implements UI {
         for (Sequence sequence : sequences())
             sequencesWidth = Math.max(sequencesWidth, renderer.getWidth(sequence.getName()) + 25);
 
-        Util.box(renderer, x, y, getWidth(), getHeight(), LightsCore.dark());
-        Util.box(renderer, x, y, sequencesWidth, cellHeight, LightsCore.DARK_BLUE, "Sequences: " + countSequences(), me.therealdan.lights.renderer.Task.TextPosition.CENTER);
+        Util.box(renderer, x, y, getWidth(), getHeight(), Lights.dark());
+        Util.box(renderer, x, y, sequencesWidth, cellHeight, Lights.DARK_BLUE, "Sequences: " + countSequences(), me.therealdan.lights.renderer.Task.TextPosition.CENTER);
         drag(x, y, sequencesWidth, cellHeight);
         y -= cellHeight;
         canScrollSequences = Util.containsMouse(x, y, sequencesWidth, getHeight());
@@ -140,7 +140,7 @@ public class SequencesUI implements UI {
         for (Sequence sequence : sequences(true)) {
             if (sequence.equals(getSequencesScroll())) display = true;
             if (display) {
-                Util.box(renderer, x, y, sequencesWidth, cellHeight, sequence.equals(getSelectedSequence()) ? LightsCore.DARK_GREEN : LightsCore.medium(), setWidth(renderer, sequence.getName()));
+                Util.box(renderer, x, y, sequencesWidth, cellHeight, sequence.equals(getSelectedSequence()) ? Lights.DARK_GREEN : Lights.medium(), setWidth(renderer, sequence.getName()));
                 if (Util.containsMouse(x, y, sequencesWidth, cellHeight) && canInteract()) {
                     interacted = true;
                     if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
@@ -162,14 +162,14 @@ public class SequencesUI implements UI {
 
         x += sequencesWidth;
         y = getY();
-        Util.box(renderer, x, y, optionsWidth, cellHeight, LightsCore.DARK_BLUE, "Sequence Options", me.therealdan.lights.renderer.Task.TextPosition.CENTER);
+        Util.box(renderer, x, y, optionsWidth, cellHeight, Lights.DARK_BLUE, "Sequence Options", me.therealdan.lights.renderer.Task.TextPosition.CENTER);
         drag(x, y, optionsWidth, cellHeight);
         y -= cellHeight;
 
-        Util.box(renderer, x, y, optionsWidth, cellHeight, canEdit(Section.NAME) ? LightsCore.DARK_GREEN : LightsCore.medium(), "Name: " + getSelectedSequence().getName());
+        Util.box(renderer, x, y, optionsWidth, cellHeight, canEdit(Section.NAME) ? Lights.DARK_GREEN : Lights.medium(), "Name: " + getSelectedSequence().getName());
         if (Util.containsMouse(x, y, optionsWidth, cellHeight) && canInteract()) {
             interacted = true;
-            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.leftMouseReady(500)) {
+            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.leftMouseReady(500)) {
                 if (canEdit(Section.NAME)) {
                     edit(null);
                 } else {
@@ -179,55 +179,55 @@ public class SequencesUI implements UI {
         }
         y -= cellHeight;
 
-        Util.box(renderer, x, y, optionsWidth, cellHeight, hasSelectedSequence() && getSelectedSequence().doesLoop() ? LightsCore.DARK_GREEN : LightsCore.medium(), "Loop");
+        Util.box(renderer, x, y, optionsWidth, cellHeight, hasSelectedSequence() && getSelectedSequence().doesLoop() ? Lights.DARK_GREEN : Lights.medium(), "Loop");
         if (Util.containsMouse(x, y, optionsWidth, cellHeight) && canInteract()) {
             interacted = true;
-            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.leftMouseReady(500)) {
+            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.leftMouseReady(500)) {
                 if (hasSelectedSequence()) getSelectedSequence().toggleLoop();
             }
         }
         y -= cellHeight;
 
-        Util.box(renderer, x, y, optionsWidth, cellHeight, hasSelectedSequence() && getSelectedSequence().doesClear() ? LightsCore.DARK_GREEN : LightsCore.medium(), "Clear after play through");
+        Util.box(renderer, x, y, optionsWidth, cellHeight, hasSelectedSequence() && getSelectedSequence().doesClear() ? Lights.DARK_GREEN : Lights.medium(), "Clear after play through");
         if (Util.containsMouse(x, y, optionsWidth, cellHeight) && canInteract()) {
             interacted = true;
-            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.leftMouseReady(500)) {
+            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.leftMouseReady(500)) {
                 if (hasSelectedSequence()) getSelectedSequence().toggleClear();
             }
         }
         y -= cellHeight;
 
-        Util.box(renderer, x, y, optionsWidth, cellHeight, hasSelectedSequence() && getSelectedSequence().globalFrameTime() ? LightsCore.DARK_GREEN : LightsCore.medium(), "Global Frame Time");
+        Util.box(renderer, x, y, optionsWidth, cellHeight, hasSelectedSequence() && getSelectedSequence().globalFrameTime() ? Lights.DARK_GREEN : Lights.medium(), "Global Frame Time");
         if (Util.containsMouse(x, y, optionsWidth, cellHeight) && canInteract()) {
             interacted = true;
-            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.leftMouseReady(500)) {
+            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.leftMouseReady(500)) {
                 if (hasSelectedSequence()) getSelectedSequence().toggleGlobalFrameTime();
             }
         }
         y -= cellHeight;
 
-        Util.box(renderer, x, y, optionsWidth, cellHeight, hasSelectedSequence() && getSelectedSequence().globalFadeTime() ? LightsCore.DARK_GREEN : LightsCore.medium(), "Global Fade Time");
+        Util.box(renderer, x, y, optionsWidth, cellHeight, hasSelectedSequence() && getSelectedSequence().globalFadeTime() ? Lights.DARK_GREEN : Lights.medium(), "Global Fade Time");
         if (Util.containsMouse(x, y, optionsWidth, cellHeight) && canInteract()) {
             interacted = true;
-            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.leftMouseReady(500)) {
+            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.leftMouseReady(500)) {
                 if (hasSelectedSequence()) getSelectedSequence().toggleGlobalFadeTime();
             }
         }
         y -= cellHeight;
 
-        Util.box(renderer, x, y, optionsWidth, cellHeight, hasSelectedSequence() && getSelectedSequence().useTempo() ? LightsCore.DARK_GREEN : LightsCore.medium(), "Global Tempo");
+        Util.box(renderer, x, y, optionsWidth, cellHeight, hasSelectedSequence() && getSelectedSequence().useTempo() ? Lights.DARK_GREEN : Lights.medium(), "Global Tempo");
         if (Util.containsMouse(x, y, optionsWidth, cellHeight) && canInteract()) {
             interacted = true;
-            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.leftMouseReady(500)) {
+            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.leftMouseReady(500)) {
                 if (hasSelectedSequence()) getSelectedSequence().toggleUseTempo();
             }
         }
         y -= cellHeight;
 
-        Util.box(renderer, x, y, optionsWidth, cellHeight, LightsCore.medium(), !hasAllSelected() ? "Select All" : "Deselect All");
+        Util.box(renderer, x, y, optionsWidth, cellHeight, Lights.medium(), !hasAllSelected() ? "Select All" : "Deselect All");
         if (Util.containsMouse(x, y, optionsWidth, cellHeight) && canInteract()) {
             interacted = true;
-            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.leftMouseReady(500)) {
+            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.leftMouseReady(500)) {
                 if (!hasAllSelected()) {
                     for (Frame frame : getSelectedSequence().frames())
                         select(frame);
@@ -238,19 +238,19 @@ public class SequencesUI implements UI {
         }
         y -= cellHeight;
 
-        Util.box(renderer, x, y, optionsWidth, cellHeight, LightsCore.medium(), "Edit Sequence");
+        Util.box(renderer, x, y, optionsWidth, cellHeight, Lights.medium(), "Edit Sequence");
         if (Util.containsMouse(x, y, optionsWidth, cellHeight) && canInteract()) {
             interacted = true;
-            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.leftMouseReady(500)) {
+            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.leftMouseReady(500)) {
                 Programmer.edit(getSelectedSequence());
             }
         }
         y -= cellHeight;
 
-        Util.box(renderer, x, y, optionsWidth, cellHeight, LightsCore.medium(), LightsCore.RED, "Delete Sequence");
+        Util.box(renderer, x, y, optionsWidth, cellHeight, Lights.medium(), Lights.RED, "Delete Sequence");
         if (Util.containsMouse(x, y, optionsWidth, cellHeight) && canInteract()) {
             interacted = true;
-            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && shift && LightsCore.leftMouseReady(500)) {
+            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && shift && Lights.leftMouseReady(500)) {
                 if (hasSelectedSequence()) {
                     remove(getSelectedSequence());
                     return interacted;
@@ -260,7 +260,7 @@ public class SequencesUI implements UI {
         y -= cellHeight;
 
         if (countSelectedFrames() > 0) {
-            Util.box(renderer, x, y, optionsWidth, cellHeight, LightsCore.DARK_BLUE, "Frame Options", me.therealdan.lights.renderer.Task.TextPosition.CENTER);
+            Util.box(renderer, x, y, optionsWidth, cellHeight, Lights.DARK_BLUE, "Frame Options", me.therealdan.lights.renderer.Task.TextPosition.CENTER);
             drag(x, y, optionsWidth, cellHeight);
             y -= cellHeight;
 
@@ -273,10 +273,10 @@ public class SequencesUI implements UI {
                 if (fadeTime != frame.getFadeTime()) fadeTime = -2;
             }
 
-            Util.box(renderer, x, y, optionsWidth, cellHeight, LightsCore.medium(), "Frame Time: " + (frameTime == -2 ? "Various" : Frame.format(frameTime)));
+            Util.box(renderer, x, y, optionsWidth, cellHeight, Lights.medium(), "Frame Time: " + (frameTime == -2 ? "Various" : Frame.format(frameTime)));
             if (Util.containsMouse(x, y, optionsWidth, cellHeight) && canInteract()) {
                 interacted = true;
-                if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.leftMouseReady(500)) {
+                if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.leftMouseReady(500)) {
                     if (Util.containsMouse(x, y, optionsWidth / 2, cellHeight)) {
                         for (Frame frame : selectedFrames())
                             frame.setFrameTime(frame.getFrameTime() + (shift ? 100 : 10));
@@ -288,10 +288,10 @@ public class SequencesUI implements UI {
             }
             y -= cellHeight;
 
-            Util.box(renderer, x, y, optionsWidth, cellHeight, LightsCore.medium(), "Fade Time: " + (fadeTime == -2 ? "Various" : Frame.format(fadeTime)));
+            Util.box(renderer, x, y, optionsWidth, cellHeight, Lights.medium(), "Fade Time: " + (fadeTime == -2 ? "Various" : Frame.format(fadeTime)));
             if (Util.containsMouse(x, y, optionsWidth, cellHeight) && canInteract()) {
                 interacted = true;
-                if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.leftMouseReady(500)) {
+                if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.leftMouseReady(500)) {
                     if (Util.containsMouse(x, y, optionsWidth / 2, cellHeight)) {
                         for (Frame frame : selectedFrames())
                             frame.setFadeTime(frame.getFadeTime() + (shift ? 100 : 10));
@@ -303,10 +303,10 @@ public class SequencesUI implements UI {
             }
             y -= cellHeight;
 
-            Util.box(renderer, x, y, optionsWidth, cellHeight, LightsCore.medium(), LightsCore.RED, "Delete Frame" + (countSelectedFrames() > 1 ? "s" : ""));
+            Util.box(renderer, x, y, optionsWidth, cellHeight, Lights.medium(), Lights.RED, "Delete Frame" + (countSelectedFrames() > 1 ? "s" : ""));
             if (Util.containsMouse(x, y, optionsWidth, cellHeight) && canInteract()) {
                 interacted = true;
-                if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && shift && LightsCore.leftMouseReady(500)) {
+                if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && shift && Lights.leftMouseReady(500)) {
                     for (Frame frame : selectedFrames())
                         getSelectedSequence().delete(frame);
                 }
@@ -320,7 +320,7 @@ public class SequencesUI implements UI {
 
         x += optionsWidth;
         y = getY();
-        Util.box(renderer, x, y, framesWidth, cellHeight, LightsCore.DARK_BLUE, "Frames: " + countSelectedFrames() + " / " + getSelectedSequence().countFrames(), me.therealdan.lights.renderer.Task.TextPosition.CENTER);
+        Util.box(renderer, x, y, framesWidth, cellHeight, Lights.DARK_BLUE, "Frames: " + countSelectedFrames() + " / " + getSelectedSequence().countFrames(), me.therealdan.lights.renderer.Task.TextPosition.CENTER);
         drag(x, y, framesWidth, cellHeight);
         y -= cellHeight;
         canScrollFrames = Util.containsMouse(x, y, framesWidth, getHeight());
@@ -332,10 +332,10 @@ public class SequencesUI implements UI {
             if (current == getFramesScroll()) display = true;
             current++;
             if (display) {
-                Util.box(renderer, x, y, framesWidth, cellHeight, isSelected(frame) ? LightsCore.DARK_RED : LightsCore.medium(), frame.getInfo());
+                Util.box(renderer, x, y, framesWidth, cellHeight, isSelected(frame) ? Lights.DARK_RED : Lights.medium(), frame.getInfo());
                 if (Util.containsMouse(x, y, framesWidth, cellHeight) && canInteract()) {
                     interacted = true;
-                    if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.leftMouseReady(500)) {
+                    if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.leftMouseReady(500)) {
                         if (isSelected(frame)) {
                             deselect(frame);
                         } else {
@@ -359,7 +359,7 @@ public class SequencesUI implements UI {
 
         x += framesWidth;
         y = getY();
-        Util.box(renderer, x, y, tasksWidth, cellHeight, LightsCore.DARK_BLUE, "Tasks: " + frame.tasks().size(), me.therealdan.lights.renderer.Task.TextPosition.CENTER);
+        Util.box(renderer, x, y, tasksWidth, cellHeight, Lights.DARK_BLUE, "Tasks: " + frame.tasks().size(), me.therealdan.lights.renderer.Task.TextPosition.CENTER);
         drag(x, y, tasksWidth, cellHeight);
         y -= cellHeight;
         canScrollTasks = Util.containsMouse(x, y, tasksWidth, getHeight());
@@ -371,7 +371,7 @@ public class SequencesUI implements UI {
             if (current == getTasksScroll()) display = true;
             current++;
             if (display) {
-                Util.box(renderer, x, y, tasksWidth, cellHeight, LightsCore.medium(), task.getInfo());
+                Util.box(renderer, x, y, tasksWidth, cellHeight, Lights.medium(), task.getInfo());
                 drag(x, y, tasksWidth, cellHeight);
                 y -= cellHeight;
                 if (++i == MAX_ROWS) break;

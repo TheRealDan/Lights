@@ -2,7 +2,7 @@ package me.therealdan.lights.ui.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import me.therealdan.lights.LightsCore;
+import me.therealdan.lights.Lights;
 import me.therealdan.lights.renderer.Renderer;
 import me.therealdan.lights.renderer.Task;
 import me.therealdan.lights.settings.Setting;
@@ -25,17 +25,17 @@ public class SettingsUI implements UI {
         float y = getY();
         float width = getWidth();
 
-        Util.box(renderer, x, y, width, cellHeight, LightsCore.DARK_BLUE, setWidth(renderer, "Settings"), Task.TextPosition.CENTER);
+        Util.box(renderer, x, y, width, cellHeight, Lights.DARK_BLUE, setWidth(renderer, "Settings"), Task.TextPosition.CENTER);
         drag(x, y, width, cellHeight);
         y -= cellHeight;
 
         for (Setting setting : Setting.settings()) {
             switch (setting.getType()) {
                 case LONG:
-                    Util.box(renderer, x, y, width, cellHeight, LightsCore.medium(), setWidth(renderer, setting.getName() + ": " + setting.getValue()));
+                    Util.box(renderer, x, y, width, cellHeight, Lights.medium(), setWidth(renderer, setting.getName() + ": " + setting.getValue()));
                     if (Util.containsMouse(x, y, width, cellHeight) && canInteract()) {
                         interacted = true;
-                        if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.leftMouseReady(100)) {
+                        if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.leftMouseReady(100)) {
                             if (Util.containsMouse(x, y, width / 2, cellHeight)) {
                                 setting.increment(1);
                             } else {
@@ -45,10 +45,10 @@ public class SettingsUI implements UI {
                     }
                     break;
                 case BOOLEAN:
-                    Util.box(renderer, x, y, width, cellHeight, setting.isTrue() ? LightsCore.DARK_GREEN : LightsCore.medium(), setWidth(renderer, setting.getName()));
+                    Util.box(renderer, x, y, width, cellHeight, setting.isTrue() ? Lights.DARK_GREEN : Lights.medium(), setWidth(renderer, setting.getName()));
                     if (Util.containsMouse(x, y, width, cellHeight) && canInteract()) {
                         interacted = true;
-                        if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.leftMouseReady(250))
+                        if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.leftMouseReady(250))
                             setting.toggle();
                     }
                     break;

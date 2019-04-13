@@ -2,18 +2,18 @@ package me.therealdan.lights.util;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import me.therealdan.lights.LightsCore;
+import me.therealdan.lights.Lights;
 import me.therealdan.lights.renderer.Renderer;
 import me.therealdan.lights.renderer.Task;
 
 public class Util {
 
     public static void box(Renderer renderer, float x, float y, float width, float height, Color background, String text) {
-        box(renderer, x, y, width, height, background, LightsCore.text(), text);
+        box(renderer, x, y, width, height, background, Lights.text(), text);
     }
 
     public static void box(Renderer renderer, float x, float y, float width, float height, Color background, String text, Task.TextPosition textPosition) {
-        box(renderer, x, y, width, height, background, LightsCore.text(), text, textPosition);
+        box(renderer, x, y, width, height, background, Lights.text(), text, textPosition);
     }
 
     public static void box(Renderer renderer, float x, float y, float width, float height, Color background, Color textColor, String text) {
@@ -27,7 +27,7 @@ public class Util {
 
     public static void box(Renderer renderer, float x, float y, float width, float height, Color background) {
         renderer.queue(new Task(x, y - height).rect(width, height).setColor(background));
-        renderer.queue(new Task(x, y - height).rectOutline(width, height).setColor(LightsCore.light()));
+        renderer.queue(new Task(x, y - height).rectOutline(width, height).setColor(Lights.light()));
     }
 
     public static boolean containsMouse(float x, float y, float width, float height) {

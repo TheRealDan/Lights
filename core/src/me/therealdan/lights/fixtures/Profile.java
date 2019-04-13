@@ -56,7 +56,7 @@ public class Profile {
     public void rename(String name) {
         this.name = name;
 
-        // TODO - Will probably cause issues. Need to scan through things and update the name or use different system
+        // TODO - Need to test name changing, it should be fine since Fixtures hold an object reference rather than the profile name as a string
     }
 
     public String getName() {

@@ -2,7 +2,7 @@ package me.therealdan.lights.ui.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import me.therealdan.lights.LightsCore;
+import me.therealdan.lights.Lights;
 import me.therealdan.lights.fixtures.Group;
 import me.therealdan.lights.programmer.Programmer;
 import me.therealdan.lights.renderer.Renderer;
@@ -32,15 +32,15 @@ public class GroupsUI implements UI {
         float y = getY();
         float width = getWidth();
 
-        Util.box(renderer, x, y, width, cellHeight, LightsCore.DARK_BLUE, setWidth(renderer, "Groups"), Task.TextPosition.CENTER);
+        Util.box(renderer, x, y, width, cellHeight, Lights.DARK_BLUE, setWidth(renderer, "Groups"), Task.TextPosition.CENTER);
         drag(x, y, width, cellHeight);
         y -= cellHeight;
 
         for (Group group : PatchUI.groups()) {
-            Util.box(renderer, x, y, cellSize, cellSize, Programmer.isSelected(group) ? LightsCore.DARK_RED : LightsCore.medium(), setWidth(renderer, group.getName()), Task.TextPosition.CENTER);
+            Util.box(renderer, x, y, cellSize, cellSize, Programmer.isSelected(group) ? Lights.DARK_RED : Lights.medium(), setWidth(renderer, group.getName()), Task.TextPosition.CENTER);
             if (Util.containsMouse(x, y, cellSize, cellSize) && canInteract()) {
                 interacted = true;
-                if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.leftMouseReady(500)) {
+                if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.leftMouseReady(500)) {
                     if (Programmer.isSelected(group)) {
                         Programmer.deselect(group);
                     } else {

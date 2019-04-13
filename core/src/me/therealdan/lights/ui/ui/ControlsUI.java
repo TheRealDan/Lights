@@ -2,7 +2,7 @@ package me.therealdan.lights.ui.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import me.therealdan.lights.LightsCore;
+import me.therealdan.lights.Lights;
 import me.therealdan.lights.renderer.Renderer;
 import me.therealdan.lights.renderer.Task;
 import me.therealdan.lights.settings.Control;
@@ -32,16 +32,16 @@ public class ControlsUI implements UI {
         float width = getWidth();
         float cellHeight = 30;
 
-        Util.box(renderer, x, y, width, cellHeight, LightsCore.DARK_BLUE, setWidth(renderer, "Controls"), Task.TextPosition.CENTER);
+        Util.box(renderer, x, y, width, cellHeight, Lights.DARK_BLUE, setWidth(renderer, "Controls"), Task.TextPosition.CENTER);
         drag(x, y, width, cellHeight);
         y -= cellHeight;
 
-        Util.box(renderer, x, y, width, cellHeight, LightsCore.medium(), setWidth(renderer, "Category: " + getSelectedCategory().formatString()), Task.TextPosition.LEFT_CENTER);
+        Util.box(renderer, x, y, width, cellHeight, Lights.medium(), setWidth(renderer, "Category: " + getSelectedCategory().formatString()), Task.TextPosition.LEFT_CENTER);
         if (Util.containsMouse(x, y, width, cellHeight) && canInteract()) {
             interacted = true;
-            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.leftMouseReady(500)) {
+            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.leftMouseReady(500)) {
                 select(true);
-            } else if (Gdx.input.isButtonPressed(Input.Buttons.RIGHT) && LightsCore.rightMouseReady(500)) {
+            } else if (Gdx.input.isButtonPressed(Input.Buttons.RIGHT) && Lights.rightMouseReady(500)) {
                 select(false);
             }
         }
@@ -49,11 +49,11 @@ public class ControlsUI implements UI {
 
         for (Control control : getSelectedCategory().getControls()) {
             setWidth(renderer, control.getName().formatString(), 2);
-            Util.box(renderer, x, y, width / 2, cellHeight, isSelected(control) ? LightsCore.DARK_RED : LightsCore.medium(), control.getName().formatString());
-            Util.box(renderer, x + width / 2, y, width / 2, cellHeight, isSelected(control) ? LightsCore.DARK_RED : LightsCore.medium(), control.formatKeycode());
+            Util.box(renderer, x, y, width / 2, cellHeight, isSelected(control) ? Lights.DARK_RED : Lights.medium(), control.getName().formatString());
+            Util.box(renderer, x + width / 2, y, width / 2, cellHeight, isSelected(control) ? Lights.DARK_RED : Lights.medium(), control.formatKeycode());
             if (Util.containsMouse(x, y, width, cellHeight) && canInteract()) {
                 interacted = true;
-                if (LightsCore.leftMouseClicked(500, getSelectedControl() != null && !control.equals(getSelectedControl()))) {
+                if (Lights.leftMouseClicked(500, getSelectedControl() != null && !control.equals(getSelectedControl()))) {
                     select(isSelected(control) ? null : control);
                 }
             }

@@ -13,7 +13,7 @@ import me.therealdan.lights.ui.DefaultInputProcessor;
 import me.therealdan.lights.ui.Live;
 import me.therealdan.lights.ui.Visualiser3D;
 
-public class LightsCore extends ApplicationAdapter implements DefaultInputProcessor {
+public class Lights extends ApplicationAdapter implements DefaultInputProcessor {
 
     private Renderer renderer;
     private Visualiser3D visualiser3D;

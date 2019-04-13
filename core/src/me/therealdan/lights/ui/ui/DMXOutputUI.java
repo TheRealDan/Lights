@@ -2,7 +2,7 @@ package me.therealdan.lights.ui.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import me.therealdan.lights.LightsCore;
+import me.therealdan.lights.Lights;
 import me.therealdan.lights.dmx.DMX;
 import me.therealdan.lights.renderer.Renderer;
 import me.therealdan.lights.renderer.Task;
@@ -31,22 +31,22 @@ public class DMXOutputUI implements UI {
 
         if (!displayInCells()) setWidth(0);
 
-        Util.box(renderer, x, y, width, cellHeight, LightsCore.DARK_BLUE, setWidth(renderer, "DMX Output"), Task.TextPosition.CENTER);
+        Util.box(renderer, x, y, width, cellHeight, Lights.DARK_BLUE, setWidth(renderer, "DMX Output"), Task.TextPosition.CENTER);
         drag(x, y, width, cellHeight);
         y -= cellHeight;
 
-        Util.box(renderer, x, y, width, cellHeight, LightsCore.medium(), setWidth(renderer, "DMX: " + getDmxToDisplay()));
+        Util.box(renderer, x, y, width, cellHeight, Lights.medium(), setWidth(renderer, "DMX: " + getDmxToDisplay()));
         if (Util.containsMouse(x, y, width, cellHeight) && canInteract()) {
             interacted = true;
-            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.leftMouseReady(500))
+            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.leftMouseReady(500))
                 next();
         }
         y -= cellHeight;
 
-        Util.box(renderer, x, y, width, cellHeight, displayInCells() ? LightsCore.DARK_RED : LightsCore.medium(), setWidth(renderer, "Display In Cells"));
+        Util.box(renderer, x, y, width, cellHeight, displayInCells() ? Lights.DARK_RED : Lights.medium(), setWidth(renderer, "Display In Cells"));
         if (Util.containsMouse(x, y, width, cellHeight) && canInteract()) {
             interacted = true;
-            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.leftMouseReady(500))
+            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.leftMouseReady(500))
                 toggleDisplayInCells();
         }
         y -= cellHeight;
@@ -54,10 +54,10 @@ public class DMXOutputUI implements UI {
         DMX dmx = DMX.get(getDmxToDisplay());
         if (displayInCells()) {
             for (int address : dmx.active()) {
-                Util.box(renderer, x, y, cellHeight, cellHeight, LightsCore.medium(), Integer.toString(address));
+                Util.box(renderer, x, y, cellHeight, cellHeight, Lights.medium(), Integer.toString(address));
                 drag(x, y, cellHeight, cellHeight);
                 float fill = cellHeight * dmx.get(address) / 255f;
-                Util.box(renderer, x, y - cellHeight + fill, cellHeight, fill, LightsCore.DARK_RED);
+                Util.box(renderer, x, y - cellHeight + fill, cellHeight, fill, Lights.DARK_RED);
                 x += cellHeight;
 
                 if (address % 16 == 0) {
@@ -72,7 +72,7 @@ public class DMXOutputUI implements UI {
             for (int address : dmx.active()) {
                 if (dmx.get(address) > 0) {
                     shown++;
-                    Util.box(renderer, x, y, width, cellHeight, LightsCore.medium(), setWidth(renderer, address + ": " + dmx.get(address)));
+                    Util.box(renderer, x, y, width, cellHeight, Lights.medium(), setWidth(renderer, address + ": " + dmx.get(address)));
                     y -= cellHeight;
 
                     if (shown == 13 || (shown - 13) % 16 == 0) {

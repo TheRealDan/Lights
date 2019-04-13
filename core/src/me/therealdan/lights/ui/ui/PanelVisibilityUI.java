@@ -2,7 +2,7 @@ package me.therealdan.lights.ui.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import me.therealdan.lights.LightsCore;
+import me.therealdan.lights.Lights;
 import me.therealdan.lights.renderer.Renderer;
 import me.therealdan.lights.renderer.Task;
 import me.therealdan.lights.ui.Live;
@@ -23,7 +23,7 @@ public class PanelVisibilityUI implements UI {
         float y = getY();
         float width = getWidth();
 
-        Util.box(renderer, x, y, width, cellHeight, LightsCore.DARK_BLUE, setWidth(renderer, "Panel Visibility"), Task.TextPosition.CENTER);
+        Util.box(renderer, x, y, width, cellHeight, Lights.DARK_BLUE, setWidth(renderer, "Panel Visibility"), Task.TextPosition.CENTER);
         drag(x, y, width, cellHeight);
         y -= cellHeight;
 
@@ -40,10 +40,10 @@ public class PanelVisibilityUI implements UI {
             if (ui.ignoreVisibilityUI()) continue;
             if (Util.containsMouse(x, y, width, cellHeight) && canInteract()) {
                 interacted = true;
-                if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.leftMouseReady(200))
+                if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.leftMouseReady(200))
                     ui.toggleVisibility();
             }
-            Util.box(renderer, x, y, width, cellHeight, ui.isVisible() ? LightsCore.DARK_GREEN : LightsCore.medium(), setWidth(renderer, ui.getName()));
+            Util.box(renderer, x, y, width, cellHeight, ui.isVisible() ? Lights.DARK_GREEN : Lights.medium(), setWidth(renderer, ui.getName()));
             y -= cellHeight;
         }
 

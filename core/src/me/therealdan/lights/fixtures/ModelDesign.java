@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.math.Vector3;
-import me.therealdan.lights.LightsCore;
+import me.therealdan.lights.Lights;
 
 public class ModelDesign {
 
@@ -28,7 +28,7 @@ public class ModelDesign {
     }
 
     public ModelDesign(float width, float height, float depth, float xOffset, float yOffset, float zOffset) {
-        this.model = modelBuilder.createBox(width, height, depth, new Material(ColorAttribute.createDiffuse(LightsCore.BLACK)), VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal);
+        this.model = modelBuilder.createBox(width, height, depth, new Material(ColorAttribute.createDiffuse(Lights.BLACK)), VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal);
         this.dimensions = new Vector3(width, height, depth);
         this.offset = new Vector3(xOffset, yOffset, zOffset);
     }

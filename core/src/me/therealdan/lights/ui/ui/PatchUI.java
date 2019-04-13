@@ -5,7 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector3;
-import me.therealdan.lights.LightsCore;
+import me.therealdan.lights.Lights;
 import me.therealdan.lights.dmx.DMX;
 import me.therealdan.lights.fixtures.Fixture;
 import me.therealdan.lights.fixtures.Group;
@@ -150,21 +150,21 @@ public class PatchUI implements UI {
             width = Math.max(width, idWidth + nameWidth + profileWidth + addressWidth);
         }
 
-        Util.box(renderer, x, y, uiWidth, cellHeight, LightsCore.DARK_BLUE, "Patch", Task.TextPosition.CENTER);
+        Util.box(renderer, x, y, uiWidth, cellHeight, Lights.DARK_BLUE, "Patch", Task.TextPosition.CENTER);
         drag(x, y, uiWidth, cellHeight);
         y -= cellHeight;
 
-        Util.box(renderer, x, y, idWidth, cellHeight, LightsCore.DARK_BLUE, "ID", Task.TextPosition.CENTER);
-        Util.box(renderer, x + idWidth, y, nameWidth, cellHeight, LightsCore.DARK_BLUE, "Name", Task.TextPosition.CENTER);
-        Util.box(renderer, x + idWidth + nameWidth, y, profileWidth, cellHeight, LightsCore.DARK_BLUE, "Profile", Task.TextPosition.CENTER);
-        Util.box(renderer, x + idWidth + nameWidth + profileWidth, y, addressWidth, cellHeight, LightsCore.DARK_BLUE, "Address", Task.TextPosition.CENTER);
+        Util.box(renderer, x, y, idWidth, cellHeight, Lights.DARK_BLUE, "ID", Task.TextPosition.CENTER);
+        Util.box(renderer, x + idWidth, y, nameWidth, cellHeight, Lights.DARK_BLUE, "Name", Task.TextPosition.CENTER);
+        Util.box(renderer, x + idWidth + nameWidth, y, profileWidth, cellHeight, Lights.DARK_BLUE, "Profile", Task.TextPosition.CENTER);
+        Util.box(renderer, x + idWidth + nameWidth + profileWidth, y, addressWidth, cellHeight, Lights.DARK_BLUE, "Address", Task.TextPosition.CENTER);
         drag(x, y, width, cellHeight);
         y -= cellHeight;
 
         for (Fixture fixture : fixtures()) {
             if (Util.containsMouse(x, y, width, cellHeight) && canInteract()) {
                 interacted = true;
-                if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && LightsCore.leftMouseReady(500)) {
+                if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.leftMouseReady(500)) {
                     if (fixture.equals(getSelectedFixture())) {
                         select(null);
                     } else {
@@ -172,7 +172,7 @@ public class PatchUI implements UI {
                     }
                 }
             }
-            Color color = fixture.equals(getSelectedFixture()) ? LightsCore.DARK_GREEN : LightsCore.medium();
+            Color color = fixture.equals(getSelectedFixture()) ? Lights.DARK_GREEN : Lights.medium();
             Util.box(renderer, x, y, idWidth, cellHeight, color, setWidth(renderer, Integer.toString(fixture.getID())), Task.TextPosition.CENTER);
             Util.box(renderer, x + idWidth, y, nameWidth, cellHeight, color, setWidth(renderer, fixture.getName()));
             Util.box(renderer, x + idWidth + nameWidth, y, profileWidth, cellHeight, color, setWidth(renderer, fixture.getProfile()));
@@ -197,10 +197,10 @@ public class PatchUI implements UI {
                     }
                 }
                 boolean selected = getSelectedFixture().getAddress() <= address && address <= getSelectedFixture().getAddress() + getSelectedFixture().getPhysicalChannels() - 1;
-                Color color = LightsCore.medium();
-                if (selected) color = LightsCore.DARK_GREEN;
-                if (occupied) color = LightsCore.DARK_BLUE;
-                if (selected && occupied) color = LightsCore.DARK_CYAN;
+                Color color = Lights.medium();
+                if (selected) color = Lights.DARK_GREEN;
+                if (occupied) color = Lights.DARK_BLUE;
+                if (selected && occupied) color = Lights.DARK_CYAN;
                 Util.box(renderer, x, y, cellHeight, cellHeight, color, Integer.toString(address));
                 if (Util.containsMouse(x, y, cellHeight, cellHeight) && canInteract()) {
                     interacted = true;

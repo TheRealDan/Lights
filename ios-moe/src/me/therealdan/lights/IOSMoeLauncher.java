@@ -2,6 +2,7 @@ package me.therealdan.lights;
 
 import com.badlogic.gdx.backends.iosmoe.IOSApplication;
 import com.badlogic.gdx.backends.iosmoe.IOSApplicationConfiguration;
+import me.therealdan.lights.main.Lights;
 import org.moe.natj.general.Pointer;
 
 import apple.uikit.c.UIKit;

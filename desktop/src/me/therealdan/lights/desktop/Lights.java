@@ -8,6 +8,6 @@ public class Lights {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		config.title = "Lights";
-		new LwjglApplication(new me.therealdan.lights.Lights(), config);
+		new LwjglApplication(new me.therealdan.lights.main.Lights(), config);
 	}
 }

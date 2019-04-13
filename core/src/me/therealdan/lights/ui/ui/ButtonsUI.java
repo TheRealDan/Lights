@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
-import me.therealdan.lights.Lights;
+import me.therealdan.lights.main.Lights;
 import me.therealdan.lights.controllers.Button;
 import me.therealdan.lights.programmer.Sequence;
 import me.therealdan.lights.renderer.Renderer;

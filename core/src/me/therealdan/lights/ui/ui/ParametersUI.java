@@ -2,7 +2,7 @@ package me.therealdan.lights.ui.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import me.therealdan.lights.Lights;
+import me.therealdan.lights.main.Lights;
 import me.therealdan.lights.fixtures.Channel;
 import me.therealdan.lights.fixtures.Fixture;
 import me.therealdan.lights.programmer.Programmer;

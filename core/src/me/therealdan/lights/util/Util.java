@@ -2,7 +2,7 @@ package me.therealdan.lights.util;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import me.therealdan.lights.Lights;
+import me.therealdan.lights.main.Lights;
 import me.therealdan.lights.renderer.Renderer;
 import me.therealdan.lights.renderer.Task;
 

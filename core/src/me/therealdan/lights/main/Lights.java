@@ -1,4 +1,4 @@
-package me.therealdan.lights;
+package me.therealdan.lights.main;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;

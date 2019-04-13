@@ -1,6 +1,6 @@
 package me.therealdan.lights.ui.ui;
 
-import me.therealdan.lights.Lights;
+import me.therealdan.lights.main.Lights;
 import me.therealdan.lights.renderer.Renderer;
 import me.therealdan.lights.renderer.Task;
 import me.therealdan.lights.ui.UIHandler;

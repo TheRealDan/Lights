@@ -3,7 +3,7 @@ package me.therealdan.lights.ui.ui;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.files.FileHandle;
-import me.therealdan.lights.Lights;
+import me.therealdan.lights.main.Lights;
 import me.therealdan.lights.renderer.Renderer;
 import me.therealdan.lights.ui.UIHandler;
 import me.therealdan.lights.util.Util;

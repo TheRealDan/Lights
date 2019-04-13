@@ -170,16 +170,6 @@ public class Visualiser3D {
         camera.update();
     }
 
-    public boolean keyDown(int keycode) {
-        keys.put(keycode, keycode);
-        return true;
-    }
-
-    public boolean keyUp(int keycode) {
-        keys.remove(keycode, 0);
-        return true;
-    }
-
     public boolean touchDragged(int screenX, int screenY, int pointer) {
         if (UIHandler.getSection().equals(UIHandler.Section.VISUALISER3D)) {
             float deltaX = -Gdx.input.getDeltaX() * degreesPerPixel;
@@ -188,6 +178,16 @@ public class Visualiser3D {
             tmp.set(camera.direction).crs(camera.up).nor();
             camera.direction.rotate(tmp, deltaY);
         }
+        return true;
+    }
+
+    public boolean keyDown(int keycode) {
+        keys.put(keycode, keycode);
+        return true;
+    }
+
+    public boolean keyUp(int keycode) {
+        keys.remove(keycode, 0);
         return true;
     }
 

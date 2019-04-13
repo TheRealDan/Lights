@@ -76,9 +76,20 @@ public class Lights extends ApplicationAdapter implements DefaultInputProcessor 
     }
 
     @Override
-    public boolean keyUp(int keycode) {
-        visualiser3D.keyUp(keycode);
-        uiHandler.keyUp(keycode);
+    public boolean scrolled(int amount) {
+        uiHandler.scrolled(amount);
+        return true;
+    }
+
+    @Override
+    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        uiHandler.touchUp(screenX, screenY, pointer, button);
+        return true;
+    }
+
+    @Override
+    public boolean touchDragged(int screenX, int screenY, int pointer) {
+        visualiser3D.touchDragged(screenX, screenY, pointer);
         return true;
     }
 
@@ -90,8 +101,9 @@ public class Lights extends ApplicationAdapter implements DefaultInputProcessor 
     }
 
     @Override
-    public boolean touchDragged(int screenX, int screenY, int pointer) {
-        visualiser3D.touchDragged(screenX, screenY, pointer);
+    public boolean keyUp(int keycode) {
+        visualiser3D.keyUp(keycode);
+        uiHandler.keyUp(keycode);
         return true;
     }
 }

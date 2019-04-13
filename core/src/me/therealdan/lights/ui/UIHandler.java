@@ -191,13 +191,6 @@ public class UIHandler {
         return true;
     }
 
-    public boolean keyUp(int keycode) {
-        for (UI ui : UIs())
-            ui.keyUp(keycode);
-
-        return true;
-    }
-
     public boolean keyDown(int keycode) {
         boolean shift = Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT);
 
@@ -262,6 +255,13 @@ public class UIHandler {
                     break;
             }
         }
+
+        return true;
+    }
+
+    public boolean keyUp(int keycode) {
+        for (UI ui : UIs())
+            ui.keyUp(keycode);
 
         return true;
     }

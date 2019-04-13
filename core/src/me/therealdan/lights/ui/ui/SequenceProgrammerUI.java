@@ -125,11 +125,11 @@ public class SequenceProgrammerUI implements UI {
         float y = getY();
         float width = getWidth();
 
-        Util.box(renderer, x, y, getWidth(), cellHeight, Lights.DARK_BLUE, setWidth(renderer, "Sequence Programmer"), Task.TextPosition.CENTER);
+        Util.box(renderer, x, y, getWidth(), cellHeight, Lights.color.DARK_BLUE, setWidth(renderer, "Sequence Programmer"), Task.TextPosition.CENTER);
         drag(x, y, getWidth(), cellHeight);
         y -= cellHeight;
 
-        Util.box(renderer, x, y, getWidth(), cellHeight, selected.equals(Selected.NAME) ? Lights.DARK_RED : Lights.medium(), setWidth(renderer, sequence.getName()), Task.TextPosition.CENTER);
+        Util.box(renderer, x, y, getWidth(), cellHeight, selected.equals(Selected.NAME) ? Lights.color.DARK_RED : Lights.color.MEDIUM, setWidth(renderer, sequence.getName()), Task.TextPosition.CENTER);
         if (Util.containsMouse(x, y, width, cellHeight) && canInteract()) {
             interacted = true;
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT))
@@ -139,7 +139,7 @@ public class SequenceProgrammerUI implements UI {
 
         x = getX();
         width = getWidth() / 2f;
-        Util.box(renderer, x, y, width, cellHeight, selected.equals(Selected.FRAME) ? Lights.DARK_RED : Lights.medium(), setWidth(renderer,
+        Util.box(renderer, x, y, width, cellHeight, selected.equals(Selected.FRAME) ? Lights.color.DARK_RED : Lights.color.MEDIUM, setWidth(renderer,
                 firstSelectedFrame != null ?
                         "Frame time: " + Frame.format(firstSelectedFrame.getFrameTime()) :
                         "N/A"
@@ -150,7 +150,7 @@ public class SequenceProgrammerUI implements UI {
                 setSelected(Selected.FRAME);
         }
         x += width;
-        Util.box(renderer, x, y, width, cellHeight, selected.equals(Selected.FADE) ? Lights.DARK_RED : Lights.medium(), setWidth(renderer,
+        Util.box(renderer, x, y, width, cellHeight, selected.equals(Selected.FADE) ? Lights.color.DARK_RED : Lights.color.MEDIUM, setWidth(renderer,
                 firstSelectedFrame != null ?
                         "Fade time: " + Frame.format(firstSelectedFrame.getFadeTime()) :
                         "N/A"
@@ -168,7 +168,7 @@ public class SequenceProgrammerUI implements UI {
             boolean highlight = false;
             if (button.equals(Button.LOOP)) highlight = sequence.doesLoop();
             setWidth((renderer.getWidth(button.getName()) + 10) * Button.values().length, true);
-            Util.box(renderer, x, y, width, cellHeight, highlight ? Lights.DARK_GREEN : Lights.medium(), button.getName(), Task.TextPosition.CENTER);
+            Util.box(renderer, x, y, width, cellHeight, highlight ? Lights.color.DARK_GREEN : Lights.color.MEDIUM, button.getName(), Task.TextPosition.CENTER);
             if (Util.containsMouse(x, y, width, cellHeight) && canInteract()) {
                 interacted = true;
                 if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.leftMouseReady(500))
@@ -182,15 +182,15 @@ public class SequenceProgrammerUI implements UI {
         width = getWidth();
         int index = 0;
         for (Frame frame : sequence.frames()) {
-            Color color = Lights.medium();
-            if (Programmer.isSelected(frame)) color = Lights.DARK_RED;
+            Color color = Lights.color.MEDIUM;
+            if (Programmer.isSelected(frame)) color = Lights.color.DARK_RED;
             if (sequence.getCurrentFrame() == index) {
-                color = Lights.DARK_GREEN;
-                if (Programmer.isSelected(frame)) color = Lights.DARK_YELLOW;
+                color = Lights.color.DARK_GREEN;
+                if (Programmer.isSelected(frame)) color = Lights.color.DARK_YELLOW;
             }
             Util.box(renderer, x, y, width, cellHeight, color, setWidth(renderer, frame.getInfo()));
             if (DMX.DRAW_DMX) {
-                if (color == Lights.medium()) color = Lights.light();
+                if (color == Lights.color.MEDIUM) color = Lights.color.LIGHT;
                 frame.draw(renderer, x, y, width, cellHeight, color);
             }
             if (Util.containsMouse(x, y, width, cellHeight) && canInteract()) {

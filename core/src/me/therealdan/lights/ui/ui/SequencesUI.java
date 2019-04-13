@@ -129,8 +129,8 @@ public class SequencesUI implements UI {
         for (Sequence sequence : sequences())
             sequencesWidth = Math.max(sequencesWidth, renderer.getWidth(sequence.getName()) + 25);
 
-        Util.box(renderer, x, y, getWidth(), getHeight(), Lights.dark());
-        Util.box(renderer, x, y, sequencesWidth, cellHeight, Lights.DARK_BLUE, "Sequences: " + countSequences(), me.therealdan.lights.renderer.Task.TextPosition.CENTER);
+        Util.box(renderer, x, y, getWidth(), getHeight(), Lights.color.DARK);
+        Util.box(renderer, x, y, sequencesWidth, cellHeight, Lights.color.DARK_BLUE, "Sequences: " + countSequences(), me.therealdan.lights.renderer.Task.TextPosition.CENTER);
         drag(x, y, sequencesWidth, cellHeight);
         y -= cellHeight;
         canScrollSequences = Util.containsMouse(x, y, sequencesWidth, getHeight());
@@ -140,7 +140,7 @@ public class SequencesUI implements UI {
         for (Sequence sequence : sequences(true)) {
             if (sequence.equals(getSequencesScroll())) display = true;
             if (display) {
-                Util.box(renderer, x, y, sequencesWidth, cellHeight, sequence.equals(getSelectedSequence()) ? Lights.DARK_GREEN : Lights.medium(), setWidth(renderer, sequence.getName()));
+                Util.box(renderer, x, y, sequencesWidth, cellHeight, sequence.equals(getSelectedSequence()) ? Lights.color.DARK_GREEN : Lights.color.MEDIUM, setWidth(renderer, sequence.getName()));
                 if (Util.containsMouse(x, y, sequencesWidth, cellHeight) && canInteract()) {
                     interacted = true;
                     if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
@@ -162,11 +162,11 @@ public class SequencesUI implements UI {
 
         x += sequencesWidth;
         y = getY();
-        Util.box(renderer, x, y, optionsWidth, cellHeight, Lights.DARK_BLUE, "Sequence Options", me.therealdan.lights.renderer.Task.TextPosition.CENTER);
+        Util.box(renderer, x, y, optionsWidth, cellHeight, Lights.color.DARK_BLUE, "Sequence Options", me.therealdan.lights.renderer.Task.TextPosition.CENTER);
         drag(x, y, optionsWidth, cellHeight);
         y -= cellHeight;
 
-        Util.box(renderer, x, y, optionsWidth, cellHeight, canEdit(Section.NAME) ? Lights.DARK_GREEN : Lights.medium(), "Name: " + getSelectedSequence().getName());
+        Util.box(renderer, x, y, optionsWidth, cellHeight, canEdit(Section.NAME) ? Lights.color.DARK_GREEN : Lights.color.MEDIUM, "Name: " + getSelectedSequence().getName());
         if (Util.containsMouse(x, y, optionsWidth, cellHeight) && canInteract()) {
             interacted = true;
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.leftMouseReady(500)) {
@@ -179,7 +179,7 @@ public class SequencesUI implements UI {
         }
         y -= cellHeight;
 
-        Util.box(renderer, x, y, optionsWidth, cellHeight, hasSelectedSequence() && getSelectedSequence().doesLoop() ? Lights.DARK_GREEN : Lights.medium(), "Loop");
+        Util.box(renderer, x, y, optionsWidth, cellHeight, hasSelectedSequence() && getSelectedSequence().doesLoop() ? Lights.color.DARK_GREEN : Lights.color.MEDIUM, "Loop");
         if (Util.containsMouse(x, y, optionsWidth, cellHeight) && canInteract()) {
             interacted = true;
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.leftMouseReady(500)) {
@@ -188,7 +188,7 @@ public class SequencesUI implements UI {
         }
         y -= cellHeight;
 
-        Util.box(renderer, x, y, optionsWidth, cellHeight, hasSelectedSequence() && getSelectedSequence().doesClear() ? Lights.DARK_GREEN : Lights.medium(), "Clear after play through");
+        Util.box(renderer, x, y, optionsWidth, cellHeight, hasSelectedSequence() && getSelectedSequence().doesClear() ? Lights.color.DARK_GREEN : Lights.color.MEDIUM, "Clear after play through");
         if (Util.containsMouse(x, y, optionsWidth, cellHeight) && canInteract()) {
             interacted = true;
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.leftMouseReady(500)) {
@@ -197,7 +197,7 @@ public class SequencesUI implements UI {
         }
         y -= cellHeight;
 
-        Util.box(renderer, x, y, optionsWidth, cellHeight, hasSelectedSequence() && getSelectedSequence().globalFrameTime() ? Lights.DARK_GREEN : Lights.medium(), "Global Frame Time");
+        Util.box(renderer, x, y, optionsWidth, cellHeight, hasSelectedSequence() && getSelectedSequence().globalFrameTime() ? Lights.color.DARK_GREEN : Lights.color.MEDIUM, "Global Frame Time");
         if (Util.containsMouse(x, y, optionsWidth, cellHeight) && canInteract()) {
             interacted = true;
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.leftMouseReady(500)) {
@@ -206,7 +206,7 @@ public class SequencesUI implements UI {
         }
         y -= cellHeight;
 
-        Util.box(renderer, x, y, optionsWidth, cellHeight, hasSelectedSequence() && getSelectedSequence().globalFadeTime() ? Lights.DARK_GREEN : Lights.medium(), "Global Fade Time");
+        Util.box(renderer, x, y, optionsWidth, cellHeight, hasSelectedSequence() && getSelectedSequence().globalFadeTime() ? Lights.color.DARK_GREEN : Lights.color.MEDIUM, "Global Fade Time");
         if (Util.containsMouse(x, y, optionsWidth, cellHeight) && canInteract()) {
             interacted = true;
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.leftMouseReady(500)) {
@@ -215,7 +215,7 @@ public class SequencesUI implements UI {
         }
         y -= cellHeight;
 
-        Util.box(renderer, x, y, optionsWidth, cellHeight, hasSelectedSequence() && getSelectedSequence().useTempo() ? Lights.DARK_GREEN : Lights.medium(), "Global Tempo");
+        Util.box(renderer, x, y, optionsWidth, cellHeight, hasSelectedSequence() && getSelectedSequence().useTempo() ? Lights.color.DARK_GREEN : Lights.color.MEDIUM, "Global Tempo");
         if (Util.containsMouse(x, y, optionsWidth, cellHeight) && canInteract()) {
             interacted = true;
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.leftMouseReady(500)) {
@@ -224,7 +224,7 @@ public class SequencesUI implements UI {
         }
         y -= cellHeight;
 
-        Util.box(renderer, x, y, optionsWidth, cellHeight, Lights.medium(), !hasAllSelected() ? "Select All" : "Deselect All");
+        Util.box(renderer, x, y, optionsWidth, cellHeight, Lights.color.MEDIUM, !hasAllSelected() ? "Select All" : "Deselect All");
         if (Util.containsMouse(x, y, optionsWidth, cellHeight) && canInteract()) {
             interacted = true;
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.leftMouseReady(500)) {
@@ -238,7 +238,7 @@ public class SequencesUI implements UI {
         }
         y -= cellHeight;
 
-        Util.box(renderer, x, y, optionsWidth, cellHeight, Lights.medium(), "Edit Sequence");
+        Util.box(renderer, x, y, optionsWidth, cellHeight, Lights.color.MEDIUM, "Edit Sequence");
         if (Util.containsMouse(x, y, optionsWidth, cellHeight) && canInteract()) {
             interacted = true;
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.leftMouseReady(500)) {
@@ -247,7 +247,7 @@ public class SequencesUI implements UI {
         }
         y -= cellHeight;
 
-        Util.box(renderer, x, y, optionsWidth, cellHeight, Lights.medium(), Lights.RED, "Delete Sequence");
+        Util.box(renderer, x, y, optionsWidth, cellHeight, Lights.color.MEDIUM, Lights.color.RED, "Delete Sequence");
         if (Util.containsMouse(x, y, optionsWidth, cellHeight) && canInteract()) {
             interacted = true;
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && shift && Lights.leftMouseReady(500)) {
@@ -260,7 +260,7 @@ public class SequencesUI implements UI {
         y -= cellHeight;
 
         if (countSelectedFrames() > 0) {
-            Util.box(renderer, x, y, optionsWidth, cellHeight, Lights.DARK_BLUE, "Frame Options", me.therealdan.lights.renderer.Task.TextPosition.CENTER);
+            Util.box(renderer, x, y, optionsWidth, cellHeight, Lights.color.DARK_BLUE, "Frame Options", me.therealdan.lights.renderer.Task.TextPosition.CENTER);
             drag(x, y, optionsWidth, cellHeight);
             y -= cellHeight;
 
@@ -273,7 +273,7 @@ public class SequencesUI implements UI {
                 if (fadeTime != frame.getFadeTime()) fadeTime = -2;
             }
 
-            Util.box(renderer, x, y, optionsWidth, cellHeight, Lights.medium(), "Frame Time: " + (frameTime == -2 ? "Various" : Frame.format(frameTime)));
+            Util.box(renderer, x, y, optionsWidth, cellHeight, Lights.color.MEDIUM, "Frame Time: " + (frameTime == -2 ? "Various" : Frame.format(frameTime)));
             if (Util.containsMouse(x, y, optionsWidth, cellHeight) && canInteract()) {
                 interacted = true;
                 if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.leftMouseReady(500)) {
@@ -288,7 +288,7 @@ public class SequencesUI implements UI {
             }
             y -= cellHeight;
 
-            Util.box(renderer, x, y, optionsWidth, cellHeight, Lights.medium(), "Fade Time: " + (fadeTime == -2 ? "Various" : Frame.format(fadeTime)));
+            Util.box(renderer, x, y, optionsWidth, cellHeight, Lights.color.MEDIUM, "Fade Time: " + (fadeTime == -2 ? "Various" : Frame.format(fadeTime)));
             if (Util.containsMouse(x, y, optionsWidth, cellHeight) && canInteract()) {
                 interacted = true;
                 if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.leftMouseReady(500)) {
@@ -303,7 +303,7 @@ public class SequencesUI implements UI {
             }
             y -= cellHeight;
 
-            Util.box(renderer, x, y, optionsWidth, cellHeight, Lights.medium(), Lights.RED, "Delete Frame" + (countSelectedFrames() > 1 ? "s" : ""));
+            Util.box(renderer, x, y, optionsWidth, cellHeight, Lights.color.MEDIUM, Lights.color.RED, "Delete Frame" + (countSelectedFrames() > 1 ? "s" : ""));
             if (Util.containsMouse(x, y, optionsWidth, cellHeight) && canInteract()) {
                 interacted = true;
                 if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && shift && Lights.leftMouseReady(500)) {
@@ -320,7 +320,7 @@ public class SequencesUI implements UI {
 
         x += optionsWidth;
         y = getY();
-        Util.box(renderer, x, y, framesWidth, cellHeight, Lights.DARK_BLUE, "Frames: " + countSelectedFrames() + " / " + getSelectedSequence().countFrames(), me.therealdan.lights.renderer.Task.TextPosition.CENTER);
+        Util.box(renderer, x, y, framesWidth, cellHeight, Lights.color.DARK_BLUE, "Frames: " + countSelectedFrames() + " / " + getSelectedSequence().countFrames(), me.therealdan.lights.renderer.Task.TextPosition.CENTER);
         drag(x, y, framesWidth, cellHeight);
         y -= cellHeight;
         canScrollFrames = Util.containsMouse(x, y, framesWidth, getHeight());
@@ -332,7 +332,7 @@ public class SequencesUI implements UI {
             if (current == getFramesScroll()) display = true;
             current++;
             if (display) {
-                Util.box(renderer, x, y, framesWidth, cellHeight, isSelected(frame) ? Lights.DARK_RED : Lights.medium(), frame.getInfo());
+                Util.box(renderer, x, y, framesWidth, cellHeight, isSelected(frame) ? Lights.color.DARK_RED : Lights.color.MEDIUM, frame.getInfo());
                 if (Util.containsMouse(x, y, framesWidth, cellHeight) && canInteract()) {
                     interacted = true;
                     if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.leftMouseReady(500)) {
@@ -359,7 +359,7 @@ public class SequencesUI implements UI {
 
         x += framesWidth;
         y = getY();
-        Util.box(renderer, x, y, tasksWidth, cellHeight, Lights.DARK_BLUE, "Tasks: " + frame.tasks().size(), me.therealdan.lights.renderer.Task.TextPosition.CENTER);
+        Util.box(renderer, x, y, tasksWidth, cellHeight, Lights.color.DARK_BLUE, "Tasks: " + frame.tasks().size(), me.therealdan.lights.renderer.Task.TextPosition.CENTER);
         drag(x, y, tasksWidth, cellHeight);
         y -= cellHeight;
         canScrollTasks = Util.containsMouse(x, y, tasksWidth, getHeight());
@@ -371,7 +371,7 @@ public class SequencesUI implements UI {
             if (current == getTasksScroll()) display = true;
             current++;
             if (display) {
-                Util.box(renderer, x, y, tasksWidth, cellHeight, Lights.medium(), task.getInfo());
+                Util.box(renderer, x, y, tasksWidth, cellHeight, Lights.color.MEDIUM, task.getInfo());
                 drag(x, y, tasksWidth, cellHeight);
                 y -= cellHeight;
                 if (++i == MAX_ROWS) break;

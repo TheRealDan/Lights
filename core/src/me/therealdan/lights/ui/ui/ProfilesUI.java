@@ -123,8 +123,8 @@ public class ProfilesUI implements UI {
         for (Profile profile : profiles())
             profilesWidth = Math.max(profilesWidth, renderer.getWidth(profile.getName()) + 25);
 
-        Util.box(renderer, x, y, getWidth(), getHeight(), Lights.dark());
-        Util.box(renderer, x, y, profilesWidth, cellHeight, Lights.DARK_BLUE, "Profiles: " + countProfiles(), Task.TextPosition.CENTER);
+        Util.box(renderer, x, y, getWidth(), getHeight(), Lights.color.DARK);
+        Util.box(renderer, x, y, profilesWidth, cellHeight, Lights.color.DARK_BLUE, "Profiles: " + countProfiles(), Task.TextPosition.CENTER);
         drag(x, y, profilesWidth, cellHeight);
         canScrollProfiles = Util.containsMouse(x, y, profilesWidth, getHeight());
         y -= cellHeight;
@@ -134,7 +134,7 @@ public class ProfilesUI implements UI {
         for (Profile profile : profiles(true)) {
             if (profile.equals(getProfileScroll())) display = true;
             if (display) {
-                Util.box(renderer, x, y, profilesWidth, cellHeight, profile.equals(getSelectedProfile()) ? Lights.DARK_GREEN : Lights.medium(), setWidth(renderer, profile.getName()));
+                Util.box(renderer, x, y, profilesWidth, cellHeight, profile.equals(getSelectedProfile()) ? Lights.color.DARK_GREEN : Lights.color.MEDIUM, setWidth(renderer, profile.getName()));
                 if (Util.containsMouse(x, y, profilesWidth, cellHeight) && canInteract()) {
                     interacted = true;
                     if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
@@ -146,7 +146,7 @@ public class ProfilesUI implements UI {
             }
         }
 
-        Util.box(renderer, x, y, profilesWidth, cellHeight, Lights.medium(), "Add New");
+        Util.box(renderer, x, y, profilesWidth, cellHeight, Lights.color.MEDIUM, "Add New");
         if (Util.containsMouse(x, y, profilesWidth, cellHeight) && canInteract()) {
             interacted = true;
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.leftMouseReady(500)) {
@@ -172,11 +172,11 @@ public class ProfilesUI implements UI {
 
         x += profilesWidth;
         y = getY();
-        Util.box(renderer, x, y, optionsWidth, cellHeight, Lights.DARK_BLUE, "Profile Options", Task.TextPosition.CENTER);
+        Util.box(renderer, x, y, optionsWidth, cellHeight, Lights.color.DARK_BLUE, "Profile Options", Task.TextPosition.CENTER);
         drag(x, y, optionsWidth, cellHeight);
         y -= cellHeight;
 
-        Util.box(renderer, x, y, optionsWidth, cellHeight, canEdit(Section.NAME) ? Lights.DARK_GREEN : Lights.medium(), "Name: " + getSelectedProfile().getName());
+        Util.box(renderer, x, y, optionsWidth, cellHeight, canEdit(Section.NAME) ? Lights.color.DARK_GREEN : Lights.color.MEDIUM, "Name: " + getSelectedProfile().getName());
         if (Util.containsMouse(x, y, optionsWidth, cellHeight) && canInteract()) {
             interacted = true;
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.leftMouseReady(500)) {
@@ -185,7 +185,7 @@ public class ProfilesUI implements UI {
         }
         y -= cellHeight;
 
-        Util.box(renderer, x, y, optionsWidth, cellHeight, canEdit(Section.PHYSICAL_CHANNELS) ? Lights.DARK_GREEN : Lights.medium(), "Physical Channels: " + getSelectedProfile().getPhysicalChannels());
+        Util.box(renderer, x, y, optionsWidth, cellHeight, canEdit(Section.PHYSICAL_CHANNELS) ? Lights.color.DARK_GREEN : Lights.color.MEDIUM, "Physical Channels: " + getSelectedProfile().getPhysicalChannels());
         if (Util.containsMouse(x, y, optionsWidth, cellHeight) && canInteract()) {
             interacted = true;
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.leftMouseReady(500)) {
@@ -194,7 +194,7 @@ public class ProfilesUI implements UI {
         }
         y -= cellHeight;
 
-        Util.box(renderer, x, y, optionsWidth, cellHeight, canEdit(Section.CHANNELS) ? Lights.DARK_GREEN : Lights.medium(), "Channels");
+        Util.box(renderer, x, y, optionsWidth, cellHeight, canEdit(Section.CHANNELS) ? Lights.color.DARK_GREEN : Lights.color.MEDIUM, "Channels");
         if (Util.containsMouse(x, y, optionsWidth, cellHeight) && canInteract()) {
             interacted = true;
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.leftMouseReady(500)) {
@@ -203,7 +203,7 @@ public class ProfilesUI implements UI {
         }
         y -= cellHeight;
 
-        Util.box(renderer, x, y, optionsWidth, cellHeight, canEdit(Section.MODELS) ? Lights.DARK_GREEN : Lights.medium(), "Models");
+        Util.box(renderer, x, y, optionsWidth, cellHeight, canEdit(Section.MODELS) ? Lights.color.DARK_GREEN : Lights.color.MEDIUM, "Models");
         if (Util.containsMouse(x, y, optionsWidth, cellHeight) && canInteract()) {
             interacted = true;
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.leftMouseReady(500)) {
@@ -212,7 +212,7 @@ public class ProfilesUI implements UI {
         }
         y -= cellHeight;
 
-        Util.box(renderer, x, y, optionsWidth, cellHeight, Lights.medium(), Lights.RED, "Delete");
+        Util.box(renderer, x, y, optionsWidth, cellHeight, Lights.color.MEDIUM, Lights.color.RED, "Delete");
         if (Util.containsMouse(x, y, optionsWidth, cellHeight) && canInteract() && shift) {
             interacted = true;
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.leftMouseReady(500)) {
@@ -232,7 +232,7 @@ public class ProfilesUI implements UI {
             channelsWidth = 300;
 
             y = getY();
-            Util.box(renderer, x, y, channelsWidth, cellHeight, Lights.DARK_BLUE, "Channels: " + getSelectedProfile().countChannels(), Task.TextPosition.CENTER);
+            Util.box(renderer, x, y, channelsWidth, cellHeight, Lights.color.DARK_BLUE, "Channels: " + getSelectedProfile().countChannels(), Task.TextPosition.CENTER);
             drag(x, y, channelsWidth, cellHeight);
             y -= cellHeight;
             canScrollChannels = Util.containsMouse(x, y, channelsWidth, getHeight());
@@ -244,7 +244,7 @@ public class ProfilesUI implements UI {
                 if (current == getChannelsScroll()) display = true;
                 current++;
                 if (display) {
-                    Util.box(renderer, x, y, channelsWidth, cellHeight, Lights.medium(), channel.getType().getName() + ": " + channel.addressOffsets());
+                    Util.box(renderer, x, y, channelsWidth, cellHeight, Lights.color.MEDIUM, channel.getType().getName() + ": " + channel.addressOffsets());
                     y -= cellHeight;
                     if (i++ == MAX_ROWS) break;
                 }
@@ -260,7 +260,7 @@ public class ProfilesUI implements UI {
             modelsWidth = 300;
 
             y = getY();
-            Util.box(renderer, x, y, modelsWidth, cellHeight, Lights.DARK_BLUE, "Models: " + getSelectedProfile().countModels(), Task.TextPosition.CENTER);
+            Util.box(renderer, x, y, modelsWidth, cellHeight, Lights.color.DARK_BLUE, "Models: " + getSelectedProfile().countModels(), Task.TextPosition.CENTER);
             drag(x, y, modelsWidth, cellHeight);
             y -= cellHeight;
             canScrollModels = Util.containsMouse(x, y, modelsWidth, getHeight());
@@ -272,7 +272,7 @@ public class ProfilesUI implements UI {
                 if (current == getModelsScroll()) display = true;
                 current++;
                 if (display) {
-                    Util.box(renderer, x, y, modelsWidth, cellHeight, Lights.medium(), modelDesign.toString());
+                    Util.box(renderer, x, y, modelsWidth, cellHeight, Lights.color.MEDIUM, modelDesign.toString());
                     y -= cellHeight;
                     if (i++ == MAX_ROWS) break;
                 }

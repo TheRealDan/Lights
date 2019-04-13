@@ -25,7 +25,7 @@ public class DMXInterfaceUI implements UI {
         float y = getY();
         float width = getWidth();
 
-        Util.box(renderer, x, y, width, cellHeight, Lights.DARK_BLUE, setWidth(renderer, "DMX Interface"), Task.TextPosition.CENTER);
+        Util.box(renderer, x, y, width, cellHeight, Lights.color.DARK_BLUE, setWidth(renderer, "DMX Interface"), Task.TextPosition.CENTER);
         drag(x, y, width, cellHeight);
         y -= cellHeight;
 
@@ -39,7 +39,7 @@ public class DMXInterfaceUI implements UI {
                     }
                 }
             }
-            Util.box(renderer, x, y, width, cellHeight, Output.getActivePort().equals(port) ? Lights.DARK_RED : Lights.medium(), setWidth(renderer, port));
+            Util.box(renderer, x, y, width, cellHeight, Output.getActivePort().equals(port) ? Lights.color.DARK_RED : Lights.color.MEDIUM, setWidth(renderer, port));
             y -= cellHeight;
         }
 

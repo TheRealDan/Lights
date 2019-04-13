@@ -49,7 +49,7 @@ public class ConsoleUI implements UI {
         float width = getWidth();
         float cellHeight = 30;
 
-        Util.box(renderer, x, y, width, cellHeight, Lights.DARK_BLUE, setWidth(renderer, "Console"), Task.TextPosition.CENTER);
+        Util.box(renderer, x, y, width, cellHeight, Lights.color.DARK_BLUE, setWidth(renderer, "Console"), Task.TextPosition.CENTER);
         drag(x, y, width, cellHeight);
         y -= cellHeight;
 
@@ -59,12 +59,12 @@ public class ConsoleUI implements UI {
                 colorCode = line.substring(1, 2);
                 line = line.substring(2);
             }
-            Util.box(renderer, x, y, width, cellHeight, Lights.medium(), getColor(colorCode), setWidth(renderer, line));
+            Util.box(renderer, x, y, width, cellHeight, Lights.color.MEDIUM, getColor(colorCode), setWidth(renderer, line));
             drag(x, y, width, cellHeight);
             y -= cellHeight;
         }
 
-        Util.box(renderer, x, y, width, cellHeight, canInteract() ? Lights.DARK_RED : Lights.medium(), setWidth(renderer, input));
+        Util.box(renderer, x, y, width, cellHeight, canInteract() ? Lights.color.DARK_RED : Lights.color.MEDIUM, setWidth(renderer, input));
         drag(x, y, width, cellHeight);
         y -= cellHeight;
 
@@ -162,21 +162,21 @@ public class ConsoleUI implements UI {
     private Color getColor(String colorCode) {
         switch (colorCode.toUpperCase()) {
             case "R":
-                return Lights.RED;
+                return Lights.color.RED;
             case "G":
-                return Lights.GREEN;
+                return Lights.color.GREEN;
             case "B":
-                return Lights.BLUE;
+                return Lights.color.BLUE;
             case "M":
-                return Lights.MAGENTA;
+                return Lights.color.MAGENTA;
             case "Y":
-                return Lights.YELLOW;
+                return Lights.color.YELLOW;
             case "C":
-                return Lights.CYAN;
+                return Lights.color.CYAN;
 
             case "W":
             default:
-                return Lights.text();
+                return Lights.color.TEXT;
         }
     }
 

@@ -17,7 +17,7 @@ public class Button {
     private LinkedHashMap<Sequence, Integer> sequences = new LinkedHashMap<>();
 
     public Button() {
-        this("New Button", Lights.medium());
+        this("New Button", Lights.color.MEDIUM);
     }
 
     public Button(String name, Color color) {

@@ -95,11 +95,11 @@ public class FadersUI implements UI {
 
         float height = getHeight() - cellHeight - cellHeight;
 
-        Util.box(renderer, x, y, getWidth(), cellHeight, Lights.DARK_BLUE, setWidth(renderer, "Faders"), Task.TextPosition.CENTER);
+        Util.box(renderer, x, y, getWidth(), cellHeight, Lights.color.DARK_BLUE, setWidth(renderer, "Faders"), Task.TextPosition.CENTER);
         drag(x, y, getWidth(), cellHeight);
         y -= cellHeight;
 
-        Util.box(renderer, x, y, getWidth(), cellHeight, Lights.medium(), setWidth(renderer, "Bank: " + getBank().getID()));
+        Util.box(renderer, x, y, getWidth(), cellHeight, Lights.color.MEDIUM, setWidth(renderer, "Bank: " + getBank().getID()));
         if (Util.containsMouse(x, y, getWidth(), cellHeight) && canInteract()) {
             interacted = true;
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.leftMouseReady(1000)) {
@@ -113,7 +113,7 @@ public class FadersUI implements UI {
         y -= cellHeight;
 
         for (Fader fader : getBank().faders()) {
-            Util.box(renderer, x, y, faderWidth, height, Lights.medium(), Util.getPercentage(fader.getValue()), Task.TextPosition.CENTER);
+            Util.box(renderer, x, y, faderWidth, height, Lights.color.MEDIUM, Util.getPercentage(fader.getValue()), Task.TextPosition.CENTER);
             float fill = fader.getValue() * height;
             Util.box(renderer, x, y - height + fill, faderWidth, fill, fader.getColor());
             if (Util.containsMouse(x, y, faderWidth, height) && canInteract()) {

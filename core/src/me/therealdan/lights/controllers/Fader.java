@@ -15,7 +15,7 @@ public class Fader {
     private Sequence sequence = new Sequence("No Sequence");
 
     public Fader(int id) {
-        this(id, "New fader", Lights.medium());
+        this(id, "New fader", Lights.color.MEDIUM);
     }
 
     public Fader(int id, String name, Color color) {

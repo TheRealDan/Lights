@@ -32,11 +32,11 @@ public class ControlsUI implements UI {
         float width = getWidth();
         float cellHeight = 30;
 
-        Util.box(renderer, x, y, width, cellHeight, Lights.DARK_BLUE, setWidth(renderer, "Controls"), Task.TextPosition.CENTER);
+        Util.box(renderer, x, y, width, cellHeight, Lights.color.DARK_BLUE, setWidth(renderer, "Controls"), Task.TextPosition.CENTER);
         drag(x, y, width, cellHeight);
         y -= cellHeight;
 
-        Util.box(renderer, x, y, width, cellHeight, Lights.medium(), setWidth(renderer, "Category: " + getSelectedCategory().formatString()), Task.TextPosition.LEFT_CENTER);
+        Util.box(renderer, x, y, width, cellHeight, Lights.color.MEDIUM, setWidth(renderer, "Category: " + getSelectedCategory().formatString()), Task.TextPosition.LEFT_CENTER);
         if (Util.containsMouse(x, y, width, cellHeight) && canInteract()) {
             interacted = true;
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.leftMouseReady(500)) {
@@ -49,8 +49,8 @@ public class ControlsUI implements UI {
 
         for (Control control : getSelectedCategory().getControls()) {
             setWidth(renderer, control.getName().formatString(), 2);
-            Util.box(renderer, x, y, width / 2, cellHeight, isSelected(control) ? Lights.DARK_RED : Lights.medium(), control.getName().formatString());
-            Util.box(renderer, x + width / 2, y, width / 2, cellHeight, isSelected(control) ? Lights.DARK_RED : Lights.medium(), control.formatKeycode());
+            Util.box(renderer, x, y, width / 2, cellHeight, isSelected(control) ? Lights.color.DARK_RED : Lights.color.MEDIUM, control.getName().formatString());
+            Util.box(renderer, x + width / 2, y, width / 2, cellHeight, isSelected(control) ? Lights.color.DARK_RED : Lights.color.MEDIUM, control.formatKeycode());
             if (Util.containsMouse(x, y, width, cellHeight) && canInteract()) {
                 interacted = true;
                 if (Lights.leftMouseClicked(500, getSelectedControl() != null && !control.equals(getSelectedControl()))) {

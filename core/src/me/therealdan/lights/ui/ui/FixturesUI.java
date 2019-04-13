@@ -32,12 +32,12 @@ public class FixturesUI implements UI {
         float y = getY();
         float width = getWidth();
 
-        Util.box(renderer, x, y, width, cellHeight, Lights.DARK_BLUE, setWidth(renderer, "Fixtures"), Task.TextPosition.CENTER);
+        Util.box(renderer, x, y, width, cellHeight, Lights.color.DARK_BLUE, setWidth(renderer, "Fixtures"), Task.TextPosition.CENTER);
         drag(x, y, width, cellHeight);
         y -= cellHeight;
 
         for (Fixture fixture : PatchUI.fixtures()) {
-            Util.box(renderer, x, y, cellSize, cellSize, Programmer.isSelected(fixture) ? Lights.DARK_RED : Lights.medium(), fixture.getName(), Task.TextPosition.CENTER);
+            Util.box(renderer, x, y, cellSize, cellSize, Programmer.isSelected(fixture) ? Lights.color.DARK_RED : Lights.color.MEDIUM, fixture.getName(), Task.TextPosition.CENTER);
             if (Util.containsMouse(x, y, cellSize, cellSize) && canInteract()) {
                 interacted = true;
                 if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.leftMouseReady(500)) {

@@ -150,14 +150,14 @@ public class PatchUI implements UI {
             width = Math.max(width, idWidth + nameWidth + profileWidth + addressWidth);
         }
 
-        Util.box(renderer, x, y, uiWidth, cellHeight, Lights.DARK_BLUE, "Patch", Task.TextPosition.CENTER);
+        Util.box(renderer, x, y, uiWidth, cellHeight, Lights.color.DARK_BLUE, "Patch", Task.TextPosition.CENTER);
         drag(x, y, uiWidth, cellHeight);
         y -= cellHeight;
 
-        Util.box(renderer, x, y, idWidth, cellHeight, Lights.DARK_BLUE, "ID", Task.TextPosition.CENTER);
-        Util.box(renderer, x + idWidth, y, nameWidth, cellHeight, Lights.DARK_BLUE, "Name", Task.TextPosition.CENTER);
-        Util.box(renderer, x + idWidth + nameWidth, y, profileWidth, cellHeight, Lights.DARK_BLUE, "Profile", Task.TextPosition.CENTER);
-        Util.box(renderer, x + idWidth + nameWidth + profileWidth, y, addressWidth, cellHeight, Lights.DARK_BLUE, "Address", Task.TextPosition.CENTER);
+        Util.box(renderer, x, y, idWidth, cellHeight, Lights.color.DARK_BLUE, "ID", Task.TextPosition.CENTER);
+        Util.box(renderer, x + idWidth, y, nameWidth, cellHeight, Lights.color.DARK_BLUE, "Name", Task.TextPosition.CENTER);
+        Util.box(renderer, x + idWidth + nameWidth, y, profileWidth, cellHeight, Lights.color.DARK_BLUE, "Profile", Task.TextPosition.CENTER);
+        Util.box(renderer, x + idWidth + nameWidth + profileWidth, y, addressWidth, cellHeight, Lights.color.DARK_BLUE, "Address", Task.TextPosition.CENTER);
         drag(x, y, width, cellHeight);
         y -= cellHeight;
 
@@ -172,7 +172,7 @@ public class PatchUI implements UI {
                     }
                 }
             }
-            Color color = fixture.equals(getSelectedFixture()) ? Lights.DARK_GREEN : Lights.medium();
+            Color color = fixture.equals(getSelectedFixture()) ? Lights.color.DARK_GREEN : Lights.color.MEDIUM;
             Util.box(renderer, x, y, idWidth, cellHeight, color, setWidth(renderer, Integer.toString(fixture.getID())), Task.TextPosition.CENTER);
             Util.box(renderer, x + idWidth, y, nameWidth, cellHeight, color, setWidth(renderer, fixture.getName()));
             Util.box(renderer, x + idWidth + nameWidth, y, profileWidth, cellHeight, color, setWidth(renderer, fixture.getProfile()));
@@ -197,10 +197,10 @@ public class PatchUI implements UI {
                     }
                 }
                 boolean selected = getSelectedFixture().getAddress() <= address && address <= getSelectedFixture().getAddress() + getSelectedFixture().getPhysicalChannels() - 1;
-                Color color = Lights.medium();
-                if (selected) color = Lights.DARK_GREEN;
-                if (occupied) color = Lights.DARK_BLUE;
-                if (selected && occupied) color = Lights.DARK_CYAN;
+                Color color = Lights.color.MEDIUM;
+                if (selected) color = Lights.color.DARK_GREEN;
+                if (occupied) color = Lights.color.DARK_BLUE;
+                if (selected && occupied) color = Lights.color.DARK_CYAN;
                 Util.box(renderer, x, y, cellHeight, cellHeight, color, Integer.toString(address));
                 if (Util.containsMouse(x, y, cellHeight, cellHeight) && canInteract()) {
                     interacted = true;

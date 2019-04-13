@@ -45,7 +45,7 @@ public class ButtonsUI implements UI {
             } else if (line.startsWith("Position: ")) {
                 int position = Integer.parseInt(line.split(": ")[1]);
                 if (position >= 0) set(button, position);
-            } else if (line.startsWith("Color:")) {
+            } else if (line.startsWith("Colour:")) {
                 sequences = false;
             } else if (line.startsWith("  Red: ") && !sequences) {
                 button.setRed(Float.parseFloat(line.split(": ")[1]));
@@ -75,7 +75,7 @@ public class ButtonsUI implements UI {
 
             fileHandle.writeString("Name: " + button.getName() + "\r\n", true);
             fileHandle.writeString("Position: " + getPosition(button) + "\r\n", true);
-            fileHandle.writeString("Color:\r\n", true);
+            fileHandle.writeString("Colour:\r\n", true);
             fileHandle.writeString("  Red: " + button.getColor().r + "\r\n", true);
             fileHandle.writeString("  Green: " + button.getColor().g + "\r\n", true);
             fileHandle.writeString("  Blue: " + button.getColor().b + "\r\n", true);
@@ -101,7 +101,7 @@ public class ButtonsUI implements UI {
         float x = getX();
         float y = getY();
 
-        Util.box(renderer, x, y, getWidth(), cellHeight, Lights.DARK_BLUE, "Buttons", Task.TextPosition.CENTER);
+        Util.box(renderer, x, y, getWidth(), cellHeight, Lights.color.DARK_BLUE, "Buttons", Task.TextPosition.CENTER);
         drag(x, y, getWidth(), cellHeight);
         y -= cellHeight;
 
@@ -119,7 +119,7 @@ public class ButtonsUI implements UI {
                     }
                 }
             } else {
-                Util.box(renderer, x, y, size, size, Lights.dark());
+                Util.box(renderer, x, y, size, size, Lights.color.DARK);
                 if (Util.containsMouse(x, y, size, size) && canInteract()) {
                     interacted = true;
                     if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.leftMouseReady(1000)) {
@@ -137,7 +137,7 @@ public class ButtonsUI implements UI {
                 y -= size;
             }
         }
-        Util.box(renderer, x, y, size, size, Lights.dark(), "Add New", Task.TextPosition.CENTER);
+        Util.box(renderer, x, y, size, size, Lights.color.DARK, "Add New", Task.TextPosition.CENTER);
         if (Util.containsMouse(x, y, size, size) && canInteract()) {
             interacted = true;
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.leftMouseReady(1000)) {

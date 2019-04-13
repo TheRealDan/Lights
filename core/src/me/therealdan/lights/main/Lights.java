@@ -3,7 +3,6 @@ package me.therealdan.lights.main;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import me.therealdan.lights.dmx.Output;
 import me.therealdan.lights.renderer.Renderer;
@@ -15,33 +14,11 @@ import me.therealdan.lights.ui.Visualiser3D;
 
 public class Lights extends ApplicationAdapter implements DefaultInputProcessor {
 
+    public static Colour color;
+
     private Renderer renderer;
     private Visualiser3D visualiser3D;
     private UIHandler uiHandler;
-
-    // COLORS
-
-    private static Color text, light, medium, dark;
-
-    public static Color BLACK = new Color(0f, 0f, 0f, 1);
-    public static Color WHITE = new Color(1f, 1f, 1f, 1);
-
-    public static Color RED = new Color(1f, 0.25f, 0.25f, 1);
-    public static Color GREEN = new Color(0.25f, 1f, 0.25f, 1);
-    public static Color BLUE = new Color(0.25f, 0.25f, 1, 1);
-    public static Color MAGENTA = new Color(1f, 0.25f, 1f, 1);
-    public static Color YELLOW = new Color(1f, 1f, 0.25f, 1);
-    public static Color CYAN = new Color(0.25f, 1f, 1f, 1);
-
-    public static Color PURPLE = new Color(0.5f, 0.25f, 1f, 1);
-    public static Color ORANGE = new Color(1f, 0.5f, 0.25f, 1);
-
-    public static Color DARK_RED = new Color(0.5f, 0.1f, 0.1f, 1);
-    public static Color DARK_GREEN = new Color(0.1f, 0.5f, 0.1f, 1);
-    public static Color DARK_BLUE = new Color(0.1f, 0.1f, 0.5f, 1);
-    public static Color DARK_MAGENTA = new Color(0.5f, 0.1f, 0.5f, 1);
-    public static Color DARK_YELLOW = new Color(0.5f, 0.5f, 0.1f, 1);
-    public static Color DARK_CYAN = new Color(0.1f, 0.5f, 0.5f, 1);
 
     // CLICK DETECTION
 
@@ -51,10 +28,7 @@ public class Lights extends ApplicationAdapter implements DefaultInputProcessor 
 
     @Override
     public void create() {
-        text = new Color(1, 1, 1, 1);
-        light = new Color(0.6f, 0.6f, 0.6f, 1);
-        medium = new Color(0.2f, 0.2f, 0.2f, 1);
-        dark = new Color(0.1f, 0.1f, 0.1f, 1);
+        color = new Colour();
 
         Setting.createSettings();
         Setting.loadFromFile();
@@ -165,21 +139,5 @@ public class Lights extends ApplicationAdapter implements DefaultInputProcessor 
             return true;
         }
         return false;
-    }
-
-    public static Color text() {
-        return text;
-    }
-
-    public static Color light() {
-        return light;
-    }
-
-    public static Color medium() {
-        return medium;
-    }
-
-    public static Color dark() {
-        return dark;
     }
 }

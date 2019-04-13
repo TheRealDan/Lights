@@ -47,7 +47,7 @@ public interface UI {
     }
 
     default boolean draw(Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {
-        Util.box(renderer, getX(), getY(), getWidth(), getHeight(), Lights.color.MEDIUM);
+        renderer.box(getX(), getY(), getWidth(), getHeight(), Lights.color.MEDIUM);
         return true;
     }
 

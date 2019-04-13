@@ -22,14 +22,14 @@ public class FrozenUI implements UI {
 
         float width = getWidth();
 
-        Util.box(renderer, x, y, width, cellHeight,
+        renderer.box(x, y, width, cellHeight,
                 System.currentTimeMillis() % 1000 > 500 ? Lights.color.DARK_BLUE : Lights.color.RED,
                 System.currentTimeMillis() % 1000 > 500 ? Lights.color.TEXT : Lights.color.BLACK,
                 setWidth(renderer, "OUTPUT FROZEN"), Task.TextPosition.CENTER);
         drag(x, y, width, cellHeight);
         y -= cellHeight;
 
-        Util.box(renderer, x, y, width, cellHeight, Lights.color.MEDIUM, setWidth(renderer, "Press Escape to unfreeze"), Task.TextPosition.CENTER);
+        renderer.box(x, y, width, cellHeight, Lights.color.MEDIUM, setWidth(renderer, "Press Escape to unfreeze"), Task.TextPosition.CENTER);
         y -= cellHeight;
 
         setHeightBasedOnY(y);

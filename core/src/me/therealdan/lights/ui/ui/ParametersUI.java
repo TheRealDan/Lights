@@ -43,13 +43,13 @@ public class ParametersUI implements UI {
         float width = getWidth() / 4;
         float cellHeight = 30;
 
-        Util.box(renderer, x, y, getWidth(), getHeight(), Lights.color.DARK);
-        Util.box(renderer, x, y, getWidth(), cellHeight, Lights.color.DARK_BLUE, "Parameters", Task.TextPosition.CENTER);
+        renderer.box(x, y, getWidth(), getHeight(), Lights.color.DARK);
+        renderer.box(x, y, getWidth(), cellHeight, Lights.color.DARK_BLUE, "Parameters", Task.TextPosition.CENTER);
         drag(x, y, getWidth(), cellHeight);
         y -= cellHeight;
 
         for (Channel.Category category : Programmer.availableChannelTypeCategories()) {
-            Util.box(renderer, x, y, width, cellHeight, category.equals(getCategory()) ? Lights.color.DARK_GREEN : Lights.color.MEDIUM, category.getName(), Task.TextPosition.CENTER);
+            renderer.box(x, y, width, cellHeight, category.equals(getCategory()) ? Lights.color.DARK_GREEN : Lights.color.MEDIUM, category.getName(), Task.TextPosition.CENTER);
             if (Util.containsMouse(x, y, width, cellHeight) && canInteract()) {
                 interacted = true;
                 if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(500)) {
@@ -80,13 +80,13 @@ public class ParametersUI implements UI {
                 }
                 seen++;
                 if (Util.containsMouse(x, y, width, parameterHeight) && canInteract()) setChannelType(channelType);
-                Util.box(renderer, x, y, width, cellHeight, Lights.color.DARK_BLUE, channelType.getName(), Task.TextPosition.CENTER);
+                renderer.box(x, y, width, cellHeight, Lights.color.DARK_BLUE, channelType.getName(), Task.TextPosition.CENTER);
                 drag(x, y, width, cellHeight);
                 y -= cellHeight;
 
                 for (float percentage = 1.0f; percentage >= -0.01f; percentage -= 0.05f) {
                     float level = Float.parseFloat(decimalFormat.format(percentage * 100.0));
-                    Util.box(renderer, x, y, width, cellHeight, isSet(channelType, parameter) && getLevel(channelType, parameter) == level ? Lights.color.DARK_RED : Lights.color.MEDIUM, Float.toString(level).replace("-", "").replace(".0", "") + "%", Task.TextPosition.CENTER);
+                    renderer.box(x, y, width, cellHeight, isSet(channelType, parameter) && getLevel(channelType, parameter) == level ? Lights.color.DARK_RED : Lights.color.MEDIUM, Float.toString(level).replace("-", "").replace(".0", "") + "%", Task.TextPosition.CENTER);
                     if (Util.containsMouse(x, y, width, cellHeight) && canInteract()) {
                         interacted = true;
                         if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(-1)) {

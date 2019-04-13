@@ -34,7 +34,7 @@ public class ColorWheelUI implements UI {
         float width = getWidth();
         float height = getHeight() - cellHeight;
 
-        Util.box(renderer, x, y, width, cellHeight, Lights.color.DARK_BLUE, setWidth(renderer, "Colour Wheel"));
+        renderer.box(x, y, width, cellHeight, Lights.color.DARK_BLUE, setWidth(renderer, "Colour Wheel"));
 
         float third = width / 3f;
         float seventh = width / 7f;

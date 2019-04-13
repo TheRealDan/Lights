@@ -23,7 +23,7 @@ public class PanelVisibilityUI implements UI {
         float y = getY();
         float width = getWidth();
 
-        Util.box(renderer, x, y, width, cellHeight, Lights.color.DARK_BLUE, setWidth(renderer, "Panel Visibility"), Task.TextPosition.CENTER);
+        renderer.box(x, y, width, cellHeight, Lights.color.DARK_BLUE, setWidth(renderer, "Panel Visibility"), Task.TextPosition.CENTER);
         drag(x, y, width, cellHeight);
         y -= cellHeight;
 
@@ -43,7 +43,7 @@ public class PanelVisibilityUI implements UI {
                 if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(200))
                     ui.toggleVisibility();
             }
-            Util.box(renderer, x, y, width, cellHeight, ui.isVisible() ? Lights.color.DARK_GREEN : Lights.color.MEDIUM, setWidth(renderer, ui.getName()));
+            renderer.box(x, y, width, cellHeight, ui.isVisible() ? Lights.color.DARK_GREEN : Lights.color.MEDIUM, setWidth(renderer, ui.getName()));
             y -= cellHeight;
         }
 

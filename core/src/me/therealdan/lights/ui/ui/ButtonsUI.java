@@ -101,25 +101,25 @@ public class ButtonsUI implements UI {
         float x = getX();
         float y = getY();
 
-        Util.box(renderer, x, y, getWidth(), cellHeight, Lights.color.DARK_BLUE, "Buttons", Task.TextPosition.CENTER);
+        renderer.box(x, y, getWidth(), cellHeight, Lights.color.DARK_BLUE, "Buttons", Task.TextPosition.CENTER);
         drag(x, y, getWidth(), cellHeight);
         y -= cellHeight;
 
         for (int position = 1; position <= ButtonsUI.getTopPosition(); position++) {
             Button button = ButtonsUI.getButton(position);
             if (button != null) {
-                Util.box(renderer, x, y, size, size, button.getColor(), button.getName(), Task.TextPosition.CENTER);
+                renderer.box(x, y, size, size, button.getColor(), button.getName(), Task.TextPosition.CENTER);
                 if (Util.containsMouse(x, y, size, size) && canInteract()) {
                     interacted = true;
                     if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(1000)) {
                         button.press();
-                        Util.box(renderer, x, y, size, size, new Color(button.getColor()).mul(1.5f));
+                        renderer.box(x, y, size, size, new Color(button.getColor()).mul(1.5f));
                     } else if (Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) {
                         ButtonEditUI.edit(button);
                     }
                 }
             } else {
-                Util.box(renderer, x, y, size, size, Lights.color.DARK);
+                renderer.box(x, y, size, size, Lights.color.DARK);
                 if (Util.containsMouse(x, y, size, size) && canInteract()) {
                     interacted = true;
                     if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(1000)) {
@@ -137,7 +137,7 @@ public class ButtonsUI implements UI {
                 y -= size;
             }
         }
-        Util.box(renderer, x, y, size, size, Lights.color.DARK, "Add New", Task.TextPosition.CENTER);
+        renderer.box(x, y, size, size, Lights.color.DARK, "Add New", Task.TextPosition.CENTER);
         if (Util.containsMouse(x, y, size, size) && canInteract()) {
             interacted = true;
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(1000)) {

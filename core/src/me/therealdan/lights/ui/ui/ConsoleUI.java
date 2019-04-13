@@ -49,7 +49,7 @@ public class ConsoleUI implements UI {
         float width = getWidth();
         float cellHeight = 30;
 
-        Util.box(renderer, x, y, width, cellHeight, Lights.color.DARK_BLUE, setWidth(renderer, "Console"), Task.TextPosition.CENTER);
+        renderer.box(x, y, width, cellHeight, Lights.color.DARK_BLUE, setWidth(renderer, "Console"), Task.TextPosition.CENTER);
         drag(x, y, width, cellHeight);
         y -= cellHeight;
 
@@ -59,12 +59,12 @@ public class ConsoleUI implements UI {
                 colorCode = line.substring(1, 2);
                 line = line.substring(2);
             }
-            Util.box(renderer, x, y, width, cellHeight, Lights.color.MEDIUM, getColor(colorCode), setWidth(renderer, line));
+            renderer.box(x, y, width, cellHeight, Lights.color.MEDIUM, getColor(colorCode), setWidth(renderer, line));
             drag(x, y, width, cellHeight);
             y -= cellHeight;
         }
 
-        Util.box(renderer, x, y, width, cellHeight, canInteract() ? Lights.color.DARK_RED : Lights.color.MEDIUM, setWidth(renderer, input));
+        renderer.box(x, y, width, cellHeight, canInteract() ? Lights.color.DARK_RED : Lights.color.MEDIUM, setWidth(renderer, input));
         drag(x, y, width, cellHeight);
         y -= cellHeight;
 

@@ -25,14 +25,14 @@ public class SettingsUI implements UI {
         float y = getY();
         float width = getWidth();
 
-        Util.box(renderer, x, y, width, cellHeight, Lights.color.DARK_BLUE, setWidth(renderer, "Settings"), Task.TextPosition.CENTER);
+        renderer.box(x, y, width, cellHeight, Lights.color.DARK_BLUE, setWidth(renderer, "Settings"), Task.TextPosition.CENTER);
         drag(x, y, width, cellHeight);
         y -= cellHeight;
 
         for (Setting setting : Setting.settings()) {
             switch (setting.getType()) {
                 case LONG:
-                    Util.box(renderer, x, y, width, cellHeight, Lights.color.MEDIUM, setWidth(renderer, setting.getName() + ": " + setting.getValue()));
+                    renderer.box(x, y, width, cellHeight, Lights.color.MEDIUM, setWidth(renderer, setting.getName() + ": " + setting.getValue()));
                     if (Util.containsMouse(x, y, width, cellHeight) && canInteract()) {
                         interacted = true;
                         if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(100)) {
@@ -45,7 +45,7 @@ public class SettingsUI implements UI {
                     }
                     break;
                 case BOOLEAN:
-                    Util.box(renderer, x, y, width, cellHeight, setting.isTrue() ? Lights.color.DARK_GREEN : Lights.color.MEDIUM, setWidth(renderer, setting.getName()));
+                    renderer.box(x, y, width, cellHeight, setting.isTrue() ? Lights.color.DARK_GREEN : Lights.color.MEDIUM, setWidth(renderer, setting.getName()));
                     if (Util.containsMouse(x, y, width, cellHeight) && canInteract()) {
                         interacted = true;
                         if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(250))

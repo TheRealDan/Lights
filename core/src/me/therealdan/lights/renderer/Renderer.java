@@ -1,8 +1,10 @@
 package me.therealdan.lights.renderer;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import me.therealdan.lights.main.Lights;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +24,8 @@ public class Renderer {
         bitmapFont = new BitmapFont();
         spriteBatch = new SpriteBatch();
     }
+
+    // MAIN
 
     public void draw() {
         if (textBegun) {
@@ -67,5 +71,29 @@ public class Renderer {
             textBegun = true;
         }
         return bitmapFont.draw(spriteBatch, text, 0, -100).width;
+    }
+
+    // CONVENIENCE
+
+    public void box(float x, float y, float width, float height, Color background, String text) {
+        box(x, y, width, height, background, Lights.color.TEXT, text);
+    }
+
+    public void box(float x, float y, float width, float height, Color background, String text, Task.TextPosition textPosition) {
+        box(x, y, width, height, background, Lights.color.TEXT, text, textPosition);
+    }
+
+    public void box(float x, float y, float width, float height, Color background, Color textColor, String text) {
+        box(x, y, width, height, background, textColor, text, Task.TextPosition.LEFT_CENTER);
+    }
+
+    public void box(float x, float y, float width, float height, Color background, Color textColor, String text, Task.TextPosition textPosition) {
+        box(x, y, width, height, background);
+        queue(new Task(x, y).text(text, textPosition, width, height).setColor(textColor));
+    }
+
+    public void box(float x, float y, float width, float height, Color background) {
+        queue(new Task(x, y - height).rect(width, height).setColor(background));
+        queue(new Task(x, y - height).rectOutline(width, height).setColor(Lights.color.LIGHT));
     }
 }

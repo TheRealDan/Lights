@@ -7,7 +7,6 @@ import me.therealdan.lights.renderer.Renderer;
 import me.therealdan.lights.renderer.Task;
 import me.therealdan.lights.settings.Control;
 import me.therealdan.lights.ui.UIHandler;
-import me.therealdan.lights.util.Util;
 
 import java.util.List;
 
@@ -37,7 +36,7 @@ public class ControlsUI implements UI {
         y -= cellHeight;
 
         renderer.box(x, y, width, cellHeight, Lights.color.MEDIUM, setWidth(renderer, "Category: " + getSelectedCategory().formatString()), Task.TextPosition.LEFT_CENTER);
-        if (Util.containsMouse(x, y, width, cellHeight) && canInteract()) {
+        if (Lights.mouse.contains(x, y, width, cellHeight) && canInteract()) {
             interacted = true;
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(500)) {
                 select(true);
@@ -51,7 +50,7 @@ public class ControlsUI implements UI {
             setWidth(renderer, control.getName().formatString(), 2);
             renderer.box(x, y, width / 2, cellHeight, isSelected(control) ? Lights.color.DARK_RED : Lights.color.MEDIUM, control.getName().formatString());
             renderer.box(x + width / 2, y, width / 2, cellHeight, isSelected(control) ? Lights.color.DARK_RED : Lights.color.MEDIUM, control.formatKeycode());
-            if (Util.containsMouse(x, y, width, cellHeight) && canInteract()) {
+            if (Lights.mouse.contains(x, y, width, cellHeight) && canInteract()) {
                 interacted = true;
                 if (Lights.mouse.leftClicked(500, getSelectedControl() != null && !control.equals(getSelectedControl()))) {
                     select(isSelected(control) ? null : control);

@@ -2,13 +2,12 @@ package me.therealdan.lights.ui.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import me.therealdan.lights.main.Lights;
 import me.therealdan.lights.controllers.Button;
+import me.therealdan.lights.main.Lights;
 import me.therealdan.lights.programmer.Sequence;
 import me.therealdan.lights.renderer.Renderer;
 import me.therealdan.lights.renderer.Task;
 import me.therealdan.lights.ui.UIHandler;
-import me.therealdan.lights.util.Util;
 
 import java.text.DecimalFormat;
 
@@ -41,7 +40,7 @@ public class ButtonEditUI implements UI {
         y -= cellHeight;
 
         renderer.box(x, y, width, cellHeight, canEdit(Section.NAME) ? Lights.color.DARK_RED : Lights.color.MEDIUM, "Name: " + getButton().getName());
-        if (Util.containsMouse(x, y, width, cellHeight) && canInteract()) {
+        if (Lights.mouse.contains(x, y, width, cellHeight) && canInteract()) {
             interacted = true;
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(-1)) {
                 edit(Section.NAME);
@@ -50,7 +49,7 @@ public class ButtonEditUI implements UI {
         y -= cellHeight;
 
         renderer.box(x, y, width, cellHeight, canEdit(Section.SEQUENCE) ? Lights.color.DARK_RED : Lights.color.MEDIUM, "Sequences: " + getButton().sequences().size());
-        if (Util.containsMouse(x, y, width, cellHeight) && canInteract()) {
+        if (Lights.mouse.contains(x, y, width, cellHeight) && canInteract()) {
             interacted = true;
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(-1)) {
                 edit(Section.SEQUENCE);
@@ -60,7 +59,7 @@ public class ButtonEditUI implements UI {
 
         renderer.box(x, y, width, cellHeight, Lights.color.MEDIUM, "Red: " + getButton().getColor().r);
         renderer.box(x, y, getButton().getColor().r * width, cellHeight, canEdit(Section.RED) ? Lights.color.RED : getButton().getColor());
-        if (Util.containsMouse(x, y, width, cellHeight) && canInteract()) {
+        if (Lights.mouse.contains(x, y, width, cellHeight) && canInteract()) {
             interacted = true;
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(-1)) {
                 edit(Section.RED);
@@ -72,7 +71,7 @@ public class ButtonEditUI implements UI {
 
         renderer.box(x, y, width, cellHeight, Lights.color.MEDIUM, "Green: " + getButton().getColor().g);
         renderer.box(x, y, getButton().getColor().g * width, cellHeight, canEdit(Section.GREEN) ? Lights.color.GREEN : getButton().getColor());
-        if (Util.containsMouse(x, y, width, cellHeight) && canInteract()) {
+        if (Lights.mouse.contains(x, y, width, cellHeight) && canInteract()) {
             interacted = true;
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(-1)) {
                 edit(Section.GREEN);
@@ -84,7 +83,7 @@ public class ButtonEditUI implements UI {
 
         renderer.box(x, y, width, cellHeight, Lights.color.MEDIUM, "Blue: " + getButton().getColor().b);
         renderer.box(x, y, getButton().getColor().b * width, cellHeight, canEdit(Section.BLUE) ? Lights.color.BLUE : getButton().getColor());
-        if (Util.containsMouse(x, y, width, cellHeight) && canInteract()) {
+        if (Lights.mouse.contains(x, y, width, cellHeight) && canInteract()) {
             interacted = true;
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(-1)) {
                 edit(Section.BLUE);
@@ -95,7 +94,7 @@ public class ButtonEditUI implements UI {
         y -= cellHeight;
 
         renderer.box(x, y, width, cellHeight, Lights.color.MEDIUM, "Move");
-        if (Util.containsMouse(x, y, width, cellHeight) && canInteract()) {
+        if (Lights.mouse.contains(x, y, width, cellHeight) && canInteract()) {
             interacted = true;
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(-1)) {
                 ButtonsUI.move(getButton());
@@ -105,7 +104,7 @@ public class ButtonEditUI implements UI {
         y -= cellHeight;
 
         renderer.box(x, y, width, cellHeight, Lights.color.MEDIUM, Lights.color.RED, "Delete");
-        if (Util.containsMouse(x, y, width, cellHeight) && canInteract()) {
+        if (Lights.mouse.contains(x, y, width, cellHeight) && canInteract()) {
             interacted = true;
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && shift && Lights.mouse.leftReady(-1)) {
                 ButtonsUI.remove(getButton());
@@ -116,7 +115,7 @@ public class ButtonEditUI implements UI {
         y -= cellHeight;
 
         renderer.box(x, y, width, cellHeight, Lights.color.MEDIUM, "Close");
-        if (Util.containsMouse(x, y, width, cellHeight) && canInteract()) {
+        if (Lights.mouse.contains(x, y, width, cellHeight) && canInteract()) {
             interacted = true;
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(-1)) {
                 edit((Button) null);
@@ -145,7 +144,7 @@ public class ButtonEditUI implements UI {
                 if (sequence.equals(getScroll())) display = true;
                 if (display) {
                     renderer.box(x, y, sequencesWidth, cellHeight, getButton().contains(sequence) ? Lights.color.DARK_GREEN : Lights.color.MEDIUM, sequence.getName());
-                    if (Util.containsMouse(x, y, sequencesWidth, cellHeight) && canInteract()) {
+                    if (Lights.mouse.contains(x, y, sequencesWidth, cellHeight) && canInteract()) {
                         interacted = true;
                         if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(500)) {
                             if (getButton().contains(sequence)) {
@@ -169,10 +168,10 @@ public class ButtonEditUI implements UI {
 
             for (Sequence sequence : getButton().sequences(true)) {
                 renderer.box(x, y, sequencesWidth, cellHeight, Lights.color.MEDIUM, sequence.getName() + ": " + getButton().getPriority(sequence));
-                if (Util.containsMouse(x, y, sequencesWidth, cellHeight) && canInteract()) {
+                if (Lights.mouse.contains(x, y, sequencesWidth, cellHeight) && canInteract()) {
                     interacted = true;
                     if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(500)) {
-                        if (Util.containsMouse(x, y, sequencesWidth / 2, cellHeight)) {
+                        if (Lights.mouse.contains(x, y, sequencesWidth / 2, cellHeight)) {
                             getButton().set(sequence, getButton().getPriority(sequence) + 1);
                         } else {
                             getButton().set(sequence, Math.max(getButton().getPriority(sequence) - 1, 1));

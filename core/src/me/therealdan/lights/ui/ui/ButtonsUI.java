@@ -4,13 +4,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
-import me.therealdan.lights.main.Lights;
 import me.therealdan.lights.controllers.Button;
+import me.therealdan.lights.main.Lights;
 import me.therealdan.lights.programmer.Sequence;
 import me.therealdan.lights.renderer.Renderer;
 import me.therealdan.lights.renderer.Task;
 import me.therealdan.lights.ui.UIHandler;
-import me.therealdan.lights.util.Util;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -109,7 +108,7 @@ public class ButtonsUI implements UI {
             Button button = ButtonsUI.getButton(position);
             if (button != null) {
                 renderer.box(x, y, size, size, button.getColor(), button.getName(), Task.TextPosition.CENTER);
-                if (Util.containsMouse(x, y, size, size) && canInteract()) {
+                if (Lights.mouse.contains(x, y, size, size) && canInteract()) {
                     interacted = true;
                     if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(1000)) {
                         button.press();
@@ -120,7 +119,7 @@ public class ButtonsUI implements UI {
                 }
             } else {
                 renderer.box(x, y, size, size, Lights.color.DARK);
-                if (Util.containsMouse(x, y, size, size) && canInteract()) {
+                if (Lights.mouse.contains(x, y, size, size) && canInteract()) {
                     interacted = true;
                     if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(1000)) {
                         if (getButtonToMove() != null) {
@@ -138,7 +137,7 @@ public class ButtonsUI implements UI {
             }
         }
         renderer.box(x, y, size, size, Lights.color.DARK, "Add New", Task.TextPosition.CENTER);
-        if (Util.containsMouse(x, y, size, size) && canInteract()) {
+        if (Lights.mouse.contains(x, y, size, size) && canInteract()) {
             interacted = true;
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(1000)) {
                 set(new Button());

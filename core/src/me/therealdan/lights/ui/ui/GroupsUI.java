@@ -2,13 +2,12 @@ package me.therealdan.lights.ui.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import me.therealdan.lights.main.Lights;
 import me.therealdan.lights.fixtures.Group;
+import me.therealdan.lights.main.Lights;
 import me.therealdan.lights.programmer.Programmer;
 import me.therealdan.lights.renderer.Renderer;
 import me.therealdan.lights.renderer.Task;
 import me.therealdan.lights.ui.UIHandler;
-import me.therealdan.lights.util.Util;
 
 public class GroupsUI implements UI {
 
@@ -38,7 +37,7 @@ public class GroupsUI implements UI {
 
         for (Group group : PatchUI.groups()) {
             renderer.box(x, y, cellSize, cellSize, Programmer.isSelected(group) ? Lights.color.DARK_RED : Lights.color.MEDIUM, setWidth(renderer, group.getName()), Task.TextPosition.CENTER);
-            if (Util.containsMouse(x, y, cellSize, cellSize) && canInteract()) {
+            if (Lights.mouse.contains(x, y, cellSize, cellSize) && canInteract()) {
                 interacted = true;
                 if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(500)) {
                     if (Programmer.isSelected(group)) {

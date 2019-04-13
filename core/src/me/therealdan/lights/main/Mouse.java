@@ -51,4 +51,13 @@ public class Mouse {
         }
         return false;
     }
+
+    public boolean contains(float x, float y, float width, float height) {
+        y = Gdx.graphics.getHeight() - y;
+
+        float mouseX = Gdx.input.getX();
+        float mouseY = Gdx.input.getY();
+
+        return mouseX > x && mouseX < x + width && mouseY > y && mouseY < y + height;
+    }
 }

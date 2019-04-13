@@ -45,7 +45,7 @@ public class MasterUI implements UI {
         if (isFadeToMax()) currentAction = "Fading to Max..";
         if (isFadeToZero()) currentAction = "Fading to Zero..";
         renderer.box(x, y, width, cellHeight, Lights.color.MEDIUM, setWidth(renderer, currentAction), Task.TextPosition.CENTER);
-        if (Util.containsMouse(x, y, width, cellHeight) && canInteract()) {
+        if (Lights.mouse.contains(x, y, width, cellHeight) && canInteract()) {
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(1000)) {
                 interacted = true;
                 toggle();
@@ -58,7 +58,7 @@ public class MasterUI implements UI {
         float fill = UIHandler.getMaster() * height;
         renderer.box(x, y - height + fill, width, fill, Lights.color.BLACK);
 
-        if (Util.containsMouse(x, y, width, height) && canInteract()) {
+        if (Lights.mouse.contains(x, y, width, height) && canInteract()) {
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
                 interacted = true;
                 float bottom = y - height + 20;

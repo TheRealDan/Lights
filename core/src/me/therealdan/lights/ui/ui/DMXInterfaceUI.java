@@ -6,7 +6,6 @@ import me.therealdan.lights.main.Lights;
 import me.therealdan.lights.renderer.Renderer;
 import me.therealdan.lights.renderer.Task;
 import me.therealdan.lights.ui.UIHandler;
-import me.therealdan.lights.util.Util;
 
 public class DMXInterfaceUI implements UI {
 
@@ -29,7 +28,7 @@ public class DMXInterfaceUI implements UI {
         y -= cellHeight;
 
         for (String port : Lights.output.openPorts()) {
-            if (Util.containsMouse(x, y, width, cellHeight) && canInteract()) {
+            if (Lights.mouse.contains(x, y, width, cellHeight) && canInteract()) {
                 if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(500)) {
                     if (Lights.output.getActivePort().equals(port)) {
                         Lights.output.disconnect();

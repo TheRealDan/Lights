@@ -7,7 +7,6 @@ import me.therealdan.lights.programmer.Sequence;
 import me.therealdan.lights.renderer.Renderer;
 import me.therealdan.lights.renderer.Task;
 import me.therealdan.lights.ui.UIHandler;
-import me.therealdan.lights.util.Util;
 
 public class ActiveSequencesUI implements UI {
 
@@ -35,14 +34,14 @@ public class ActiveSequencesUI implements UI {
             if (sequence == null) continue;
             float priorityWidth = renderer.getWidth(Integer.toString(priority)) + 10;
             renderer.box(x, y, priorityWidth, cellHeight, Lights.color.MEDIUM, Integer.toString(priority));
-            if (Util.containsMouse(x, y, priorityWidth, cellHeight) && canInteract()) {
+            if (Lights.mouse.contains(x, y, priorityWidth, cellHeight) && canInteract()) {
                 interacted = true;
                 if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(500)) {
                     UIHandler.clearSequence(priority);
                 }
             }
             renderer.box(x + priorityWidth, y, width - priorityWidth, cellHeight, Lights.color.MEDIUM, sequence.getName());
-            if (Util.containsMouse(x, y, width - priorityWidth, cellHeight) && canInteract()) {
+            if (Lights.mouse.contains(x, y, width - priorityWidth, cellHeight) && canInteract()) {
                 interacted = true;
                 if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(500)) {
                     UIHandler.clearSequence(priority);

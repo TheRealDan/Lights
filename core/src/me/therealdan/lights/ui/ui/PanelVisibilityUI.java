@@ -6,7 +6,6 @@ import me.therealdan.lights.main.Lights;
 import me.therealdan.lights.renderer.Renderer;
 import me.therealdan.lights.renderer.Task;
 import me.therealdan.lights.ui.UIHandler;
-import me.therealdan.lights.util.Util;
 
 import java.util.List;
 
@@ -38,7 +37,7 @@ public class PanelVisibilityUI implements UI {
 
             UIs.remove(ui);
             if (ui.ignoreVisibilityUI()) continue;
-            if (Util.containsMouse(x, y, width, cellHeight) && canInteract()) {
+            if (Lights.mouse.contains(x, y, width, cellHeight) && canInteract()) {
                 interacted = true;
                 if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(200))
                     ui.toggleVisibility();

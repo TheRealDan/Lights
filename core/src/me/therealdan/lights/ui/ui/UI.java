@@ -6,7 +6,6 @@ import com.badlogic.gdx.files.FileHandle;
 import me.therealdan.lights.main.Lights;
 import me.therealdan.lights.renderer.Renderer;
 import me.therealdan.lights.ui.UIHandler;
-import me.therealdan.lights.util.Util;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -96,7 +95,7 @@ public interface UI {
     }
 
     default boolean containsMouse() {
-        return Util.containsMouse(getX(), getY(), getWidth(), getHeight());
+        return Lights.mouse.contains(getX(), getY(), getWidth(), getHeight());
     }
 
     default void toggleVisibility() {
@@ -132,7 +131,7 @@ public interface UI {
     }
 
     default void drag(float x, float y, float width, float cellHeight) {
-        if (canInteract() && isVisible() && Util.containsMouse(x, y, width, cellHeight) && Gdx.input.isButtonPressed(Input.Buttons.LEFT)) UIHandler.drag(this);
+        if (canInteract() && isVisible() && Lights.mouse.contains(x, y, width, cellHeight) && Gdx.input.isButtonPressed(Input.Buttons.LEFT)) UIHandler.drag(this);
     }
 
     default boolean isDragging() {

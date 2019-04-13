@@ -3,14 +3,13 @@ package me.therealdan.lights.ui.ui;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.files.FileHandle;
-import me.therealdan.lights.main.Lights;
 import me.therealdan.lights.fixtures.Channel;
 import me.therealdan.lights.fixtures.ModelDesign;
 import me.therealdan.lights.fixtures.Profile;
+import me.therealdan.lights.main.Lights;
 import me.therealdan.lights.renderer.Renderer;
 import me.therealdan.lights.renderer.Task;
 import me.therealdan.lights.ui.UIHandler;
-import me.therealdan.lights.util.Util;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -126,7 +125,7 @@ public class ProfilesUI implements UI {
         renderer.box(x, y, getWidth(), getHeight(), Lights.color.DARK);
         renderer.box(x, y, profilesWidth, cellHeight, Lights.color.DARK_BLUE, "Profiles: " + countProfiles(), Task.TextPosition.CENTER);
         drag(x, y, profilesWidth, cellHeight);
-        canScrollProfiles = Util.containsMouse(x, y, profilesWidth, getHeight());
+        canScrollProfiles = Lights.mouse.contains(x, y, profilesWidth, getHeight());
         y -= cellHeight;
 
         int i = 0;
@@ -135,7 +134,7 @@ public class ProfilesUI implements UI {
             if (profile.equals(getProfileScroll())) display = true;
             if (display) {
                 renderer.box(x, y, profilesWidth, cellHeight, profile.equals(getSelectedProfile()) ? Lights.color.DARK_GREEN : Lights.color.MEDIUM, setWidth(renderer, profile.getName()));
-                if (Util.containsMouse(x, y, profilesWidth, cellHeight) && canInteract()) {
+                if (Lights.mouse.contains(x, y, profilesWidth, cellHeight) && canInteract()) {
                     interacted = true;
                     if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
                         select(profile);
@@ -147,7 +146,7 @@ public class ProfilesUI implements UI {
         }
 
         renderer.box(x, y, profilesWidth, cellHeight, Lights.color.MEDIUM, "Add New");
-        if (Util.containsMouse(x, y, profilesWidth, cellHeight) && canInteract()) {
+        if (Lights.mouse.contains(x, y, profilesWidth, cellHeight) && canInteract()) {
             interacted = true;
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(500)) {
                 add(new Profile("New Profile", new ArrayList<>(), new ArrayList<>()));
@@ -177,7 +176,7 @@ public class ProfilesUI implements UI {
         y -= cellHeight;
 
         renderer.box(x, y, optionsWidth, cellHeight, canEdit(Section.NAME) ? Lights.color.DARK_GREEN : Lights.color.MEDIUM, "Name: " + getSelectedProfile().getName());
-        if (Util.containsMouse(x, y, optionsWidth, cellHeight) && canInteract()) {
+        if (Lights.mouse.contains(x, y, optionsWidth, cellHeight) && canInteract()) {
             interacted = true;
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(500)) {
                 toggleEdit(Section.NAME);
@@ -186,7 +185,7 @@ public class ProfilesUI implements UI {
         y -= cellHeight;
 
         renderer.box(x, y, optionsWidth, cellHeight, canEdit(Section.PHYSICAL_CHANNELS) ? Lights.color.DARK_GREEN : Lights.color.MEDIUM, "Physical Channels: " + getSelectedProfile().getPhysicalChannels());
-        if (Util.containsMouse(x, y, optionsWidth, cellHeight) && canInteract()) {
+        if (Lights.mouse.contains(x, y, optionsWidth, cellHeight) && canInteract()) {
             interacted = true;
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(500)) {
                 toggleEdit(Section.PHYSICAL_CHANNELS);
@@ -195,7 +194,7 @@ public class ProfilesUI implements UI {
         y -= cellHeight;
 
         renderer.box(x, y, optionsWidth, cellHeight, canEdit(Section.CHANNELS) ? Lights.color.DARK_GREEN : Lights.color.MEDIUM, "Channels");
-        if (Util.containsMouse(x, y, optionsWidth, cellHeight) && canInteract()) {
+        if (Lights.mouse.contains(x, y, optionsWidth, cellHeight) && canInteract()) {
             interacted = true;
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(500)) {
                 toggleEdit(Section.CHANNELS);
@@ -204,7 +203,7 @@ public class ProfilesUI implements UI {
         y -= cellHeight;
 
         renderer.box(x, y, optionsWidth, cellHeight, canEdit(Section.MODELS) ? Lights.color.DARK_GREEN : Lights.color.MEDIUM, "Models");
-        if (Util.containsMouse(x, y, optionsWidth, cellHeight) && canInteract()) {
+        if (Lights.mouse.contains(x, y, optionsWidth, cellHeight) && canInteract()) {
             interacted = true;
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(500)) {
                 toggleEdit(Section.MODELS);
@@ -213,7 +212,7 @@ public class ProfilesUI implements UI {
         y -= cellHeight;
 
         renderer.box(x, y, optionsWidth, cellHeight, Lights.color.MEDIUM, Lights.color.RED, "Delete");
-        if (Util.containsMouse(x, y, optionsWidth, cellHeight) && canInteract() && shift) {
+        if (Lights.mouse.contains(x, y, optionsWidth, cellHeight) && canInteract() && shift) {
             interacted = true;
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(500)) {
                 delete(getSelectedProfile());
@@ -235,7 +234,7 @@ public class ProfilesUI implements UI {
             renderer.box(x, y, channelsWidth, cellHeight, Lights.color.DARK_BLUE, "Channels: " + getSelectedProfile().countChannels(), Task.TextPosition.CENTER);
             drag(x, y, channelsWidth, cellHeight);
             y -= cellHeight;
-            canScrollChannels = Util.containsMouse(x, y, channelsWidth, getHeight());
+            canScrollChannels = Lights.mouse.contains(x, y, channelsWidth, getHeight());
 
             i = 0;
             display = false;
@@ -263,7 +262,7 @@ public class ProfilesUI implements UI {
             renderer.box(x, y, modelsWidth, cellHeight, Lights.color.DARK_BLUE, "Models: " + getSelectedProfile().countModels(), Task.TextPosition.CENTER);
             drag(x, y, modelsWidth, cellHeight);
             y -= cellHeight;
-            canScrollModels = Util.containsMouse(x, y, modelsWidth, getHeight());
+            canScrollModels = Lights.mouse.contains(x, y, modelsWidth, getHeight());
 
             i = 0;
             display = false;

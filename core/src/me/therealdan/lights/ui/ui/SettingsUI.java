@@ -7,7 +7,6 @@ import me.therealdan.lights.renderer.Renderer;
 import me.therealdan.lights.renderer.Task;
 import me.therealdan.lights.settings.Setting;
 import me.therealdan.lights.ui.UIHandler;
-import me.therealdan.lights.util.Util;
 
 public class SettingsUI implements UI {
 
@@ -33,10 +32,10 @@ public class SettingsUI implements UI {
             switch (setting.getType()) {
                 case LONG:
                     renderer.box(x, y, width, cellHeight, Lights.color.MEDIUM, setWidth(renderer, setting.getName() + ": " + setting.getValue()));
-                    if (Util.containsMouse(x, y, width, cellHeight) && canInteract()) {
+                    if (Lights.mouse.contains(x, y, width, cellHeight) && canInteract()) {
                         interacted = true;
                         if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(100)) {
-                            if (Util.containsMouse(x, y, width / 2, cellHeight)) {
+                            if (Lights.mouse.contains(x, y, width / 2, cellHeight)) {
                                 setting.increment(1);
                             } else {
                                 setting.decrement(1);
@@ -46,7 +45,7 @@ public class SettingsUI implements UI {
                     break;
                 case BOOLEAN:
                     renderer.box(x, y, width, cellHeight, setting.isTrue() ? Lights.color.DARK_GREEN : Lights.color.MEDIUM, setWidth(renderer, setting.getName()));
-                    if (Util.containsMouse(x, y, width, cellHeight) && canInteract()) {
+                    if (Lights.mouse.contains(x, y, width, cellHeight) && canInteract()) {
                         interacted = true;
                         if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(250))
                             setting.toggle();

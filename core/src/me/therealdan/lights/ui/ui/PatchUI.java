@@ -5,15 +5,14 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector3;
-import me.therealdan.lights.main.Lights;
 import me.therealdan.lights.dmx.DMX;
 import me.therealdan.lights.fixtures.Fixture;
 import me.therealdan.lights.fixtures.Group;
 import me.therealdan.lights.fixtures.Profile;
+import me.therealdan.lights.main.Lights;
 import me.therealdan.lights.renderer.Renderer;
 import me.therealdan.lights.renderer.Task;
 import me.therealdan.lights.ui.UIHandler;
-import me.therealdan.lights.util.Util;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -162,7 +161,7 @@ public class PatchUI implements UI {
         y -= cellHeight;
 
         for (Fixture fixture : fixtures()) {
-            if (Util.containsMouse(x, y, width, cellHeight) && canInteract()) {
+            if (Lights.mouse.contains(x, y, width, cellHeight) && canInteract()) {
                 interacted = true;
                 if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(500)) {
                     if (fixture.equals(getSelectedFixture())) {
@@ -202,7 +201,7 @@ public class PatchUI implements UI {
                 if (occupied) color = Lights.color.DARK_BLUE;
                 if (selected && occupied) color = Lights.color.DARK_CYAN;
                 renderer.box(x, y, cellHeight, cellHeight, color, Integer.toString(address));
-                if (Util.containsMouse(x, y, cellHeight, cellHeight) && canInteract()) {
+                if (Lights.mouse.contains(x, y, cellHeight, cellHeight) && canInteract()) {
                     interacted = true;
                     if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
                         getSelectedFixture().setAddress(address);

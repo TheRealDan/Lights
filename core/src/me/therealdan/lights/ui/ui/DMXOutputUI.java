@@ -2,12 +2,11 @@ package me.therealdan.lights.ui.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import me.therealdan.lights.main.Lights;
 import me.therealdan.lights.dmx.DMX;
+import me.therealdan.lights.main.Lights;
 import me.therealdan.lights.renderer.Renderer;
 import me.therealdan.lights.renderer.Task;
 import me.therealdan.lights.ui.UIHandler;
-import me.therealdan.lights.util.Util;
 
 public class DMXOutputUI implements UI {
 
@@ -36,7 +35,7 @@ public class DMXOutputUI implements UI {
         y -= cellHeight;
 
         renderer.box(x, y, width, cellHeight, Lights.color.MEDIUM, setWidth(renderer, "DMX: " + getDmxToDisplay()));
-        if (Util.containsMouse(x, y, width, cellHeight) && canInteract()) {
+        if (Lights.mouse.contains(x, y, width, cellHeight) && canInteract()) {
             interacted = true;
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(500))
                 next();
@@ -44,7 +43,7 @@ public class DMXOutputUI implements UI {
         y -= cellHeight;
 
         renderer.box(x, y, width, cellHeight, displayInCells() ? Lights.color.DARK_RED : Lights.color.MEDIUM, setWidth(renderer, "Display In Cells"));
-        if (Util.containsMouse(x, y, width, cellHeight) && canInteract()) {
+        if (Lights.mouse.contains(x, y, width, cellHeight) && canInteract()) {
             interacted = true;
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(500))
                 toggleDisplayInCells();

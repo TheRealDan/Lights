@@ -3,9 +3,9 @@ package me.therealdan.lights.ui.ui;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.files.FileHandle;
-import me.therealdan.lights.main.Lights;
 import me.therealdan.lights.controllers.Fader;
 import me.therealdan.lights.controllers.FaderBank;
+import me.therealdan.lights.main.Lights;
 import me.therealdan.lights.renderer.Renderer;
 import me.therealdan.lights.renderer.Task;
 import me.therealdan.lights.ui.UIHandler;
@@ -100,10 +100,10 @@ public class FadersUI implements UI {
         y -= cellHeight;
 
         renderer.box(x, y, getWidth(), cellHeight, Lights.color.MEDIUM, setWidth(renderer, "Bank: " + getBank().getID()));
-        if (Util.containsMouse(x, y, getWidth(), cellHeight) && canInteract()) {
+        if (Lights.mouse.contains(x, y, getWidth(), cellHeight) && canInteract()) {
             interacted = true;
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(1000)) {
-                if (Util.containsMouse(x, y, getWidth() / 2, cellHeight)) {
+                if (Lights.mouse.contains(x, y, getWidth() / 2, cellHeight)) {
                     setBank(getBank().getID() + 1);
                 } else {
                     setBank(getBank().getID() - 1);
@@ -116,7 +116,7 @@ public class FadersUI implements UI {
             renderer.box(x, y, faderWidth, height, Lights.color.MEDIUM, Util.getPercentage(fader.getValue()), Task.TextPosition.CENTER);
             float fill = fader.getValue() * height;
             renderer.box(x, y - height + fill, faderWidth, fill, fader.getColor());
-            if (Util.containsMouse(x, y, faderWidth, height) && canInteract()) {
+            if (Lights.mouse.contains(x, y, faderWidth, height) && canInteract()) {
                 if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
                     interacted = true;
                     float bottom = y - height + 20;

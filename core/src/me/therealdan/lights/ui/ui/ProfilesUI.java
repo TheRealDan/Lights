@@ -18,7 +18,7 @@ public class ProfilesUI implements UI {
 
     private static ProfilesUI profilesUI;
 
-    private final int MIN_ROWS = 5;
+    private final int MIN_ROWS = 6;
     private final int MAX_ROWS = 8;
 
     private List<Profile> profiles = new ArrayList<>();
@@ -207,6 +207,15 @@ public class ProfilesUI implements UI {
             interacted = true;
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(500)) {
                 toggleEdit(Section.MODELS);
+            }
+        }
+        y -= cellHeight;
+
+        renderer.box(x, y, optionsWidth, cellHeight, Lights.color.MEDIUM, Lights.color.YELLOW, "Advanced");
+        if (Lights.mouse.contains(x, y, optionsWidth, cellHeight) && canInteract()) {
+            interacted = true;
+            if (Lights.mouse.leftClicked(500)) {
+                Lights.openProfileEditor(getSelectedProfile());
             }
         }
         y -= cellHeight;

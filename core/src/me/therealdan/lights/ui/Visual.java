@@ -1,8 +1,15 @@
 package me.therealdan.lights.ui;
 
 import com.badlogic.gdx.InputProcessor;
+import me.therealdan.lights.renderer.Renderer;
 
-public interface DefaultInputProcessor extends InputProcessor {
+public interface Visual extends InputProcessor {
+
+    void draw(Renderer renderer);
+
+    default void resize(int width, int height) {
+
+    }
 
     @Override
     default boolean touchDown(int screenX, int screenY, int pointer, int button) {

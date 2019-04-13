@@ -16,11 +16,12 @@ import me.therealdan.lights.dmx.DMX;
 import me.therealdan.lights.fixtures.Fixture;
 import me.therealdan.lights.fixtures.Model;
 import me.therealdan.lights.programmer.Programmer;
+import me.therealdan.lights.renderer.Renderer;
 import me.therealdan.lights.settings.Control;
 import me.therealdan.lights.settings.Setting;
 import me.therealdan.lights.ui.ui.PatchUI;
 
-public class Visualiser3D {
+public class Visualiser3D implements Visual {
 
     private PerspectiveCamera camera;
 
@@ -101,7 +102,7 @@ public class Visualiser3D {
         fileHandle.writeString("  Z: " + camera.direction.z + "\r\n", true);
     }
 
-    public void update() {
+    private void mouseSelectFixtures() {
         if (UIHandler.getSection().equals(UIHandler.Section.VISUALISER3D)) {
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
                 Fixture fixture = getFixture(Gdx.input.getX(), Gdx.input.getY());
@@ -109,25 +110,13 @@ public class Visualiser3D {
                     Programmer.select(fixture);
             }
         }
+    }
 
+    private void updateFixtureColors() {
         DMX visualiser = DMX.get("VISUALISER");
         for (Fixture fixture : PatchUI.fixtures()) {
             fixture.updateColor(visualiser);
         }
-    }
-
-    public void draw(float deltaTime) {
-        update();
-
-        controls(deltaTime);
-
-        camera.update();
-
-        modelBatch.begin(camera);
-        for (Fixture fixture : PatchUI.fixtures()) {
-            modelBatch.render(fixture.getModelInstances(), environment);
-        }
-        modelBatch.end();
     }
 
     private void controls(float deltaTime) {
@@ -164,12 +153,30 @@ public class Visualiser3D {
         }
     }
 
+    @Override
+    public void draw(Renderer renderer) {
+        mouseSelectFixtures();
+        updateFixtureColors();
+
+        controls(Gdx.graphics.getDeltaTime());
+
+        camera.update();
+
+        modelBatch.begin(camera);
+        for (Fixture fixture : PatchUI.fixtures()) {
+            modelBatch.render(fixture.getModelInstances(), environment);
+        }
+        modelBatch.end();
+    }
+
+    @Override
     public void resize(int width, int height) {
         camera.viewportWidth = width;
         camera.viewportHeight = height;
         camera.update();
     }
 
+    @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
         if (UIHandler.getSection().equals(UIHandler.Section.VISUALISER3D)) {
             float deltaX = -Gdx.input.getDeltaX() * degreesPerPixel;
@@ -181,11 +188,13 @@ public class Visualiser3D {
         return true;
     }
 
+    @Override
     public boolean keyDown(int keycode) {
         keys.put(keycode, keycode);
         return true;
     }
 
+    @Override
     public boolean keyUp(int keycode) {
         keys.remove(keycode, 0);
         return true;

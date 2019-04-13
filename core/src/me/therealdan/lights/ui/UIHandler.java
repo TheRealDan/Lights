@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class UIHandler {
+public class UIHandler implements Visual {
 
     private static UIHandler uiHandler;
 
@@ -152,7 +152,8 @@ public class UIHandler {
             SequenceProgrammerUI.setSelected(SequenceProgrammerUI.Selected.NONE);
     }
 
-    public void draw(Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {
+    @Override
+    public void draw(Renderer renderer) {
         UI allowInteract = null;
         for (UI ui : UIs()) {
             ui.setAllowInteract(false);
@@ -164,7 +165,7 @@ public class UIHandler {
         for (UI ui : UIs()) {
             if (ui.isVisible()) {
                 long timestamp = System.currentTimeMillis();
-                ui.draw(renderer, X, Y, WIDTH, HEIGHT);
+                ui.draw(renderer, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
                 renderer.draw();
                 TimingsUI.set(ui.getName(), ui.getName() + " draw(): %mms %zms %ams", System.currentTimeMillis() - timestamp);
             } else {
@@ -178,6 +179,7 @@ public class UIHandler {
         }
     }
 
+    @Override
     public boolean scrolled(int amount) {
         for (UI ui : UIs())
             ui.scrolled(amount);
@@ -185,12 +187,14 @@ public class UIHandler {
         return true;
     }
 
+    @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
         drag(null);
 
         return true;
     }
 
+    @Override
     public boolean keyDown(int keycode) {
         boolean shift = Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT);
 
@@ -259,6 +263,7 @@ public class UIHandler {
         return true;
     }
 
+    @Override
     public boolean keyUp(int keycode) {
         for (UI ui : UIs())
             ui.keyUp(keycode);

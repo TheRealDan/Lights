@@ -4,25 +4,34 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import me.therealdan.lights.dmx.Output;
+import me.therealdan.lights.fixtures.Profile;
 import me.therealdan.lights.renderer.Renderer;
 import me.therealdan.lights.settings.Control;
 import me.therealdan.lights.settings.Setting;
-import me.therealdan.lights.ui.DefaultInputProcessor;
+import me.therealdan.lights.ui.ProfileEditor;
+import me.therealdan.lights.ui.TheInputProcessor;
 import me.therealdan.lights.ui.UIHandler;
 import me.therealdan.lights.ui.Visualiser3D;
 
-public class Lights extends ApplicationAdapter implements DefaultInputProcessor {
+public class Lights extends ApplicationAdapter {
+
+    private static Lights lights;
 
     public static Colour color;
     public static Mouse mouse;
     public static Output output;
 
     private Renderer renderer;
+    private TheInputProcessor theInputProcessor;
+
     private Visualiser3D visualiser3D;
     private UIHandler uiHandler;
+    private ProfileEditor profileEditor;
 
     @Override
     public void create() {
+        lights = this;
+
         color = new Colour();
         mouse = new Mouse();
         output = new Output();
@@ -34,13 +43,18 @@ public class Lights extends ApplicationAdapter implements DefaultInputProcessor 
         Control.loadFromFile();
 
         renderer = new Renderer();
+        theInputProcessor = new TheInputProcessor();
+
         uiHandler = new UIHandler();
         visualiser3D = new Visualiser3D();
+        profileEditor = new ProfileEditor();
 
         Gdx.graphics.setVSync(true);
-        Gdx.input.setInputProcessor(this);
+        Gdx.input.setInputProcessor(theInputProcessor);
 
         output.start();
+
+        openMainView();
     }
 
     @Override
@@ -49,11 +63,9 @@ public class Lights extends ApplicationAdapter implements DefaultInputProcessor 
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
         mouse.update();
-
         uiHandler.update();
 
-        visualiser3D.draw(Gdx.graphics.getDeltaTime());
-        uiHandler.draw(renderer, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        theInputProcessor.draw(renderer);
 
         renderer.draw();
     }
@@ -61,7 +73,8 @@ public class Lights extends ApplicationAdapter implements DefaultInputProcessor 
     @Override
     public void resize(int width, int height) {
         renderer.resize();
-        visualiser3D.resize(width, height);
+
+        theInputProcessor.resize(width, height);
     }
 
     @Override
@@ -75,35 +88,15 @@ public class Lights extends ApplicationAdapter implements DefaultInputProcessor 
         renderer.dispose();
     }
 
-    @Override
-    public boolean scrolled(int amount) {
-        uiHandler.scrolled(amount);
-        return true;
+    public static void openMainView() {
+        lights.theInputProcessor.clear();
+        lights.theInputProcessor.add(lights.visualiser3D);
+        lights.theInputProcessor.add(lights.uiHandler);
     }
 
-    @Override
-    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        uiHandler.touchUp(screenX, screenY, pointer, button);
-        return true;
-    }
-
-    @Override
-    public boolean touchDragged(int screenX, int screenY, int pointer) {
-        visualiser3D.touchDragged(screenX, screenY, pointer);
-        return true;
-    }
-
-    @Override
-    public boolean keyDown(int keycode) {
-        visualiser3D.keyDown(keycode);
-        uiHandler.keyDown(keycode);
-        return true;
-    }
-
-    @Override
-    public boolean keyUp(int keycode) {
-        visualiser3D.keyUp(keycode);
-        uiHandler.keyUp(keycode);
-        return true;
+    public static void openProfileEditor(Profile profile) {
+        lights.theInputProcessor.clear();
+        lights.theInputProcessor.add(lights.profileEditor);
+        lights.profileEditor.edit(profile);
     }
 }

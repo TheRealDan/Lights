@@ -164,7 +164,7 @@ public class PatchUI implements UI {
         for (Fixture fixture : fixtures()) {
             if (Util.containsMouse(x, y, width, cellHeight) && canInteract()) {
                 interacted = true;
-                if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.leftMouseReady(500)) {
+                if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(500)) {
                     if (fixture.equals(getSelectedFixture())) {
                         select(null);
                     } else {

@@ -40,7 +40,7 @@ public class PanelVisibilityUI implements UI {
             if (ui.ignoreVisibilityUI()) continue;
             if (Util.containsMouse(x, y, width, cellHeight) && canInteract()) {
                 interacted = true;
-                if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.leftMouseReady(200))
+                if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(200))
                     ui.toggleVisibility();
             }
             Util.box(renderer, x, y, width, cellHeight, ui.isVisible() ? Lights.color.DARK_GREEN : Lights.color.MEDIUM, setWidth(renderer, ui.getName()));

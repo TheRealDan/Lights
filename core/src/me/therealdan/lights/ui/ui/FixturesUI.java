@@ -40,7 +40,7 @@ public class FixturesUI implements UI {
             Util.box(renderer, x, y, cellSize, cellSize, Programmer.isSelected(fixture) ? Lights.color.DARK_RED : Lights.color.MEDIUM, fixture.getName(), Task.TextPosition.CENTER);
             if (Util.containsMouse(x, y, cellSize, cellSize) && canInteract()) {
                 interacted = true;
-                if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.leftMouseReady(500)) {
+                if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(500)) {
                     if (Programmer.isSelected(fixture)) {
                         Programmer.deselect(fixture);
                     } else {

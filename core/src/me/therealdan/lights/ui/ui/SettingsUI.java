@@ -35,7 +35,7 @@ public class SettingsUI implements UI {
                     Util.box(renderer, x, y, width, cellHeight, Lights.color.MEDIUM, setWidth(renderer, setting.getName() + ": " + setting.getValue()));
                     if (Util.containsMouse(x, y, width, cellHeight) && canInteract()) {
                         interacted = true;
-                        if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.leftMouseReady(100)) {
+                        if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(100)) {
                             if (Util.containsMouse(x, y, width / 2, cellHeight)) {
                                 setting.increment(1);
                             } else {
@@ -48,7 +48,7 @@ public class SettingsUI implements UI {
                     Util.box(renderer, x, y, width, cellHeight, setting.isTrue() ? Lights.color.DARK_GREEN : Lights.color.MEDIUM, setWidth(renderer, setting.getName()));
                     if (Util.containsMouse(x, y, width, cellHeight) && canInteract()) {
                         interacted = true;
-                        if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.leftMouseReady(250))
+                        if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(250))
                             setting.toggle();
                     }
                     break;

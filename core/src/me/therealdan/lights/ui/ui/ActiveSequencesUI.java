@@ -37,14 +37,14 @@ public class ActiveSequencesUI implements UI {
             Util.box(renderer, x, y, priorityWidth, cellHeight, Lights.color.MEDIUM, Integer.toString(priority));
             if (Util.containsMouse(x, y, priorityWidth, cellHeight) && canInteract()) {
                 interacted = true;
-                if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.leftMouseReady(500)) {
+                if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(500)) {
                     UIHandler.clearSequence(priority);
                 }
             }
             Util.box(renderer, x + priorityWidth, y, width - priorityWidth, cellHeight, Lights.color.MEDIUM, sequence.getName());
             if (Util.containsMouse(x, y, width - priorityWidth, cellHeight) && canInteract()) {
                 interacted = true;
-                if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.leftMouseReady(500)) {
+                if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(500)) {
                     UIHandler.clearSequence(priority);
                 }
             }

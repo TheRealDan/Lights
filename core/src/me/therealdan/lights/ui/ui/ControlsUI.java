@@ -39,9 +39,9 @@ public class ControlsUI implements UI {
         Util.box(renderer, x, y, width, cellHeight, Lights.color.MEDIUM, setWidth(renderer, "Category: " + getSelectedCategory().formatString()), Task.TextPosition.LEFT_CENTER);
         if (Util.containsMouse(x, y, width, cellHeight) && canInteract()) {
             interacted = true;
-            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.leftMouseReady(500)) {
+            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(500)) {
                 select(true);
-            } else if (Gdx.input.isButtonPressed(Input.Buttons.RIGHT) && Lights.rightMouseReady(500)) {
+            } else if (Gdx.input.isButtonPressed(Input.Buttons.RIGHT) && Lights.mouse.rightReady(500)) {
                 select(false);
             }
         }
@@ -53,7 +53,7 @@ public class ControlsUI implements UI {
             Util.box(renderer, x + width / 2, y, width / 2, cellHeight, isSelected(control) ? Lights.color.DARK_RED : Lights.color.MEDIUM, control.formatKeycode());
             if (Util.containsMouse(x, y, width, cellHeight) && canInteract()) {
                 interacted = true;
-                if (Lights.leftMouseClicked(500, getSelectedControl() != null && !control.equals(getSelectedControl()))) {
+                if (Lights.mouse.leftClicked(500, getSelectedControl() != null && !control.equals(getSelectedControl()))) {
                     select(isSelected(control) ? null : control);
                 }
             }

@@ -102,7 +102,7 @@ public class FadersUI implements UI {
         Util.box(renderer, x, y, getWidth(), cellHeight, Lights.color.MEDIUM, setWidth(renderer, "Bank: " + getBank().getID()));
         if (Util.containsMouse(x, y, getWidth(), cellHeight) && canInteract()) {
             interacted = true;
-            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.leftMouseReady(1000)) {
+            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(1000)) {
                 if (Util.containsMouse(x, y, getWidth() / 2, cellHeight)) {
                     setBank(getBank().getID() + 1);
                 } else {

@@ -46,7 +46,7 @@ public class MasterUI implements UI {
         if (isFadeToZero()) currentAction = "Fading to Zero..";
         Util.box(renderer, x, y, width, cellHeight, Lights.color.MEDIUM, setWidth(renderer, currentAction), Task.TextPosition.CENTER);
         if (Util.containsMouse(x, y, width, cellHeight) && canInteract()) {
-            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.leftMouseReady(1000)) {
+            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(1000)) {
                 interacted = true;
                 toggle();
             }

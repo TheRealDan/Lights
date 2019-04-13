@@ -111,7 +111,7 @@ public class ButtonsUI implements UI {
                 Util.box(renderer, x, y, size, size, button.getColor(), button.getName(), Task.TextPosition.CENTER);
                 if (Util.containsMouse(x, y, size, size) && canInteract()) {
                     interacted = true;
-                    if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.leftMouseReady(1000)) {
+                    if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(1000)) {
                         button.press();
                         Util.box(renderer, x, y, size, size, new Color(button.getColor()).mul(1.5f));
                     } else if (Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) {
@@ -122,7 +122,7 @@ public class ButtonsUI implements UI {
                 Util.box(renderer, x, y, size, size, Lights.color.DARK);
                 if (Util.containsMouse(x, y, size, size) && canInteract()) {
                     interacted = true;
-                    if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.leftMouseReady(1000)) {
+                    if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(1000)) {
                         if (getButtonToMove() != null) {
                             set(getButtonToMove(), position);
                             move(null);
@@ -140,7 +140,7 @@ public class ButtonsUI implements UI {
         Util.box(renderer, x, y, size, size, Lights.color.DARK, "Add New", Task.TextPosition.CENTER);
         if (Util.containsMouse(x, y, size, size) && canInteract()) {
             interacted = true;
-            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.leftMouseReady(1000)) {
+            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(1000)) {
                 set(new Button());
             }
         }

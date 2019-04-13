@@ -38,7 +38,7 @@ public class DMXOutputUI implements UI {
         Util.box(renderer, x, y, width, cellHeight, Lights.color.MEDIUM, setWidth(renderer, "DMX: " + getDmxToDisplay()));
         if (Util.containsMouse(x, y, width, cellHeight) && canInteract()) {
             interacted = true;
-            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.leftMouseReady(500))
+            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(500))
                 next();
         }
         y -= cellHeight;
@@ -46,7 +46,7 @@ public class DMXOutputUI implements UI {
         Util.box(renderer, x, y, width, cellHeight, displayInCells() ? Lights.color.DARK_RED : Lights.color.MEDIUM, setWidth(renderer, "Display In Cells"));
         if (Util.containsMouse(x, y, width, cellHeight) && canInteract()) {
             interacted = true;
-            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.leftMouseReady(500))
+            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(500))
                 toggleDisplayInCells();
         }
         y -= cellHeight;

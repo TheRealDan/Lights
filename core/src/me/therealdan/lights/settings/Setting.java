@@ -66,6 +66,10 @@ public class Setting {
         settings.put(getName().toUpperCase(), this);
     }
 
+    public boolean isFalse() {
+        return !isTrue();
+    }
+
     public boolean isTrue() {
         return getValue().equals("True");
     }

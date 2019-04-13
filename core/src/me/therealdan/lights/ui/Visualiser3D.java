@@ -17,11 +17,10 @@ import me.therealdan.lights.fixtures.Fixture;
 import me.therealdan.lights.fixtures.Model;
 import me.therealdan.lights.programmer.Programmer;
 import me.therealdan.lights.settings.Control;
+import me.therealdan.lights.settings.Setting;
 import me.therealdan.lights.ui.ui.PatchUI;
 
 public class Visualiser3D {
-
-    public static boolean REMEMBER_CAMERA_POSITION = true;
 
     private PerspectiveCamera camera;
 
@@ -53,6 +52,15 @@ public class Visualiser3D {
             fixture.buildModels();
         }
 
+        loadCameraPosition();
+    }
+
+    public void save() {
+        saveCameraPosition();
+    }
+
+    private void loadCameraPosition() {
+        if (Setting.byName(Setting.Name.REMEMBER_CAMERA_POSITION).isFalse()) return;
 
         FileHandle fileHandle = Gdx.files.local("Lights/Settings/Camera.txt");
         if (fileHandle.exists()) {
@@ -74,8 +82,14 @@ public class Visualiser3D {
         }
     }
 
-    public void save() {
+    private void saveCameraPosition() {
         FileHandle fileHandle = Gdx.files.local("Lights/Settings/Camera.txt");
+
+        if (Setting.byName(Setting.Name.REMEMBER_CAMERA_POSITION).isFalse()) {
+            if (fileHandle.exists()) fileHandle.delete();
+            return;
+        }
+
         fileHandle.writeString("", false);
         fileHandle.writeString("Position:\r\n", true);
         fileHandle.writeString("  X: " + camera.position.x + "\r\n", true);

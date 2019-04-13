@@ -145,7 +145,7 @@ public class ProfilesUI implements UI {
             }
         }
 
-        renderer.box(x, y, profilesWidth, cellHeight, Lights.color.MEDIUM, "Add New");
+        renderer.box(x, y, profilesWidth, cellHeight, Lights.color.MEDIUM, Lights.color.GREEN, "Add New");
         if (Lights.mouse.contains(x, y, profilesWidth, cellHeight) && canInteract()) {
             interacted = true;
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(500)) {

@@ -136,7 +136,7 @@ public class ButtonsUI implements UI {
                 y -= size;
             }
         }
-        renderer.box(x, y, size, size, Lights.color.DARK, "Add New", Task.TextPosition.CENTER);
+        renderer.box(x, y, size, size, Lights.color.DARK, Lights.color.GREEN, "Add New", Task.TextPosition.CENTER);
         if (Lights.mouse.contains(x, y, size, size) && canInteract()) {
             interacted = true;
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(1000)) {

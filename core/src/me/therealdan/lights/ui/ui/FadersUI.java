@@ -8,7 +8,7 @@ import me.therealdan.lights.controllers.Fader;
 import me.therealdan.lights.controllers.FaderBank;
 import me.therealdan.lights.renderer.Renderer;
 import me.therealdan.lights.renderer.Task;
-import me.therealdan.lights.ui.Live;
+import me.therealdan.lights.ui.UIHandler;
 import me.therealdan.lights.util.Util;
 
 import java.util.ArrayList;
@@ -83,7 +83,7 @@ public class FadersUI implements UI {
 
     @Override
     public boolean draw(Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {
-        if (containsMouse()) Live.setSection(Live.Section.FADERS);
+        if (containsMouse()) UIHandler.setSection(UIHandler.Section.FADERS);
         boolean interacted = false;
 
         setHeight(FadersUI.HEIGHT);

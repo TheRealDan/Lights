@@ -12,7 +12,7 @@ import me.therealdan.lights.fixtures.Group;
 import me.therealdan.lights.fixtures.Profile;
 import me.therealdan.lights.renderer.Renderer;
 import me.therealdan.lights.renderer.Task;
-import me.therealdan.lights.ui.Live;
+import me.therealdan.lights.ui.UIHandler;
 import me.therealdan.lights.util.Util;
 
 import java.util.ArrayList;
@@ -129,7 +129,7 @@ public class PatchUI implements UI {
 
     @Override
     public boolean draw(Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {
-        if (containsMouse()) Live.setSection(Live.Section.PATCH);
+        if (containsMouse()) UIHandler.setSection(UIHandler.Section.PATCH);
         boolean interacted = false;
 
         float x = getX();

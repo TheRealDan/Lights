@@ -7,7 +7,7 @@ import me.therealdan.lights.fixtures.Fixture;
 import me.therealdan.lights.programmer.Programmer;
 import me.therealdan.lights.renderer.Renderer;
 import me.therealdan.lights.renderer.Task;
-import me.therealdan.lights.ui.Live;
+import me.therealdan.lights.ui.UIHandler;
 import me.therealdan.lights.util.Util;
 
 public class FixturesUI implements UI {
@@ -20,7 +20,7 @@ public class FixturesUI implements UI {
 
     @Override
     public boolean draw(Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {
-        if (containsMouse()) Live.setSection(Live.Section.FIXTURES);
+        if (containsMouse()) UIHandler.setSection(UIHandler.Section.FIXTURES);
         boolean interacted = false;
 
         setWidth(FixturesUI.WIDTH);

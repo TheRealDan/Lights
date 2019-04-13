@@ -6,7 +6,7 @@ import me.therealdan.lights.fixtures.Group;
 import me.therealdan.lights.renderer.Renderer;
 import me.therealdan.lights.renderer.Task;
 import me.therealdan.lights.settings.Setting;
-import me.therealdan.lights.ui.Live;
+import me.therealdan.lights.ui.UIHandler;
 import me.therealdan.lights.ui.ui.ConsoleUI;
 import me.therealdan.lights.ui.ui.PatchUI;
 
@@ -67,7 +67,7 @@ public class DMX {
 
     public int get(int channel) {
         float value = pget(channel);
-        return (int) (value * Live.getMaster());
+        return (int) (value * UIHandler.getMaster());
     }
 
     private int pget(int channel) {

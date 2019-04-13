@@ -6,7 +6,7 @@ import me.therealdan.lights.Lights;
 import me.therealdan.lights.programmer.Sequence;
 import me.therealdan.lights.renderer.Renderer;
 import me.therealdan.lights.renderer.Task;
-import me.therealdan.lights.ui.Live;
+import me.therealdan.lights.ui.UIHandler;
 import me.therealdan.lights.util.Util;
 
 public class ActiveSequencesUI implements UI {
@@ -17,7 +17,7 @@ public class ActiveSequencesUI implements UI {
 
     @Override
     public boolean draw(Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {
-        if (containsMouse()) Live.setSection(Live.Section.ACTIVE_SEQUENCES);
+        if (containsMouse()) UIHandler.setSection(UIHandler.Section.ACTIVE_SEQUENCES);
         boolean interacted = false;
 
         float cellHeight = 30;
@@ -30,22 +30,22 @@ public class ActiveSequencesUI implements UI {
         drag(x, y, width, cellHeight);
         y -= cellHeight;
 
-        for (int priority = 0; priority <= Live.getTopPriority(); priority++) {
-            Sequence sequence = Live.getSequence(priority);
+        for (int priority = 0; priority <= UIHandler.getTopPriority(); priority++) {
+            Sequence sequence = UIHandler.getSequence(priority);
             if (sequence == null) continue;
             float priorityWidth = renderer.getWidth(Integer.toString(priority)) + 10;
             Util.box(renderer, x, y, priorityWidth, cellHeight, Lights.medium(), Integer.toString(priority));
             if (Util.containsMouse(x, y, priorityWidth, cellHeight) && canInteract()) {
                 interacted = true;
                 if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.leftMouseReady(500)) {
-                    Live.clearSequence(priority);
+                    UIHandler.clearSequence(priority);
                 }
             }
             Util.box(renderer, x + priorityWidth, y, width - priorityWidth, cellHeight, Lights.medium(), sequence.getName());
             if (Util.containsMouse(x, y, width - priorityWidth, cellHeight) && canInteract()) {
                 interacted = true;
                 if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.leftMouseReady(500)) {
-                    Live.clearSequence(priority);
+                    UIHandler.clearSequence(priority);
                 }
             }
             y -= cellHeight;

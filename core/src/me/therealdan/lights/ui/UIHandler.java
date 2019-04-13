@@ -17,9 +17,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class Live {
+public class UIHandler {
 
-    private static Live live;
+    private static UIHandler uiHandler;
 
     private List<UI> uis = new ArrayList<>();
     private UI dragging = null;
@@ -39,8 +39,8 @@ public class Live {
     private CondensedFrame targetCondensedFrame, currentCondensedFrame, previousCondensedFrame;
     private long condensedFrameTimestamp = System.currentTimeMillis();
 
-    public Live() {
-        live = this;
+    public UIHandler() {
+        uiHandler = this;
 
         // Menu
         uis.add(new PanelVisibilityUI());
@@ -292,13 +292,13 @@ public class Live {
     }
 
     public static void drag(UI ui) {
-        if (live.dragging == null && ui != null) {
-            live.xDifference = Math.abs(ui.getX() - Gdx.input.getX());
-            live.yDifference = Math.abs(ui.getYString() - Gdx.input.getY());
+        if (UIHandler.uiHandler.dragging == null && ui != null) {
+            UIHandler.uiHandler.xDifference = Math.abs(ui.getX() - Gdx.input.getX());
+            UIHandler.uiHandler.yDifference = Math.abs(ui.getYString() - Gdx.input.getY());
             moveToTop(ui);
         }
 
-        live.dragging = ui;
+        UIHandler.uiHandler.dragging = ui;
     }
 
     public static boolean isDragging() {
@@ -306,27 +306,27 @@ public class Live {
     }
 
     public static UI getDragging() {
-        return live.dragging;
+        return uiHandler.dragging;
     }
 
     public static void clearSequence(int priority) {
-        live.sequenceStack.remove(priority);
+        uiHandler.sequenceStack.remove(priority);
     }
 
     public static void setSequence(int priority, Sequence sequence) {
-        live.sequenceStack.put(priority, sequence);
+        uiHandler.sequenceStack.put(priority, sequence);
     }
 
     public static boolean contains(int priority) {
-        return live.sequenceStack.containsKey(priority);
+        return uiHandler.sequenceStack.containsKey(priority);
     }
 
     public static Sequence getSequence(int priority) {
-        return live.sequenceStack.getOrDefault(priority, null);
+        return uiHandler.sequenceStack.getOrDefault(priority, null);
     }
 
     public static int getPriority(Sequence sequence) {
-        for (int priority : live.sequenceStack.keySet())
+        for (int priority : uiHandler.sequenceStack.keySet())
             if (sequence.equals(getSequence(priority)))
                 return priority;
 
@@ -342,42 +342,42 @@ public class Live {
     }
 
     public static void moveToTop(UI ui) {
-        live.uis.remove(ui);
-        live.uis.add(ui);
+        UIHandler.uiHandler.uis.remove(ui);
+        UIHandler.uiHandler.uis.add(ui);
     }
 
     public static List<UI> UIs() {
-        return new ArrayList<>(live.uis);
+        return new ArrayList<>(uiHandler.uis);
     }
 
     public static long getTempo() {
-        return live.tempo;
+        return uiHandler.tempo;
     }
 
     public static int getTopPriority() {
         int highest = 0;
-        for (int priority : live.sequenceStack.keySet())
+        for (int priority : uiHandler.sequenceStack.keySet())
             if (priority > highest) highest = priority;
         return highest;
     }
 
     public static void setMaster(float master) {
-        live.master = Math.min(Math.max(master, 0), 1);
+        uiHandler.master = Math.min(Math.max(master, 0), 1);
     }
 
     public static float getMaster() {
-        return live.master;
+        return uiHandler.master;
     }
 
     public static void setSection(Section section) {
-        live.lastSet = System.currentTimeMillis();
-        live.section = section;
+        uiHandler.lastSet = System.currentTimeMillis();
+        uiHandler.section = section;
     }
 
     public static Section getSection() {
         if (isDragging()) return Section.DRAGGING;
-        if (System.currentTimeMillis() - live.lastSet > 500)
-            live.section = Section.VISUALISER3D;
-        return live.section;
+        if (System.currentTimeMillis() - uiHandler.lastSet > 500)
+            uiHandler.section = Section.VISUALISER3D;
+        return uiHandler.section;
     }
 }

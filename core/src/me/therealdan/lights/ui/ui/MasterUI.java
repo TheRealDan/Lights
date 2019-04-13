@@ -5,7 +5,7 @@ import com.badlogic.gdx.Input;
 import me.therealdan.lights.Lights;
 import me.therealdan.lights.renderer.Renderer;
 import me.therealdan.lights.renderer.Task;
-import me.therealdan.lights.ui.Live;
+import me.therealdan.lights.ui.UIHandler;
 import me.therealdan.lights.util.Util;
 
 public class MasterUI implements UI {
@@ -26,7 +26,7 @@ public class MasterUI implements UI {
 
     @Override
     public boolean draw(Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {
-        if (containsMouse()) Live.setSection(Live.Section.MASTER);
+        if (containsMouse()) UIHandler.setSection(UIHandler.Section.MASTER);
         boolean interacted = false;
 
         setHeight(MasterUI.HEIGHT);
@@ -41,7 +41,7 @@ public class MasterUI implements UI {
         drag(x, y, width, cellHeight);
         y -= cellHeight;
 
-        String currentAction = Live.getMaster() > 0.0 ? "Fade to Zero" : "Fade to Max";
+        String currentAction = UIHandler.getMaster() > 0.0 ? "Fade to Zero" : "Fade to Max";
         if (isFadeToMax()) currentAction = "Fading to Max..";
         if (isFadeToZero()) currentAction = "Fading to Zero..";
         Util.box(renderer, x, y, width, cellHeight, Lights.medium(), setWidth(renderer, currentAction), Task.TextPosition.CENTER);
@@ -54,15 +54,15 @@ public class MasterUI implements UI {
         y -= cellHeight;
 
         float height = getHeight() - cellHeight - cellHeight;
-        Util.box(renderer, x, y, width, height, Lights.medium(), setWidth(renderer, Util.getPercentage(Live.getMaster())), Task.TextPosition.CENTER);
-        float fill = Live.getMaster() * height;
+        Util.box(renderer, x, y, width, height, Lights.medium(), setWidth(renderer, Util.getPercentage(UIHandler.getMaster())), Task.TextPosition.CENTER);
+        float fill = UIHandler.getMaster() * height;
         Util.box(renderer, x, y - height + fill, width, fill, Lights.BLACK);
 
         if (Util.containsMouse(x, y, width, height) && canInteract()) {
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
                 interacted = true;
                 float bottom = y - height + 20;
-                Live.setMaster(Math.min(Math.max((Gdx.graphics.getHeight() - Gdx.input.getY() - bottom) / (y - 20 - bottom), 0), 1));
+                UIHandler.setMaster(Math.min(Math.max((Gdx.graphics.getHeight() - Gdx.input.getY() - bottom) / (y - 20 - bottom), 0), 1));
             }
         }
 
@@ -73,11 +73,11 @@ public class MasterUI implements UI {
             if (percentage > 1) percentage = 1;
 
             if (isFadeToMax()) {
-                Live.setMaster(startingValue + (float) percentage);
-                if (Live.getMaster() == 1.0) fadeToMax = false;
+                UIHandler.setMaster(startingValue + (float) percentage);
+                if (UIHandler.getMaster() == 1.0) fadeToMax = false;
             } else {
-                Live.setMaster(startingValue - (float) percentage);
-                if (Live.getMaster() == 0.0) fadeToZero = false;
+                UIHandler.setMaster(startingValue - (float) percentage);
+                if (UIHandler.getMaster() == 0.0) fadeToZero = false;
             }
         }
 
@@ -91,7 +91,7 @@ public class MasterUI implements UI {
             return;
         }
 
-        if (Live.getMaster() == 0.0) {
+        if (UIHandler.getMaster() == 0.0) {
             fadeToMax();
         } else {
             fadeToZero();
@@ -100,14 +100,14 @@ public class MasterUI implements UI {
 
     public static void fadeToZero() {
         masterUI.timestamp = System.currentTimeMillis();
-        masterUI.startingValue = Live.getMaster();
+        masterUI.startingValue = UIHandler.getMaster();
         masterUI.fadeToMax = false;
         masterUI.fadeToZero = true;
     }
 
     public static void fadeToMax() {
         masterUI.timestamp = System.currentTimeMillis();
-        masterUI.startingValue = Live.getMaster();
+        masterUI.startingValue = UIHandler.getMaster();
         masterUI.fadeToMax = true;
         masterUI.fadeToZero = false;
     }

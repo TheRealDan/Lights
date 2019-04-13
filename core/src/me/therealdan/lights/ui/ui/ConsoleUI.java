@@ -7,7 +7,7 @@ import me.therealdan.lights.Lights;
 import me.therealdan.lights.commands.*;
 import me.therealdan.lights.renderer.Renderer;
 import me.therealdan.lights.renderer.Task;
-import me.therealdan.lights.ui.Live;
+import me.therealdan.lights.ui.UIHandler;
 import me.therealdan.lights.util.Util;
 
 import java.text.SimpleDateFormat;
@@ -41,7 +41,7 @@ public class ConsoleUI implements UI {
 
     @Override
     public boolean draw(Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {
-        if (containsMouse()) Live.setSection(Live.Section.CONSOLE);
+        if (containsMouse()) UIHandler.setSection(UIHandler.Section.CONSOLE);
         boolean interacted = false;
 
         float x = getX();

@@ -7,7 +7,7 @@ import me.therealdan.lights.fixtures.Group;
 import me.therealdan.lights.programmer.Programmer;
 import me.therealdan.lights.renderer.Renderer;
 import me.therealdan.lights.renderer.Task;
-import me.therealdan.lights.ui.Live;
+import me.therealdan.lights.ui.UIHandler;
 import me.therealdan.lights.util.Util;
 
 public class GroupsUI implements UI {
@@ -20,7 +20,7 @@ public class GroupsUI implements UI {
 
     @Override
     public boolean draw(Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {
-        if (containsMouse()) Live.setSection(Live.Section.GROUPS);
+        if (containsMouse()) UIHandler.setSection(UIHandler.Section.GROUPS);
         boolean interacted = false;
 
         setWidth(GroupsUI.WIDTH);

@@ -5,7 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.files.FileHandle;
 import me.therealdan.lights.Lights;
 import me.therealdan.lights.renderer.Renderer;
-import me.therealdan.lights.ui.Live;
+import me.therealdan.lights.ui.UIHandler;
 import me.therealdan.lights.util.Util;
 
 import java.util.HashMap;
@@ -132,11 +132,11 @@ public interface UI {
     }
 
     default void drag(float x, float y, float width, float cellHeight) {
-        if (canInteract() && isVisible() && Util.containsMouse(x, y, width, cellHeight) && Gdx.input.isButtonPressed(Input.Buttons.LEFT)) Live.drag(this);
+        if (canInteract() && isVisible() && Util.containsMouse(x, y, width, cellHeight) && Gdx.input.isButtonPressed(Input.Buttons.LEFT)) UIHandler.drag(this);
     }
 
     default boolean isDragging() {
-        return Live.getDragging().equals(this);
+        return UIHandler.getDragging().equals(this);
     }
 
     default String getName() {

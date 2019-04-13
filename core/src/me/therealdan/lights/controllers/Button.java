@@ -3,7 +3,7 @@ package me.therealdan.lights.controllers;
 import com.badlogic.gdx.graphics.Color;
 import me.therealdan.lights.Lights;
 import me.therealdan.lights.programmer.Sequence;
-import me.therealdan.lights.ui.Live;
+import me.therealdan.lights.ui.UIHandler;
 import me.therealdan.lights.ui.ui.ButtonsUI;
 
 import java.util.ArrayList;
@@ -28,7 +28,7 @@ public class Button {
     public void press() {
         for (Sequence sequence : sequences()) {
             sequence.resetLastFrame();
-            Live.setSequence(getPriority(sequence), sequence);
+            UIHandler.setSequence(getPriority(sequence), sequence);
         }
     }
 

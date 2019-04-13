@@ -6,7 +6,7 @@ import me.therealdan.lights.Lights;
 import me.therealdan.lights.renderer.Renderer;
 import me.therealdan.lights.renderer.Task;
 import me.therealdan.lights.settings.Control;
-import me.therealdan.lights.ui.Live;
+import me.therealdan.lights.ui.UIHandler;
 import me.therealdan.lights.util.Util;
 
 import java.util.List;
@@ -24,7 +24,7 @@ public class ControlsUI implements UI {
 
     @Override
     public boolean draw(Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {
-        Live.setSection(Live.Section.CONTROLS);
+        UIHandler.setSection(UIHandler.Section.CONTROLS);
         boolean interacted = false;
 
         float x = getX();

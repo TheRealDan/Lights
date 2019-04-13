@@ -10,7 +10,7 @@ import me.therealdan.lights.programmer.Programmer;
 import me.therealdan.lights.programmer.Sequence;
 import me.therealdan.lights.programmer.Task;
 import me.therealdan.lights.renderer.Renderer;
-import me.therealdan.lights.ui.Live;
+import me.therealdan.lights.ui.UIHandler;
 import me.therealdan.lights.util.Util;
 
 import java.util.ArrayList;
@@ -117,7 +117,7 @@ public class SequencesUI implements UI {
 
     @Override
     public boolean draw(Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {
-        if (containsMouse()) Live.setSection(Live.Section.SEQUENCES);
+        if (containsMouse()) UIHandler.setSection(UIHandler.Section.SEQUENCES);
         boolean interacted = false;
         boolean shift = Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT);
 

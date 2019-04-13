@@ -10,14 +10,14 @@ import me.therealdan.lights.renderer.Renderer;
 import me.therealdan.lights.settings.Control;
 import me.therealdan.lights.settings.Setting;
 import me.therealdan.lights.ui.DefaultInputProcessor;
-import me.therealdan.lights.ui.Live;
+import me.therealdan.lights.ui.UIHandler;
 import me.therealdan.lights.ui.Visualiser3D;
 
 public class Lights extends ApplicationAdapter implements DefaultInputProcessor {
 
     private Renderer renderer;
     private Visualiser3D visualiser3D;
-    private Live live;
+    private UIHandler uiHandler;
 
     // COLORS
 
@@ -63,7 +63,7 @@ public class Lights extends ApplicationAdapter implements DefaultInputProcessor 
         Control.loadFromFile();
 
         renderer = new Renderer();
-        live = new Live();
+        uiHandler = new UIHandler();
         visualiser3D = new Visualiser3D();
 
         new Output();
@@ -79,10 +79,10 @@ public class Lights extends ApplicationAdapter implements DefaultInputProcessor 
 
         controls();
 
-        live.update();
+        uiHandler.update();
 
         visualiser3D.draw(Gdx.graphics.getDeltaTime());
-        live.draw(renderer, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        uiHandler.draw(renderer, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
         renderer.draw();
     }
@@ -106,14 +106,14 @@ public class Lights extends ApplicationAdapter implements DefaultInputProcessor 
         Setting.saveToFile();
         Control.saveToFile();
 
-        live.save();
+        uiHandler.save();
         visualiser3D.save();
     }
 
     @Override
     public boolean keyUp(int keycode) {
         visualiser3D.keyUp(keycode);
-        live.keyUp(keycode);
+        uiHandler.keyUp(keycode);
 
         return true;
     }
@@ -121,7 +121,7 @@ public class Lights extends ApplicationAdapter implements DefaultInputProcessor 
     @Override
     public boolean keyDown(int keycode) {
         visualiser3D.keyDown(keycode);
-        live.keyDown(keycode);
+        uiHandler.keyDown(keycode);
 
         return true;
     }

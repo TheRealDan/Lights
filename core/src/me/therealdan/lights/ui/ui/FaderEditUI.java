@@ -7,7 +7,7 @@ import me.therealdan.lights.controllers.Fader;
 import me.therealdan.lights.programmer.Sequence;
 import me.therealdan.lights.renderer.Renderer;
 import me.therealdan.lights.renderer.Task;
-import me.therealdan.lights.ui.Live;
+import me.therealdan.lights.ui.UIHandler;
 import me.therealdan.lights.util.Util;
 
 import java.text.DecimalFormat;
@@ -26,7 +26,7 @@ public class FaderEditUI implements UI {
 
     @Override
     public boolean draw(Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {
-        if (containsMouse()) Live.setSection(Live.Section.FADER_EDIT);
+        if (containsMouse()) UIHandler.setSection(UIHandler.Section.FADER_EDIT);
         boolean interacted = false;
         boolean shift = Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT);
 

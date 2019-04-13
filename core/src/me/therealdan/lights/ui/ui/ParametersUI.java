@@ -8,7 +8,7 @@ import me.therealdan.lights.fixtures.Fixture;
 import me.therealdan.lights.programmer.Programmer;
 import me.therealdan.lights.renderer.Renderer;
 import me.therealdan.lights.renderer.Task;
-import me.therealdan.lights.ui.Live;
+import me.therealdan.lights.ui.UIHandler;
 import me.therealdan.lights.util.Util;
 
 import java.text.DecimalFormat;
@@ -32,7 +32,7 @@ public class ParametersUI implements UI {
 
     @Override
     public boolean draw(Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {
-        Live.setSection(Live.Section.PARAMETERS);
+        UIHandler.setSection(UIHandler.Section.PARAMETERS);
         boolean interacted = false;
 
         setWidth(ParametersUI.WIDTH);

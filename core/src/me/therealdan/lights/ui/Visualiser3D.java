@@ -88,7 +88,7 @@ public class Visualiser3D {
     }
 
     public void update() {
-        if (Live.getSection().equals(Live.Section.VISUALISER3D)) {
+        if (UIHandler.getSection().equals(UIHandler.Section.VISUALISER3D)) {
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
                 Fixture fixture = getFixture(Gdx.input.getX(), Gdx.input.getY());
                 if (fixture != null)
@@ -167,7 +167,7 @@ public class Visualiser3D {
     }
 
     public boolean touchDragged(int screenX, int screenY, int pointer) {
-        if (Live.getSection().equals(Live.Section.VISUALISER3D)) {
+        if (UIHandler.getSection().equals(UIHandler.Section.VISUALISER3D)) {
             float deltaX = -Gdx.input.getDeltaX() * degreesPerPixel;
             float deltaY = -Gdx.input.getDeltaY() * degreesPerPixel;
             camera.direction.rotate(camera.up, deltaX);

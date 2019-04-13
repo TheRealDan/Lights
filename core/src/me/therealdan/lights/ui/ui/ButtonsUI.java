@@ -9,7 +9,7 @@ import me.therealdan.lights.controllers.Button;
 import me.therealdan.lights.programmer.Sequence;
 import me.therealdan.lights.renderer.Renderer;
 import me.therealdan.lights.renderer.Task;
-import me.therealdan.lights.ui.Live;
+import me.therealdan.lights.ui.UIHandler;
 import me.therealdan.lights.util.Util;
 
 import java.util.ArrayList;
@@ -89,7 +89,7 @@ public class ButtonsUI implements UI {
 
     @Override
     public boolean draw(Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {
-        if (containsMouse()) Live.setSection(Live.Section.BUTTONS);
+        if (containsMouse()) UIHandler.setSection(UIHandler.Section.BUTTONS);
         boolean interacted = false;
 
         setWidth(ButtonsUI.WIDTH);

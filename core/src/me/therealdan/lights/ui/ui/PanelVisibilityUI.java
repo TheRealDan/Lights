@@ -5,7 +5,7 @@ import com.badlogic.gdx.Input;
 import me.therealdan.lights.Lights;
 import me.therealdan.lights.renderer.Renderer;
 import me.therealdan.lights.renderer.Task;
-import me.therealdan.lights.ui.Live;
+import me.therealdan.lights.ui.UIHandler;
 import me.therealdan.lights.util.Util;
 
 import java.util.List;
@@ -14,7 +14,7 @@ public class PanelVisibilityUI implements UI {
 
     @Override
     public boolean draw(Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {
-        if (containsMouse()) Live.setSection(Live.Section.PANEL_VISIBILITY);
+        if (containsMouse()) UIHandler.setSection(UIHandler.Section.PANEL_VISIBILITY);
         boolean interacted = false;
 
         float cellHeight = 30;
@@ -27,7 +27,7 @@ public class PanelVisibilityUI implements UI {
         drag(x, y, width, cellHeight);
         y -= cellHeight;
 
-        List<UI> UIs = Live.UIs();
+        List<UI> UIs = UIHandler.UIs();
         while (UIs.size() > 0) {
             UI ui = null;
             for (UI each : UIs) {

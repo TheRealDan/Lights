@@ -1,7 +1,6 @@
 package me.therealdan.lights.ui.ui;
 
 import me.therealdan.lights.main.Lights;
-import me.therealdan.lights.dmx.Output;
 import me.therealdan.lights.renderer.Renderer;
 import me.therealdan.lights.renderer.Task;
 import me.therealdan.lights.ui.UIHandler;
@@ -14,7 +13,7 @@ public class FrozenUI implements UI {
         if (containsMouse()) UIHandler.setSection(UIHandler.Section.FROZEN);
         boolean interacted = false;
 
-        if (!Output.isFrozen()) return interacted;
+        if (!Lights.output.isFrozen()) return interacted;
 
         float cellHeight = 30;
 

@@ -10,9 +10,7 @@ import java.util.List;
 
 public class Output {
 
-    private static Output output;
-
-    private static boolean FROZEN = false;
+    private boolean FROZEN = false;
 
     private Thread thread;
 
@@ -21,14 +19,12 @@ public class Output {
     private String activePort = "Not Connected";
     private boolean connected = false;
 
-    public static int BAUDRATE = 74880;
+    private int BAUDRATE = 74880;
 
     private long lastConnect = System.currentTimeMillis();
     private long lastSend = System.currentTimeMillis();
 
     public Output() {
-        output = this;
-
         thread = new Thread("Output") {
             @Override
             public void run() {
@@ -37,6 +33,10 @@ public class Output {
                 }
             }
         };
+    }
+
+    public void start() {
+        if (thread.isAlive()) return;
         thread.start();
     }
 
@@ -96,55 +96,55 @@ public class Output {
             ConsoleUI.log(ConsoleUI.ConsoleColor.RED, e.getMessage());
         }
         long timeTaken = System.currentTimeMillis() - timestamp;
-        TimingsUI.set("Output.tick()", "Output tick(): %mms %zms %ams", timeTaken);
+        TimingsUI.set("Lights.output.tick()", "Output tick(): %mms %zms %ams", timeTaken);
     }
 
-    public static void freeze() {
+    public void freeze() {
         FROZEN = true;
     }
 
-    public static void unfreeze() {
+    public void unfreeze() {
         FROZEN = false;
     }
 
-    public static void toggleFreeze() {
+    public void toggleFreeze() {
         FROZEN = !FROZEN;
-        ConsoleUI.log(ConsoleUI.ConsoleColor.CYAN, Output.isFrozen() ?
+        ConsoleUI.log(ConsoleUI.ConsoleColor.CYAN, isFrozen() ?
                 "DMX Output frozen." :
                 "DMX Output unfrozen."
         );
     }
 
-    public static boolean isFrozen() {
+    public boolean isFrozen() {
         return FROZEN;
     }
 
-    public static boolean isConnected() {
-        return output.connected;
+    public boolean isConnected() {
+        return connected;
     }
 
-    public static void disconnect() {
+    public void disconnect() {
         try {
-            output.serialPort.closePort();
+            serialPort.closePort();
         } catch (Exception e) {
             ConsoleUI.log(ConsoleUI.ConsoleColor.RED, e.getMessage());
             e.printStackTrace();
         }
-        output.serialPort = null;
+        serialPort = null;
         ConsoleUI.log(ConsoleUI.ConsoleColor.YELLOW, "Port Disconnected");
-        output.activePort = "Not Connected";
-        output.connected = false;
+        activePort = "Not Connected";
+        connected = false;
     }
 
-    public static void setActivePort(String port) {
-        output.activePort = port;
+    public void setActivePort(String port) {
+        activePort = port;
     }
 
-    public static String getActivePort() {
-        return output.activePort;
+    public String getActivePort() {
+        return activePort;
     }
 
-    public static List<String> openPorts() {
-        return new ArrayList<>(output.openPorts);
+    public List<String> openPorts() {
+        return new ArrayList<>(openPorts);
     }
 }

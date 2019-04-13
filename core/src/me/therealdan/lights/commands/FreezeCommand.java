@@ -1,6 +1,6 @@
 package me.therealdan.lights.commands;
 
-import me.therealdan.lights.dmx.Output;
+import me.therealdan.lights.main.Lights;
 import me.therealdan.lights.ui.ui.ConsoleUI;
 
 public class FreezeCommand implements Command {
@@ -9,7 +9,7 @@ public class FreezeCommand implements Command {
     public boolean onCommand(ConsoleUI console, String command, String[] args) {
         if (!command.equalsIgnoreCase(getCommand())) return false;
 
-        Output.toggleFreeze();
+        Lights.output.toggleFreeze();
 
         return true;
     }

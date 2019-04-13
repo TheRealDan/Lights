@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import me.therealdan.lights.controllers.Fader;
 import me.therealdan.lights.dmx.DMX;
-import me.therealdan.lights.dmx.Output;
+import me.therealdan.lights.main.Lights;
 import me.therealdan.lights.programmer.CondensedFrame;
 import me.therealdan.lights.programmer.Frame;
 import me.therealdan.lights.programmer.Programmer;
@@ -146,7 +146,7 @@ public class UIHandler {
 
         visualiser.set(13, Setting.byName(Setting.Name.HAZE).isTrue() ? 255 : 0);
 
-        if (!Output.isFrozen()) output.copy(visualiser);
+        if (!Lights.output.isFrozen()) output.copy(visualiser);
 
         if (!getSection().equals(Section.SEQUENCE_PROGRAMMER))
             SequenceProgrammerUI.setSelected(SequenceProgrammerUI.Selected.NONE);
@@ -206,7 +206,7 @@ public class UIHandler {
             lastTempo = System.currentTimeMillis();
         }
 
-        if (Input.Keys.ESCAPE == keycode) Output.toggleFreeze();
+        if (Input.Keys.ESCAPE == keycode) Lights.output.toggleFreeze();
 
         for (UI ui : UIs()) {
             if (ui.isVisible() && ui.containsMouse() && ui.canInteract()) {

@@ -15,6 +15,7 @@ public class Lights extends ApplicationAdapter implements DefaultInputProcessor 
 
     public static Colour color;
     public static Mouse mouse;
+    public static Output output;
 
     private Renderer renderer;
     private Visualiser3D visualiser3D;
@@ -24,6 +25,7 @@ public class Lights extends ApplicationAdapter implements DefaultInputProcessor 
     public void create() {
         color = new Colour();
         mouse = new Mouse();
+        output = new Output();
 
         Setting.createSettings();
         Setting.loadFromFile();
@@ -35,10 +37,10 @@ public class Lights extends ApplicationAdapter implements DefaultInputProcessor 
         uiHandler = new UIHandler();
         visualiser3D = new Visualiser3D();
 
-        new Output();
-
         Gdx.graphics.setVSync(true);
         Gdx.input.setInputProcessor(this);
+
+        output.start();
     }
 
     @Override
@@ -64,20 +66,19 @@ public class Lights extends ApplicationAdapter implements DefaultInputProcessor 
 
     @Override
     public void dispose() {
-        renderer.dispose();
-
         Setting.saveToFile();
         Control.saveToFile();
 
         uiHandler.save();
         visualiser3D.save();
+
+        renderer.dispose();
     }
 
     @Override
     public boolean keyUp(int keycode) {
         visualiser3D.keyUp(keycode);
         uiHandler.keyUp(keycode);
-
         return true;
     }
 
@@ -85,14 +86,12 @@ public class Lights extends ApplicationAdapter implements DefaultInputProcessor 
     public boolean keyDown(int keycode) {
         visualiser3D.keyDown(keycode);
         uiHandler.keyDown(keycode);
-
         return true;
     }
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
         visualiser3D.touchDragged(screenX, screenY, pointer);
-
         return true;
     }
 }

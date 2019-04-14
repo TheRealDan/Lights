@@ -31,7 +31,7 @@ public class ParametersUI implements UI {
 
     @Override
     public boolean draw(Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {
-        UIHandler.setSection(UIHandler.Section.PARAMETERS);
+        if (containsMouse()) UIHandler.setSection(UIHandler.Section.PARAMETERS);
         boolean interacted = false;
 
         setWidth(ParametersUI.WIDTH);

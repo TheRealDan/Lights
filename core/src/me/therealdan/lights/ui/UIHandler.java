@@ -209,7 +209,7 @@ public class UIHandler implements Visual {
 
         for (UI ui : UIs()) {
             if (ui.isVisible() && ui.containsMouse() && ui.canInteract()) {
-                if (ui.keyDown(keycode)) return true;
+                if (!ui.keyDown(keycode)) return false;
             }
         }
 
@@ -268,7 +268,7 @@ public class UIHandler implements Visual {
     @Override
     public boolean keyUp(int keycode) {
         for (UI ui : UIs())
-            ui.keyUp(keycode);
+            if (!ui.keyUp(keycode)) return false;
 
         return true;
     }

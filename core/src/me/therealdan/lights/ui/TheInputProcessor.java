@@ -3,15 +3,13 @@ package me.therealdan.lights.ui;
 import com.badlogic.gdx.InputProcessor;
 import me.therealdan.lights.renderer.Renderer;
 
-import java.util.LinkedList;
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.Iterator;
 
 public class TheInputProcessor implements InputProcessor {
 
-    private LinkedList<Visual> active = new LinkedList<>();
-
-    public TheInputProcessor() {
-
-    }
+    private Deque<Visual> active = new ArrayDeque<>();
 
     public void draw(Renderer renderer) {
         for (Visual visual : active)
@@ -42,64 +40,72 @@ public class TheInputProcessor implements InputProcessor {
 
     @Override
     public boolean keyDown(int keycode) {
-        for (Visual visual : active)
-            if (!visual.keyDown(keycode)) return false;
+        Iterator<Visual> iterator = active.descendingIterator();
+        while (iterator.hasNext())
+            if (!iterator.next().keyDown(keycode)) return false;
 
         return true;
     }
 
     @Override
     public boolean keyUp(int keycode) {
-        for (Visual visual : active)
-            if (!visual.keyUp(keycode)) return false;
+        Iterator<Visual> iterator = active.descendingIterator();
+        while (iterator.hasNext())
+            if (!iterator.next().keyUp(keycode)) return false;
 
         return true;
     }
 
     @Override
     public boolean keyTyped(char character) {
-        for (Visual visual : active)
-            if (!visual.keyTyped(character)) return false;
+        Iterator<Visual> iterator = active.descendingIterator();
+        while (iterator.hasNext())
+            if (!iterator.next().keyTyped(character)) return false;
 
         return true;
     }
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        for (Visual visual : active)
-            if (!visual.touchDown(screenX, screenY, pointer, button)) return false;
+        Iterator<Visual> iterator = active.descendingIterator();
+        while (iterator.hasNext())
+            if (!iterator.next().touchDown(screenX, screenY, pointer, button)) return false;
 
         return true;
     }
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        for (Visual visual : active)
-            if (!visual.touchUp(screenX, screenY, pointer, button)) return false;
+        Iterator<Visual> iterator = active.descendingIterator();
+        while (iterator.hasNext())
+            if (!iterator.next().touchUp(screenX, screenY, pointer, button)) return false;
 
         return true;
     }
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
-        for (Visual visual : active)
-            if (!visual.touchDragged(screenX, screenY, pointer)) return false;
+        Iterator<Visual> iterator = active.descendingIterator();
+        while (iterator.hasNext())
+            if (!iterator.next().touchDragged(screenX, screenY, pointer)) return false;
 
         return true;
     }
 
     @Override
     public boolean mouseMoved(int screenX, int screenY) {
-        for (Visual visual : active)
-            if (!visual.mouseMoved(screenX, screenY)) return false;
+        Iterator<Visual> iterator = active.descendingIterator();
+        while (iterator.hasNext())
+            if (!iterator.next().mouseMoved(screenX, screenY)) return false;
 
         return true;
     }
 
     @Override
     public boolean scrolled(int amount) {
-        for (Visual visual : active)
-            if (!visual.scrolled(amount)) return false;
+        Iterator<Visual> iterator = active.descendingIterator();
+        while (iterator.hasNext())
+            if (!iterator.next().scrolled(amount)) return false;
 
         return true;
     }

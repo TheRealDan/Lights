@@ -38,11 +38,12 @@ public interface UI {
     default void scrolled(int amount) {
     }
 
-    default void keyUp(int keycode) {
+    default boolean keyUp(int keycode) {
+        return true;
     }
 
     default boolean keyDown(int keycode) {
-        return false;
+        return true;
     }
 
     default boolean draw(Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {

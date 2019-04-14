@@ -23,7 +23,7 @@ public class ControlsUI implements UI {
 
     @Override
     public boolean draw(Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {
-        UIHandler.setSection(UIHandler.Section.CONTROLS);
+        if (containsMouse()) UIHandler.setSection(UIHandler.Section.CONTROLS);
         boolean interacted = false;
 
         float x = getX();

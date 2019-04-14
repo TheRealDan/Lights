@@ -4,7 +4,6 @@ import me.therealdan.lights.main.Lights;
 import me.therealdan.lights.renderer.Renderer;
 import me.therealdan.lights.renderer.Task;
 import me.therealdan.lights.ui.UIHandler;
-import me.therealdan.lights.util.Util;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -24,7 +23,7 @@ public class TimingsUI implements UI {
 
     @Override
     public boolean draw(Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {
-        UIHandler.setSection(UIHandler.Section.TIMINGS);
+        if (containsMouse()) UIHandler.setSection(UIHandler.Section.TIMINGS);
         boolean interacted = false;
 
         float x = getX();

@@ -18,20 +18,15 @@ public class ProfilesUI implements UI {
 
     private static ProfilesUI profilesUI;
 
-    private final int MIN_ROWS = 6;
-    private final int MAX_ROWS = 8;
+    private final int ROWS = 6;
 
     private List<Profile> profiles = new ArrayList<>();
 
     private Profile selectedProfile = null;
-    private Section section;
+    private Section edit, scroll;
 
-    private Profile profileScroll = null;
-    private boolean canScrollProfiles = false;
+    private int profileScroll = 0;
     private int channelsScroll = 0;
-    private boolean canScrollChannels = false;
-    private int modelsScroll = 0;
-    private boolean canScrollModels = false;
 
     public ProfilesUI() {
         profilesUI = this;
@@ -125,23 +120,25 @@ public class ProfilesUI implements UI {
         renderer.box(x, y, getWidth(), getHeight(), Lights.color.DARK);
         renderer.box(x, y, profilesWidth, cellHeight, Lights.color.DARK_BLUE, "Profiles: " + countProfiles(), Task.TextPosition.CENTER);
         drag(x, y, profilesWidth, cellHeight);
-        canScrollProfiles = Lights.mouse.contains(x, y, profilesWidth, getHeight());
+        if (Lights.mouse.contains(x, y, profilesWidth, getHeight())) scroll(Section.PROFILES);
         y -= cellHeight;
 
         int i = 0;
         boolean display = false;
+        int current = 0;
         for (Profile profile : profiles(true)) {
-            if (profile.equals(getProfileScroll())) display = true;
+            if (current == getProfileScroll()) display = true;
+            current++;
             if (display) {
                 renderer.box(x, y, profilesWidth, cellHeight, profile.equals(getSelectedProfile()) ? Lights.color.DARK_GREEN : Lights.color.MEDIUM, setWidth(renderer, profile.getName()));
                 if (Lights.mouse.contains(x, y, profilesWidth, cellHeight) && canInteract()) {
                     interacted = true;
-                    if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
+                    if (Lights.mouse.leftClicked()) {
                         select(profile);
                     }
                 }
                 y -= cellHeight;
-                if (++i == MAX_ROWS) break;
+                if (++i == ROWS - 1) break;
             }
         }
 
@@ -154,10 +151,7 @@ public class ProfilesUI implements UI {
         }
         y -= cellHeight;
 
-        while (i < MIN_ROWS - 1) {
-            i++;
-            y -= cellHeight;
-        }
+        while (++i < ROWS) y -= cellHeight;
 
         setHeightBasedOnY(y);
         if (!hasSelectedProfile()) {
@@ -175,57 +169,55 @@ public class ProfilesUI implements UI {
         drag(x, y, optionsWidth, cellHeight);
         y -= cellHeight;
 
-        renderer.box(x, y, optionsWidth, cellHeight, canEdit(Section.NAME) ? Lights.color.DARK_GREEN : Lights.color.MEDIUM, "Name: " + getSelectedProfile().getName());
+        renderer.box(x, y, optionsWidth, cellHeight, canEdit(Section.NAME) ? Lights.color.DARK_RED : Lights.color.MEDIUM, "Name: " + getSelectedProfile().getName());
         if (Lights.mouse.contains(x, y, optionsWidth, cellHeight) && canInteract()) {
             interacted = true;
-            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(500)) {
-                toggleEdit(Section.NAME);
+            if (Lights.mouse.leftClicked()) {
+                edit(Section.NAME);
             }
         }
         y -= cellHeight;
 
-        renderer.box(x, y, optionsWidth, cellHeight, canEdit(Section.PHYSICAL_CHANNELS) ? Lights.color.DARK_GREEN : Lights.color.MEDIUM, "Physical Channels: " + getSelectedProfile().getPhysicalChannels());
+        renderer.box(x, y, optionsWidth, cellHeight, canEdit(Section.PHYSICAL_CHANNELS) ? Lights.color.DARK_RED : Lights.color.MEDIUM, "Physical Channels: " + getSelectedProfile().getPhysicalChannels());
         if (Lights.mouse.contains(x, y, optionsWidth, cellHeight) && canInteract()) {
             interacted = true;
-            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(500)) {
-                toggleEdit(Section.PHYSICAL_CHANNELS);
+            if (Lights.mouse.leftClicked()) {
+                edit(Section.PHYSICAL_CHANNELS);
             }
         }
         y -= cellHeight;
 
-        renderer.box(x, y, optionsWidth, cellHeight, canEdit(Section.CHANNELS) ? Lights.color.DARK_GREEN : Lights.color.MEDIUM, "Channels");
+        renderer.box(x, y, optionsWidth, cellHeight, canEdit(Section.CHANNELS) ? Lights.color.DARK_RED : Lights.color.MEDIUM, "Channels: " + getSelectedProfile().countChannels());
         if (Lights.mouse.contains(x, y, optionsWidth, cellHeight) && canInteract()) {
             interacted = true;
-            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(500)) {
-                toggleEdit(Section.CHANNELS);
+            if (Lights.mouse.leftClicked()) {
+                edit(Section.CHANNELS);
             }
         }
         y -= cellHeight;
 
-        renderer.box(x, y, optionsWidth, cellHeight, canEdit(Section.MODELS) ? Lights.color.DARK_GREEN : Lights.color.MEDIUM, "Models");
-        if (Lights.mouse.contains(x, y, optionsWidth, cellHeight) && canInteract()) {
-            interacted = true;
-            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(500)) {
-                toggleEdit(Section.MODELS);
-            }
-        }
+        renderer.box(x, y, optionsWidth, cellHeight, Lights.color.MEDIUM, "Model: " + getSelectedProfile().countModels());
+        if (Lights.mouse.contains(x, y, optionsWidth, cellHeight) && canInteract()) interacted = true;
         y -= cellHeight;
 
         renderer.box(x, y, optionsWidth, cellHeight, Lights.color.MEDIUM, Lights.color.YELLOW, "Advanced");
         if (Lights.mouse.contains(x, y, optionsWidth, cellHeight) && canInteract()) {
             interacted = true;
-            if (Lights.mouse.leftClicked(500)) {
+            if (Lights.mouse.leftClicked()) {
                 Lights.openProfileEditor(getSelectedProfile());
             }
         }
         y -= cellHeight;
 
         renderer.box(x, y, optionsWidth, cellHeight, Lights.color.MEDIUM, Lights.color.RED, "Delete");
-        if (Lights.mouse.contains(x, y, optionsWidth, cellHeight) && canInteract() && shift) {
+        if (Lights.mouse.contains(x, y, optionsWidth, cellHeight) && canInteract()) {
             interacted = true;
-            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(500)) {
-                delete(getSelectedProfile());
-                select(null);
+            if (Lights.mouse.leftClicked()) {
+                if (shift) {
+                    delete(getSelectedProfile());
+                    select(null);
+                    return interacted;
+                }
             }
         }
         y -= cellHeight;
@@ -233,7 +225,6 @@ public class ProfilesUI implements UI {
         x += optionsWidth;
 
         // CHANNELS
-        // TODO - Need channel and model editor, perhaps a new view (like V3D) that overlays everything?
 
         float channelsWidth = 0;
         if (canEdit(Section.CHANNELS)) {
@@ -243,51 +234,25 @@ public class ProfilesUI implements UI {
             renderer.box(x, y, channelsWidth, cellHeight, Lights.color.DARK_BLUE, "Channels: " + getSelectedProfile().countChannels(), Task.TextPosition.CENTER);
             drag(x, y, channelsWidth, cellHeight);
             y -= cellHeight;
-            canScrollChannels = Lights.mouse.contains(x, y, channelsWidth, getHeight());
+            if (Lights.mouse.contains(x, y, channelsWidth, getHeight())) scroll(Section.CHANNELS);
 
             i = 0;
             display = false;
-            int current = 0;
+            current = 0;
             for (Channel channel : getSelectedProfile().channels()) {
                 if (current == getChannelsScroll()) display = true;
                 current++;
                 if (display) {
                     renderer.box(x, y, channelsWidth, cellHeight, Lights.color.MEDIUM, channel.getType().getName() + ": " + channel.addressOffsets());
                     y -= cellHeight;
-                    if (i++ == MAX_ROWS) break;
+                    if (++i == ROWS) break;
                 }
             }
 
             x += channelsWidth;
         }
 
-        // MODELS
-
-        float modelsWidth = 0;
-        if (canEdit(Section.MODELS)) {
-            modelsWidth = 300;
-
-            y = getY();
-            renderer.box(x, y, modelsWidth, cellHeight, Lights.color.DARK_BLUE, "Models: " + getSelectedProfile().countModels(), Task.TextPosition.CENTER);
-            drag(x, y, modelsWidth, cellHeight);
-            y -= cellHeight;
-            canScrollModels = Lights.mouse.contains(x, y, modelsWidth, getHeight());
-
-            i = 0;
-            display = false;
-            int current = 0;
-            for (ModelDesign modelDesign : getSelectedProfile().getModelDesigns()) {
-                if (current == getModelsScroll()) display = true;
-                current++;
-                if (display) {
-                    renderer.box(x, y, modelsWidth, cellHeight, Lights.color.MEDIUM, modelDesign.toString());
-                    y -= cellHeight;
-                    if (i++ == MAX_ROWS) break;
-                }
-            }
-        }
-
-        setWidth(profilesWidth + optionsWidth + channelsWidth + modelsWidth);
+        setWidth(profilesWidth + optionsWidth + channelsWidth);
         return interacted;
     }
 
@@ -332,118 +297,41 @@ public class ProfilesUI implements UI {
 
     @Override
     public void scrolled(int amount) {
-        if (canScrollProfiles()) {
-            if (amount > 0) {
-                boolean next = false;
-                int i = 0;
-                for (Profile profile : profiles(true)) {
-                    if (i++ > countProfiles() - MAX_ROWS) return;
-                    if (next) {
-                        setProfileScroll(profile);
-                        return;
-                    }
-                    if (profile.equals(getProfileScroll())) next = true;
-                }
-            } else {
-                Profile previous = null;
-                for (Profile profile : profiles(true)) {
-                    if (profile.equals(getProfileScroll()) && previous != null) {
-                        setProfileScroll(previous);
-                        return;
-                    }
-                    previous = profile;
-                }
-            }
+        if (canScroll(Section.PROFILES)) {
+            profileScroll += amount;
+            if (getProfileScroll() < 0) profileScroll = 0;
+            if (getProfileScroll() > Math.max(0, countProfiles() - (ROWS - 1))) profileScroll = Math.max(0, countProfiles() - (ROWS - 1));
         }
 
-        if (canScrollChannels()) {
-            if (amount > 0) {
-                if (getChannelsScroll() < getSelectedProfile().countChannels() - MAX_ROWS) channelsScroll += 1;
-            } else {
-                channelsScroll -= 1;
-                if (getChannelsScroll() < 0) channelsScroll = 0;
-            }
-        }
-
-        if (canScrollModels()) {
-            if (amount > 0) {
-                if (getModelsScroll() < getSelectedProfile().countModels() - MAX_ROWS) modelsScroll += 1;
-            } else {
-                modelsScroll -= 1;
-                if (getModelsScroll() < 0) modelsScroll = 0;
-            }
-        }
-    }
-
-    private void toggleEdit(Section section) {
-        if (section.equals(Section.CHANNELS)) {
-            if (Section.MODELS.equals(this.section)) {
-                edit(Section.CHANNELS_AND_MODELS);
-                return;
-            } else if (Section.CHANNELS_AND_MODELS.equals(this.section)) {
-                edit(Section.MODELS);
-                return;
-            }
-        }
-
-        if (section.equals(Section.MODELS)) {
-            if (Section.CHANNELS.equals(this.section)) {
-                edit(Section.CHANNELS_AND_MODELS);
-                return;
-            } else if (Section.CHANNELS_AND_MODELS.equals(this.section)) {
-                edit(Section.CHANNELS);
-                return;
-            }
-        }
-
-        if (canEdit(section)) {
-            edit(null);
-        } else {
-            edit(section);
+        if (canScroll(Section.CHANNELS)) {
+            channelsScroll += amount;
+            if (channelsScroll < 0) channelsScroll = 0;
+            if (getChannelsScroll() > Math.max(0, getSelectedProfile().countChannels() - ROWS)) channelsScroll = Math.max(0, getSelectedProfile().countChannels() - ROWS);
         }
     }
 
     private void edit(Section section) {
-        this.section = section;
+        this.edit = section;
     }
 
     private boolean canEdit(Section section) {
-        if (Section.CHANNELS_AND_MODELS.equals(this.section)) {
-            if (section.equals(Section.CHANNELS)) return true;
-            if (section.equals(Section.MODELS)) return true;
-        }
-
-        return section.equals(this.section);
+        return section.equals(this.edit);
     }
 
-    private void setProfileScroll(Profile profile) {
-        this.profileScroll = profile;
+    private void scroll(Section section) {
+        this.scroll = section;
     }
 
-    private boolean canScrollProfiles() {
-        return canScrollProfiles;
+    private boolean canScroll(Section section) {
+        return section.equals(this.scroll);
     }
 
-    private Profile getProfileScroll() {
-        if (profileScroll == null) setProfileScroll(profiles(true).get(0));
-        if (!profiles().contains(profileScroll)) setProfileScroll(profiles(true).get(0));
+    private int getProfileScroll() {
         return profileScroll;
-    }
-
-    private boolean canScrollChannels() {
-        return canScrollChannels;
     }
 
     private int getChannelsScroll() {
         return channelsScroll;
-    }
-
-    private boolean canScrollModels() {
-        return canScrollModels;
-    }
-
-    private int getModelsScroll() {
-        return modelsScroll;
     }
 
     private void select(Profile profile) {
@@ -459,9 +347,10 @@ public class ProfilesUI implements UI {
     }
 
     public enum Section {
+        PROFILES,
         NAME,
         PHYSICAL_CHANNELS,
-        CHANNELS, MODELS, CHANNELS_AND_MODELS;
+        CHANNELS;
     }
 
     public static void add(Profile profile) {

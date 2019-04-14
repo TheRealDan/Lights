@@ -6,51 +6,13 @@ import java.util.List;
 public class Profile {
 
     private String name;
-    private List<Channel> channels;
-
-    private int virtualChannels;
-    private int physicalChannels;
-
-    private boolean virtualIntensity = false;
-
     private List<ModelDesign> modelDesigns;
+    private List<Channel> channels;
 
     public Profile(String name, List<ModelDesign> modelDesigns, List<Channel> channels) {
         this.name = name;
         this.modelDesigns = modelDesigns;
         this.channels = new ArrayList<>(channels);
-
-        this.virtualChannels = this.channels.size();
-
-        this.physicalChannels = 0;
-        List<Integer> address = new ArrayList<>();
-        for (Channel channel : channels()) {
-            for (int offsets : channel.addressOffsets()) {
-                if (!address.contains(offsets)) {
-                    this.physicalChannels++;
-                    address.add(offsets);
-                }
-            }
-        }
-
-        for (Channel channel : channels()) {
-            if (channel.getType().equals(Channel.Type.INTENSITY)) {
-                for (Channel eachChannel : channels()) {
-                    if (!eachChannel.getType().equals(Channel.Type.INTENSITY)) {
-                        for (int offset : channel.addressOffsets()) {
-                            if (eachChannel.addressOffsets().contains(offset)) {
-                                virtualIntensity = true;
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    public void setPhysicalChannels(int physicalChannels) {
-        this.physicalChannels = physicalChannels;
     }
 
     public void rename(String name) {
@@ -67,15 +29,23 @@ public class Profile {
         return new ArrayList<>(channels);
     }
 
-    public int getVirtualChannels() {
-        return virtualChannels;
-    }
-
     public int getPhysicalChannels() {
+        int physicalChannels = 0;
+        List<Integer> address = new ArrayList<>();
+        for (Channel channel : channels()) {
+            for (int offsets : channel.addressOffsets()) {
+                if (!address.contains(offsets)) {
+                    physicalChannels++;
+                    address.add(offsets);
+                }
+            }
+        }
         return physicalChannels;
+
+        // TODO - Could probably cache this and update whenever channels are modified
     }
 
-    public int countChannels() {
+    public int getVirtualChannels() {
         return channels.size();
     }
 
@@ -84,7 +54,22 @@ public class Profile {
     }
 
     public boolean hasVirtualIntensity() {
-        return virtualIntensity;
+        for (Channel channel : channels()) {
+            if (channel.getType().equals(Channel.Type.INTENSITY)) {
+                for (Channel eachChannel : channels()) {
+                    if (!eachChannel.getType().equals(Channel.Type.INTENSITY)) {
+                        for (int offset : channel.addressOffsets()) {
+                            if (eachChannel.addressOffsets().contains(offset)) {
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+
+        // TODO - Could probably cache this and update whenever channels are modified
     }
 
     public List<ModelDesign> getModelDesigns() {

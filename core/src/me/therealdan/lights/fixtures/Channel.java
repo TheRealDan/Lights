@@ -27,6 +27,13 @@ public class Channel {
         return type;
     }
 
+    public String addressOffsetsAsString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int offset : addressOffsets())
+            stringBuilder.append(", ").append(offset);
+        return stringBuilder.toString().replaceFirst(", ", "");
+    }
+
     public List<Integer> addressOffsets() {
         return new ArrayList<>(addressOffsets);
     }

@@ -74,7 +74,18 @@ public class ProfileEditor implements Visual {
             width = WIDTH / 4;
             renderer.box(x, y, width, cellHeight, Lights.color.DARK_BLUE, "Physical Channels: " + profile.getPhysicalChannels(), Task.TextPosition.CENTER);
             y -= cellHeight;
-            // TODO - Format this properly
+            for (int offset = 0; offset < profile.getPhysicalChannels(); offset++) {
+                StringBuilder channels = new StringBuilder();
+                for (Channel channel : profile.channels()) {
+                    for (int addressOffset : channel.addressOffsets()) {
+                        if (addressOffset == offset) {
+                            channels.append(", ").append(channel.getType().getName());
+                        }
+                    }
+                }
+                renderer.box(x, y, width, cellHeight, Lights.color.MEDIUM, offset + " - " + channels.toString().replaceFirst(", ", ""));
+                y -= cellHeight;
+            }
             y = Y - cellHeight;
         }
 
@@ -84,8 +95,7 @@ public class ProfileEditor implements Visual {
             renderer.box(x, y, width, cellHeight, Lights.color.DARK_BLUE, "Virtual Channels: " + profile.getVirtualChannels(), Task.TextPosition.CENTER);
             y -= cellHeight;
             for (Channel channel : profile.channels()) {
-                // TODO - Format this properly
-                renderer.box(x, y, width, cellHeight, Lights.color.MEDIUM, channel.getType().getCategory().getName() + " > " + channel.getType().getName() + ": " + channel.addressOffsets().toString());
+                renderer.box(x, y, width, cellHeight, Lights.color.MEDIUM, channel.getType().getName() + " - " + channel.addressOffsetsAsString());
                 y -= cellHeight;
             }
             x += width;

@@ -12,8 +12,6 @@ import java.util.List;
 
 public class ControlsUI implements UI {
 
-    // TODO - Implement way to change key bindings
-
     private Control.Category selectedCategory;
     private Control selectedControl = null;
 
@@ -61,6 +59,14 @@ public class ControlsUI implements UI {
 
         setHeightBasedOnY(y);
         return interacted;
+    }
+
+    @Override
+    public boolean keyDown(int keycode) {
+        if (selectedControl == null) return true;
+
+        getSelectedControl().setKeycode(keycode);
+        return false;
     }
 
     public void select(boolean next) {

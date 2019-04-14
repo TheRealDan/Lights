@@ -153,7 +153,7 @@ public class UIHandler implements Visual {
     }
 
     @Override
-    public void draw(Renderer renderer) {
+    public boolean draw(Renderer renderer) {
         UI allowInteract = null;
         for (UI ui : UIs()) {
             ui.setAllowInteract(false);
@@ -177,6 +177,8 @@ public class UIHandler implements Visual {
             getDragging().setLocation(Gdx.input.getX() - xDifference, Gdx.input.getY() - yDifference);
             if (!getDragging().containsMouse()) drag(null);
         }
+
+        return true;
     }
 
     @Override

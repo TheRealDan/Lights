@@ -10,7 +10,15 @@ public class ProfileEditor implements Visual {
     // TODO - Finish Profile editor; Channels, Models and how they interact
 
     @Override
-    public void draw(Renderer renderer) {
+    public boolean draw(Renderer renderer) {
+        float X = 0;
+        float Y = Gdx.graphics.getHeight();
+        float WIDTH = Gdx.graphics.getWidth();
+        float cellHeight = 30;
+
+        float x = X;
+        float y = Y;
+        float width = WIDTH;
 
     }
 

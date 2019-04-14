@@ -154,7 +154,7 @@ public class Visualiser3D implements Visual {
     }
 
     @Override
-    public void draw(Renderer renderer) {
+    public boolean draw(Renderer renderer) {
         mouseSelectFixtures();
         updateFixtureColors();
 
@@ -167,6 +167,8 @@ public class Visualiser3D implements Visual {
             modelBatch.render(fixture.getModelInstances(), environment);
         }
         modelBatch.end();
+
+        return true;
     }
 
     @Override

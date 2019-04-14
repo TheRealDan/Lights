@@ -5,7 +5,7 @@ import me.therealdan.lights.renderer.Renderer;
 
 public interface Visual extends InputProcessor {
 
-    void draw(Renderer renderer);
+    boolean draw(Renderer renderer);
 
     default void resize(int width, int height) {
 

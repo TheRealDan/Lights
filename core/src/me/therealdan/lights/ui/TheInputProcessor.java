@@ -15,7 +15,8 @@ public class TheInputProcessor implements InputProcessor {
 
     public void draw(Renderer renderer) {
         for (Visual visual : active)
-            visual.draw(renderer);
+            if (!visual.draw(renderer))
+                return;
     }
 
     public void resize(int width, int height) {

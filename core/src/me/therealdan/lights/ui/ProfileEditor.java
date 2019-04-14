@@ -124,10 +124,31 @@ public class ProfileEditor implements Visual {
 
     @Override
     public boolean keyDown(int keycode) {
+        boolean shift = Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT);
+
         switch (keycode) {
             case Input.Keys.ESCAPE:
                 Lights.openMainView();
                 return false;
+        }
+
+        if (isEditing(Section.NAME)) {
+            switch (keycode) {
+                case Input.Keys.BACKSPACE:
+                    if (profile.getName().length() > 0)
+                        profile.rename(profile.getName().substring(0, profile.getName().length() - 1));
+                    if (shift) profile.rename("");
+                    break;
+                case Input.Keys.SPACE:
+                    profile.rename(profile.getName() + " ");
+                    break;
+                default:
+                    String string = Input.Keys.toString(keycode);
+                    if ("ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890".contains(string)) {
+                        if (!shift) string = string.toLowerCase();
+                        profile.rename(profile.getName() + string);
+                    }
+            }
         }
 
         return true;

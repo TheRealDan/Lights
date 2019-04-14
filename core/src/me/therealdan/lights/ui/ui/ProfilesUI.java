@@ -181,11 +181,11 @@ public class ProfilesUI implements UI {
         }
         y -= cellHeight;
 
-        renderer.box(x, y, optionsWidth, cellHeight, canEdit(Section.CHANNELS) ? Lights.color.DARK_RED : Lights.color.MEDIUM, "Channels: " + getSelectedProfile().getVirtualChannels());
+        renderer.box(x, y, optionsWidth, cellHeight, canEdit(Section.VIRTUAL_CHANNELS) ? Lights.color.DARK_RED : Lights.color.MEDIUM, "Virtual Channels: " + getSelectedProfile().getVirtualChannels());
         if (Lights.mouse.contains(x, y, optionsWidth, cellHeight) && canInteract()) {
             interacted = true;
             if (Lights.mouse.leftClicked()) {
-                edit(Section.CHANNELS);
+                edit(Section.VIRTUAL_CHANNELS);
             }
         }
         y -= cellHeight;
@@ -221,14 +221,14 @@ public class ProfilesUI implements UI {
         // CHANNELS
 
         float channelsWidth = 0;
-        if (canEdit(Section.CHANNELS)) {
+        if (canEdit(Section.VIRTUAL_CHANNELS)) {
             channelsWidth = 300;
 
             y = getY();
-            renderer.box(x, y, channelsWidth, cellHeight, Lights.color.DARK_BLUE, "Channels: " + getSelectedProfile().getVirtualChannels(), Task.TextPosition.CENTER);
+            renderer.box(x, y, channelsWidth, cellHeight, Lights.color.DARK_BLUE, "Virtual Channels: " + getSelectedProfile().getVirtualChannels(), Task.TextPosition.CENTER);
             drag(x, y, channelsWidth, cellHeight);
             y -= cellHeight;
-            if (Lights.mouse.contains(x, y, channelsWidth, getHeight())) scroll(Section.CHANNELS);
+            if (Lights.mouse.contains(x, y, channelsWidth, getHeight())) scroll(Section.VIRTUAL_CHANNELS);
 
             i = 0;
             display = false;
@@ -284,7 +284,7 @@ public class ProfilesUI implements UI {
             if (getProfileScroll() > Math.max(0, countProfiles() - (ROWS - 1))) profileScroll = Math.max(0, countProfiles() - (ROWS - 1));
         }
 
-        if (canScroll(Section.CHANNELS)) {
+        if (canScroll(Section.VIRTUAL_CHANNELS)) {
             channelsScroll += amount;
             if (channelsScroll < 0) channelsScroll = 0;
             if (getChannelsScroll() > Math.max(0, getSelectedProfile().getVirtualChannels() - ROWS)) channelsScroll = Math.max(0, getSelectedProfile().getVirtualChannels() - ROWS);
@@ -331,7 +331,7 @@ public class ProfilesUI implements UI {
         PROFILES,
         NAME,
         PHYSICAL_CHANNELS,
-        CHANNELS;
+        VIRTUAL_CHANNELS;
     }
 
     public static void add(Profile profile) {

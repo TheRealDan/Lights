@@ -23,10 +23,9 @@ public class ProfilesUI implements UI {
     private List<Profile> profiles = new ArrayList<>();
 
     private Profile selectedProfile = null;
-    private Section edit, scroll;
 
     private int profileScroll = 0;
-    private int channelsScroll = 0;
+    private boolean canEditName = false;
 
     public ProfilesUI() {
         profilesUI = this;
@@ -114,7 +113,6 @@ public class ProfilesUI implements UI {
         renderer.box(x, y, getWidth(), getHeight(), Lights.color.DARK);
         renderer.box(x, y, profilesWidth, cellHeight, Lights.color.DARK_BLUE, "Profiles: " + countProfiles(), Task.TextPosition.CENTER);
         drag(x, y, profilesWidth, cellHeight);
-        if (Lights.mouse.contains(x, y, profilesWidth, getHeight())) scroll(Section.PROFILES);
         y -= cellHeight;
 
         int i = 0;
@@ -163,31 +161,19 @@ public class ProfilesUI implements UI {
         drag(x, y, optionsWidth, cellHeight);
         y -= cellHeight;
 
-        renderer.box(x, y, optionsWidth, cellHeight, canEdit(Section.NAME) ? Lights.color.DARK_RED : Lights.color.MEDIUM, "Name: " + getSelectedProfile().getName());
+        renderer.box(x, y, optionsWidth, cellHeight, canEditName() ? Lights.color.DARK_RED : Lights.color.MEDIUM, "Name: " + getSelectedProfile().getName());
         if (Lights.mouse.contains(x, y, optionsWidth, cellHeight) && canInteract()) {
             interacted = true;
-            if (Lights.mouse.leftClicked()) {
-                edit(Section.NAME);
-            }
+            if (Lights.mouse.leftClicked(500)) toggleCanEditName();
         }
         y -= cellHeight;
 
-        renderer.box(x, y, optionsWidth, cellHeight, canEdit(Section.PHYSICAL_CHANNELS) ? Lights.color.DARK_RED : Lights.color.MEDIUM, "Physical Channels: " + getSelectedProfile().getPhysicalChannels());
-        if (Lights.mouse.contains(x, y, optionsWidth, cellHeight) && canInteract()) {
-            interacted = true;
-            if (Lights.mouse.leftClicked()) {
-                edit(Section.PHYSICAL_CHANNELS);
-            }
-        }
+        renderer.box(x, y, optionsWidth, cellHeight, Lights.color.MEDIUM, "Physical Channels: " + getSelectedProfile().getPhysicalChannels());
+        if (Lights.mouse.contains(x, y, optionsWidth, cellHeight) && canInteract()) interacted = true;
         y -= cellHeight;
 
-        renderer.box(x, y, optionsWidth, cellHeight, canEdit(Section.VIRTUAL_CHANNELS) ? Lights.color.DARK_RED : Lights.color.MEDIUM, "Virtual Channels: " + getSelectedProfile().getVirtualChannels());
-        if (Lights.mouse.contains(x, y, optionsWidth, cellHeight) && canInteract()) {
-            interacted = true;
-            if (Lights.mouse.leftClicked()) {
-                edit(Section.VIRTUAL_CHANNELS);
-            }
-        }
+        renderer.box(x, y, optionsWidth, cellHeight, Lights.color.MEDIUM, "Virtual Channels: " + getSelectedProfile().getVirtualChannels());
+        if (Lights.mouse.contains(x, y, optionsWidth, cellHeight) && canInteract()) interacted = true;
         y -= cellHeight;
 
         renderer.box(x, y, optionsWidth, cellHeight, Lights.color.MEDIUM, "Model: " + getSelectedProfile().countModels());
@@ -197,9 +183,7 @@ public class ProfilesUI implements UI {
         renderer.box(x, y, optionsWidth, cellHeight, Lights.color.MEDIUM, Lights.color.YELLOW, "Advanced");
         if (Lights.mouse.contains(x, y, optionsWidth, cellHeight) && canInteract()) {
             interacted = true;
-            if (Lights.mouse.leftClicked()) {
-                Lights.openProfileEditor(getSelectedProfile());
-            }
+            if (Lights.mouse.leftClicked()) Lights.openProfileEditor(getSelectedProfile());
         }
         y -= cellHeight;
 
@@ -216,37 +200,7 @@ public class ProfilesUI implements UI {
         }
         y -= cellHeight;
 
-        x += optionsWidth;
-
-        // CHANNELS
-
-        float channelsWidth = 0;
-        if (canEdit(Section.VIRTUAL_CHANNELS)) {
-            channelsWidth = 300;
-
-            y = getY();
-            renderer.box(x, y, channelsWidth, cellHeight, Lights.color.DARK_BLUE, "Virtual Channels: " + getSelectedProfile().getVirtualChannels(), Task.TextPosition.CENTER);
-            drag(x, y, channelsWidth, cellHeight);
-            y -= cellHeight;
-            if (Lights.mouse.contains(x, y, channelsWidth, getHeight())) scroll(Section.VIRTUAL_CHANNELS);
-
-            i = 0;
-            display = false;
-            current = 0;
-            for (Channel channel : getSelectedProfile().channels()) {
-                if (current == getChannelsScroll()) display = true;
-                current++;
-                if (display) {
-                    renderer.box(x, y, channelsWidth, cellHeight, Lights.color.MEDIUM, channel.getType().getName() + ": " + channel.addressOffsets());
-                    y -= cellHeight;
-                    if (++i == ROWS) break;
-                }
-            }
-
-            x += channelsWidth;
-        }
-
-        setWidth(profilesWidth + optionsWidth + channelsWidth);
+        setWidth(profilesWidth + optionsWidth);
         return interacted;
     }
 
@@ -254,7 +208,7 @@ public class ProfilesUI implements UI {
     public boolean keyDown(int keycode) {
         boolean shift = Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT);
 
-        if (canEdit(Section.NAME)) {
+        if (canEditName()) {
             switch (keycode) {
                 case Input.Keys.BACKSPACE:
                     if (getSelectedProfile().getName().length() > 0)
@@ -278,41 +232,21 @@ public class ProfilesUI implements UI {
 
     @Override
     public void scrolled(int amount) {
-        if (canScroll(Section.PROFILES)) {
-            profileScroll += amount;
-            if (getProfileScroll() < 0) profileScroll = 0;
-            if (getProfileScroll() > Math.max(0, countProfiles() - (ROWS - 1))) profileScroll = Math.max(0, countProfiles() - (ROWS - 1));
-        }
-
-        if (canScroll(Section.VIRTUAL_CHANNELS)) {
-            channelsScroll += amount;
-            if (channelsScroll < 0) channelsScroll = 0;
-            if (getChannelsScroll() > Math.max(0, getSelectedProfile().getVirtualChannels() - ROWS)) channelsScroll = Math.max(0, getSelectedProfile().getVirtualChannels() - ROWS);
-        }
+        profileScroll += amount;
+        if (getProfileScroll() < 0) profileScroll = 0;
+        if (getProfileScroll() > Math.max(0, countProfiles() - (ROWS - 1))) profileScroll = Math.max(0, countProfiles() - (ROWS - 1));
     }
 
-    private void edit(Section section) {
-        this.edit = section;
+    private void toggleCanEditName() {
+        this.canEditName = !this.canEditName;
     }
 
-    private boolean canEdit(Section section) {
-        return section.equals(this.edit);
-    }
-
-    private void scroll(Section section) {
-        this.scroll = section;
-    }
-
-    private boolean canScroll(Section section) {
-        return section.equals(this.scroll);
+    private boolean canEditName() {
+        return canEditName;
     }
 
     private int getProfileScroll() {
         return profileScroll;
-    }
-
-    private int getChannelsScroll() {
-        return channelsScroll;
     }
 
     private void select(Profile profile) {
@@ -325,13 +259,6 @@ public class ProfilesUI implements UI {
 
     private Profile getSelectedProfile() {
         return selectedProfile;
-    }
-
-    public enum Section {
-        PROFILES,
-        NAME,
-        PHYSICAL_CHANNELS,
-        VIRTUAL_CHANNELS;
     }
 
     public static void add(Profile profile) {

@@ -40,7 +40,6 @@ public class ProfilesUI implements UI {
     private void load(FileHandle fileHandle) {
         String name = fileHandle.name().replace(".txt", "");
 
-        int physicalChannels = 0;
         List<Channel> channels = new ArrayList<>();
         List<ModelDesign> modelDesigns = new ArrayList<>();
 
@@ -48,9 +47,6 @@ public class ProfilesUI implements UI {
         for (String line : fileHandle.readString().split("\\r?\\n")) {
             if (line.startsWith("Name: ")) {
                 name = line.split(": ")[1];
-                continue;
-            } else if (line.startsWith("Physical Channels: ")) {
-                physicalChannels = Integer.parseInt(line.split(": ")[1]);
                 continue;
             } else if (line.startsWith("Channels:")) {
                 isChannel = true;
@@ -70,7 +66,6 @@ public class ProfilesUI implements UI {
         }
 
         Profile profile = new Profile(name, modelDesigns, channels);
-        profile.setPhysicalChannels(physicalChannels);
         add(profile);
     }
 
@@ -83,7 +78,6 @@ public class ProfilesUI implements UI {
             fileHandle.writeString("", false);
 
             fileHandle.writeString("Name: " + profile.getName() + "\r\n", true);
-            fileHandle.writeString("Physical Channels: " + profile.getPhysicalChannels() + "\r\n", true);
 
             fileHandle.writeString("Channels:\r\n", true);
             for (Channel channel : profile.channels()) {
@@ -187,7 +181,7 @@ public class ProfilesUI implements UI {
         }
         y -= cellHeight;
 
-        renderer.box(x, y, optionsWidth, cellHeight, canEdit(Section.CHANNELS) ? Lights.color.DARK_RED : Lights.color.MEDIUM, "Channels: " + getSelectedProfile().countChannels());
+        renderer.box(x, y, optionsWidth, cellHeight, canEdit(Section.CHANNELS) ? Lights.color.DARK_RED : Lights.color.MEDIUM, "Channels: " + getSelectedProfile().getVirtualChannels());
         if (Lights.mouse.contains(x, y, optionsWidth, cellHeight) && canInteract()) {
             interacted = true;
             if (Lights.mouse.leftClicked()) {
@@ -231,7 +225,7 @@ public class ProfilesUI implements UI {
             channelsWidth = 300;
 
             y = getY();
-            renderer.box(x, y, channelsWidth, cellHeight, Lights.color.DARK_BLUE, "Channels: " + getSelectedProfile().countChannels(), Task.TextPosition.CENTER);
+            renderer.box(x, y, channelsWidth, cellHeight, Lights.color.DARK_BLUE, "Channels: " + getSelectedProfile().getVirtualChannels(), Task.TextPosition.CENTER);
             drag(x, y, channelsWidth, cellHeight);
             y -= cellHeight;
             if (Lights.mouse.contains(x, y, channelsWidth, getHeight())) scroll(Section.CHANNELS);
@@ -279,19 +273,6 @@ public class ProfilesUI implements UI {
             }
         }
 
-        if (canEdit(Section.PHYSICAL_CHANNELS)) {
-            String physicalChannels = Integer.toString(getSelectedProfile().getPhysicalChannels());
-            if (keycode == Input.Keys.BACKSPACE) {
-                if (physicalChannels.length() > 0) physicalChannels = physicalChannels.substring(0, physicalChannels.length() - 1);
-                if (shift) physicalChannels = "0";
-            } else {
-                String string = Input.Keys.toString(keycode);
-                if ("1234567890".contains(string)) physicalChannels += string;
-            }
-            if (physicalChannels.length() == 0) physicalChannels = "0";
-            getSelectedProfile().setPhysicalChannels(Integer.parseInt(physicalChannels));
-        }
-
         return true;
     }
 
@@ -306,7 +287,7 @@ public class ProfilesUI implements UI {
         if (canScroll(Section.CHANNELS)) {
             channelsScroll += amount;
             if (channelsScroll < 0) channelsScroll = 0;
-            if (getChannelsScroll() > Math.max(0, getSelectedProfile().countChannels() - ROWS)) channelsScroll = Math.max(0, getSelectedProfile().countChannels() - ROWS);
+            if (getChannelsScroll() > Math.max(0, getSelectedProfile().getVirtualChannels() - ROWS)) channelsScroll = Math.max(0, getSelectedProfile().getVirtualChannels() - ROWS);
         }
     }
 

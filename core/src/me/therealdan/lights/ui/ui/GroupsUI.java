@@ -35,7 +35,7 @@ public class GroupsUI implements UI {
         drag(x, y, width, cellHeight);
         y -= cellHeight;
 
-        for (Group group : PatchUI.groups()) {
+        for (Group group : Group.groups(Group.SortBy.NAME)) {
             renderer.box(x, y, cellSize, cellSize, Programmer.isSelected(group) ? Lights.color.DARK_RED : Lights.color.MEDIUM, setWidth(renderer, group.getName()), Task.TextPosition.CENTER);
             if (Lights.mouse.contains(x, y, cellSize, cellSize) && canInteract()) {
                 interacted = true;

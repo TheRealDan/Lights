@@ -2,71 +2,17 @@ package me.therealdan.lights.ui.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import me.therealdan.lights.dmx.DMX;
 import me.therealdan.lights.fixtures.Fixture;
-import me.therealdan.lights.fixtures.Group;
 import me.therealdan.lights.main.Lights;
 import me.therealdan.lights.renderer.Renderer;
 import me.therealdan.lights.renderer.Task;
 import me.therealdan.lights.ui.UIHandler;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class PatchUI implements UI {
 
-    private static PatchUI patch;
-
-    private List<Group> groups = new ArrayList<>();
-
     private Fixture selectedFixture = null;
-
-    public PatchUI() {
-        patch = this;
-
-        FileHandle fileHandle = Gdx.files.local("Lights/Groups/");
-        if (fileHandle.exists() && fileHandle.isDirectory())
-            for (FileHandle child : fileHandle.list())
-                loadGroup(child);
-    }
-
-    private void loadGroup(FileHandle fileHandle) {
-        if (fileHandle.name().startsWith(".")) return;
-        String name = fileHandle.name().replace(".txt", "");
-        Group group = new Group(name);
-
-        for (String line : fileHandle.readString().split("\\r?\\n")) {
-            if (line.startsWith("Name: ")) {
-                group.rename(line.split(": ")[1]);
-            } else if (line.startsWith("Fixtures:")) {
-                // do nothing
-            } else if (line.startsWith("  - ")) {
-                int id = Integer.parseInt(line.replaceFirst("  - ", ""));
-                Fixture fixture = Fixture.fixtureByID(id);
-                if (fixture != null) group.add(fixture);
-            }
-        }
-
-        add(group);
-    }
-
-    @Override
-    public void save() {
-        UI.super.save();
-
-        for (Group group : groups()) {
-            FileHandle fileHandle = Gdx.files.local("Lights/Groups/" + group.getName() + ".txt");
-            fileHandle.writeString("", false);
-
-            fileHandle.writeString("Name: " + group.getName() + "\r\n", true);
-
-            fileHandle.writeString("Fixtures:\r\n", true);
-            for (Fixture fixture : group.fixtures())
-                fileHandle.writeString("  - " + fixture.getID() + "\r\n", true);
-        }
-    }
 
     @Override
     public boolean draw(Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {
@@ -175,20 +121,5 @@ public class PatchUI implements UI {
 
     private boolean hasFixtureSelected() {
         return getSelectedFixture() != null;
-    }
-
-    public static void add(Group group) {
-        patch.groups.add(group);
-    }
-
-    public static Group groupByName(String name) {
-        for (Group group : patch.groups)
-            if (group.getName().equalsIgnoreCase(name))
-                return group;
-        return null;
-    }
-
-    public static List<Group> groups() {
-        return new ArrayList<>(patch.groups);
     }
 }

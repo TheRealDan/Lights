@@ -72,7 +72,7 @@ public class DMX {
 
     private int pget(int channel) {
         if (DMX.LIMIT_LED_STRIPS) {
-            Group group = PatchUI.groupByName("LEDs");
+            Group group = Group.groupByName("LEDs");
             if (group != null) {
                 for (Fixture fixture : group.fixtures()) {
                     for (int address : fixture.getAddresses()) {

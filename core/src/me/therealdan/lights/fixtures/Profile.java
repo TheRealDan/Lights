@@ -79,6 +79,7 @@ public class Profile {
     }
 
     public List<ModelDesign> getModelDesigns() {
+        // TODO - Still using hardcoded model designs based off profile name
         if (modelDesigns.size() == 0) {
             switch (getName()) {
                 case "Ming":
@@ -149,14 +150,8 @@ public class Profile {
             fileHandle.writeString("Name: " + profile.getName() + "\r\n", true);
 
             fileHandle.writeString("Channels:\r\n", true);
-            for (Channel channel : profile.channels()) {
-                fileHandle.writeString("  " + channel.getType().toString() + ": ", true);
-                StringBuilder offsets = new StringBuilder();
-                for (int offset : channel.addressOffsets())
-                    offsets.append(", ").append(offset);
-                fileHandle.writeString(offsets.toString().replaceFirst(", ", ""), true);
-                fileHandle.writeString("\r\n", true);
-            }
+            for (Channel channel : profile.channels())
+                fileHandle.writeString("  " + channel.toString() + "\r\n", true);
 
             fileHandle.writeString("Models:\r\n", true);
             for (ModelDesign modelDesign : profile.getModelDesigns())

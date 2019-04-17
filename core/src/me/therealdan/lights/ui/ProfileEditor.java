@@ -120,7 +120,8 @@ public class ProfileEditor implements Visual {
 
             renderer.box(x, y, width, cellHeight, Lights.color.MEDIUM, Lights.color.GREEN, "Add Channel");
             if (Lights.mouse.contains(x, y, width, cellHeight) && Lights.mouse.leftClicked()) {
-                // TODO - Implement Add Channel for mutable/profile
+                // TODO TEST - 1. This button adds a channel 2. Not saving doesn't change profile 3. Saving changes profile
+                getMutableProfile().addChannel(Channel.DEFAULT_TYPE);
             }
             y -= cellHeight;
 

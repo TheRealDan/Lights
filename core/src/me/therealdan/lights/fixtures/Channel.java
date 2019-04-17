@@ -6,6 +6,8 @@ import java.util.List;
 
 public class Channel {
 
+    public static final Type DEFAULT_TYPE = Type.INTENSITY;
+
     private Type type;
     private List<Integer> addressOffsets;
 

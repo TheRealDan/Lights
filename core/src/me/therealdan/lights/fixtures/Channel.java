@@ -38,6 +38,20 @@ public class Channel {
         return new ArrayList<>(addressOffsets);
     }
 
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(getType().toString()).append(": ");
+        for (int addressOffset : addressOffsets())
+            stringBuilder.append(", ").append(addressOffset);
+        return stringBuilder.toString().replaceFirst(", ", "");
+    }
+
+    @Override
+    public Channel clone() {
+        return new Channel(toString());
+    }
+
     public enum Type {
         INTENSITY,
         RED, GREEN, BLUE;

@@ -21,6 +21,12 @@ public class Profile {
         this.channels = new ArrayList<>(channels);
     }
 
+    public void update(MutableProfile mutableProfile) {
+        this.name = mutableProfile.getName();
+        this.modelDesigns = mutableProfile.getModelDesigns();
+        this.channels = mutableProfile.channels();
+    }
+
     public void rename(String name) {
         this.name = name;
 

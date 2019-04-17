@@ -57,6 +57,7 @@ public class Fixture {
     }
 
     public void updateColor(DMX visualiser) {
+        // TODO - Still using hardcoded colors for 3DV models based on profile names
         switch (getProfile()) {
             case "Ming":
                 int parameter = 1;
@@ -233,6 +234,8 @@ public class Fixture {
         fixtures.add(fixture);
     }
 
+    // TODO - Fixture object should contain the fileName, then [fixtureID]_[fixtureName] will be used if a fileName doesn't exist
+
     public static void loadFixturesFromFile() {
         FileHandle fileHandle = Gdx.files.local("Lights/Fixtures/");
         if (fileHandle.exists() && fileHandle.isDirectory())
@@ -290,6 +293,12 @@ public class Fixture {
             fileHandle.writeString("  Y: " + position.y + "\r\n", true);
             fileHandle.writeString("  Z: " + position.z + "\r\n", true);
         }
+    }
+
+    public static int getFreeID() {
+        int id = 0;
+        while (fixtureByID(id) != null) id++;
+        return id;
     }
 
     public static Fixture fixtureByID(int id) {

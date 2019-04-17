@@ -30,26 +30,26 @@ public class ProfileEditor implements Visual {
         renderer.box(x, y, width, cellHeight, Lights.color.DARK_BLUE, "Profile Editor", Task.TextPosition.CENTER);
         y -= cellHeight;
 
-        if (profile == null) return true;
+        if (getProfile() == null) return true;
 
         // PROFILE OPTIONS
         width = WIDTH / 4;
         renderer.box(x, y, width, cellHeight, Lights.color.DARK_BLUE, "Profile Options", Task.TextPosition.CENTER);
         y -= cellHeight;
 
-        renderer.box(x, y, width, cellHeight, isEditing(Section.NAME) ? Lights.color.DARK_RED : Lights.color.MEDIUM, "Name: " + profile.getName());
+        renderer.box(x, y, width, cellHeight, isEditing(Section.NAME) ? Lights.color.DARK_RED : Lights.color.MEDIUM, "Name: " + getProfile().getName());
         if (Lights.mouse.contains(x, y, width, cellHeight) && Lights.mouse.leftClicked()) edit(Section.NAME);
         y -= cellHeight;
 
-        renderer.box(x, y, width, cellHeight, isEditing(Section.PHYSICAL_CHANNELS) ? Lights.color.DARK_RED : Lights.color.MEDIUM, "Physical Channels: " + profile.getPhysicalChannels());
+        renderer.box(x, y, width, cellHeight, isEditing(Section.PHYSICAL_CHANNELS) ? Lights.color.DARK_RED : Lights.color.MEDIUM, "Physical Channels: " + getProfile().getPhysicalChannels());
         if (Lights.mouse.contains(x, y, width, cellHeight) && Lights.mouse.leftClicked()) edit(Section.PHYSICAL_CHANNELS);
         y -= cellHeight;
 
-        renderer.box(x, y, width, cellHeight, isEditing(Section.VIRTUAL_CHANNELS) ? Lights.color.DARK_RED : Lights.color.MEDIUM, "Virtual Channels: " + profile.getVirtualChannels());
+        renderer.box(x, y, width, cellHeight, isEditing(Section.VIRTUAL_CHANNELS) ? Lights.color.DARK_RED : Lights.color.MEDIUM, "Virtual Channels: " + getProfile().getVirtualChannels());
         if (Lights.mouse.contains(x, y, width, cellHeight) && Lights.mouse.leftClicked()) edit(Section.VIRTUAL_CHANNELS);
         y -= cellHeight;
 
-        renderer.box(x, y, width, cellHeight, isEditing(Section.MODEL) ? Lights.color.DARK_RED : Lights.color.MEDIUM, "Model: " + profile.countModels());
+        renderer.box(x, y, width, cellHeight, isEditing(Section.MODEL) ? Lights.color.DARK_RED : Lights.color.MEDIUM, "Model: " + getProfile().countModels());
         if (Lights.mouse.contains(x, y, width, cellHeight) && Lights.mouse.leftClicked()) edit(Section.MODEL);
         y -= cellHeight;
 
@@ -62,7 +62,10 @@ public class ProfileEditor implements Visual {
 
         renderer.box(x, y, width, cellHeight, Lights.color.MEDIUM, Lights.color.RED, "Delete");
         if (Lights.mouse.contains(x, y, width, cellHeight) && Lights.mouse.leftClicked()) {
-            // TODO - Adding delete functionality is going to require a little rework which needs to happen anyway
+            Profile.delete(getProfile());
+            edit((Profile) null);
+            Lights.openMainView();
+            return false;
         }
         y -= cellHeight;
 
@@ -72,11 +75,11 @@ public class ProfileEditor implements Visual {
         // PHYSICAL CHANNELS
         if (isEditing(Section.PHYSICAL_CHANNELS)) {
             width = WIDTH / 4;
-            renderer.box(x, y, width, cellHeight, Lights.color.DARK_BLUE, "Physical Channels: " + profile.getPhysicalChannels(), Task.TextPosition.CENTER);
+            renderer.box(x, y, width, cellHeight, Lights.color.DARK_BLUE, "Physical Channels: " + getProfile().getPhysicalChannels(), Task.TextPosition.CENTER);
             y -= cellHeight;
-            for (int offset = 0; offset < profile.getPhysicalChannels(); offset++) {
+            for (int offset = 0; offset < getProfile().getPhysicalChannels(); offset++) {
                 StringBuilder channels = new StringBuilder();
-                for (Channel channel : profile.channels()) {
+                for (Channel channel : getProfile().channels()) {
                     for (int addressOffset : channel.addressOffsets()) {
                         if (addressOffset == offset) {
                             channels.append(", ").append(channel.getType().getName());
@@ -92,9 +95,9 @@ public class ProfileEditor implements Visual {
         // VIRTUAL CHANNELS
         if (isEditing(Section.VIRTUAL_CHANNELS)) {
             width = WIDTH / 4;
-            renderer.box(x, y, width, cellHeight, Lights.color.DARK_BLUE, "Virtual Channels: " + profile.getVirtualChannels(), Task.TextPosition.CENTER);
+            renderer.box(x, y, width, cellHeight, Lights.color.DARK_BLUE, "Virtual Channels: " + getProfile().getVirtualChannels(), Task.TextPosition.CENTER);
             y -= cellHeight;
-            for (Channel channel : profile.channels()) {
+            for (Channel channel : getProfile().channels()) {
                 renderer.box(x, y, width, cellHeight, Lights.color.MEDIUM, channel.getType().getName() + " - " + channel.addressOffsetsAsString());
                 y -= cellHeight;
             }
@@ -112,9 +115,9 @@ public class ProfileEditor implements Visual {
         // MODEL
         if (isEditing(Section.MODEL)) {
             width = WIDTH / 4;
-            renderer.box(x, y, width, cellHeight, Lights.color.DARK_BLUE, "Model: " + profile.countModels(), Task.TextPosition.CENTER);
+            renderer.box(x, y, width, cellHeight, Lights.color.DARK_BLUE, "Model: " + getProfile().countModels(), Task.TextPosition.CENTER);
             y -= cellHeight;
-            for (ModelDesign modelDesign : profile.getModelDesigns()) {
+            for (ModelDesign modelDesign : getProfile().getModelDesigns()) {
                 renderer.box(x, y, width, cellHeight, Lights.color.MEDIUM, modelDesign.toString());
                 y -= cellHeight;
             }
@@ -142,18 +145,18 @@ public class ProfileEditor implements Visual {
         if (isEditing(Section.NAME)) {
             switch (keycode) {
                 case Input.Keys.BACKSPACE:
-                    if (profile.getName().length() > 0)
-                        profile.rename(profile.getName().substring(0, profile.getName().length() - 1));
-                    if (shift) profile.rename("");
+                    if (getProfile().getName().length() > 0)
+                        getProfile().rename(getProfile().getName().substring(0, getProfile().getName().length() - 1));
+                    if (shift) getProfile().rename("");
                     break;
                 case Input.Keys.SPACE:
-                    profile.rename(profile.getName() + " ");
+                    getProfile().rename(getProfile().getName() + " ");
                     break;
                 default:
                     String string = Input.Keys.toString(keycode);
                     if ("ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890".contains(string)) {
                         if (!shift) string = string.toLowerCase();
-                        profile.rename(profile.getName() + string);
+                        getProfile().rename(getProfile().getName() + string);
                     }
             }
         }
@@ -171,6 +174,10 @@ public class ProfileEditor implements Visual {
 
     private boolean isEditing(Section section) {
         return section.equals(this.section);
+    }
+
+    private Profile getProfile() {
+        return profile;
     }
 
     public enum Section {

@@ -50,6 +50,11 @@ public class ModelDesign {
         return getDimensions().x + ";" + getDimensions().y + ";" + getDimensions().z + ";" + getOffset().x + ";" + getOffset().y + ";" + getOffset().z;
     }
 
+    @Override
+    public ModelDesign clone() {
+        return new ModelDesign(dimensions.x, dimensions.y, dimensions.z, offset.x, offset.y, offset.z);
+    }
+
     public static ModelDesign fromString(String string) {
         String[] args = string.split(";");
         return new ModelDesign(

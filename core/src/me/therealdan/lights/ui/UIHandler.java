@@ -6,6 +6,7 @@ import me.therealdan.lights.controllers.Fader;
 import me.therealdan.lights.dmx.DMX;
 import me.therealdan.lights.fixtures.Fixture;
 import me.therealdan.lights.fixtures.Group;
+import me.therealdan.lights.fixtures.Profile;
 import me.therealdan.lights.main.Lights;
 import me.therealdan.lights.programmer.CondensedFrame;
 import me.therealdan.lights.programmer.Frame;
@@ -54,6 +55,10 @@ public class UIHandler implements Visual {
 
         // Setup
         uis.add(new ProfilesUI());
+
+        // TODO - Move elsewhere
+        Profile.loadProfilesFromFile();
+
         uis.add(new PatchUI());
 
         // TODO - Move elsewhere
@@ -95,6 +100,8 @@ public class UIHandler implements Visual {
         // TODO - Move elsewhere?
         Fixture.saveFixturesToFile();
         Group.saveGroupsToFile();
+
+        Profile.saveProfilesToFile();
     }
 
     public void update() {

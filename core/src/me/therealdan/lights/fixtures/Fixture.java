@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.math.Vector3;
 import me.therealdan.lights.dmx.DMX;
-import me.therealdan.lights.ui.ui.ProfilesUI;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -253,7 +252,7 @@ public class Fixture {
             if (line.startsWith("Name: ")) {
                 name = line.split(": ")[1];
             } else if (line.startsWith("Profile: ")) {
-                profile = ProfilesUI.profileByName(line.split(": ")[1]);
+                profile = Profile.profileByName(line.split(": ")[1]);
             } else if (line.startsWith("Address: ")) {
                 address = Integer.parseInt(line.split(": ")[1]);
             } else if (line.startsWith("ID: ")) {

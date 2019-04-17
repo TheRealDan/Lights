@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.files.FileHandle;
 import me.therealdan.lights.fixtures.Channel;
+import me.therealdan.lights.fixtures.Fixture;
 import me.therealdan.lights.main.Lights;
 import me.therealdan.lights.programmer.Frame;
 import me.therealdan.lights.programmer.Programmer;
@@ -76,7 +77,7 @@ public class SequencesUI implements UI {
                 if (frame != null) {
                     String[] args = line.split(" \\| ");
                     frame.set(
-                            PatchUI.fixtureByID(Integer.parseInt(args[1])),
+                            Fixture.fixtureByID(Integer.parseInt(args[1])),
                             Channel.Type.valueOf(args[2]),
                             Float.parseFloat(args[4]),
                             Integer.parseInt(args[3])

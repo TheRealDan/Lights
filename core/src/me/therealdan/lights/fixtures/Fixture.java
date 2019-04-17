@@ -1,14 +1,20 @@
 package me.therealdan.lights.fixtures;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.math.Vector3;
 import me.therealdan.lights.dmx.DMX;
+import me.therealdan.lights.ui.ui.ProfilesUI;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 public class Fixture {
+
+    private static HashSet<Fixture> fixtures = new HashSet<>();
 
     private String name;
     private Profile profile;
@@ -224,4 +230,117 @@ public class Fixture {
         return profile.channels();
     }
 
+    public static void add(Fixture fixture) {
+        fixtures.add(fixture);
+    }
+
+    public static void loadFixturesFromFile() {
+        FileHandle fileHandle = Gdx.files.local("Lights/Fixtures/");
+        if (fileHandle.exists() && fileHandle.isDirectory())
+            for (FileHandle file : fileHandle.list())
+                loadFixtureFromFile(file);
+    }
+
+    private static void loadFixtureFromFile(FileHandle fileHandle) {
+        String name = fileHandle.name().replace(".txt", "");
+
+        Profile profile = null;
+        int address = 0;
+        int id = -1;
+        Vector3 position = new Vector3();
+
+        for (String line : fileHandle.readString().split("\\r?\\n")) {
+            if (line.startsWith("Name: ")) {
+                name = line.split(": ")[1];
+            } else if (line.startsWith("Profile: ")) {
+                profile = ProfilesUI.profileByName(line.split(": ")[1]);
+            } else if (line.startsWith("Address: ")) {
+                address = Integer.parseInt(line.split(": ")[1]);
+            } else if (line.startsWith("ID: ")) {
+                id = Integer.parseInt(line.split(": ")[1]);
+
+            } else if (line.startsWith("  X: ")) {
+                position.set(Float.parseFloat(line.split(": ")[1]), position.y, position.z);
+            } else if (line.startsWith("  Y: ")) {
+                position.set(position.x, Float.parseFloat(line.split(": ")[1]), position.z);
+            } else if (line.startsWith("  Z: ")) {
+                position.set(position.x, position.y, Float.parseFloat(line.split(": ")[1]));
+            }
+        }
+
+        if (profile == null) return;
+        if (address == 0) return;
+        if (id <= -1) return;
+
+        add(new Fixture(name, profile, address, id, position));
+    }
+
+    public static void saveFixturesToFile() {
+        for (Fixture fixture : fixtures()) {
+            FileHandle fileHandle = Gdx.files.local("Lights/Fixtures/" + fixture.getID() + "_" + fixture.getName() + ".txt");
+            fileHandle.writeString("", false);
+
+            fileHandle.writeString("Name: " + fixture.getName() + "\r\n", true);
+            fileHandle.writeString("Profile: " + fixture.getProfile() + "\r\n", true);
+            fileHandle.writeString("Address: " + fixture.getAddress() + "\r\n", true);
+            fileHandle.writeString("ID: " + fixture.getID() + "\r\n", true);
+
+            Vector3 position = fixture.getPosition();
+            fileHandle.writeString("Position:\r\n", true);
+            fileHandle.writeString("  X: " + position.x + "\r\n", true);
+            fileHandle.writeString("  Y: " + position.y + "\r\n", true);
+            fileHandle.writeString("  Z: " + position.z + "\r\n", true);
+        }
+    }
+
+    public static Fixture fixtureByID(int id) {
+        for (Fixture fixture : fixtures(SortBy.ID))
+            if (fixture.getID() == id)
+                return fixture;
+
+        return null;
+    }
+
+    public static Fixture fixtureByName(String name) {
+        for (Fixture fixture : fixtures())
+            if (fixture.getName().equalsIgnoreCase(name))
+                return fixture;
+
+        return null;
+    }
+
+    public static List<Fixture> fixtures(SortBy... sortBy) {
+        List<Fixture> fixtures = new ArrayList<>(Fixture.fixtures);
+        if (sortBy.length == 0) return fixtures;
+
+        List<Fixture> sorted = new ArrayList<>();
+
+        while (fixtures.size() > 0) {
+            Fixture next = null;
+            for (Fixture fixture : fixtures) {
+                if (next == null) {
+                    next = fixture;
+                } else {
+                    sort:
+                    for (SortBy each : sortBy) {
+                        switch (each) {
+                            case ID:
+                                if (fixture.getID() == next.getID()) break;
+                                if (fixture.getID() < next.getID()) next = fixture;
+                                break sort;
+                        }
+                    }
+                }
+            }
+            sorted.add(next);
+            fixtures.remove(next);
+        }
+
+        return sorted;
+    }
+
+    // TODO - Add more sorting options
+    public enum SortBy {
+        ID
+    }
 }

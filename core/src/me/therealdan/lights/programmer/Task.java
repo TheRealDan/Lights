@@ -2,7 +2,6 @@ package me.therealdan.lights.programmer;
 
 import me.therealdan.lights.fixtures.Channel;
 import me.therealdan.lights.fixtures.Fixture;
-import me.therealdan.lights.ui.ui.PatchUI;
 
 import java.util.List;
 
@@ -74,7 +73,7 @@ public class Task {
     public static Task fromString(String string) {
         String[] args = string.split(";");
         return new Task(
-                PatchUI.fixtureByID(Integer.parseInt(args[0])),
+                Fixture.fixtureByID(Integer.parseInt(args[0])),
                 Channel.Type.valueOf(args[1]),
                 Integer.parseInt(args[2]),
                 Float.parseFloat(args[3])

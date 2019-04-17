@@ -35,7 +35,7 @@ public class FixturesUI implements UI {
         drag(x, y, width, cellHeight);
         y -= cellHeight;
 
-        for (Fixture fixture : PatchUI.fixtures()) {
+        for (Fixture fixture : Fixture.fixtures(Fixture.SortBy.ID)) {
             renderer.box(x, y, cellSize, cellSize, Programmer.isSelected(fixture) ? Lights.color.DARK_RED : Lights.color.MEDIUM, fixture.getName(), Task.TextPosition.CENTER);
             if (Lights.mouse.contains(x, y, cellSize, cellSize) && canInteract()) {
                 interacted = true;

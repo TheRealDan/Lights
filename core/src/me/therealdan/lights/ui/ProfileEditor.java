@@ -98,6 +98,13 @@ public class ProfileEditor implements Visual {
                 renderer.box(x, y, width, cellHeight, Lights.color.MEDIUM, channel.getType().getName() + " - " + channel.addressOffsetsAsString());
                 y -= cellHeight;
             }
+
+            renderer.box(x, y, width, cellHeight, Lights.color.MEDIUM, Lights.color.GREEN, "Add Channel");
+            if (Lights.mouse.contains(x, y, width, cellHeight) && Lights.mouse.leftClicked()) {
+                // TODO - Profile isn't mutable!
+            }
+            y -= cellHeight;
+
             x += width;
             y = Y - cellHeight;
         }

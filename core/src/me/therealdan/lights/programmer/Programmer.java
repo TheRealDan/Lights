@@ -3,7 +3,6 @@ package me.therealdan.lights.programmer;
 import me.therealdan.lights.fixtures.Channel;
 import me.therealdan.lights.fixtures.Fixture;
 import me.therealdan.lights.fixtures.Group;
-import me.therealdan.lights.ui.ui.PatchUI;
 import me.therealdan.lights.ui.ui.SequencesUI;
 
 import java.util.ArrayList;
@@ -22,7 +21,7 @@ public class Programmer {
     }
 
     public static void set(float address, float value) {
-        for (Fixture fixture : PatchUI.fixtures()) {
+        for (Fixture fixture : Fixture.fixtures()) {
             HashMap<String, Integer> parameters = new HashMap<>();
             for (Channel channel : fixture.channels()) {
                 parameters.put(channel.getType().toString(), parameters.getOrDefault(channel.getType().toString(), 0) + 1);

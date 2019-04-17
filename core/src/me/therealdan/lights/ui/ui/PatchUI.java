@@ -4,11 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.math.Vector3;
 import me.therealdan.lights.dmx.DMX;
 import me.therealdan.lights.fixtures.Fixture;
 import me.therealdan.lights.fixtures.Group;
-import me.therealdan.lights.fixtures.Profile;
 import me.therealdan.lights.main.Lights;
 import me.therealdan.lights.renderer.Renderer;
 import me.therealdan.lights.renderer.Task;
@@ -21,7 +19,6 @@ public class PatchUI implements UI {
 
     private static PatchUI patch;
 
-    private List<Fixture> fixtures = new ArrayList<>();
     private List<Group> groups = new ArrayList<>();
 
     private Fixture selectedFixture = null;
@@ -29,49 +26,10 @@ public class PatchUI implements UI {
     public PatchUI() {
         patch = this;
 
-        FileHandle fileHandle = Gdx.files.local("Lights/Fixtures/");
-        if (fileHandle.exists() && fileHandle.isDirectory())
-            for (FileHandle child : fileHandle.list())
-                loadFixture(child);
-
-        fileHandle = Gdx.files.local("Lights/Groups/");
+        FileHandle fileHandle = Gdx.files.local("Lights/Groups/");
         if (fileHandle.exists() && fileHandle.isDirectory())
             for (FileHandle child : fileHandle.list())
                 loadGroup(child);
-    }
-
-    private void loadFixture(FileHandle fileHandle) {
-        String name = fileHandle.name().replace(".txt", "");
-
-        Profile profile = null;
-        int address = 0;
-        int id = -1;
-        Vector3 position = new Vector3();
-
-        for (String line : fileHandle.readString().split("\\r?\\n")) {
-            if (line.startsWith("Name: ")) {
-                name = line.split(": ")[1];
-            } else if (line.startsWith("Profile: ")) {
-                profile = ProfilesUI.profileByName(line.split(": ")[1]);
-            } else if (line.startsWith("Address: ")) {
-                address = Integer.parseInt(line.split(": ")[1]);
-            } else if (line.startsWith("ID: ")) {
-                id = Integer.parseInt(line.split(": ")[1]);
-
-            } else if (line.startsWith("  X: ")) {
-                position.set(Float.parseFloat(line.split(": ")[1]), position.y, position.z);
-            } else if (line.startsWith("  Y: ")) {
-                position.set(position.x, Float.parseFloat(line.split(": ")[1]), position.z);
-            } else if (line.startsWith("  Z: ")) {
-                position.set(position.x, position.y, Float.parseFloat(line.split(": ")[1]));
-            }
-        }
-
-        if (profile == null) return;
-        if (address == 0) return;
-        if (id <= -1) return;
-
-        add(new Fixture(name, profile, address, id, position));
     }
 
     private void loadGroup(FileHandle fileHandle) {
@@ -86,7 +44,7 @@ public class PatchUI implements UI {
                 // do nothing
             } else if (line.startsWith("  - ")) {
                 int id = Integer.parseInt(line.replaceFirst("  - ", ""));
-                Fixture fixture = fixtureByID(id);
+                Fixture fixture = Fixture.fixtureByID(id);
                 if (fixture != null) group.add(fixture);
             }
         }
@@ -97,22 +55,6 @@ public class PatchUI implements UI {
     @Override
     public void save() {
         UI.super.save();
-
-        for (Fixture fixture : fixtures()) {
-            FileHandle fileHandle = Gdx.files.local("Lights/Fixtures/" + fixture.getName() + ".txt");
-            fileHandle.writeString("", false);
-
-            fileHandle.writeString("Name: " + fixture.getName() + "\r\n", true);
-            fileHandle.writeString("Profile: " + fixture.getProfile() + "\r\n", true);
-            fileHandle.writeString("Address: " + fixture.getAddress() + "\r\n", true);
-            fileHandle.writeString("ID: " + fixture.getID() + "\r\n", true);
-
-            Vector3 position = fixture.getPosition();
-            fileHandle.writeString("Position:\r\n", true);
-            fileHandle.writeString("  X: " + position.x + "\r\n", true);
-            fileHandle.writeString("  Y: " + position.y + "\r\n", true);
-            fileHandle.writeString("  Z: " + position.z + "\r\n", true);
-        }
 
         for (Group group : groups()) {
             FileHandle fileHandle = Gdx.files.local("Lights/Groups/" + group.getName() + ".txt");
@@ -141,7 +83,7 @@ public class PatchUI implements UI {
         float profileWidth = renderer.getWidth("Profile") + 10;
         float addressWidth = renderer.getWidth("Address") + 10;
         float width = idWidth + nameWidth + profileWidth + addressWidth;
-        for (Fixture fixture : fixtures()) {
+        for (Fixture fixture : Fixture.fixtures()) {
             idWidth = Math.max(idWidth, renderer.getWidth(Integer.toString(fixture.getID())) + 10);
             nameWidth = Math.max(nameWidth, renderer.getWidth(fixture.getName()) + 10);
             profileWidth = Math.max(profileWidth, renderer.getWidth(fixture.getProfile()) + 10);
@@ -160,7 +102,7 @@ public class PatchUI implements UI {
         drag(x, y, width, cellHeight);
         y -= cellHeight;
 
-        for (Fixture fixture : fixtures()) {
+        for (Fixture fixture : Fixture.fixtures(Fixture.SortBy.ID)) {
             if (Lights.mouse.contains(x, y, width, cellHeight) && canInteract()) {
                 interacted = true;
                 if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(500)) {
@@ -182,14 +124,14 @@ public class PatchUI implements UI {
         setHeightBasedOnY(y);
 
         if (hasFixtureSelected()) {
-            int perRow = (int) DMX.MAX_CHANNELS / fixtures().size();
+            int perRow = (int) DMX.MAX_CHANNELS / Fixture.fixtures().size();
             float addressesWidth = perRow * cellHeight;
             x = getX() + width;
             y = getY() - cellHeight;
 
             for (int address = 1; address <= DMX.MAX_CHANNELS; address++) {
                 boolean occupied = false;
-                for (Fixture fixture : fixtures()) {
+                for (Fixture fixture : Fixture.fixtures()) {
                     if (!fixture.equals(getSelectedFixture()) && fixture.getAddress() <= address && address <= fixture.getAddress() + fixture.getPhysicalChannels() - 1) {
                         occupied = true;
                         break;
@@ -235,35 +177,8 @@ public class PatchUI implements UI {
         return getSelectedFixture() != null;
     }
 
-    public static void add(Fixture fixture) {
-        patch.fixtures.add(fixture);
-    }
-
     public static void add(Group group) {
         patch.groups.add(group);
-    }
-
-    public static int getTopID() {
-        int id = 1;
-        for (Fixture fixture : patch.fixtures)
-            if (fixture.getID() > id)
-                id = fixture.getID();
-
-        return id;
-    }
-
-    public static Fixture fixtureByID(int id) {
-        for (Fixture fixture : patch.fixtures)
-            if (fixture.getID() == id)
-                return fixture;
-        return null;
-    }
-
-    public static Fixture fixtureByName(String name) {
-        for (Fixture fixture : patch.fixtures)
-            if (fixture.getName().equalsIgnoreCase(name))
-                return fixture;
-        return null;
     }
 
     public static Group groupByName(String name) {
@@ -273,16 +188,7 @@ public class PatchUI implements UI {
         return null;
     }
 
-    public static List<Fixture> fixtures() {
-        List<Fixture> fixtures = new ArrayList<>();
-        for (int id = 1; id <= getTopID(); id++)
-            if (fixtureByID(id) != null)
-                fixtures.add(fixtureByID(id));
-        return fixtures;
-    }
-
     public static List<Group> groups() {
         return new ArrayList<>(patch.groups);
     }
-
 }

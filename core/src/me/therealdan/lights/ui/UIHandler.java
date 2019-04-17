@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import me.therealdan.lights.controllers.Fader;
 import me.therealdan.lights.dmx.DMX;
+import me.therealdan.lights.fixtures.Fixture;
 import me.therealdan.lights.main.Lights;
 import me.therealdan.lights.programmer.CondensedFrame;
 import me.therealdan.lights.programmer.Frame;
@@ -53,6 +54,11 @@ public class UIHandler implements Visual {
         // Setup
         uis.add(new ProfilesUI());
         uis.add(new PatchUI());
+
+        // TODO - Move elsewhere
+        Fixture.loadFixturesFromFile();
+//        Group.loadGroupsFromFile();
+
         uis.add(new SequencesUI());
         uis.add(new FaderEditUI());
         uis.add(new ButtonEditUI());
@@ -84,6 +90,9 @@ public class UIHandler implements Visual {
     public void save() {
         for (UI ui : UIs())
             ui.save();
+
+        Fixture.saveFixturesToFile();
+//        Group.saveGroupsToFile();
     }
 
     public void update() {

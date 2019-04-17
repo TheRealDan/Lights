@@ -183,7 +183,7 @@ public class ProfileEditor implements Visual {
 
     public void edit(Profile profile) {
         this.profile = profile;
-        this.mutableProfile = new MutableProfile(profile);
+        this.mutableProfile = profile != null ? new MutableProfile(profile) : null;
     }
 
     private void edit(Section section) {

@@ -102,6 +102,7 @@ public class Lights extends ApplicationAdapter {
     }
 
     public static void openFixtureCreator() {
+        lights.fixtureCreator.clear();
         lights.theInputProcessor.clear();
         lights.theInputProcessor.add(lights.fixtureCreator);
     }

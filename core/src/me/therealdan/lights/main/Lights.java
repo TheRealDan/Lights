@@ -18,6 +18,7 @@ public class Lights extends ApplicationAdapter {
     private static Lights lights;
 
     public static Colour color;
+    public static Keyboard keyboard;
     public static Mouse mouse;
     public static Output output;
 
@@ -33,6 +34,7 @@ public class Lights extends ApplicationAdapter {
         lights = this;
 
         color = new Colour();
+        keyboard = new Keyboard();
         mouse = new Mouse();
         output = new Output();
 

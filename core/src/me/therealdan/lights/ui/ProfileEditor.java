@@ -16,7 +16,10 @@ public class ProfileEditor implements Visual {
 
     private Profile profile;
     private MutableProfile mutableProfile;
+
     private Section section;
+
+    private Channel channel;
 
     @Override
     public boolean draw(Renderer renderer) {
@@ -114,7 +117,10 @@ public class ProfileEditor implements Visual {
             renderer.box(x, y, width, cellHeight, Lights.color.DARK_BLUE, "Virtual Channels: " + getMutableProfile().getVirtualChannels(), Task.TextPosition.CENTER);
             y -= cellHeight;
             for (Channel channel : getMutableProfile().channels()) {
-                renderer.box(x, y, width, cellHeight, Lights.color.MEDIUM, channel.getType().getName() + " - " + channel.addressOffsetsAsString());
+                renderer.box(x, y, width, cellHeight, channel.equals(getSelectedChannel()) ? Lights.color.DARK_RED : Lights.color.MEDIUM, channel.getType().getName() + " - " + channel.addressOffsetsAsString());
+                if (Lights.mouse.contains(x, y, width, cellHeight) && Lights.mouse.leftClicked()) {
+                    select(channel);
+                }
                 y -= cellHeight;
             }
 
@@ -123,6 +129,15 @@ public class ProfileEditor implements Visual {
                 getMutableProfile().addChannel(Channel.DEFAULT_TYPE);
             }
             y -= cellHeight;
+
+            if (hasChannelSelected()) {
+                renderer.box(x, y, width, cellHeight, Lights.color.MEDIUM, Lights.color.RED, "Delete Channel");
+                if (Lights.mouse.contains(x, y, width, cellHeight) && Lights.mouse.leftClicked()) {
+                    getMutableProfile().removeChannel(getSelectedChannel());
+                    select(null);
+                }
+                y -= cellHeight;
+            }
 
             x += width;
             y = Y - cellHeight;
@@ -180,9 +195,14 @@ public class ProfileEditor implements Visual {
         return true;
     }
 
+    private void select(Channel channel) {
+        this.channel = channel;
+    }
+
     public void edit(Profile profile) {
         this.profile = profile;
         this.mutableProfile = profile != null ? new MutableProfile(profile) : null;
+        this.channel = null;
     }
 
     private void edit(Section section) {
@@ -195,6 +215,14 @@ public class ProfileEditor implements Visual {
 
     public MutableProfile getMutableProfile() {
         return mutableProfile;
+    }
+
+    private boolean hasChannelSelected() {
+        return getSelectedChannel() != null;
+    }
+
+    private Channel getSelectedChannel() {
+        return channel;
     }
 
     public enum Section {

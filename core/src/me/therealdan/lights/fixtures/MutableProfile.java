@@ -30,9 +30,8 @@ public class MutableProfile extends Profile {
         this.channels.add(new Channel(type, addressOffsets));
     }
 
-    // TODO - Might be more useful as object rather than index
-    public void removeChannel(int index) {
-        this.channels.remove(index);
+    public void removeChannel(Channel channel) {
+        this.channels.remove(channel);
     }
 
     @Override

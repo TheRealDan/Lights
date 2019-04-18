@@ -16,8 +16,9 @@ public class Channel {
         this.type = Type.valueOf(args[0]);
         this.addressOffsets = new ArrayList<>();
 
-        for (String offset : args[1].split(", "))
-            this.addressOffsets.add(Integer.parseInt(offset));
+        if (args.length > 1)
+            for (String offset : args[1].split(", "))
+                this.addressOffsets.add(Integer.parseInt(offset));
     }
 
     public Channel(Type type, Integer... addressOffset) {

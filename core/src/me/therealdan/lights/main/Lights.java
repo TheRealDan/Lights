@@ -95,8 +95,8 @@ public class Lights extends ApplicationAdapter {
     }
 
     public static void openProfileEditor(Profile profile) {
+        lights.profileEditor.edit(profile);
         lights.theInputProcessor.clear();
         lights.theInputProcessor.add(lights.profileEditor);
-        lights.profileEditor.edit(profile);
     }
 }

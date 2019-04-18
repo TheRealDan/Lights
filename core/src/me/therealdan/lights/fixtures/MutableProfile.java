@@ -26,12 +26,24 @@ public class MutableProfile extends Profile {
         this.name = name;
     }
 
+    public void changeType(Channel channel) {
+        channel.type = channel.type.next();
+    }
+
     public void addChannel(Channel.Type type, Integer... addressOffsets) {
         this.channels.add(new Channel(type, addressOffsets));
     }
 
     public void removeChannel(Channel channel) {
         this.channels.remove(channel);
+    }
+
+    public void addOffset(Channel channel, int offset) {
+        channel.addressOffsets.add(offset);
+    }
+
+    public void removeLastOffset(Channel channel) {
+        channel.addressOffsets.remove(channel.countAddressOffsets() - 1);
     }
 
     @Override

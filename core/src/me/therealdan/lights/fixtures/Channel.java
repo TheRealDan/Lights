@@ -8,8 +8,8 @@ public class Channel {
 
     public static final Type DEFAULT_TYPE = Type.INTENSITY;
 
-    private Type type;
-    private List<Integer> addressOffsets;
+    protected Type type;
+    protected List<Integer> addressOffsets;
 
     public Channel(String string) {
         String[] args = string.split(": ");
@@ -39,6 +39,14 @@ public class Channel {
 
     public List<Integer> addressOffsets() {
         return new ArrayList<>(addressOffsets);
+    }
+
+    public int countAddressOffsets() {
+        return addressOffsets.size();
+    }
+
+    public int getLastAddressOffset() {
+        return addressOffsets.get(countAddressOffsets() - 1);
     }
 
     @Override
@@ -83,6 +91,15 @@ public class Channel {
 
         public String getName() {
             return this.toString().substring(0, 1) + this.toString().substring(1).toLowerCase();
+        }
+
+        public Type next() {
+            boolean next = false;
+            for (Type type : Type.values()) {
+                if (next) return type;
+                if (type.equals(this)) next = true;
+            }
+            return Type.values()[0];
         }
     }
 

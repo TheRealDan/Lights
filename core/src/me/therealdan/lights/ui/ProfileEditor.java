@@ -124,6 +124,14 @@ public class ProfileEditor implements Visual {
                 y -= cellHeight;
             }
 
+            if (hasChannelSelected()) {
+                renderer.box(x, y, width, cellHeight, Lights.color.MEDIUM, Lights.color.YELLOW, "Change Type");
+                if (Lights.mouse.contains(x, y, width, cellHeight) && Lights.mouse.leftClicked(500)) {
+                    getMutableProfile().changeType(getSelectedChannel());
+                }
+                y -= cellHeight;
+            }
+
             renderer.box(x, y, width, cellHeight, Lights.color.MEDIUM, Lights.color.GREEN, "Add Channel");
             if (Lights.mouse.contains(x, y, width, cellHeight) && Lights.mouse.leftClicked()) {
                 getMutableProfile().addChannel(Channel.DEFAULT_TYPE);
@@ -132,7 +140,7 @@ public class ProfileEditor implements Visual {
 
             if (hasChannelSelected()) {
                 renderer.box(x, y, width, cellHeight, Lights.color.MEDIUM, Lights.color.RED, "Delete Channel");
-                if (Lights.mouse.contains(x, y, width, cellHeight) && Lights.mouse.leftClicked()) {
+                if (Lights.mouse.contains(x, y, width, cellHeight) && Lights.mouse.leftClicked() && Lights.keyboard.isShift()) {
                     getMutableProfile().removeChannel(getSelectedChannel());
                     select(null);
                 }
@@ -179,16 +187,49 @@ public class ProfileEditor implements Visual {
                     if (getMutableProfile().getName().length() > 0)
                         getMutableProfile().rename(getMutableProfile().getName().substring(0, getMutableProfile().getName().length() - 1));
                     if (shift) getMutableProfile().rename("");
-                    break;
+                    return false;
                 case Input.Keys.SPACE:
                     getMutableProfile().rename(getMutableProfile().getName() + " ");
-                    break;
+                    return false;
                 default:
                     String string = Input.Keys.toString(keycode);
                     if ("ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890".contains(string)) {
                         if (!shift) string = string.toLowerCase();
                         getMutableProfile().rename(getMutableProfile().getName() + string);
                     }
+                    return false;
+            }
+        }
+
+        if (isEditing(Section.VIRTUAL_CHANNELS) && hasChannelSelected()) {
+            switch (keycode) {
+                case Input.Keys.BACKSPACE:
+                    if (getSelectedChannel().countAddressOffsets() == 0) return false;
+                    if (Integer.toString(getSelectedChannel().getLastAddressOffset()).length() == 1) {
+                        getMutableProfile().removeLastOffset(getSelectedChannel());
+                    } else {
+                        String lastOffset = Integer.toString(getSelectedChannel().getLastAddressOffset());
+                        getMutableProfile().removeLastOffset(getSelectedChannel());
+                        getMutableProfile().addOffset(getSelectedChannel(), Integer.parseInt(lastOffset.substring(0, lastOffset.length() - 1)));
+                    }
+                    return false;
+                case Input.Keys.ENTER:
+                    getMutableProfile().addOffset(getSelectedChannel(), 0);
+                    return false;
+                default:
+                    if (getSelectedChannel().countAddressOffsets() == 0) return false;
+                    String string = Input.Keys.toString(keycode);
+                    if ("1234567890".contains(string)) {
+                        string = getSelectedChannel().getLastAddressOffset() + string;
+                        getMutableProfile().removeLastOffset(getSelectedChannel());
+                        getMutableProfile().addOffset(getSelectedChannel(), Integer.parseInt(string));
+
+                        if (getSelectedChannel().getLastAddressOffset() > 511) {
+                            getMutableProfile().removeLastOffset(getSelectedChannel());
+                            getMutableProfile().addOffset(getSelectedChannel(), 511);
+                        }
+                    }
+                    return false;
             }
         }
 

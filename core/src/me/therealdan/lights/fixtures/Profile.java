@@ -43,15 +43,10 @@ public class Profile {
 
     public int getPhysicalChannels() {
         int physicalChannels = 0;
-        List<Integer> address = new ArrayList<>();
-        for (Channel channel : channels()) {
-            for (int offsets : channel.addressOffsets()) {
-                if (!address.contains(offsets)) {
-                    physicalChannels++;
-                    address.add(offsets);
-                }
-            }
-        }
+        for (Channel channel : channels())
+            for (int offsets : channel.addressOffsets())
+                if (offsets + 1 > physicalChannels)
+                    physicalChannels = offsets + 1;
         return physicalChannels;
 
         // TODO - Could probably cache this and update whenever channels are modified

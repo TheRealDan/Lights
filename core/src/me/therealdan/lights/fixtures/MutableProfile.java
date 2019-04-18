@@ -47,6 +47,11 @@ public class MutableProfile extends Profile {
     }
 
     @Override
+    public int getVirtualChannels() {
+        return channels.size();
+    }
+
+    @Override
     public String getName() {
         return name;
     }

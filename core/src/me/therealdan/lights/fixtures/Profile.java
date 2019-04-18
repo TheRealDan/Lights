@@ -112,6 +112,8 @@ public class Profile {
     }
 
     private static void loadProfileFromFile(FileHandle fileHandle) {
+        if (fileHandle.name().contains(".DS_Store")) return;
+
         String name = fileHandle.name().replace(".txt", "");
 
         List<Channel> channels = new ArrayList<>();

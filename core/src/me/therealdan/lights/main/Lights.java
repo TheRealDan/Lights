@@ -8,10 +8,7 @@ import me.therealdan.lights.fixtures.Profile;
 import me.therealdan.lights.renderer.Renderer;
 import me.therealdan.lights.settings.Control;
 import me.therealdan.lights.settings.Setting;
-import me.therealdan.lights.ui.ProfileEditor;
-import me.therealdan.lights.ui.TheInputProcessor;
-import me.therealdan.lights.ui.UIHandler;
-import me.therealdan.lights.ui.Visualiser3D;
+import me.therealdan.lights.ui.*;
 
 public class Lights extends ApplicationAdapter {
 
@@ -28,6 +25,7 @@ public class Lights extends ApplicationAdapter {
     private Visualiser3D visualiser3D;
     private UIHandler uiHandler;
     private ProfileEditor profileEditor;
+    private FixtureCreator fixtureCreator;
 
     @Override
     public void create() {
@@ -50,6 +48,7 @@ public class Lights extends ApplicationAdapter {
         uiHandler = new UIHandler();
         visualiser3D = new Visualiser3D();
         profileEditor = new ProfileEditor();
+        fixtureCreator = new FixtureCreator();
 
         Gdx.graphics.setVSync(true);
         Gdx.input.setInputProcessor(theInputProcessor);
@@ -100,5 +99,10 @@ public class Lights extends ApplicationAdapter {
         lights.profileEditor.edit(profile);
         lights.theInputProcessor.clear();
         lights.theInputProcessor.add(lights.profileEditor);
+    }
+
+    public static void openFixtureCreator() {
+        lights.theInputProcessor.clear();
+        lights.theInputProcessor.add(lights.fixtureCreator);
     }
 }

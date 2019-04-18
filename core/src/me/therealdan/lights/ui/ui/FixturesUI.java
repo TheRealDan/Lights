@@ -54,6 +54,15 @@ public class FixturesUI implements UI {
                 y -= cellSize;
             }
         }
+
+        if (Lights.keyboard.isShift()) {
+            renderer.box(x, y, cellSize, cellSize, Lights.color.MEDIUM, Lights.color.GREEN, "Create Fixture", Task.TextPosition.CENTER);
+            if (Lights.mouse.contains(x, y, cellSize, cellSize) && Lights.mouse.leftClicked()) {
+                interacted = true;
+                Lights.openFixtureCreator();
+                return interacted;
+            }
+        }
         y -= cellSize;
 
         setHeightBasedOnY(y);

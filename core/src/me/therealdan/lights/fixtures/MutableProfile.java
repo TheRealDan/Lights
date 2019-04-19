@@ -26,6 +26,14 @@ public class MutableProfile extends Profile {
         this.name = name;
     }
 
+    public void addModelDesign(ModelDesign modelDesign) {
+        this.modelDesigns.add(modelDesign);
+    }
+
+    public void removeModelDesign(ModelDesign modelDesign) {
+        this.modelDesigns.remove(modelDesign);
+    }
+
     public void changeType(Channel channel) {
         channel.type = channel.type.next();
     }
@@ -44,6 +52,11 @@ public class MutableProfile extends Profile {
 
     public void removeLastOffset(Channel channel) {
         channel.addressOffsets.remove(channel.countAddressOffsets() - 1);
+    }
+
+    @Override
+    public int countModels() {
+        return modelDesigns.size();
     }
 
     @Override

@@ -20,6 +20,7 @@ public class ProfileEditor implements Visual {
     private Section section;
 
     private Channel channel;
+    private ModelDesign modelDesign;
 
     @Override
     public boolean draw(Renderer renderer) {
@@ -108,6 +109,7 @@ public class ProfileEditor implements Visual {
                 renderer.box(x, y, width, cellHeight, Lights.color.MEDIUM, offset + " - " + channels.toString().replaceFirst(", ", ""));
                 y -= cellHeight;
             }
+            x += width;
             y = Y - cellHeight;
         }
 
@@ -142,7 +144,7 @@ public class ProfileEditor implements Visual {
                 renderer.box(x, y, width, cellHeight, Lights.color.MEDIUM, Lights.color.RED, "Delete Channel");
                 if (Lights.mouse.contains(x, y, width, cellHeight) && Lights.mouse.leftClicked() && Lights.keyboard.isShift()) {
                     getMutableProfile().removeChannel(getSelectedChannel());
-                    select(null);
+                    select((Channel) null);
                 }
                 y -= cellHeight;
             }
@@ -151,15 +153,40 @@ public class ProfileEditor implements Visual {
             y = Y - cellHeight;
         }
 
-        // MODEL
+        // MODELS
         if (isEditing(Section.MODEL)) {
             width = WIDTH / 4;
-            renderer.box(x, y, width, cellHeight, Lights.color.DARK_BLUE, "Model: " + getMutableProfile().countModels(), Task.TextPosition.CENTER);
+            renderer.box(x, y, width, cellHeight, Lights.color.DARK_BLUE, "Models: " + getMutableProfile().countModels(), Task.TextPosition.CENTER);
             y -= cellHeight;
             for (ModelDesign modelDesign : getMutableProfile().getModelDesigns()) {
-                renderer.box(x, y, width, cellHeight, Lights.color.MEDIUM, modelDesign.toString());
+                renderer.box(x, y, width, cellHeight, modelDesign.equals(getSelectedModelDesign()) ? Lights.color.DARK_RED : Lights.color.MEDIUM, modelDesign.toString());
+                if (Lights.mouse.contains(x, y, width, cellHeight)) {
+                    if (Lights.mouse.leftClicked()) {
+                        select(modelDesign);
+                    }
+                }
                 y -= cellHeight;
             }
+
+            renderer.box(x, y, width, cellHeight, Lights.color.MEDIUM, Lights.color.GREEN, "Add Model");
+            if (Lights.mouse.contains(x, y, width, cellHeight)) {
+                if (Lights.mouse.leftClicked(500)) {
+                    getMutableProfile().addModelDesign(new ModelDesign(1));
+                }
+            }
+            y -= cellHeight;
+
+            if (hasModelDesignSelected()) {
+                renderer.box(x, y, width, cellHeight, Lights.color.MEDIUM, Lights.color.RED, "Delete Model");
+                if (Lights.mouse.contains(x, y, width, cellHeight)) {
+                    if (Lights.mouse.leftClicked(500)) {
+                        getMutableProfile().removeModelDesign(getSelectedModelDesign());
+                        select((ModelDesign) null);
+                    }
+                }
+            }
+            y -= cellHeight;
+
             x += width;
             y = Y - cellHeight;
         }
@@ -240,6 +267,10 @@ public class ProfileEditor implements Visual {
         this.channel = channel;
     }
 
+    private void select(ModelDesign modelDesign) {
+        this.modelDesign = modelDesign;
+    }
+
     public void edit(Profile profile) {
         this.profile = profile;
         this.mutableProfile = profile != null ? new MutableProfile(profile) : null;
@@ -264,6 +295,14 @@ public class ProfileEditor implements Visual {
 
     private Channel getSelectedChannel() {
         return channel;
+    }
+
+    private boolean hasModelDesignSelected() {
+        return getSelectedModelDesign() != null;
+    }
+
+    private ModelDesign getSelectedModelDesign() {
+        return modelDesign;
     }
 
     public enum Section {

@@ -13,7 +13,6 @@ public class FixtureEditor implements Visual {
     private Fixture fixture;
 
     private Profile profile;
-
     private String name;
     private int address;
 
@@ -36,8 +35,25 @@ public class FixtureEditor implements Visual {
         renderer.box(x, y, width, cellHeight, Lights.color.DARK_BLUE, "Fixture Creator", Task.TextPosition.CENTER);
         y -= cellHeight;
 
+        // EXISTING FIXTURES
+        width = WIDTH / 3;
+        renderer.box(x, y, width, cellHeight, Lights.color.DARK_BLUE, "Fixtures", Task.TextPosition.CENTER);
+        y -= cellHeight;
+        for (Fixture fixture : Fixture.fixtures(Fixture.SortBy.ID)) {
+            renderer.box(x, y, width, cellHeight, fixture.equals(getFixture()) ? Lights.color.DARK_RED : Lights.color.MEDIUM, fixture.getName(), Task.TextPosition.LEFT_CENTER);
+            if (Lights.mouse.contains(x, y, width, cellHeight)) {
+                if (Lights.mouse.leftClicked()) {
+                    setFixture(fixture);
+                }
+            }
+            y -= cellHeight;
+        }
+        x += width;
+        y = Y - cellHeight;
+
         // PROFILES
-        width = WIDTH / 2;
+        renderer.box(x, y, width, cellHeight, Lights.color.DARK_BLUE, "Profiles", Task.TextPosition.CENTER);
+        y -= cellHeight;
         for (Profile profile : Profile.profiles(Profile.SortBy.NAME)) {
             renderer.box(x, y, width, cellHeight, profile.equals(getProfile()) ? Lights.color.DARK_RED : Lights.color.MEDIUM, profile.getName(), Task.TextPosition.LEFT_CENTER);
             if (Lights.mouse.contains(x, y, width, cellHeight)) {
@@ -51,32 +67,47 @@ public class FixtureEditor implements Visual {
         y = Y - cellHeight;
 
 
-        if (getProfile() == null) return true;
-
-        // NAME, ADDRESS, CREATE
-        renderer.box(x, y, width, cellHeight, isEditing(Section.NAME) ? Lights.color.DARK_RED : Lights.color.MEDIUM, "Name: " + getName());
-        if (Lights.mouse.contains(x, y, width, cellHeight)) {
-            if (Lights.mouse.leftClicked()) {
-                edit(Section.NAME);
-            }
-        }
+        // ACTIONS
+        renderer.box(x, y, width, cellHeight, Lights.color.DARK_BLUE, "Actions", Task.TextPosition.CENTER);
         y -= cellHeight;
 
-        renderer.box(x, y, width, cellHeight, isEditing(Section.ADDRESS) ? Lights.color.DARK_RED : Lights.color.MEDIUM, "Address: " + getAddress());
-        if (Lights.mouse.contains(x, y, width, cellHeight)) {
-            if (Lights.mouse.leftClicked()) {
-                edit(Section.ADDRESS);
+        if (getFixture() != null) {
+            renderer.box(x, y, width, cellHeight, Lights.color.MEDIUM, Lights.color.RED, "Delete");
+            if (Lights.mouse.contains(x, y, width, cellHeight) && Lights.keyboard.isShift()) {
+                if (Lights.mouse.leftClicked()) {
+                    Fixture.remove(getFixture());
+                    setFixture(null);
+                    return false;
+                }
             }
+            y -= cellHeight;
         }
-        y -= cellHeight;
 
-        renderer.box(x, y, width, cellHeight, Lights.color.MEDIUM, Lights.color.YELLOW, "Create Fixture");
-        if (Lights.mouse.contains(x, y, width, cellHeight)) {
-            if (Lights.mouse.leftClicked(500)) {
-                Fixture.add(new Fixture(getName(), getProfile(), getAddress(), Fixture.getFreeID()));
+        if (getProfile() != null) {
+            renderer.box(x, y, width, cellHeight, isEditing(Section.NAME) ? Lights.color.DARK_RED : Lights.color.MEDIUM, "Name: " + getName());
+            if (Lights.mouse.contains(x, y, width, cellHeight)) {
+                if (Lights.mouse.leftClicked()) {
+                    edit(Section.NAME);
+                }
             }
+            y -= cellHeight;
+
+            renderer.box(x, y, width, cellHeight, isEditing(Section.ADDRESS) ? Lights.color.DARK_RED : Lights.color.MEDIUM, "Address: " + getAddress());
+            if (Lights.mouse.contains(x, y, width, cellHeight)) {
+                if (Lights.mouse.leftClicked()) {
+                    edit(Section.ADDRESS);
+                }
+            }
+            y -= cellHeight;
+
+            renderer.box(x, y, width, cellHeight, Lights.color.MEDIUM, Lights.color.YELLOW, "Create Fixture");
+            if (Lights.mouse.contains(x, y, width, cellHeight)) {
+                if (Lights.mouse.leftClicked(500)) {
+                    Fixture.add(new Fixture(getName(), getProfile(), getAddress(), Fixture.getFreeID()));
+                }
+            }
+            y -= cellHeight;
         }
-        y -= cellHeight;
 
         return true;
     }
@@ -133,7 +164,13 @@ public class FixtureEditor implements Visual {
         this.address = 1;
     }
 
+    public void setFixture(Fixture fixture) {
+        this.profile = null;
+        this.fixture = fixture;
+    }
+
     public void setProfile(Profile profile) {
+        this.fixture = null;
         this.profile = profile;
     }
 
@@ -151,6 +188,10 @@ public class FixtureEditor implements Visual {
 
     public boolean isEditing(Section section) {
         return section.equals(this.section);
+    }
+
+    public Fixture getFixture() {
+        return fixture;
     }
 
     public Profile getProfile() {

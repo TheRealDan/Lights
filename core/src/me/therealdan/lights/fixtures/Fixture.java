@@ -234,6 +234,10 @@ public class Fixture {
         fixtures.add(fixture);
     }
 
+    public static void remove(Fixture fixture) {
+        fixtures.remove(fixture);
+    }
+
     // TODO - Fixture object should contain the fileName, then [fixtureID]_[fixtureName] will be used if a fileName doesn't exist
 
     public static void loadFixturesFromFile() {

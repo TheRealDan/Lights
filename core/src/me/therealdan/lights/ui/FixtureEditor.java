@@ -15,6 +15,8 @@ public class FixtureEditor implements Visual {
     private Profile profile;
     private String name;
     private int address;
+    private int count;
+    private int step;
 
     private Section section;
 
@@ -100,10 +102,36 @@ public class FixtureEditor implements Visual {
             }
             y -= cellHeight;
 
-            renderer.box(x, y, width, cellHeight, Lights.color.MEDIUM, Lights.color.YELLOW, "Create Fixture");
+            renderer.box(x, y, width, cellHeight, Lights.color.MEDIUM, "Count: " + getCount());
             if (Lights.mouse.contains(x, y, width, cellHeight)) {
                 if (Lights.mouse.leftClicked(500)) {
-                    Fixture.add(new Fixture(getName(), getProfile(), getAddress(), Fixture.getFreeID()));
+                    setCount(getCount() + 1);
+                } else if (Lights.mouse.rightClicked()) {
+                    setCount(getCount() - 1);
+                }
+            }
+            y -= cellHeight;
+
+            if (getCount() > 1) {
+                renderer.box(x, y, width, cellHeight, Lights.color.MEDIUM, "Step: " + getStep());
+                if (Lights.mouse.contains(x, y, width, cellHeight)) {
+                    if (Lights.mouse.leftClicked(500)) {
+                        setStep(getStep() + 1);
+                    } else if (Lights.mouse.rightClicked()) {
+                        setStep(getStep() - 1);
+                    }
+                }
+                y -= cellHeight;
+            }
+
+            renderer.box(x, y, width, cellHeight, Lights.color.MEDIUM, Lights.color.YELLOW, "Create Fixture" + (getCount() > 1 ? "s" : ""));
+            if (Lights.mouse.contains(x, y, width, cellHeight)) {
+                if (Lights.mouse.leftClicked(500)) {
+                    int address = getAddress();
+                    for (int count = 1; count <= getCount(); count++) {
+                        Fixture.add(new Fixture(getName() + " " + count, getProfile(), address, Fixture.getFreeID()));
+                        address += getStep();
+                    }
                 }
             }
             y -= cellHeight;
@@ -162,6 +190,8 @@ public class FixtureEditor implements Visual {
     public void clear() {
         this.name = "New Fixture";
         this.address = 1;
+        this.count = 1;
+        this.step = 0;
     }
 
     public void setFixture(Fixture fixture) {
@@ -180,6 +210,14 @@ public class FixtureEditor implements Visual {
 
     public void setAddress(int address) {
         this.address = address;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
+    }
+
+    public void setStep(int step) {
+        this.step = step;
     }
 
     public void edit(Section section) {
@@ -204,6 +242,14 @@ public class FixtureEditor implements Visual {
 
     public int getAddress() {
         return address;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public int getStep() {
+        return step;
     }
 
     public enum Section {

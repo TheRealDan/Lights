@@ -25,7 +25,7 @@ public class Lights extends ApplicationAdapter {
     private Visualiser3D visualiser3D;
     private UIHandler uiHandler;
     private ProfileEditor profileEditor;
-    private FixtureCreator fixtureCreator;
+    private FixtureEditor fixtureEditor;
 
     @Override
     public void create() {
@@ -48,7 +48,7 @@ public class Lights extends ApplicationAdapter {
         uiHandler = new UIHandler();
         visualiser3D = new Visualiser3D();
         profileEditor = new ProfileEditor();
-        fixtureCreator = new FixtureCreator();
+        fixtureEditor = new FixtureEditor();
 
         Gdx.graphics.setVSync(true);
         Gdx.input.setInputProcessor(theInputProcessor);
@@ -102,8 +102,8 @@ public class Lights extends ApplicationAdapter {
     }
 
     public static void openFixtureCreator() {
-        lights.fixtureCreator.clear();
+        lights.fixtureEditor.clear();
         lights.theInputProcessor.clear();
-        lights.theInputProcessor.add(lights.fixtureCreator);
+        lights.theInputProcessor.add(lights.fixtureEditor);
     }
 }

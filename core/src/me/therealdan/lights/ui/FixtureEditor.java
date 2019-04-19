@@ -8,7 +8,9 @@ import me.therealdan.lights.main.Lights;
 import me.therealdan.lights.renderer.Renderer;
 import me.therealdan.lights.renderer.Task;
 
-public class FixtureCreator implements Visual {
+public class FixtureEditor implements Visual {
+
+    private Fixture fixture;
 
     private Profile profile;
 
@@ -17,7 +19,7 @@ public class FixtureCreator implements Visual {
 
     private Section section;
 
-    public FixtureCreator() {
+    public FixtureEditor() {
     }
 
     @Override

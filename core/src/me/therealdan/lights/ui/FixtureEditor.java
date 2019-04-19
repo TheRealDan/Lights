@@ -32,7 +32,7 @@ public class FixtureEditor implements Visual {
         float y = Y;
         float width = WIDTH;
 
-        renderer.box(x, y, width, cellHeight, Lights.color.DARK_BLUE, "Fixture Creator", Task.TextPosition.CENTER);
+        renderer.box(x, y, width, cellHeight, Lights.color.DARK_BLUE, "Fixture Editor", Task.TextPosition.CENTER);
         y -= cellHeight;
 
         // EXISTING FIXTURES

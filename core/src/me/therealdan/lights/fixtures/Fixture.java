@@ -15,6 +15,7 @@ public class Fixture {
 
     private static HashSet<Fixture> fixtures = new HashSet<>();
 
+    private String fileName;
     private String name;
     private Profile profile;
     private int address;
@@ -25,6 +26,11 @@ public class Fixture {
 
     public Fixture(String name, Profile profile, int address, int id) {
         this(name, profile, address, id, new Vector3());
+    }
+
+    public Fixture(String name, Profile profile, int address, int id, Vector3 position, String fileName) {
+        this(name, profile, address, id, position);
+        this.fileName = fileName;
     }
 
     public Fixture(String name, Profile profile, int address, int id, Vector3 position) {
@@ -112,6 +118,11 @@ public class Fixture {
 
     public void setAddress(int address) {
         this.address = address;
+    }
+
+    public String getFileName() {
+        if (fileName == null) fileName = getID() + "_" + getName();
+        return fileName;
     }
 
     public String getName() {
@@ -238,8 +249,6 @@ public class Fixture {
         fixtures.remove(fixture);
     }
 
-    // TODO - Fixture object should contain the fileName, then [fixtureID]_[fixtureName] will be used if a fileName doesn't exist
-
     public static void loadFixturesFromFile() {
         FileHandle fileHandle = Gdx.files.local("Lights/Fixtures/");
         if (fileHandle.exists() && fileHandle.isDirectory())
@@ -249,8 +258,9 @@ public class Fixture {
 
     private static void loadFixtureFromFile(FileHandle fileHandle) {
         if (fileHandle.isDirectory()) return;
-        String name = fileHandle.name().replace(".txt", "");
 
+        String fileName = fileHandle.toString().replaceFirst("Lights/Fixtures/", "").replace(".txt", "");
+        String name = null;
         Profile profile = null;
         int address = 0;
         int id = -1;
@@ -275,16 +285,17 @@ public class Fixture {
             }
         }
 
+        if (name == null) return;
         if (profile == null) return;
         if (address == 0) return;
         if (id <= -1) return;
 
-        add(new Fixture(name, profile, address, id, position));
+        add(new Fixture(name, profile, address, id, position, fileName));
     }
 
     public static void saveFixturesToFile() {
         for (Fixture fixture : fixtures()) {
-            FileHandle fileHandle = Gdx.files.local("Lights/Fixtures/" + fixture.getID() + "_" + fixture.getName() + ".txt");
+            FileHandle fileHandle = Gdx.files.local("Lights/Fixtures/" + fixture.getFileName() + ".txt");
             fileHandle.writeString("", false);
 
             fileHandle.writeString("Name: " + fixture.getName() + "\r\n", true);

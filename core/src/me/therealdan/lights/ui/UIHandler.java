@@ -216,7 +216,7 @@ public class UIHandler implements Visual {
 
     @Override
     public boolean keyDown(int keycode) {
-        boolean shift = Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT);
+        boolean shift = Lights.keyboard.isShift();
 
         if (keycode == Input.Keys.SPACE) {
             tempo = System.currentTimeMillis() - lastTempo;

@@ -27,7 +27,7 @@ public class ButtonEditUI implements UI {
     public boolean draw(Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {
         if (containsMouse()) UIHandler.setSection(UIHandler.Section.BUTTON_EDIT);
         boolean interacted = false;
-        boolean shift = Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT);
+        boolean shift = Lights.keyboard.isShift();
 
         float x = getX();
         float y = getY();
@@ -221,7 +221,7 @@ public class ButtonEditUI implements UI {
 
     @Override
     public boolean keyDown(int keycode) {
-        boolean shift = Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT);
+        boolean shift = Lights.keyboard.isShift();
 
         if (canEdit(Section.NAME)) {
             switch (keycode) {

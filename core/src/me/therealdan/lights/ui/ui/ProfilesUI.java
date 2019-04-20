@@ -23,7 +23,7 @@ public class ProfilesUI implements UI {
     public boolean draw(Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {
         if (containsMouse()) UIHandler.setSection(UIHandler.Section.PROFILES);
         boolean interacted = false;
-        boolean shift = Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT);
+        boolean shift = Lights.keyboard.isShift();
 
         // PROFILES: #
 
@@ -131,7 +131,7 @@ public class ProfilesUI implements UI {
 
     @Override
     public boolean keyDown(int keycode) {
-        boolean shift = Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT);
+        boolean shift = Lights.keyboard.isShift();
 
         if (canEditName()) {
             switch (keycode) {

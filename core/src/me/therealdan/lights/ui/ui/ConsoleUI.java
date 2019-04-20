@@ -98,7 +98,7 @@ public class ConsoleUI implements UI {
                 input = input.concat("~");
                 break;
             case Input.Keys.MINUS:
-                input = input.concat(Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT) ? "_" : "-");
+                input = input.concat(Lights.keyboard.isShift() ? "_" : "-");
                 break;
             case Input.Keys.COMMA:
                 input = input.concat(",");
@@ -107,7 +107,7 @@ public class ConsoleUI implements UI {
             default:
                 String key = Input.Keys.toString(keycode);
                 if ("ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890".contains(key.toUpperCase()))
-                    input = input.concat(Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT) ? key.toUpperCase() : key.toLowerCase());
+                    input = input.concat(Lights.keyboard.isShift() ? key.toUpperCase() : key.toLowerCase());
         }
 
         return true;

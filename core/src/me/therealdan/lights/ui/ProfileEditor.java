@@ -200,7 +200,7 @@ public class ProfileEditor implements Visual {
 
     @Override
     public boolean keyDown(int keycode) {
-        boolean shift = Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT);
+        boolean shift = Lights.keyboard.isShift();
 
         switch (keycode) {
             case Input.Keys.ESCAPE:

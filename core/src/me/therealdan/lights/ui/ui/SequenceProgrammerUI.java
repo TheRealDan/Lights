@@ -35,7 +35,7 @@ public class SequenceProgrammerUI implements UI {
 
     @Override
     public boolean keyDown(int keycode) {
-        boolean shift = Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT);
+        boolean shift = Lights.keyboard.isShift();
 
         switch (getSelected()) {
             case NAME:
@@ -113,7 +113,7 @@ public class SequenceProgrammerUI implements UI {
 
         if (containsMouse()) UIHandler.setSection(UIHandler.Section.SEQUENCE_PROGRAMMER);
         boolean interacted = false;
-        boolean shift = Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT);
+        boolean shift = Lights.keyboard.isShift();
 
         Sequence sequence = Programmer.getSequence();
         Frame firstSelectedFrame = Programmer.getFirstSelectedFrame();

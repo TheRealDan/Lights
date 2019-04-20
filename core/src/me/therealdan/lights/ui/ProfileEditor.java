@@ -81,7 +81,7 @@ public class ProfileEditor implements Visual {
         y -= cellHeight;
 
         renderer.box(x, y, width, cellHeight, Lights.color.MEDIUM, Lights.color.RED, "Delete Profile");
-        if (Lights.mouse.contains(x, y, width, cellHeight) && Lights.mouse.leftClicked()) {
+        if (Lights.mouse.contains(x, y, width, cellHeight) && Lights.keyboard.isShift() && Lights.mouse.leftClicked()) {
             Profile.delete(getMutableProfile());
             edit((Profile) null);
             Lights.openMainView();
@@ -142,7 +142,7 @@ public class ProfileEditor implements Visual {
 
             if (hasChannelSelected()) {
                 renderer.box(x, y, width, cellHeight, Lights.color.MEDIUM, Lights.color.RED, "Delete Channel");
-                if (Lights.mouse.contains(x, y, width, cellHeight) && Lights.mouse.leftClicked() && Lights.keyboard.isShift()) {
+                if (Lights.mouse.contains(x, y, width, cellHeight) && Lights.keyboard.isShift() && Lights.mouse.leftClicked()) {
                     getMutableProfile().removeChannel(getSelectedChannel());
                     select((Channel) null);
                 }
@@ -178,11 +178,9 @@ public class ProfileEditor implements Visual {
 
             if (hasModelDesignSelected()) {
                 renderer.box(x, y, width, cellHeight, Lights.color.MEDIUM, Lights.color.RED, "Delete Model");
-                if (Lights.mouse.contains(x, y, width, cellHeight)) {
-                    if (Lights.mouse.leftClicked(500)) {
-                        getMutableProfile().removeModelDesign(getSelectedModelDesign());
-                        select((ModelDesign) null);
-                    }
+                if (Lights.mouse.contains(x, y, width, cellHeight) && Lights.keyboard.isShift() && Lights.mouse.leftClicked(500)) {
+                    getMutableProfile().removeModelDesign(getSelectedModelDesign());
+                    select((ModelDesign) null);
                 }
             }
             y -= cellHeight;

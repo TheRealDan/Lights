@@ -58,7 +58,8 @@ public class FixturesUI implements UI {
                 y -= cellSize;
             }
         }
-        
+        y -= cellSize;
+
         setHeightBasedOnY(y);
         return interacted;
     }

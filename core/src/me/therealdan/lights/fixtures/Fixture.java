@@ -248,6 +248,7 @@ public class Fixture {
     }
 
     private static void loadFixtureFromFile(FileHandle fileHandle) {
+        if (fileHandle.isDirectory()) return;
         String name = fileHandle.name().replace(".txt", "");
 
         Profile profile = null;

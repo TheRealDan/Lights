@@ -16,21 +16,41 @@ public class ModelDesign {
     private Vector3 dimensions, offset;
 
     public ModelDesign(float cube) {
-        this(cube, 0, 0, 0);
+        build(cube, cube, cube, 0, 0, 0);
     }
 
     public ModelDesign(float cube, float xOffset, float yOffset, float zOffset) {
-        this(cube, cube, cube, xOffset, yOffset, zOffset);
+        build(cube, cube, cube, xOffset, yOffset, zOffset);
     }
 
     public ModelDesign(float width, float height, float depth) {
-        this(width, height, depth, 0, 0, 0);
+        build(width, height, depth, 0, 0, 0);
     }
 
     public ModelDesign(float width, float height, float depth, float xOffset, float yOffset, float zOffset) {
+        build(width, height, depth, xOffset, yOffset, zOffset);
+    }
+
+    private void build(float width, float height, float depth, float xOffset, float yOffset, float zOffset) {
         this.model = modelBuilder.createBox(width, height, depth, new Material(ColorAttribute.createDiffuse(Lights.color.BLACK)), VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal);
         this.dimensions = new Vector3(width, height, depth);
         this.offset = new Vector3(xOffset, yOffset, zOffset);
+    }
+
+    public void setDimensions(float width, float height, float depth) {
+        build(width, height, depth, getOffset().x, getOffset().y, getOffset().z);
+    }
+
+    public void setXOffset(float x) {
+        this.offset.x = x;
+    }
+
+    public void setYOffset(float y) {
+        this.offset.y = y;
+    }
+
+    public void setZOffset(float z) {
+        this.offset.z = z;
     }
 
     public Model getModel() {

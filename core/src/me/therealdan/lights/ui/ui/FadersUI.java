@@ -42,7 +42,7 @@ public class FadersUI implements UI {
     }
 
     private void loadFader(FileHandle fileHandle) {
-        Fader fader = new Fader(-1);
+        Fader fader = new Fader(-1, fileHandle.name());
 
         for (String line : fileHandle.readString().split("\\r?\\n")) {
             if (line.startsWith("ID: ")) {
@@ -78,6 +78,23 @@ public class FadersUI implements UI {
             } else if (line.startsWith("  - ")) {
                 bank.add(Fader.byID(Integer.parseInt(line.split("- ")[1])));
             }
+        }
+    }
+
+    @Override
+    public void save() {
+        for (Fader fader : faders()) {
+            FileHandle fileHandle = Gdx.files.local("Lights/Faders/" + fader.getFileName() + ".txt");
+            fileHandle.writeString("", false);
+
+            fileHandle.writeString("ID: " + fader.getID() + "\r\n", true);
+            fileHandle.writeString("Name: " + fader.getName() + "\r\n", true);
+            fileHandle.writeString("Type: " + fader.getType().toString() + "\r\n", true);
+            fileHandle.writeString("Value: " + fader.getValue() + "\r\n", true);
+            fileHandle.writeString("Sequence: " + fader.getSequence().getName() + "\r\n", true);
+            fileHandle.writeString("  Red: " + fader.getColor().r + "\r\n", true);
+            fileHandle.writeString("  Green: " + fader.getColor().g + "\r\n", true);
+            fileHandle.writeString("  Blue: " + fader.getColor().b + "\r\n", true);
         }
     }
 

@@ -9,13 +9,24 @@ public class Fader {
 
     private float value = 0f;
     private int id;
+    private String fileName;
     private String name;
     private Color color;
     private Type type = Type.MASTER;
     private Sequence sequence = new Sequence("No Sequence");
 
+    public Fader(int id, String fileName) {
+        this(id);
+        this.fileName = fileName;
+    }
+
     public Fader(int id) {
         this(id, "New fader", Lights.color.MEDIUM);
+    }
+
+    public Fader(int id, String fileName, String name, Color color) {
+        this(id, name, color);
+        this.fileName = fileName;
     }
 
     public Fader(int id, String name, Color color) {
@@ -81,6 +92,11 @@ public class Fader {
 
     public int getID() {
         return id;
+    }
+
+    public String getFileName() {
+        if (fileName == null) fileName = getID() + "_" + getName();
+        return fileName;
     }
 
     public String getName() {

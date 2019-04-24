@@ -9,6 +9,8 @@ public class Colour {
     public Color MEDIUM;
     public Color DARK;
 
+    public Color BACKGROUND = new Color(0.05f, 0.05f, 0.05f, 1);
+
     public Color BLACK = new Color(0f, 0f, 0f, 1);
     public Color WHITE = new Color(1f, 1f, 1f, 1);
 

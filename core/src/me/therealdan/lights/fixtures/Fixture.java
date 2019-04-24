@@ -64,6 +64,21 @@ public class Fixture {
 
     public void updateColor(DMX visualiser) {
         // TODO - Still using hardcoded colors for 3DV models based on profile names
+
+        boolean hasColor = false;
+        for (Channel channel : profile.channels()) {
+            if (channel.getType().getCategory().equals(Channel.Category.COLOR)) {
+                hasColor = true;
+                continue;
+            }
+        }
+
+        if (!hasColor) {
+            float value = getValue(visualiser, Channel.Type.INTENSITY, 1) / 255f;
+            for (Model model : getModels()) setColor(model, new Color(value, value, value, 1));
+            return;
+        }
+
         switch (getProfile()) {
             case "Ming":
                 int parameter = 1;

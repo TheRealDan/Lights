@@ -11,19 +11,27 @@ import java.util.List;
 
 public class Control {
 
-    private static LinkedHashMap<Name, Control> controls = new LinkedHashMap<>();
+    private static LinkedHashMap<String, Control> controls = new LinkedHashMap<>();
 
-    private Name name;
+    private String name;
     private Category category;
 
     private int keycode = -1;
 
     public Control(Name name, Category category, int keycode) {
+        this(name.toString(), category, keycode);
+    }
+
+    public Control(String name, Category category, int keycode) {
         this(name, category);
         setKeycode(keycode);
     }
 
     public Control(Name name, Category category) {
+        this(name.toString(), category);
+    }
+
+    public Control(String name, Category category) {
         this.name = name;
         this.category = category;
     }
@@ -49,7 +57,7 @@ public class Control {
         return Input.Keys.toString(getKeycode());
     }
 
-    public Name getName() {
+    public String getName() {
         return name;
     }
 
@@ -79,6 +87,7 @@ public class Control {
     public enum Category {
         GLOBAL,
         VISUALISER3D,
+        BUTTONS,
         UI;
 
         public String formatString() {
@@ -121,20 +130,24 @@ public class Control {
 
         Category category = null;
         for (String line : fileHandle.readString().split("\\r?\\n")) {
-            if (!line.contains(": ")) continue;
+            if (!line.contains(":")) continue;
 
             if (line.startsWith("  ")) {
                 if (category == null) continue;
 
                 String[] split = line.replace("  ", "").split(": ");
-                Name name = Name.valueOf(split[0]);
+                String name = split[0];
                 int keycode = Integer.parseInt(split[1]);
 
-                Control control = new Control(name, category, keycode);
-                control.register();
+                Control control = Control.byName(name);
+                if (control == null) {
+                    control = new Control(name, category);
+                    control.register();
+                }
+                control.setKeycode(keycode);
 
             } else {
-                category = Category.valueOf(line.split(": ")[0]);
+                category = Category.valueOf(line.split(":")[0]);
             }
         }
     }
@@ -146,9 +159,9 @@ public class Control {
         fileHandle.writeString("", false);
 
         for (Category category : categories()) {
-            fileHandle.writeString(category.toString() + "\r\n", true);
+            fileHandle.writeString(category.toString() + ":\r\n", true);
             for (Control control : category.getControls()) {
-                fileHandle.writeString("  " + control.toString() + ": " + control.getKeycode() + "\r\n", true);
+                fileHandle.writeString("  " + control.getName().toString() + ": " + control.getKeycode() + "\r\n", true);
             }
         }
     }
@@ -157,19 +170,11 @@ public class Control {
         return controls.size();
     }
 
-    public static Control byName(String string) {
-        Name name;
-        try {
-            name = Name.valueOf(string);
-        } catch (IllegalArgumentException e) {
-            System.out.println("No Control exists with the name: " + string);
-            e.printStackTrace();
-            return null;
-        }
-        return byName(name);
+    public static Control byName(Name name) {
+        return byName(name.toString());
     }
 
-    public static Control byName(Name name) {
+    public static Control byName(String name) {
         return controls.getOrDefault(name, null);
     }
 

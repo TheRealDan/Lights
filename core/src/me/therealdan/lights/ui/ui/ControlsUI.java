@@ -2,6 +2,7 @@ package me.therealdan.lights.ui.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import me.therealdan.lights.controllers.Button;
 import me.therealdan.lights.main.Lights;
 import me.therealdan.lights.renderer.Renderer;
 import me.therealdan.lights.renderer.Task;
@@ -44,17 +45,37 @@ public class ControlsUI implements UI {
         }
         y -= cellHeight;
 
-        for (Control control : getSelectedCategory().getControls()) {
-            setWidth(renderer, control.getName().formatString(), 2);
-            renderer.box(x, y, width / 2, cellHeight, isSelected(control) ? Lights.color.DARK_RED : Lights.color.MEDIUM, control.getName().formatString());
-            renderer.box(x + width / 2, y, width / 2, cellHeight, isSelected(control) ? Lights.color.DARK_RED : Lights.color.MEDIUM, control.formatKeycode());
-            if (Lights.mouse.contains(x, y, width, cellHeight) && canInteract()) {
-                interacted = true;
-                if (Lights.mouse.leftClicked(500, getSelectedControl() != null && !control.equals(getSelectedControl()))) {
-                    select(isSelected(control) ? null : control);
+        if (getSelectedCategory().equals(Control.Category.BUTTONS)) {
+            for (Button button : ButtonsUI.buttons()) {
+                Control control = Control.byName(button.getName());
+                if (control == null) {
+                    control = new Control(button.getName(), Control.Category.BUTTONS, -1);
+                    control.register();
                 }
+                setWidth(renderer, button.getName(), 2);
+                renderer.box(x, y, width / 2, cellHeight, isSelected(control) ? Lights.color.DARK_RED : Lights.color.MEDIUM, button.getName());
+                renderer.box(x + width / 2, y, width / 2, cellHeight, isSelected(control) ? Lights.color.DARK_RED : Lights.color.MEDIUM, control.formatKeycode());
+                if (Lights.mouse.contains(x, y, width, cellHeight) && canInteract()) {
+                    interacted = true;
+                    if (Lights.mouse.leftClicked(500, getSelectedControl() != null && !control.equals(getSelectedControl()))) {
+                        select(isSelected(control) ? null : control);
+                    }
+                }
+                y -= cellHeight;
             }
-            y -= cellHeight;
+        } else {
+            for (Control control : getSelectedCategory().getControls()) {
+                setWidth(renderer, control.getName(), 2);
+                renderer.box(x, y, width / 2, cellHeight, isSelected(control) ? Lights.color.DARK_RED : Lights.color.MEDIUM, control.getName());
+                renderer.box(x + width / 2, y, width / 2, cellHeight, isSelected(control) ? Lights.color.DARK_RED : Lights.color.MEDIUM, control.formatKeycode());
+                if (Lights.mouse.contains(x, y, width, cellHeight) && canInteract()) {
+                    interacted = true;
+                    if (Lights.mouse.leftClicked(500, getSelectedControl() != null && !control.equals(getSelectedControl()))) {
+                        select(isSelected(control) ? null : control);
+                    }
+                }
+                y -= cellHeight;
+            }
         }
 
         setHeightBasedOnY(y);

@@ -2,6 +2,7 @@ package me.therealdan.lights.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import me.therealdan.lights.controllers.Button;
 import me.therealdan.lights.controllers.Fader;
 import me.therealdan.lights.dmx.DMX;
 import me.therealdan.lights.fixtures.Fixture;
@@ -13,6 +14,7 @@ import me.therealdan.lights.programmer.Frame;
 import me.therealdan.lights.programmer.Programmer;
 import me.therealdan.lights.programmer.Sequence;
 import me.therealdan.lights.renderer.Renderer;
+import me.therealdan.lights.settings.Control;
 import me.therealdan.lights.settings.Setting;
 import me.therealdan.lights.ui.ui.*;
 
@@ -119,10 +121,20 @@ public class UIHandler implements Visual {
                 }
             }
 
+            boolean skip = false;
             if (sequence.doesClear() && sequence.onLastFrame()) {
                 if (!clear.containsKey(sequence)) {
                     clear.put(sequence, System.currentTimeMillis());
                 } else if (System.currentTimeMillis() - clear.get(sequence) > sequence.getActiveFrame().getFrameTime()) {
+                    for (Button button : ButtonsUI.buttons()) {
+                        Control control = Control.byName(button.getName());
+                        if (control != null && Gdx.input.isKeyPressed(control.getKeycode())) {
+                            skip = true;
+                            continue;
+                        }
+                    }
+                    if (skip) continue;
+
                     clear.remove(sequence);
                     clearSequence(getPriority(sequence));
                     sequence.stop();
@@ -231,9 +243,17 @@ public class UIHandler implements Visual {
             }
         }
 
-        // TODO - keyDown() for Buttons!
-//        Button button = Hotkeys.getButton(keycode);
-//        if (button != null) button.press();
+        try {
+            for (Button button : ButtonsUI.buttons()) {
+                // TODO - Control for Button is based on its name, this is not ideal since it won't update if the buttons name changes!
+                Control control = Control.byName(button.getName());
+                if (control.getKeycode() == keycode) {
+                    button.press();
+                }
+            }
+        } catch (Exception e) {
+            //
+        }
 
         switch (keycode) {
             case Input.Keys.MINUS:

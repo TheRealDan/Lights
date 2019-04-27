@@ -1,90 +1,16 @@
 package me.therealdan.lights.ui.ui;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import me.therealdan.lights.controllers.Button;
 import me.therealdan.lights.main.Lights;
-import me.therealdan.lights.programmer.Sequence;
 import me.therealdan.lights.renderer.Renderer;
 import me.therealdan.lights.renderer.Task;
 import me.therealdan.lights.ui.UIHandler;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-
 public class ButtonsUI implements UI {
-
-    private static ButtonsUI buttonsUI;
 
     public static float WIDTH = 800;
     public static final int PER_ROW = 10;
-
-    private LinkedHashMap<Integer, Button> buttonMap = new LinkedHashMap<>();
-
-    private Button buttonToMove = null;
-
-    public ButtonsUI() {
-        buttonsUI = this;
-
-        FileHandle fileHandle = Gdx.files.local("Lights/Buttons/");
-        if (fileHandle.exists() && fileHandle.isDirectory())
-            for (FileHandle child : fileHandle.list())
-                load(child);
-    }
-
-    private void load(FileHandle fileHandle) {
-        Button button = new Button();
-        boolean sequences = false;
-        for (String line : fileHandle.readString().split("\\r?\\n")) {
-            if (line.startsWith("Name: ")) {
-                button.rename(line.split(": ")[1]);
-            } else if (line.startsWith("Position: ")) {
-                int position = Integer.parseInt(line.split(": ")[1]);
-                if (position >= 0) set(button, position);
-            } else if (line.startsWith("Colour:")) {
-                sequences = false;
-            } else if (line.startsWith("  Red: ") && !sequences) {
-                button.setRed(Float.parseFloat(line.split(": ")[1]));
-            } else if (line.startsWith("  Green: ") && !sequences) {
-                button.setGreen(Float.parseFloat(line.split(": ")[1]));
-            } else if (line.startsWith("  Blue: ") && !sequences) {
-                button.setBlue(Float.parseFloat(line.split(": ")[1]));
-            } else if (line.startsWith("Sequences:")) {
-                sequences = true;
-            } else if (sequences) {
-                String[] args = line.replaceFirst("  ", "").split(": ");
-                button.set(
-                        SequencesUI.byName(args[0]),
-                        Integer.parseInt(args[1])
-                );
-            }
-        }
-    }
-
-    @Override
-    public void save() {
-        UI.super.save();
-
-        for (Button button : buttons()) {
-            FileHandle fileHandle = Gdx.files.local("Lights/Buttons/" + button.getName() + ".txt");
-            fileHandle.writeString("", false);
-
-            fileHandle.writeString("Name: " + button.getName() + "\r\n", true);
-            fileHandle.writeString("Position: " + getPosition(button) + "\r\n", true);
-            fileHandle.writeString("Colour:\r\n", true);
-            fileHandle.writeString("  Red: " + button.getColor().r + "\r\n", true);
-            fileHandle.writeString("  Green: " + button.getColor().g + "\r\n", true);
-            fileHandle.writeString("  Blue: " + button.getColor().b + "\r\n", true);
-            fileHandle.writeString("Sequences:\r\n", true);
-            for (Sequence sequence : button.sequences()) {
-                int priority = button.getPriority(sequence);
-                fileHandle.writeString("  " + sequence.getName() + ": " + priority + "\r\n", true);
-            }
-        }
-    }
 
     @Override
     public boolean draw(Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {
@@ -104,28 +30,32 @@ public class ButtonsUI implements UI {
         drag(x, y, getWidth(), cellHeight);
         y -= cellHeight;
 
-        for (int position = 1; position <= ButtonsUI.getTopPosition(); position++) {
-            Button button = ButtonsUI.getButton(position);
+        ButtonEditUI buttonEditUI = (ButtonEditUI) UIHandler.byName("ButtonEdit");
+
+        int topPositionToDisplay = Button.getTopPosition();
+        if (buttonEditUI.isEditing()) {
+            while (topPositionToDisplay % PER_ROW != 0) topPositionToDisplay++;
+            topPositionToDisplay += PER_ROW;
+        }
+
+        for (int position = 1; position <= topPositionToDisplay; position++) {
+            Button button = Button.byPosition(position);
             if (button != null) {
                 renderer.box(x, y, size, size, button.getColor(), button.getName(), Task.TextPosition.CENTER);
                 if (Lights.mouse.contains(x, y, size, size) && canInteract()) {
                     interacted = true;
-                    if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(1000)) {
+                    if (Lights.mouse.leftClicked(1000)) {
                         button.press();
                         renderer.box(x, y, size, size, new Color(button.getColor()).mul(1.5f));
-                    } else if (Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) {
-                        ButtonEditUI.edit(button);
+                    } else if (Lights.mouse.rightClicked()) {
+                        buttonEditUI.edit(button);
                     }
                 }
             } else {
                 renderer.box(x, y, size, size, Lights.color.DARK);
-                if (Lights.mouse.contains(x, y, size, size) && canInteract()) {
-                    interacted = true;
-                    if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(1000)) {
-                        if (getButtonToMove() != null) {
-                            set(getButtonToMove(), position);
-                            move(null);
-                        }
+                if (Lights.mouse.contains(x, y, size, size) && canInteract() && buttonEditUI.isEditing()) {
+                    if (Lights.mouse.leftClicked()) {
+                        buttonEditUI.getEditing().setPosition(position);
                     }
                 }
             }
@@ -136,86 +66,17 @@ public class ButtonsUI implements UI {
                 y -= size;
             }
         }
+
         renderer.box(x, y, size, size, Lights.color.DARK, Lights.color.GREEN, "Add New", Task.TextPosition.CENTER);
         if (Lights.mouse.contains(x, y, size, size) && canInteract()) {
             interacted = true;
-            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(1000)) {
-                set(new Button());
+            if (Lights.mouse.leftClicked(1000)) {
+                Button.add(new Button("New Button", Lights.color.MEDIUM));
             }
         }
         y -= size;
 
         setHeightBasedOnY(y);
         return interacted;
-    }
-
-    public static boolean isButtonToMove() {
-        return getButtonToMove() != null;
-    }
-
-    public static Button getButtonToMove() {
-        return buttonsUI.buttonToMove;
-    }
-
-    public static void move(Button button) {
-        buttonsUI.buttonToMove = button;
-    }
-
-    public static void set(Button button) {
-        set(button, getFreePosition());
-    }
-
-    public static void set(Button button, int position) {
-        remove(button);
-        if (!contains(position)) {
-            buttonsUI.buttonMap.put(position, button);
-        } else {
-            set(button);
-        }
-    }
-
-    public static void remove(Button button) {
-        if (contains(button.getPosition()))
-            buttonsUI.buttonMap.remove(button.getPosition());
-    }
-
-    public static boolean contains(int position) {
-        return buttonsUI.buttonMap.containsKey(position);
-    }
-
-    public static int getPosition(Button button) {
-        for (int position : buttonsUI.buttonMap.keySet())
-            if (getButton(position).equals(button))
-                return position;
-
-        return -1;
-    }
-
-    public static int getFreePosition() {
-        int position = 1;
-        while (contains(position))
-            position++;
-        return position;
-    }
-
-    public static int getTopPosition() {
-        int top = -1;
-        for (int position : buttonsUI.buttonMap.keySet())
-            if (position > top) top = position;
-
-        if (isButtonToMove()) {
-            while (top % PER_ROW != 0) top++;
-            top += PER_ROW;
-        }
-
-        return top;
-    }
-
-    public static Button getButton(int position) {
-        return buttonsUI.buttonMap.getOrDefault(position, null);
-    }
-
-    public static List<Button> buttons() {
-        return new ArrayList<>(buttonsUI.buttonMap.values());
     }
 }

@@ -354,6 +354,14 @@ public class UIHandler implements Visual {
         return uiHandler.dragging;
     }
 
+    public static UI byName(String name) {
+        for (UI ui : UIs())
+            if (ui.getName().equals(name))
+                return ui;
+
+        return null;
+    }
+
     public static void clearSequence(int priority) {
         uiHandler.sequenceStack.remove(priority);
     }

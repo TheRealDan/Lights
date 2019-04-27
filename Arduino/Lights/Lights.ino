@@ -1,7 +1,6 @@
-#include <lib_dmx.h>
-#include <AltSoftSerial.h>
+#include <Conceptinetics.h>
 
-AltSoftSerial rx;
+DMX_Master DMX(512, 2);
 
 String dmxBuffer = "";
 int address, value;
@@ -9,17 +8,15 @@ int incoming;
 char c;
 
 void setup() {
-  ArduinoDmx0.set_tx_address(1);
-  ArduinoDmx0.set_tx_channels(512);
-  ArduinoDmx0.init_tx(0);
+  Serial.begin(74880);
+  Serial.setTimeout(0);
 
-  rx.begin(74880);
-  rx.setTimeout(0);
+  DMX.enable();
 }
 
 void loop() {
-  if (rx.available() > 0) {
-    incoming = rx.read();
+  if (Serial.available() > 0) {
+    incoming = Serial.read();
 
     switch (incoming) {
       case 32:
@@ -27,7 +24,7 @@ void loop() {
           value = dmxBuffer.substring(0, 3).toInt();
           for (int i = 3; i < dmxBuffer.length(); i += 3) {
             address = dmxBuffer.substring(i, i + 3).toInt();
-            dmx(address, value);
+            DMX.setChannelValue(address, value);
           }
         }
         dmxBuffer = "";
@@ -49,13 +46,3 @@ void loop() {
     }
   }
 }
-
-void dmx(int address, int value) {
-  if (address > 512) address = 512;
-  if (address < 1) address = 1;
-  if (value > 255) value = 255;
-  if (value < 0) value = 0;
-
-  ArduinoDmx0.TxBuffer[address - 1] = value;
-}
-

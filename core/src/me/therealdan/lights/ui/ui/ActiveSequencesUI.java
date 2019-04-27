@@ -10,10 +10,6 @@ import me.therealdan.lights.ui.UIHandler;
 
 public class ActiveSequencesUI implements UI {
 
-    public ActiveSequencesUI() {
-        setLocation(560, 20);
-    }
-
     @Override
     public boolean draw(Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {
         if (containsMouse()) UIHandler.setSection(UIHandler.Section.ACTIVE_SEQUENCES);

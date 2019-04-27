@@ -17,7 +17,6 @@ import java.util.List;
 
 public class SequenceProgrammerUI implements UI {
 
-    private static SequenceProgrammerUI sequenceProgrammerUI;
     private static Selected selected = Selected.NONE;
 
     private final long delay = 1000;
@@ -27,11 +26,6 @@ public class SequenceProgrammerUI implements UI {
 
     private String fadeMilliseconds = "";
     private long fadeTimestamp = System.currentTimeMillis();
-
-    public SequenceProgrammerUI() {
-        sequenceProgrammerUI = this;
-        setLocation(330, 200);
-    }
 
     @Override
     public boolean keyDown(int keycode) {
@@ -285,9 +279,5 @@ public class SequenceProgrammerUI implements UI {
 
     public static Selected getSelected() {
         return selected;
-    }
-
-    public static SequenceProgrammerUI getInstance() {
-        return sequenceProgrammerUI;
     }
 }

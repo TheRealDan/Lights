@@ -3,6 +3,7 @@ package me.therealdan.lights.settings;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.files.FileHandle;
+import me.therealdan.lights.controllers.Button;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -161,7 +162,7 @@ public class Control {
         for (Category category : categories()) {
             fileHandle.writeString(category.toString() + ":\r\n", true);
             for (Control control : category.getControls()) {
-                fileHandle.writeString("  " + control.getName().toString() + ": " + control.getKeycode() + "\r\n", true);
+                fileHandle.writeString("  " + control.getName() + ": " + control.getKeycode() + "\r\n", true);
             }
         }
     }
@@ -170,11 +171,20 @@ public class Control {
         return controls.size();
     }
 
+    public static Control byButton(Button button) {
+        Control control = byName("Button_" + button.getID());
+        if (control == null) {
+            control = new Control("Button_" + button.getID(), Control.Category.BUTTONS, -1);
+            control.register();
+        }
+        return control;
+    }
+
     public static Control byName(Name name) {
         return byName(name.toString());
     }
 
-    public static Control byName(String name) {
+    private static Control byName(String name) {
         return controls.getOrDefault(name, null);
     }
 

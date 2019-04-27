@@ -46,12 +46,8 @@ public class ControlsUI implements UI {
         y -= cellHeight;
 
         if (getSelectedCategory().equals(Control.Category.BUTTONS)) {
-            for (Button button : Button.buttons()) {
-                Control control = Control.byName(button.getName());
-                if (control == null) {
-                    control = new Control(button.getName(), Control.Category.BUTTONS, -1);
-                    control.register();
-                }
+            for (Button button : Button.buttons(Button.SortBy.POSITION)) {
+                Control control = Control.byButton(button);
                 setWidth(renderer, button.getName(), 2);
                 renderer.box(x, y, width / 2, cellHeight, isSelected(control) ? Lights.color.DARK_RED : Lights.color.MEDIUM, button.getName());
                 renderer.box(x + width / 2, y, width / 2, cellHeight, isSelected(control) ? Lights.color.DARK_RED : Lights.color.MEDIUM, control.formatKeycode());

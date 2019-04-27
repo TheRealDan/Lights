@@ -162,6 +162,8 @@ public class Button {
         for (String line : fileHandle.readString().split("\\r?\\n")) {
             if (line.startsWith("Name: ")) {
                 button.rename(line.split(": ")[1]);
+            } else if (line.startsWith("ID: ")) {
+                button.id = Integer.parseInt(line.split(": ")[1]);
             } else if (line.startsWith("Position: ")) {
                 button.setPosition(Integer.parseInt(line.split(": ")[1]));
             } else if (line.startsWith("Color:")) {
@@ -192,6 +194,7 @@ public class Button {
             fileHandle.writeString("", false);
 
             fileHandle.writeString("Name: " + button.getName() + "\r\n", true);
+            fileHandle.writeString("ID: " + button.getID() + "\r\n", true);
             fileHandle.writeString("Position: " + button.getPosition() + "\r\n", true);
             fileHandle.writeString("Color:\r\n", true);
             fileHandle.writeString("  Red: " + button.getColor().r + "\r\n", true);

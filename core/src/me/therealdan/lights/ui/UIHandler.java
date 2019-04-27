@@ -132,7 +132,7 @@ public class UIHandler implements Visual {
                     clear.put(sequence, System.currentTimeMillis());
                 } else if (System.currentTimeMillis() - clear.get(sequence) > sequence.getActiveFrame().getFrameTime()) {
                     for (Button button : Button.buttons()) {
-                        Control control = Control.byName(button.getName());
+                        Control control = Control.byButton(button);
                         if (control != null && Gdx.input.isKeyPressed(control.getKeycode())) {
                             skip = true;
                             continue;
@@ -248,16 +248,11 @@ public class UIHandler implements Visual {
             }
         }
 
-        try {
-            for (Button button : Button.buttons()) {
-                // TODO - Control for Button is based on its name, this is not ideal since it won't update if the buttons name changes!
-                Control control = Control.byName(button.getName());
-                if (control.getKeycode() == keycode) {
-                    button.press();
-                }
+        for (Button button : Button.buttons()) {
+            Control control = Control.byButton(button);
+            if (control != null && control.getKeycode() == keycode) {
+                button.press();
             }
-        } catch (Exception e) {
-            //
         }
 
         switch (keycode) {

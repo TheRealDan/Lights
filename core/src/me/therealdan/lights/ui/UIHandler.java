@@ -91,6 +91,9 @@ public class UIHandler implements Visual {
         uis.add(new FadersUI());
         uis.add(new ButtonsUI());
 
+        // TODO - Move elsewhere
+        Button.loadButtonsFromFile();
+
         for (UI ui : UIs())
             ui.load();
     }
@@ -104,6 +107,8 @@ public class UIHandler implements Visual {
         Group.saveGroupsToFile();
 
         Profile.saveProfilesToFile();
+
+        Button.saveButtonsToFile();
     }
 
     public void update() {
@@ -126,7 +131,7 @@ public class UIHandler implements Visual {
                 if (!clear.containsKey(sequence)) {
                     clear.put(sequence, System.currentTimeMillis());
                 } else if (System.currentTimeMillis() - clear.get(sequence) > sequence.getActiveFrame().getFrameTime()) {
-                    for (Button button : ButtonsUI.buttons()) {
+                    for (Button button : Button.buttons()) {
                         Control control = Control.byName(button.getName());
                         if (control != null && Gdx.input.isKeyPressed(control.getKeycode())) {
                             skip = true;
@@ -244,7 +249,7 @@ public class UIHandler implements Visual {
         }
 
         try {
-            for (Button button : ButtonsUI.buttons()) {
+            for (Button button : Button.buttons()) {
                 // TODO - Control for Button is based on its name, this is not ideal since it won't update if the buttons name changes!
                 Control control = Control.byName(button.getName());
                 if (control.getKeycode() == keycode) {

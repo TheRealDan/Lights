@@ -46,7 +46,7 @@ public class ControlsUI implements UI {
         y -= cellHeight;
 
         if (getSelectedCategory().equals(Control.Category.BUTTONS)) {
-            for (Button button : ButtonsUI.buttons()) {
+            for (Button button : Button.buttons()) {
                 Control control = Control.byName(button.getName());
                 if (control == null) {
                     control = new Control(button.getName(), Control.Category.BUTTONS, -1);

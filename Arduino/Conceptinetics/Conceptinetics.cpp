@@ -119,8 +119,8 @@
     #define DMX_RXEN RXEN1
     #define DMX_RXCIE RXCIE1
     #define DMX_FE FE1
-    #define RX_PIN 19
-    #define TX_PIN 18
+    #define RX_PIN 18
+    #define TX_PIN 19
 #elif defined (USE_DMX_SERIAL_2)
     #define USART_RX USART2_RX_vect
     #define USART_TX USART2_TX_vect

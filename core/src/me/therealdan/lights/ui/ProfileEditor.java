@@ -331,6 +331,27 @@ public class ProfileEditor implements Visual {
 
         if (isEditing(Section.VIRTUAL_CHANNELS) && hasChannelSelected()) {
             switch (keycode) {
+                case Input.Keys.UP:
+                    Channel previous = null;
+                    for (Channel channel : getMutableProfile().channels()) {
+                        if (channel.equals(getSelectedChannel())) {
+                            if (previous == null) return false;
+                            select(previous);
+                            return false;
+                        }
+                        previous = channel;
+                    }
+                    return false;
+                case Input.Keys.DOWN:
+                    boolean next = false;
+                    for (Channel channel : getMutableProfile().channels()) {
+                        if (next) {
+                            select(channel);
+                            return false;
+                        }
+                        if (channel.equals(getSelectedChannel())) next = true;
+                    }
+                    return false;
                 case Input.Keys.BACKSPACE:
                     if (getSelectedChannel().countAddressOffsets() == 0) return false;
                     if (Integer.toString(getSelectedChannel().getLastAddressOffset()).length() == 1) {

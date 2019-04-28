@@ -24,7 +24,7 @@ void loop() {
           value = dmxBuffer.substring(0, 3).toInt();
           for (int i = 3; i < dmxBuffer.length(); i += 3) {
             address = dmxBuffer.substring(i, i + 3).toInt();
-            DMX.setChannelValue(address, value);
+            set(address, value);
           }
         }
         dmxBuffer = "";
@@ -45,4 +45,17 @@ void loop() {
         break;
     }
   }
+}
+
+void set(int address, int value) {
+  if (address > 512) return;
+  if (address < 1) return;
+  if (value > 255) return;
+  if (value < 0) return;
+  
+  DMX.setChannelValue(address, value);
+  
+  Serial.print(address);
+  Serial.print(": ");
+  Serial.println(value);
 }

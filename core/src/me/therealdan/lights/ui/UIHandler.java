@@ -77,6 +77,7 @@ public class UIHandler implements Visual {
 
         // Programmer
         uis.add(new SequenceProgrammerUI());
+        uis.add(new NewSequenceProgrammerUI());
         uis.add(new FixturesUI());
         uis.add(new GroupsUI());
         uis.add(new ParametersUI());
@@ -325,7 +326,7 @@ public class UIHandler implements Visual {
 
         CONSOLE, DMX_OUTPUT,
 
-        SEQUENCE_PROGRAMMER,
+        SEQUENCE_PROGRAMMER, NEW_SEQUENCE_PROGRAMMER,
         FIXTURES, GROUPS, COLOR_WHEEL,
         PARAMETERS,
 

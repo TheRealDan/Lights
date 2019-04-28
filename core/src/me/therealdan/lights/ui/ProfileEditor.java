@@ -432,6 +432,9 @@ public class ProfileEditor implements Visual {
         this.profile = profile;
         this.mutableProfile = profile != null ? new MutableProfile(profile) : null;
         this.channel = null;
+        this.modelDesign = null;
+
+        rebuildModelInstances();
     }
 
     private void edit(Section section) {

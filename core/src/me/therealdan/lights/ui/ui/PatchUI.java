@@ -37,6 +37,7 @@ public class PatchUI implements UI {
             width = Math.max(width, idWidth + nameWidth + profileWidth + addressWidth);
         }
 
+        renderer.box(x, y, uiWidth, getHeight(), Lights.color.DARK);
         renderer.box(x, y, uiWidth, cellHeight, Lights.color.DARK_BLUE, "Patch", Task.TextPosition.CENTER);
         drag(x, y, uiWidth, cellHeight);
         y -= cellHeight;
@@ -66,7 +67,7 @@ public class PatchUI implements UI {
         setHeightBasedOnY(y);
 
         if (hasFixtureSelected()) {
-            int perRow = (int) DMX.MAX_CHANNELS / Fixture.fixtures().size();
+            int perRow = (int) DMX.MAX_CHANNELS / 16;
             float addressesWidth = perRow * cellHeight;
             x = getX() + width;
             y = getY() - cellHeight;
@@ -104,6 +105,7 @@ public class PatchUI implements UI {
             setWidth(width);
         }
 
+        setHeightBasedOnY(y);
         return interacted;
     }
 

@@ -1,6 +1,6 @@
 package me.therealdan.lights.programmer;
 
-import me.therealdan.lights.fixtures.Channel;
+import me.therealdan.lights.fixtures.fixture.profile.Channel;
 import me.therealdan.lights.fixtures.Fixture;
 
 import java.util.List;

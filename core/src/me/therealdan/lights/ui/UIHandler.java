@@ -7,7 +7,7 @@ import me.therealdan.lights.controllers.Fader;
 import me.therealdan.lights.dmx.DMX;
 import me.therealdan.lights.fixtures.Fixture;
 import me.therealdan.lights.fixtures.Group;
-import me.therealdan.lights.fixtures.Profile;
+import me.therealdan.lights.fixtures.fixture.Profile;
 import me.therealdan.lights.main.Lights;
 import me.therealdan.lights.programmer.CondensedFrame;
 import me.therealdan.lights.programmer.Frame;

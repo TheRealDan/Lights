@@ -5,7 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import me.therealdan.lights.dmx.Output;
-import me.therealdan.lights.fixtures.Profile;
+import me.therealdan.lights.fixtures.fixture.Profile;
 import me.therealdan.lights.renderer.Renderer;
 import me.therealdan.lights.settings.Control;
 import me.therealdan.lights.settings.Setting;

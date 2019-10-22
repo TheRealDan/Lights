@@ -1,7 +1,10 @@
-package me.therealdan.lights.fixtures;
+package me.therealdan.lights.fixtures.fixture;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import me.therealdan.lights.fixtures.fixture.profile.Channel;
+import me.therealdan.lights.fixtures.fixture.profile.ModelDesign;
+import me.therealdan.lights.fixtures.fixture.profile.MutableProfile;
 
 import java.util.ArrayList;
 import java.util.HashSet;

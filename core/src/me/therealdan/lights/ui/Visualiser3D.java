@@ -14,7 +14,7 @@ import com.badlogic.gdx.math.collision.Ray;
 import com.badlogic.gdx.utils.IntIntMap;
 import me.therealdan.lights.dmx.DMX;
 import me.therealdan.lights.fixtures.Fixture;
-import me.therealdan.lights.fixtures.Model;
+import me.therealdan.lights.fixtures.fixture.Model;
 import me.therealdan.lights.main.Lights;
 import me.therealdan.lights.programmer.Programmer;
 import me.therealdan.lights.renderer.Renderer;

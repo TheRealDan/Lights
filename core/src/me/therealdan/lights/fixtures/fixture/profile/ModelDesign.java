@@ -1,4 +1,4 @@
-package me.therealdan.lights.fixtures;
+package me.therealdan.lights.fixtures.fixture.profile;
 
 import com.badlogic.gdx.graphics.VertexAttributes;
 import com.badlogic.gdx.graphics.g3d.Material;

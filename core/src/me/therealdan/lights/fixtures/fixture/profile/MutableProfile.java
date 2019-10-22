@@ -1,4 +1,6 @@
-package me.therealdan.lights.fixtures;
+package me.therealdan.lights.fixtures.fixture.profile;
+
+import me.therealdan.lights.fixtures.fixture.Profile;
 
 import java.util.ArrayList;
 import java.util.List;

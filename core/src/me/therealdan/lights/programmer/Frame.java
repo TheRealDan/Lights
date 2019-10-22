@@ -2,7 +2,7 @@ package me.therealdan.lights.programmer;
 
 import com.badlogic.gdx.graphics.Color;
 import me.therealdan.lights.dmx.DMX;
-import me.therealdan.lights.fixtures.Channel;
+import me.therealdan.lights.fixtures.fixture.profile.Channel;
 import me.therealdan.lights.fixtures.Fixture;
 import me.therealdan.lights.renderer.Renderer;
 

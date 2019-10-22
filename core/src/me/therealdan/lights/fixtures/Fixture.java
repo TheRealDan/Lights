@@ -6,6 +6,10 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.math.Vector3;
 import me.therealdan.lights.dmx.DMX;
+import me.therealdan.lights.fixtures.fixture.Model;
+import me.therealdan.lights.fixtures.fixture.Profile;
+import me.therealdan.lights.fixtures.fixture.profile.Channel;
+import me.therealdan.lights.fixtures.fixture.profile.ModelDesign;
 
 import java.util.ArrayList;
 import java.util.HashSet;

@@ -1,9 +1,10 @@
-package me.therealdan.lights.fixtures;
+package me.therealdan.lights.fixtures.fixture;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.math.Vector3;
+import me.therealdan.lights.fixtures.fixture.profile.ModelDesign;
 
 public class Model {
 

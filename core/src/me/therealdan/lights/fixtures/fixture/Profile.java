@@ -21,6 +21,9 @@ public class Profile implements Sortable {
     private List<ModelDesign> modelDesigns;
     private List<Channel> channels;
 
+    // TODO - Still using hardcoded model designs based off profile name
+    private boolean usingHardcodedModelDesignsBasedOnProfileName = false;
+
     public Profile(String name, List<ModelDesign> modelDesigns, List<Channel> channels) {
         this.name = name;
         this.modelDesigns = modelDesigns;
@@ -86,14 +89,18 @@ public class Profile implements Sortable {
         // TODO - Could probably cache this and update whenever channels are modified
     }
 
+    public boolean isUsingHardcodedModelDesignsBasedOnProfileName() {
+        return usingHardcodedModelDesignsBasedOnProfileName;
+    }
+
     public List<ModelDesign> getModelDesigns() {
-        // TODO - Still using hardcoded model designs based off profile name
         if (modelDesigns.size() == 0) {
             switch (getName()) {
                 case "Ming":
                     modelDesigns.add(new ModelDesign(2f / 3f, 0.2f, 0.2f, -(2f / 3f), 0f, 0f));
                     modelDesigns.add(new ModelDesign(2f / 3f, 0.2f, 0.2f));
                     modelDesigns.add(new ModelDesign(2f / 3f, 0.2f, 0.2f, 2f / 3f, 0f, 0f));
+                    usingHardcodedModelDesignsBasedOnProfileName = true;
                     break;
 
                 case "LED Strip":
@@ -101,10 +108,12 @@ public class Profile implements Sortable {
                     modelDesigns.add(new ModelDesign(0.2f, 2f, 0.2f, 0.5f, 0f, 0f));
                     modelDesigns.add(new ModelDesign(0.2f, 2f, 0.2f, 1f, 0f, 0f));
                     modelDesigns.add(new ModelDesign(0.2f, 2f, 0.2f, 1.5f, 0f, 0f));
+                    usingHardcodedModelDesignsBasedOnProfileName = true;
                     break;
 
                 case "Par Can":
                     modelDesigns.add(new ModelDesign(0.5f));
+                    usingHardcodedModelDesignsBasedOnProfileName = true;
                     break;
             }
         }

@@ -98,6 +98,11 @@ public class ProfileEditor implements Visual {
         if (Lights.mouse.contains(x, y, width, cellHeight) && Lights.mouse.leftClicked()) edit(Section.MODEL);
         y -= cellHeight;
 
+        if (profile.isUsingHardcodedModelDesignsBasedOnProfileName()) {
+            renderer.box(x, y, width, cellHeight, Lights.color.MEDIUM, "Warning: Hardcoded models based on profile name");
+            y -= cellHeight;
+        }
+
         renderer.box(x, y, width, cellHeight, Lights.color.MEDIUM, Lights.color.YELLOW, "Save Changes");
         if (Lights.mouse.contains(x, y, width, cellHeight) && Lights.mouse.leftClicked()) {
             profile.update(getMutableProfile());

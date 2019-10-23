@@ -2,14 +2,16 @@ package me.therealdan.lights.fixtures;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import me.therealdan.lights.util.sorting.Sortable;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
 import static me.therealdan.lights.fixtures.Fixture.fixtureByID;
+import static me.therealdan.lights.util.sorting.Sortable.Sort.NAME;
 
-public class Group {
+public class Group implements Sortable {
 
     private static HashSet<Group> groups = new HashSet<>();
 
@@ -45,6 +47,7 @@ public class Group {
         return fixtures.size();
     }
 
+    @Override
     public String getName() {
         return name;
     }
@@ -97,46 +100,24 @@ public class Group {
         groups.add(group);
     }
 
+    public static int count() {
+        return groups.size();
+    }
+
     public static Group groupByName(String name) {
-        for (Group group : groups(SortBy.NAME))
+        for (Group group : groups(NAME))
             if (group.getName().equalsIgnoreCase(name))
                 return group;
 
         return null;
     }
 
-    public static List<Group> groups(SortBy... sortBy) {
-        List<Group> groups = new ArrayList<>(Group.groups);
-        if (sortBy.length == 0) return groups;
+    public static List<Group> groups(Sort... sort) {
+        if (sort.length == 0) return new ArrayList<>(Group.groups);
 
-        List<Group> sorted = new ArrayList<>();
-
-        while (groups.size() > 0) {
-            Group next = null;
-            for (Group group : groups) {
-                if (next == null) {
-                    next = group;
-                } else {
-                    sort:
-                    for (Group.SortBy each : sortBy) {
-                        switch (each) {
-                            case NAME:
-                                if (group.getName().compareTo(next.getName()) == 0) break;
-                                if (group.getName().compareTo(next.getName()) > 0) next = group;
-                                break sort;
-                        }
-                    }
-                }
-            }
-            sorted.add(next);
-            groups.remove(next);
-        }
-
-        return sorted;
-    }
-
-    // TODO - Add more sorting options
-    public enum SortBy {
-        NAME
+        List<Group> groups = new ArrayList<>();
+        for (Sortable sortable : Sortable.sort(new ArrayList<>(Group.groups), sort))
+            groups.add((Group) sortable);
+        return groups;
     }
 }

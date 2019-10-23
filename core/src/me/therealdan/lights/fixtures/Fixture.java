@@ -10,12 +10,15 @@ import me.therealdan.lights.fixtures.fixture.Model;
 import me.therealdan.lights.fixtures.fixture.Profile;
 import me.therealdan.lights.fixtures.fixture.profile.Channel;
 import me.therealdan.lights.fixtures.fixture.profile.ModelDesign;
+import me.therealdan.lights.util.sorting.Sortable;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
-public class Fixture {
+import static me.therealdan.lights.util.sorting.Sortable.Sort.ID;
+
+public class Fixture implements Sortable {
 
     private static HashSet<Fixture> fixtures = new HashSet<>();
 
@@ -25,7 +28,7 @@ public class Fixture {
     private int address;
     private int id;
 
-    private Vector3 position;
+    private Vector3 location;
     private List<Model> models = new ArrayList<>();
 
     public Fixture(String name, Profile profile, int address, int id) {
@@ -37,21 +40,21 @@ public class Fixture {
         this.fileName = fileName;
     }
 
-    public Fixture(String name, Profile profile, int address, int id, Vector3 position) {
+    public Fixture(String name, Profile profile, int address, int id, Vector3 location) {
         this.name = name;
         this.profile = profile;
         this.address = address;
         this.id = id;
-        this.position = position;
+        this.location = location;
     }
 
     public void buildModels() {
         models.clear();
         for (ModelDesign modelDesign : profile.getModelDesigns()) {
             Vector3 position = new Vector3(
-                    getPosition().x + modelDesign.getOffset().x,
-                    getPosition().y + modelDesign.getOffset().y,
-                    getPosition().z + modelDesign.getOffset().z
+                    getLocation().x + modelDesign.getOffset().x,
+                    getLocation().y + modelDesign.getOffset().y,
+                    getLocation().z + modelDesign.getOffset().z
             );
             models.add(new Model(modelDesign, position));
         }
@@ -120,13 +123,13 @@ public class Fixture {
     }
 
     public void move(float x, float y, float z) {
-        position.add(x, y, z);
+        location.add(x, y, z);
         for (Model model : getModels())
             model.move(x, y, z);
     }
 
     public void teleport(float x, float y, float z) {
-        position.set(x, y, z);
+        location.set(x, y, z);
         for (Model model : getModels())
             model.teleport(x, y, z, true);
     }
@@ -144,6 +147,7 @@ public class Fixture {
         return fileName;
     }
 
+    @Override
     public String getName() {
         return name;
     }
@@ -156,12 +160,13 @@ public class Fixture {
         return address;
     }
 
+    @Override
     public int getID() {
         return id;
     }
 
-    public Vector3 getPosition() {
-        return position;
+    public Vector3 getLocation() {
+        return location;
     }
 
     public List<Model> getModels() {
@@ -322,7 +327,7 @@ public class Fixture {
             fileHandle.writeString("Address: " + fixture.getAddress() + "\r\n", true);
             fileHandle.writeString("ID: " + fixture.getID() + "\r\n", true);
 
-            Vector3 position = fixture.getPosition();
+            Vector3 position = fixture.getLocation();
             fileHandle.writeString("Position:\r\n", true);
             fileHandle.writeString("  X: " + position.x + "\r\n", true);
             fileHandle.writeString("  Y: " + position.y + "\r\n", true);
@@ -336,8 +341,12 @@ public class Fixture {
         return id;
     }
 
+    public static int count() {
+        return fixtures.size();
+    }
+
     public static Fixture fixtureByID(int id) {
-        for (Fixture fixture : fixtures(SortBy.ID))
+        for (Fixture fixture : fixtures(ID))
             if (fixture.getID() == id)
                 return fixture;
 
@@ -352,38 +361,12 @@ public class Fixture {
         return null;
     }
 
-    public static List<Fixture> fixtures(SortBy... sortBy) {
-        List<Fixture> fixtures = new ArrayList<>(Fixture.fixtures);
-        if (sortBy.length == 0) return fixtures;
+    public static List<Fixture> fixtures(Sort... sort) {
+        if (sort.length == 0) return new ArrayList<>(Fixture.fixtures);
 
-        List<Fixture> sorted = new ArrayList<>();
-
-        while (fixtures.size() > 0) {
-            Fixture next = null;
-            for (Fixture fixture : fixtures) {
-                if (next == null) {
-                    next = fixture;
-                } else {
-                    sort:
-                    for (SortBy each : sortBy) {
-                        switch (each) {
-                            case ID:
-                                if (fixture.getID() == next.getID()) break;
-                                if (fixture.getID() < next.getID()) next = fixture;
-                                break sort;
-                        }
-                    }
-                }
-            }
-            sorted.add(next);
-            fixtures.remove(next);
-        }
-
-        return sorted;
-    }
-
-    // TODO - Add more sorting options
-    public enum SortBy {
-        ID
+        List<Fixture> fixtures = new ArrayList<>();
+        for (Sortable sortable : Sortable.sort(new ArrayList<>(Fixture.fixtures), sort))
+            fixtures.add((Fixture) sortable);
+        return fixtures;
     }
 }

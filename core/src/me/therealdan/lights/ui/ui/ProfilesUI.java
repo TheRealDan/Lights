@@ -10,6 +10,8 @@ import me.therealdan.lights.ui.UIHandler;
 
 import java.util.ArrayList;
 
+import static me.therealdan.lights.util.sorting.Sortable.Sort.NAME;
+
 public class ProfilesUI implements UI {
 
     private final int ROWS = 6;
@@ -43,7 +45,7 @@ public class ProfilesUI implements UI {
         int i = 0;
         boolean display = false;
         int current = 0;
-        for (Profile profile : Profile.profiles(Profile.SortBy.NAME)) {
+        for (Profile profile : Profile.profiles(NAME)) {
             if (current == getProfileScroll()) display = true;
             current++;
             if (display) {

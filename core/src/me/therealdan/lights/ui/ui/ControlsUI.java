@@ -11,6 +11,8 @@ import me.therealdan.lights.ui.UIHandler;
 
 import java.util.List;
 
+import static me.therealdan.lights.util.sorting.Sortable.Sort.POSITION;
+
 public class ControlsUI implements UI {
 
     private Control.Category selectedCategory;
@@ -46,7 +48,7 @@ public class ControlsUI implements UI {
         y -= cellHeight;
 
         if (getSelectedCategory().equals(Control.Category.BUTTONS)) {
-            for (Button button : Button.buttons(Button.SortBy.POSITION)) {
+            for (Button button : Button.buttons(POSITION)) {
                 Control control = Control.byButton(button);
                 setWidth(renderer, button.getName(), 2);
                 renderer.box(x, y, width / 2, cellHeight, isSelected(control) ? Lights.color.DARK_RED : Lights.color.MEDIUM, button.getName());

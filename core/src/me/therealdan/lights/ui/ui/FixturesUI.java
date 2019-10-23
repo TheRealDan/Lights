@@ -9,6 +9,8 @@ import me.therealdan.lights.renderer.Renderer;
 import me.therealdan.lights.renderer.Task;
 import me.therealdan.lights.ui.UIHandler;
 
+import static me.therealdan.lights.util.sorting.Sortable.Sort.ID;
+
 public class FixturesUI implements UI {
 
     public static float WIDTH = 800;
@@ -39,7 +41,7 @@ public class FixturesUI implements UI {
         drag(x, y, width, cellHeight);
         y -= cellHeight;
 
-        for (Fixture fixture : Fixture.fixtures(Fixture.SortBy.ID)) {
+        for (Fixture fixture : Fixture.fixtures(ID)) {
             renderer.box(x, y, cellSize, cellSize, Programmer.isSelected(fixture) ? Lights.color.DARK_RED : Lights.color.MEDIUM, fixture.getName(), Task.TextPosition.CENTER);
             if (Lights.mouse.contains(x, y, cellSize, cellSize) && canInteract()) {
                 interacted = true;

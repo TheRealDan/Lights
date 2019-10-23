@@ -5,12 +5,15 @@ import com.badlogic.gdx.files.FileHandle;
 import me.therealdan.lights.fixtures.fixture.profile.Channel;
 import me.therealdan.lights.fixtures.fixture.profile.ModelDesign;
 import me.therealdan.lights.fixtures.fixture.profile.MutableProfile;
+import me.therealdan.lights.util.sorting.Sortable;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
-public class Profile {
+import static me.therealdan.lights.util.sorting.Sortable.Sort.NAME;
+
+public class Profile implements Sortable {
 
     private static HashSet<Profile> profiles = new HashSet<>();
 
@@ -36,6 +39,7 @@ public class Profile {
         // TODO - Need to test name changing, it should be fine since Fixtures hold an object reference rather than the profile name as a string
     }
 
+    @Override
     public String getName() {
         return name;
     }
@@ -178,45 +182,19 @@ public class Profile {
     }
 
     public static Profile profileByName(String name) {
-        for (Profile profile : profiles(SortBy.NAME))
+        for (Profile profile : profiles(NAME))
             if (profile.getName().equalsIgnoreCase(name))
                 return profile;
 
         return null;
     }
 
-    public static List<Profile> profiles(SortBy... sortBy) {
-        List<Profile> profiles = new ArrayList<>(Profile.profiles);
-        if (sortBy.length == 0) return profiles;
+    public static List<Profile> profiles(Sort... sort) {
+        if (sort.length == 0) return new ArrayList<>(Profile.profiles);
 
-        List<Profile> sorted = new ArrayList<>();
-
-        while (profiles.size() > 0) {
-            Profile next = null;
-            for (Profile profile : profiles) {
-                if (next == null) {
-                    next = profile;
-                } else {
-                    sort:
-                    for (Profile.SortBy each : sortBy) {
-                        switch (each) {
-                            case NAME:
-                                if (profile.getName().compareTo(next.getName()) == 0) break;
-                                if (profile.getName().compareTo(next.getName()) < 0) next = profile;
-                                break sort;
-                        }
-                    }
-                }
-            }
-            sorted.add(next);
-            profiles.remove(next);
-        }
-
-        return sorted;
-    }
-
-    // TODO - Add more sorting options
-    public enum SortBy {
-        NAME
+        List<Profile> profiles = new ArrayList<>();
+        for (Sortable sortable : Sortable.sort(new ArrayList<>(Profile.profiles), sort))
+            profiles.add((Profile) sortable);
+        return profiles;
     }
 }

@@ -9,6 +9,8 @@ import me.therealdan.lights.renderer.Renderer;
 import me.therealdan.lights.renderer.Task;
 import me.therealdan.lights.ui.UIHandler;
 
+import static me.therealdan.lights.util.sorting.Sortable.Sort.NAME;
+
 public class GroupsUI implements UI {
 
     public static float WIDTH = 800;
@@ -35,7 +37,7 @@ public class GroupsUI implements UI {
         drag(x, y, width, cellHeight);
         y -= cellHeight;
 
-        for (Group group : Group.groups(Group.SortBy.NAME)) {
+        for (Group group : Group.groups(NAME)) {
             renderer.box(x, y, cellSize, cellSize, Programmer.isSelected(group) ? Lights.color.DARK_RED : Lights.color.MEDIUM, setWidth(renderer, group.getName()), Task.TextPosition.CENTER);
             if (Lights.mouse.contains(x, y, cellSize, cellSize) && canInteract()) {
                 interacted = true;

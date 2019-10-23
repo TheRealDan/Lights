@@ -6,13 +6,14 @@ import com.badlogic.gdx.graphics.Color;
 import me.therealdan.lights.programmer.Sequence;
 import me.therealdan.lights.ui.UIHandler;
 import me.therealdan.lights.ui.ui.SequencesUI;
+import me.therealdan.lights.util.sorting.Sortable;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-public class Button {
+public class Button implements Sortable {
 
     private static HashSet<Button> buttons = new HashSet<>();
 
@@ -96,10 +97,12 @@ public class Button {
         return sequences.get(sequence);
     }
 
+    @Override
     public int getID() {
         return id;
     }
 
+    @Override
     public int getPosition() {
         return position;
     }
@@ -109,6 +112,7 @@ public class Button {
         return fileName;
     }
 
+    @Override
     public String getName() {
         return name;
     }
@@ -229,6 +233,10 @@ public class Button {
         return topPosition;
     }
 
+    public static int count() {
+        return buttons.size();
+    }
+
     public static Button byName(String name) {
         for (Button button : buttons())
             if (button.getName().equals(name))
@@ -253,43 +261,12 @@ public class Button {
         return null;
     }
 
-    public static List<Button> buttons(SortBy... sortBy) {
-        List<Button> buttons = new ArrayList<>(Button.buttons);
-        if (sortBy.length == 0) return buttons;
+    public static List<Button> buttons(Sort... sort) {
+        if (sort.length == 0) return new ArrayList<>(Button.buttons);
 
-        List<Button> sorted = new ArrayList<>();
-
-        while (buttons.size() > 0) {
-            Button next = null;
-            for (Button button : buttons) {
-                if (next == null) {
-                    next = button;
-                } else {
-                    sort:
-                    for (SortBy sort : sortBy) {
-                        switch (sort) {
-                            case ID:
-                                if (button.getID() == next.getID()) break;
-                                if (button.getID() < next.getID()) next = button;
-                                break sort;
-                            case POSITION:
-                                if (button.getPosition() == next.getPosition()) break;
-                                if (button.getPosition() < next.getPosition()) next = button;
-                                break sort;
-                        }
-                    }
-                }
-            }
-            sorted.add(next);
-            buttons.remove(next);
-        }
-
-        return sorted;
-    }
-
-    // TODO - Add more sorting options
-    public enum SortBy {
-        ID,
-        POSITION,
+        List<Button> buttons = new ArrayList<>();
+        for (Sortable sortable : Sortable.sort(new ArrayList<>(Button.buttons), sort))
+            buttons.add((Button) sortable);
+        return buttons;
     }
 }

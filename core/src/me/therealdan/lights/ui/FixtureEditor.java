@@ -8,6 +8,9 @@ import me.therealdan.lights.main.Lights;
 import me.therealdan.lights.renderer.Renderer;
 import me.therealdan.lights.renderer.Task;
 
+import static me.therealdan.lights.util.sorting.Sortable.Sort.ID;
+import static me.therealdan.lights.util.sorting.Sortable.Sort.NAME;
+
 public class FixtureEditor implements Visual {
 
     private Fixture fixture;
@@ -41,7 +44,7 @@ public class FixtureEditor implements Visual {
         width = WIDTH / 3;
         renderer.box(x, y, width, cellHeight, Lights.color.DARK_BLUE, "Fixtures", Task.TextPosition.CENTER);
         y -= cellHeight;
-        for (Fixture fixture : Fixture.fixtures(Fixture.SortBy.ID)) {
+        for (Fixture fixture : Fixture.fixtures(ID)) {
             renderer.box(x, y, width, cellHeight, fixture.equals(getFixture()) ? Lights.color.DARK_RED : Lights.color.MEDIUM, fixture.getName(), Task.TextPosition.LEFT_CENTER);
             if (Lights.mouse.contains(x, y, width, cellHeight)) {
                 if (Lights.mouse.leftClicked()) {
@@ -56,7 +59,7 @@ public class FixtureEditor implements Visual {
         // PROFILES
         renderer.box(x, y, width, cellHeight, Lights.color.DARK_BLUE, "Profiles", Task.TextPosition.CENTER);
         y -= cellHeight;
-        for (Profile profile : Profile.profiles(Profile.SortBy.NAME)) {
+        for (Profile profile : Profile.profiles(NAME)) {
             renderer.box(x, y, width, cellHeight, profile.equals(getProfile()) ? Lights.color.DARK_RED : Lights.color.MEDIUM, profile.getName(), Task.TextPosition.LEFT_CENTER);
             if (Lights.mouse.contains(x, y, width, cellHeight)) {
                 if (Lights.mouse.leftClicked()) {

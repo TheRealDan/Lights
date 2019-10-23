@@ -65,7 +65,9 @@ public class ProfilesUI implements UI {
         if (Lights.mouse.contains(x, y, profilesWidth, cellHeight) && canInteract()) {
             interacted = true;
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(500)) {
-                Profile.add(new Profile("New Profile", new ArrayList<>(), new ArrayList<>()));
+                Profile newProfile = new Profile("New Profile", new ArrayList<>(), new ArrayList<>());
+                Profile.add(newProfile);
+                select(newProfile);
             }
         }
         y -= cellHeight;

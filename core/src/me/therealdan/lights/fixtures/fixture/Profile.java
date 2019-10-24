@@ -184,6 +184,7 @@ public class Profile implements Sortable {
 
     public static void delete(Profile profile) {
         profiles.remove(profile);
+        Gdx.files.local("Lights/Profiles/" + profile.getName() + ".txt").delete();
     }
 
     public static int count() {

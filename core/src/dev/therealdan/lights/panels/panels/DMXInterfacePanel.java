@@ -1,15 +1,16 @@
-package dev.therealdan.lights.ui.ui;
+package dev.therealdan.lights.panels.panels;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import dev.therealdan.lights.main.Lights;
 import dev.therealdan.lights.renderer.Renderer;
 import dev.therealdan.lights.renderer.Task;
+import dev.therealdan.lights.panels.Panel;
 import dev.therealdan.lights.ui.UIHandler;
 
-public class DMXInterfaceUI implements UI {
+public class DMXInterfacePanel implements Panel {
 
-    public DMXInterfaceUI() {
+    public DMXInterfacePanel() {
     }
 
     @Override

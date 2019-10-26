@@ -1,55 +1,52 @@
-package dev.therealdan.lights.ui.ui;
+package dev.therealdan.lights.panels.panels;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import dev.therealdan.lights.fixtures.Fixture;
+import dev.therealdan.lights.fixtures.Group;
 import dev.therealdan.lights.main.Lights;
 import dev.therealdan.lights.programmer.Programmer;
 import dev.therealdan.lights.renderer.Renderer;
 import dev.therealdan.lights.renderer.Task;
+import dev.therealdan.lights.panels.Panel;
 import dev.therealdan.lights.ui.UIHandler;
 
-import static dev.therealdan.lights.util.sorting.Sortable.Sort.ID;
+import static dev.therealdan.lights.util.sorting.Sortable.Sort.NAME;
 
-public class FixturesUI implements UI {
+public class GroupsPanel implements Panel {
 
     public static float WIDTH = 800;
-    public static int FIXTURES_PER_ROW = 10;
+    public static int GROUPS_PER_ROW = 10;
 
-    public FixturesUI() {
+    public GroupsPanel() {
     }
 
     @Override
     public boolean draw(Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {
-        if (containsMouse()) UIHandler.setSection(UIHandler.Section.FIXTURES);
+        if (containsMouse()) UIHandler.setSection(UIHandler.Section.GROUPS);
         boolean interacted = false;
 
-        setWidth(FixturesUI.WIDTH);
+        setWidth(GroupsPanel.WIDTH);
 
         float cellHeight = 30;
-        float cellSize = FixturesUI.WIDTH / FixturesUI.FIXTURES_PER_ROW;
+        float cellSize = GroupsPanel.WIDTH / GroupsPanel.GROUPS_PER_ROW;
 
         float x = getX();
         float y = getY();
         float width = getWidth();
 
-        renderer.box(x, y, width, cellHeight, Lights.color.DARK_BLUE, setWidth(renderer, "Fixtures"), Task.TextPosition.CENTER);
-        if (Lights.mouse.contains(x, y, width, cellHeight) && Lights.mouse.rightClicked()) {
-            interacted = true;
-            Lights.openFixtureEditor();
-        }
+        renderer.box(x, y, width, cellHeight, Lights.color.DARK_BLUE, setWidth(renderer, "Groups"), Task.TextPosition.CENTER);
         drag(x, y, width, cellHeight);
         y -= cellHeight;
 
-        for (Fixture fixture : Fixture.fixtures(ID)) {
-            renderer.box(x, y, cellSize, cellSize, Programmer.isSelected(fixture) ? Lights.color.DARK_RED : Lights.color.MEDIUM, fixture.getName(), Task.TextPosition.CENTER);
+        for (Group group : Group.groups(NAME)) {
+            renderer.box(x, y, cellSize, cellSize, Programmer.isSelected(group) ? Lights.color.DARK_RED : Lights.color.MEDIUM, setWidth(renderer, group.getName()), Task.TextPosition.CENTER);
             if (Lights.mouse.contains(x, y, cellSize, cellSize) && canInteract()) {
                 interacted = true;
                 if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(500)) {
-                    if (Programmer.isSelected(fixture)) {
-                        Programmer.deselect(fixture);
+                    if (Programmer.isSelected(group)) {
+                        Programmer.deselect(group);
                     } else {
-                        Programmer.select(fixture);
+                        Programmer.select(group);
                     }
                 }
             }

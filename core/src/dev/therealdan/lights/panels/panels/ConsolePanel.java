@@ -1,14 +1,13 @@
-package dev.therealdan.lights.ui.ui;
+package dev.therealdan.lights.panels.panels;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import dev.therealdan.lights.main.Lights;
 import dev.therealdan.lights.commands.*;
 import dev.therealdan.lights.renderer.Renderer;
 import dev.therealdan.lights.renderer.Task;
+import dev.therealdan.lights.panels.Panel;
 import dev.therealdan.lights.ui.UIHandler;
-import dev.therealdan.lights.util.Util;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -16,9 +15,9 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
-public class ConsoleUI implements UI {
+public class ConsolePanel implements Panel {
 
-    private static ConsoleUI console;
+    private static ConsolePanel console;
     private static SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm:ss");
 
     private List<Command> commands = new LinkedList<>();
@@ -29,7 +28,7 @@ public class ConsoleUI implements UI {
     private boolean commandHistoryActive = false;
     private String input = "";
 
-    public ConsoleUI() {
+    public ConsolePanel() {
         console = this;
 
         register(new HelpCommand());

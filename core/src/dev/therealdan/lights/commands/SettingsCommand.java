@@ -1,12 +1,12 @@
 package dev.therealdan.lights.commands;
 
 import dev.therealdan.lights.settings.Setting;
-import dev.therealdan.lights.ui.ui.ConsoleUI;
+import dev.therealdan.lights.panels.panels.ConsolePanel;
 
 public class SettingsCommand implements Command {
 
     @Override
-    public boolean onCommand(ConsoleUI console, String command, String[] args) {
+    public boolean onCommand(ConsolePanel console, String command, String[] args) {
         if (!command.equalsIgnoreCase(getCommand())) return false;
 
         if (args.length > 1) {
@@ -14,13 +14,13 @@ public class SettingsCommand implements Command {
             if (setting != null) {
                 setting.setValue(args[1]);
 
-                ConsoleUI.print(setting.getName() + " set to: " + setting.getValue());
+                ConsolePanel.print(setting.getName() + " set to: " + setting.getValue());
                 return true;
             }
         }
 
         for (Setting setting : Setting.settings())
-            ConsoleUI.print("settings " + setting.getName() + " [" + setting.getType().toString() + "]");
+            ConsolePanel.print("settings " + setting.getName() + " [" + setting.getType().toString() + "]");
 
         return true;
     }

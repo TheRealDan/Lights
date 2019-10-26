@@ -1,4 +1,4 @@
-package dev.therealdan.lights.ui.ui;
+package dev.therealdan.lights.panels.panels;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -8,6 +8,7 @@ import dev.therealdan.lights.controllers.FaderBank;
 import dev.therealdan.lights.main.Lights;
 import dev.therealdan.lights.renderer.Renderer;
 import dev.therealdan.lights.renderer.Task;
+import dev.therealdan.lights.panels.Panel;
 import dev.therealdan.lights.ui.UIHandler;
 import dev.therealdan.lights.util.Util;
 
@@ -15,9 +16,9 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-public class FadersUI implements UI {
+public class FadersPanel implements Panel {
 
-    private static FadersUI fadersUI;
+    private static FadersPanel fadersUI;
 
     private static float HEIGHT = 250;
 
@@ -27,7 +28,7 @@ public class FadersUI implements UI {
     private Fader faderToMove = null;
     private int bank = 1;
 
-    public FadersUI() {
+    public FadersPanel() {
         fadersUI = this;
 
         FileHandle fileHandle = Gdx.files.local("Lights/Faders/");
@@ -54,7 +55,7 @@ public class FadersUI implements UI {
             } else if (line.startsWith("Value: ")) {
                 fader.setValue(Float.parseFloat(line.split(": ")[1]));
             } else if (line.startsWith("Sequence: ")) {
-                fader.setSequence(SequencesUI.byName(line.split(": ")[1]));
+                fader.setSequence(SequencesPanel.byName(line.split(": ")[1]));
             } else if (line.startsWith("  Red: ")) {
                 fader.setRed(Float.parseFloat(line.split(": ")[1]));
             } else if (line.startsWith("  Green: ")) {
@@ -103,7 +104,7 @@ public class FadersUI implements UI {
         if (containsMouse()) UIHandler.setSection(UIHandler.Section.FADERS);
         boolean interacted = false;
 
-        setHeight(FadersUI.HEIGHT);
+        setHeight(FadersPanel.HEIGHT);
 
         float x = getX();
         float y = getY();
@@ -139,7 +140,7 @@ public class FadersUI implements UI {
                     float bottom = y - height + 20;
                     fader.setValue(Math.min(Math.max((Gdx.graphics.getHeight() - Gdx.input.getY() - bottom) / (y - 20 - bottom), 0), 1));
                 } else if (Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) {
-                    FaderEditUI.edit(fader);
+                    FaderEditPanel.edit(fader);
                 }
             }
             x += faderWidth;

@@ -1,4 +1,4 @@
-package dev.therealdan.lights.ui.ui;
+package dev.therealdan.lights.panels.panels;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -8,11 +8,12 @@ import dev.therealdan.lights.fixtures.Fixture;
 import dev.therealdan.lights.main.Lights;
 import dev.therealdan.lights.renderer.Renderer;
 import dev.therealdan.lights.renderer.Task;
+import dev.therealdan.lights.panels.Panel;
 import dev.therealdan.lights.ui.UIHandler;
 
 import static dev.therealdan.lights.util.sorting.Sortable.Sort.ID;
 
-public class PatchUI implements UI {
+public class PatchPanel implements Panel {
 
     private Fixture selectedFixture = null;
 

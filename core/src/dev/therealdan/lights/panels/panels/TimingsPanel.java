@@ -1,23 +1,24 @@
-package dev.therealdan.lights.ui.ui;
+package dev.therealdan.lights.panels.panels;
 
 import dev.therealdan.lights.main.Lights;
 import dev.therealdan.lights.renderer.Renderer;
 import dev.therealdan.lights.renderer.Task;
+import dev.therealdan.lights.panels.Panel;
 import dev.therealdan.lights.ui.UIHandler;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
-public class TimingsUI implements UI {
+public class TimingsPanel implements Panel {
 
-    private static TimingsUI timingsUI;
+    private static TimingsPanel timingsUI;
 
     private LinkedHashMap<String, String> timings = new LinkedHashMap<>();
     private HashMap<String, Long> max = new HashMap<>();
     private HashMap<String, Long> nonZero = new HashMap<>();
     private HashMap<String, Long> average = new HashMap<>();
 
-    public TimingsUI() {
+    public TimingsPanel() {
         timingsUI = this;
     }
 

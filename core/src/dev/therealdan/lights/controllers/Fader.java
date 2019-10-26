@@ -3,7 +3,7 @@ package dev.therealdan.lights.controllers;
 import com.badlogic.gdx.graphics.Color;
 import dev.therealdan.lights.main.Lights;
 import dev.therealdan.lights.programmer.Sequence;
-import dev.therealdan.lights.ui.ui.FadersUI;
+import dev.therealdan.lights.panels.panels.FadersPanel;
 
 public class Fader {
 
@@ -176,7 +176,7 @@ public class Fader {
     }
 
     public static Fader byID(int id) {
-        for (Fader fader : FadersUI.faders()) {
+        for (Fader fader : FadersPanel.faders()) {
             if (fader.getID() == id)
                 return fader;
         }

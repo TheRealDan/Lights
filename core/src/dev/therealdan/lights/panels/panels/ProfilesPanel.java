@@ -1,4 +1,4 @@
-package dev.therealdan.lights.ui.ui;
+package dev.therealdan.lights.panels.panels;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -6,13 +6,14 @@ import dev.therealdan.lights.fixtures.fixture.Profile;
 import dev.therealdan.lights.main.Lights;
 import dev.therealdan.lights.renderer.Renderer;
 import dev.therealdan.lights.renderer.Task;
+import dev.therealdan.lights.panels.Panel;
 import dev.therealdan.lights.ui.UIHandler;
 
 import java.util.ArrayList;
 
 import static dev.therealdan.lights.util.sorting.Sortable.Sort.NAME;
 
-public class ProfilesUI implements UI {
+public class ProfilesPanel implements Panel {
 
     private final int ROWS = 6;
 

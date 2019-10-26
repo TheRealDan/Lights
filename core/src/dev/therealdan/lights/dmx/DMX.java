@@ -7,8 +7,7 @@ import dev.therealdan.lights.renderer.Renderer;
 import dev.therealdan.lights.renderer.Task;
 import dev.therealdan.lights.settings.Setting;
 import dev.therealdan.lights.ui.UIHandler;
-import dev.therealdan.lights.ui.ui.ConsoleUI;
-import dev.therealdan.lights.ui.ui.PatchUI;
+import dev.therealdan.lights.panels.panels.ConsolePanel;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -140,11 +139,11 @@ public class DMX {
         }
 
         if (data.length() <= 1) return null;
-        if (Setting.byName(Setting.Name.SHOW_DMX_SEND_DEBUG).isTrue()) ConsoleUI.log("Preparing to send: " + data.toString());
+        if (Setting.byName(Setting.Name.SHOW_DMX_SEND_DEBUG).isTrue()) ConsolePanel.log("Preparing to send: " + data.toString());
         try {
             return data.toString().getBytes("UTF-8");
         } catch (Exception e) {
-            ConsoleUI.log("Unsupported encoding");
+            ConsolePanel.log("Unsupported encoding");
             return data.toString().getBytes();
         }
     }

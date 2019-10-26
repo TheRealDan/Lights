@@ -9,6 +9,7 @@ import dev.therealdan.lights.fixtures.Fixture;
 import dev.therealdan.lights.fixtures.Group;
 import dev.therealdan.lights.fixtures.fixture.Profile;
 import dev.therealdan.lights.main.Lights;
+import dev.therealdan.lights.panels.Panel;
 import dev.therealdan.lights.programmer.CondensedFrame;
 import dev.therealdan.lights.programmer.Frame;
 import dev.therealdan.lights.programmer.Programmer;
@@ -16,7 +17,7 @@ import dev.therealdan.lights.programmer.Sequence;
 import dev.therealdan.lights.renderer.Renderer;
 import dev.therealdan.lights.settings.Control;
 import dev.therealdan.lights.settings.Setting;
-import dev.therealdan.lights.ui.ui.*;
+import dev.therealdan.lights.panels.panels.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,8 +27,8 @@ public class UIHandler implements Visual {
 
     private static UIHandler uiHandler;
 
-    private List<UI> uis = new ArrayList<>();
-    private UI dragging = null;
+    private List<Panel> panels = new ArrayList<>();
+    private Panel dragging = null;
     private float xDifference, yDifference;
 
     private float master = 1.0f;
@@ -48,60 +49,60 @@ public class UIHandler implements Visual {
         uiHandler = this;
 
         // Menu
-        uis.add(new PanelVisibilityUI());
+        panels.add(new PanelVisibilityPanel());
 
         // Settings
-        uis.add(new SettingsUI());
-        uis.add(new ControlsUI());
-        uis.add(new DMXInterfaceUI());
+        panels.add(new SettingsPanel());
+        panels.add(new ControlsPanel());
+        panels.add(new DMXInterfacePanel());
 
         // Setup
-        uis.add(new ProfilesUI());
+        panels.add(new ProfilesPanel());
 
         // TODO - Move elsewhere
         Profile.loadProfilesFromFile();
 
-        uis.add(new PatchUI());
+        panels.add(new PatchPanel());
 
         // TODO - Move elsewhere
         Fixture.loadFixturesFromFile();
         Group.loadGroupsFromFile();
 
-        uis.add(new SequencesUI());
-        uis.add(new FaderEditUI());
-        uis.add(new ButtonEditUI());
+        panels.add(new SequencesPanel());
+        panels.add(new FaderEditPanel());
+        panels.add(new ButtonEditPanel());
 
         // Util
-        uis.add(new ConsoleUI());
-        uis.add(new DMXOutputUI());
+        panels.add(new ConsolePanel());
+        panels.add(new DMXOutputPanel());
 
         // Programmer
-        uis.add(new SequenceProgrammerUI());
-        uis.add(new NewSequenceProgrammerUI());
-        uis.add(new FixturesUI());
-        uis.add(new GroupsUI());
-        uis.add(new ParametersUI());
+        panels.add(new SequenceProgrammerPanel());
+        panels.add(new NewSequenceProgrammerPanel());
+        panels.add(new FixturesPanel());
+        panels.add(new GroupsPanel());
+        panels.add(new ParametersPanel());
 
         // Info
-        uis.add(new FrozenUI());
-        uis.add(new ActiveSequencesUI());
-        uis.add(new TimingsUI());
+        panels.add(new FrozenPanel());
+        panels.add(new ActiveSequencesPanel());
+        panels.add(new TimingsPanel());
 
         // Panels
-        uis.add(new MasterUI());
-        uis.add(new FadersUI());
-        uis.add(new ButtonsUI());
+        panels.add(new MasterPanel());
+        panels.add(new FadersPanel());
+        panels.add(new ButtonsPanel());
 
         // TODO - Move elsewhere
         Button.loadButtonsFromFile();
 
-        for (UI ui : UIs())
-            ui.load();
+        for (Panel panel : UIs())
+            panel.load();
     }
 
     public void save() {
-        for (UI ui : UIs())
-            ui.save();
+        for (Panel panel : UIs())
+            panel.save();
 
         // TODO - Move elsewhere?
         Fixture.saveFixturesToFile();
@@ -153,7 +154,7 @@ public class UIHandler implements Visual {
         for (int priority = 0; priority <= getTopPriority(); priority++)
             if (contains(priority))
                 newCondensedFrame.merge(getSequence(priority));
-        for (Fader fader : FadersUI.faders())
+        for (Fader fader : FadersPanel.faders())
             newCondensedFrame.merge(fader);
 
         if (targetCondensedFrame == null) {
@@ -185,27 +186,27 @@ public class UIHandler implements Visual {
         if (!Lights.output.isFrozen()) output.copy(visualiser);
 
         if (!getSection().equals(Section.SEQUENCE_PROGRAMMER))
-            SequenceProgrammerUI.setSelected(SequenceProgrammerUI.Selected.NONE);
+            SequenceProgrammerPanel.setSelected(SequenceProgrammerPanel.Selected.NONE);
     }
 
     @Override
     public boolean draw(Renderer renderer) {
-        UI allowInteract = null;
-        for (UI ui : UIs()) {
-            ui.setAllowInteract(false);
-            if (ui.isVisible() && ui.containsMouse() && !isDragging())
-                allowInteract = ui;
+        Panel allowInteract = null;
+        for (Panel panel : UIs()) {
+            panel.setAllowInteract(false);
+            if (panel.isVisible() && panel.containsMouse() && !isDragging())
+                allowInteract = panel;
         }
         if (allowInteract != null) allowInteract.setAllowInteract(true);
 
-        for (UI ui : UIs()) {
-            if (ui.isVisible()) {
+        for (Panel panel : UIs()) {
+            if (panel.isVisible()) {
                 long timestamp = System.currentTimeMillis();
-                ui.draw(renderer, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+                panel.draw(renderer, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
                 renderer.draw();
-                TimingsUI.set(ui.getName(), ui.getName() + " draw(): %mms %zms %ams", System.currentTimeMillis() - timestamp);
+                TimingsPanel.set(panel.getName(), panel.getName() + " draw(): %mms %zms %ams", System.currentTimeMillis() - timestamp);
             } else {
-                TimingsUI.clear(ui.getName());
+                TimingsPanel.clear(panel.getName());
             }
         }
 
@@ -219,8 +220,8 @@ public class UIHandler implements Visual {
 
     @Override
     public boolean scrolled(int amount) {
-        for (UI ui : UIs())
-            ui.scrolled(amount);
+        for (Panel panel : UIs())
+            panel.scrolled(amount);
 
         return true;
     }
@@ -243,9 +244,9 @@ public class UIHandler implements Visual {
 
         if (Input.Keys.ESCAPE == keycode) Lights.output.toggleFreeze();
 
-        for (UI ui : UIs()) {
-            if (ui.isVisible() && ui.containsMouse() && ui.canInteract()) {
-                if (!ui.keyDown(keycode)) return false;
+        for (Panel panel : UIs()) {
+            if (panel.isVisible() && panel.containsMouse() && panel.canInteract()) {
+                if (!panel.keyDown(keycode)) return false;
             }
         }
 
@@ -258,10 +259,10 @@ public class UIHandler implements Visual {
 
         switch (keycode) {
             case Input.Keys.MINUS:
-                MasterUI.fadeToZero();
+                MasterPanel.fadeToZero();
                 break;
             case Input.Keys.EQUALS:
-                MasterUI.fadeToMax();
+                MasterPanel.fadeToMax();
                 break;
         }
 
@@ -306,8 +307,8 @@ public class UIHandler implements Visual {
 
     @Override
     public boolean keyUp(int keycode) {
-        for (UI ui : UIs())
-            if (!ui.keyUp(keycode)) return false;
+        for (Panel panel : UIs())
+            if (!panel.keyUp(keycode)) return false;
 
         return true;
     }
@@ -337,28 +338,28 @@ public class UIHandler implements Visual {
         MASTER, FADERS, BUTTONS,
     }
 
-    public static void drag(UI ui) {
-        if (UIHandler.uiHandler.dragging == null && ui != null) {
-            UIHandler.uiHandler.xDifference = Math.abs(ui.getX() - Gdx.input.getX());
-            UIHandler.uiHandler.yDifference = Math.abs(ui.getYString() - Gdx.input.getY());
-            moveToTop(ui);
+    public static void drag(Panel panel) {
+        if (UIHandler.uiHandler.dragging == null && panel != null) {
+            UIHandler.uiHandler.xDifference = Math.abs(panel.getX() - Gdx.input.getX());
+            UIHandler.uiHandler.yDifference = Math.abs(panel.getYString() - Gdx.input.getY());
+            moveToTop(panel);
         }
 
-        UIHandler.uiHandler.dragging = ui;
+        UIHandler.uiHandler.dragging = panel;
     }
 
     public static boolean isDragging() {
         return getDragging() != null;
     }
 
-    public static UI getDragging() {
+    public static Panel getDragging() {
         return uiHandler.dragging;
     }
 
-    public static UI byName(String name) {
-        for (UI ui : UIs())
-            if (ui.getName().equals(name))
-                return ui;
+    public static Panel byName(String name) {
+        for (Panel panel : UIs())
+            if (panel.getName().equals(name))
+                return panel;
 
         return null;
     }
@@ -395,13 +396,13 @@ public class UIHandler implements Visual {
         return sequences;
     }
 
-    public static void moveToTop(UI ui) {
-        UIHandler.uiHandler.uis.remove(ui);
-        UIHandler.uiHandler.uis.add(ui);
+    public static void moveToTop(Panel panel) {
+        UIHandler.uiHandler.panels.remove(panel);
+        UIHandler.uiHandler.panels.add(panel);
     }
 
-    public static List<UI> UIs() {
-        return new ArrayList<>(uiHandler.uis);
+    public static List<Panel> UIs() {
+        return new ArrayList<>(uiHandler.panels);
     }
 
     public static long getTempo() {

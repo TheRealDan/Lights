@@ -1,16 +1,17 @@
-package dev.therealdan.lights.ui.ui;
+package dev.therealdan.lights.panels.panels;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import dev.therealdan.lights.main.Lights;
 import dev.therealdan.lights.renderer.Renderer;
 import dev.therealdan.lights.renderer.Task;
+import dev.therealdan.lights.panels.Panel;
 import dev.therealdan.lights.ui.UIHandler;
 import dev.therealdan.lights.util.Util;
 
-public class MasterUI implements UI {
+public class MasterPanel implements Panel {
 
-    private static MasterUI masterUI;
+    private static MasterPanel masterUI;
 
     public static float HEIGHT = 250;
 
@@ -20,7 +21,7 @@ public class MasterUI implements UI {
     private boolean fadeToMax = false;
     private boolean fadeToZero = false;
 
-    public MasterUI() {
+    public MasterPanel() {
         masterUI = this;
     }
 
@@ -29,7 +30,7 @@ public class MasterUI implements UI {
         if (containsMouse()) UIHandler.setSection(UIHandler.Section.MASTER);
         boolean interacted = false;
 
-        setHeight(MasterUI.HEIGHT);
+        setHeight(MasterPanel.HEIGHT);
 
         float cellHeight = 30;
 

@@ -1,15 +1,16 @@
-package dev.therealdan.lights.ui.ui;
+package dev.therealdan.lights.panels.panels;
 
 import com.badlogic.gdx.graphics.Color;
 import dev.therealdan.lights.main.Lights;
 import dev.therealdan.lights.programmer.Programmer;
 import dev.therealdan.lights.renderer.Renderer;
 import dev.therealdan.lights.renderer.Task;
+import dev.therealdan.lights.panels.Panel;
 import dev.therealdan.lights.ui.UIHandler;
 
-public class NewSequenceProgrammerUI implements UI {
+public class NewSequenceProgrammerPanel implements Panel {
 
-    public NewSequenceProgrammerUI() {
+    public NewSequenceProgrammerPanel() {
         setWidth(800);
     }
 

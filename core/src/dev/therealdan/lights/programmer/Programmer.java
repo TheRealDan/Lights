@@ -3,7 +3,7 @@ package dev.therealdan.lights.programmer;
 import dev.therealdan.lights.fixtures.fixture.profile.Channel;
 import dev.therealdan.lights.fixtures.Fixture;
 import dev.therealdan.lights.fixtures.Group;
-import dev.therealdan.lights.ui.ui.SequencesUI;
+import dev.therealdan.lights.panels.panels.SequencesPanel;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -44,7 +44,7 @@ public class Programmer {
     }
 
     public static void save() {
-        SequencesUI.add(getSequence().clone());
+        SequencesPanel.add(getSequence().clone());
     }
 
     public static void clear() {

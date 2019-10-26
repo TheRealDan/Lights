@@ -1,13 +1,14 @@
-package dev.therealdan.lights.ui.ui;
+package dev.therealdan.lights.panels.panels;
 
 import com.badlogic.gdx.graphics.Color;
 import dev.therealdan.lights.controllers.Button;
 import dev.therealdan.lights.main.Lights;
 import dev.therealdan.lights.renderer.Renderer;
 import dev.therealdan.lights.renderer.Task;
+import dev.therealdan.lights.panels.Panel;
 import dev.therealdan.lights.ui.UIHandler;
 
-public class ButtonsUI implements UI {
+public class ButtonsPanel implements Panel {
 
     public static float WIDTH = 800;
     public static final int PER_ROW = 10;
@@ -17,11 +18,11 @@ public class ButtonsUI implements UI {
         if (containsMouse()) UIHandler.setSection(UIHandler.Section.BUTTONS);
         boolean interacted = false;
 
-        setWidth(ButtonsUI.WIDTH);
+        setWidth(ButtonsPanel.WIDTH);
 
         float cellHeight = 30;
 
-        float size = getWidth() / ButtonsUI.PER_ROW;
+        float size = getWidth() / ButtonsPanel.PER_ROW;
 
         float x = getX();
         float y = getY();
@@ -30,7 +31,7 @@ public class ButtonsUI implements UI {
         drag(x, y, getWidth(), cellHeight);
         y -= cellHeight;
 
-        ButtonEditUI buttonEditUI = (ButtonEditUI) UIHandler.byName("ButtonEdit");
+        ButtonEditPanel buttonEditUI = (ButtonEditPanel) UIHandler.byName("ButtonEdit");
 
         int topPositionToDisplay = Button.getTopPosition();
         if (buttonEditUI.isEditing()) {

@@ -1,4 +1,4 @@
-package dev.therealdan.lights.ui.ui;
+package dev.therealdan.lights.panels.panels;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -8,13 +8,14 @@ import dev.therealdan.lights.main.Lights;
 import dev.therealdan.lights.programmer.Programmer;
 import dev.therealdan.lights.renderer.Renderer;
 import dev.therealdan.lights.renderer.Task;
+import dev.therealdan.lights.panels.Panel;
 import dev.therealdan.lights.ui.UIHandler;
 
 import java.text.DecimalFormat;
 
-public class ParametersUI implements UI {
+public class ParametersPanel implements Panel {
 
-    private static ParametersUI parametersUI;
+    private static ParametersPanel parametersUI;
 
     private static float WIDTH = 500;
     private static float HEIGHT = 690;
@@ -25,7 +26,7 @@ public class ParametersUI implements UI {
     private Channel.Category category;
     private Channel.Type channelType = null;
 
-    public ParametersUI() {
+    public ParametersPanel() {
         parametersUI = this;
     }
 
@@ -34,8 +35,8 @@ public class ParametersUI implements UI {
         if (containsMouse()) UIHandler.setSection(UIHandler.Section.PARAMETERS);
         boolean interacted = false;
 
-        setWidth(ParametersUI.WIDTH);
-        setHeight(ParametersUI.HEIGHT);
+        setWidth(ParametersPanel.WIDTH);
+        setHeight(ParametersPanel.HEIGHT);
 
         float x = getX();
         float y = getY();

@@ -1,7 +1,7 @@
 package dev.therealdan.lights.commands;
 
 import dev.therealdan.lights.dmx.DMX;
-import dev.therealdan.lights.ui.ui.ConsoleUI;
+import dev.therealdan.lights.panels.panels.ConsolePanel;
 import dev.therealdan.lights.programmer.Programmer;
 
 import java.util.ArrayList;
@@ -10,7 +10,7 @@ import java.util.List;
 public class ChannelCommand implements Command {
 
     @Override
-    public boolean onCommand(ConsoleUI console, String command, String[] args) {
+    public boolean onCommand(ConsolePanel console, String command, String[] args) {
         if (!command.equalsIgnoreCase(getCommand())) return false;
 
         try {
@@ -42,9 +42,9 @@ public class ChannelCommand implements Command {
 
             String s = " ";
             if (i > 1) s = "s ";
-            ConsoleUI.log("channel" + s + channelsString.toString().replaceFirst(", ", "") + " set to: " + value);
+            ConsolePanel.log("channel" + s + channelsString.toString().replaceFirst(", ", "") + " set to: " + value);
         } catch (Exception e) {
-            ConsoleUI.print(ConsoleUI.ConsoleColor.RED, "Command Syntax: " + getSyntax());
+            ConsolePanel.print(ConsolePanel.ConsoleColor.RED, "Command Syntax: " + getSyntax());
         }
         return true;
     }

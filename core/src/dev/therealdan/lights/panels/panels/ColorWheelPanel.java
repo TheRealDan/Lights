@@ -1,4 +1,4 @@
-package dev.therealdan.lights.ui.ui;
+package dev.therealdan.lights.panels.panels;
 
 import com.badlogic.gdx.graphics.Color;
 import dev.therealdan.lights.main.Lights;
@@ -6,19 +6,19 @@ import dev.therealdan.lights.programmer.Frame;
 import dev.therealdan.lights.programmer.Programmer;
 import dev.therealdan.lights.renderer.Renderer;
 import dev.therealdan.lights.renderer.Task;
+import dev.therealdan.lights.panels.Panel;
 import dev.therealdan.lights.ui.UIHandler;
-import dev.therealdan.lights.util.Util;
 
-public class ColorWheelUI implements UI {
+public class ColorWheelPanel implements Panel {
 
-    public ColorWheelUI() {
+    public ColorWheelPanel() {
         setWidth(250);
         setHeight(280);
     }
 
     @Override
     public boolean draw(Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {
-        UI.super.draw(renderer, X, Y, WIDTH, HEIGHT);
+        Panel.super.draw(renderer, X, Y, WIDTH, HEIGHT);
         if (containsMouse()) UIHandler.setSection(UIHandler.Section.COLOR_WHEEL);
         boolean interacted = false;
 

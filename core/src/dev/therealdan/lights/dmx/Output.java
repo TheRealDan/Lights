@@ -2,8 +2,8 @@ package dev.therealdan.lights.dmx;
 
 import com.fazecast.jSerialComm.SerialPort;
 import dev.therealdan.lights.settings.Setting;
-import dev.therealdan.lights.ui.ui.ConsoleUI;
-import dev.therealdan.lights.ui.ui.TimingsUI;
+import dev.therealdan.lights.panels.panels.ConsolePanel;
+import dev.therealdan.lights.panels.panels.TimingsPanel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,7 +48,7 @@ public class Output {
         if (this.serialPort != null && !this.serialPort.getSystemPortName().equals(activePort)) {
             this.serialPort = null;
             if (Setting.byName(Setting.Name.SHOW_DMX_SEND_DEBUG).isTrue())
-                ConsoleUI.log(ConsoleUI.ConsoleColor.YELLOW, "Port dropped");
+                ConsolePanel.log(ConsolePanel.ConsoleColor.YELLOW, "Port dropped");
         }
 
         boolean connected = false;
@@ -63,7 +63,7 @@ public class Output {
                     this.serialPort.setComPortTimeouts(SerialPort.TIMEOUT_WRITE_BLOCKING, Setting.byName(Setting.Name.NEW_READ_TIMEOUT).getInt(), Setting.byName(Setting.Name.NEW_WRITE_TIMEOUT).getInt());
                     this.lastConnect = System.currentTimeMillis();
                     if (Setting.byName(Setting.Name.SHOW_DMX_SEND_DEBUG).isTrue())
-                        ConsoleUI.log(ConsoleUI.ConsoleColor.YELLOW, "Port Connected");
+                        ConsolePanel.log(ConsolePanel.ConsoleColor.YELLOW, "Port Connected");
                     break;
                 } else if (this.serialPort != null) {
                     connected = true;
@@ -79,7 +79,7 @@ public class Output {
             serialPort.openPort();
             this.lastConnect = System.currentTimeMillis();
             if (Setting.byName(Setting.Name.SHOW_DMX_SEND_DEBUG).isTrue())
-                ConsoleUI.log(ConsoleUI.ConsoleColor.YELLOW, "Port Opened");
+                ConsolePanel.log(ConsolePanel.ConsoleColor.YELLOW, "Port Opened");
         }
 
         if (System.currentTimeMillis() - lastConnect < Setting.byName(Setting.Name.CONNECTION_WAIT).getLong()) return;
@@ -90,13 +90,13 @@ public class Output {
             if (bytes == null) return;
             serialPort.getOutputStream().write(bytes);
             if (Setting.byName(Setting.Name.SHOW_DMX_SEND_DEBUG).isTrue())
-                ConsoleUI.log(ConsoleUI.ConsoleColor.YELLOW, "DMX Sent");
+                ConsolePanel.log(ConsolePanel.ConsoleColor.YELLOW, "DMX Sent");
         } catch (Exception e) {
             serialPort = null;
-            ConsoleUI.log(ConsoleUI.ConsoleColor.RED, e.getMessage());
+            ConsolePanel.log(ConsolePanel.ConsoleColor.RED, e.getMessage());
         }
         long timeTaken = System.currentTimeMillis() - timestamp;
-        TimingsUI.set("Lights.output.tick()", "Output tick(): %mms %zms %ams", timeTaken);
+        TimingsPanel.set("Lights.output.tick()", "Output tick(): %mms %zms %ams", timeTaken);
     }
 
     public void freeze() {
@@ -109,7 +109,7 @@ public class Output {
 
     public void toggleFreeze() {
         FROZEN = !FROZEN;
-        ConsoleUI.log(ConsoleUI.ConsoleColor.CYAN, isFrozen() ?
+        ConsolePanel.log(ConsolePanel.ConsoleColor.CYAN, isFrozen() ?
                 "DMX Output frozen." :
                 "DMX Output unfrozen."
         );
@@ -127,11 +127,11 @@ public class Output {
         try {
             serialPort.closePort();
         } catch (Exception e) {
-            ConsoleUI.log(ConsoleUI.ConsoleColor.RED, e.getMessage());
+            ConsolePanel.log(ConsolePanel.ConsoleColor.RED, e.getMessage());
             e.printStackTrace();
         }
         serialPort = null;
-        ConsoleUI.log(ConsoleUI.ConsoleColor.YELLOW, "Port Disconnected");
+        ConsolePanel.log(ConsolePanel.ConsoleColor.YELLOW, "Port Disconnected");
         activePort = "Not Connected";
         connected = false;
     }

@@ -1,15 +1,16 @@
-package dev.therealdan.lights.ui.ui;
+package dev.therealdan.lights.panels.panels;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import dev.therealdan.lights.main.Lights;
 import dev.therealdan.lights.renderer.Renderer;
 import dev.therealdan.lights.renderer.Task;
+import dev.therealdan.lights.panels.Panel;
 import dev.therealdan.lights.ui.UIHandler;
 
 import java.util.List;
 
-public class PanelVisibilityUI implements UI {
+public class PanelVisibilityPanel implements Panel {
 
     @Override
     public boolean draw(Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {
@@ -26,23 +27,23 @@ public class PanelVisibilityUI implements UI {
         drag(x, y, width, cellHeight);
         y -= cellHeight;
 
-        List<UI> UIs = UIHandler.UIs();
-        while (UIs.size() > 0) {
-            UI ui = null;
-            for (UI each : UIs) {
-                if (ui == null || ui.getName().compareTo(each.getName()) > 0) {
-                    ui = each;
+        List<Panel> panels = UIHandler.UIs();
+        while (panels.size() > 0) {
+            Panel panel = null;
+            for (Panel each : panels) {
+                if (panel == null || panel.getName().compareTo(each.getName()) > 0) {
+                    panel = each;
                 }
             }
 
-            UIs.remove(ui);
-            if (ui.ignoreVisibilityUI()) continue;
+            panels.remove(panel);
+            if (panel.ignoreVisibilityUI()) continue;
             if (Lights.mouse.contains(x, y, width, cellHeight) && canInteract()) {
                 interacted = true;
                 if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(200))
-                    ui.toggleVisibility();
+                    panel.toggleVisibility();
             }
-            renderer.box(x, y, width, cellHeight, ui.isVisible() ? Lights.color.DARK_GREEN : Lights.color.MEDIUM, setWidth(renderer, ui.getName()));
+            renderer.box(x, y, width, cellHeight, panel.isVisible() ? Lights.color.DARK_GREEN : Lights.color.MEDIUM, setWidth(renderer, panel.getName()));
             y -= cellHeight;
         }
 

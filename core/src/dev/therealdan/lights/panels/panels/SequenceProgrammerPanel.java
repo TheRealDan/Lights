@@ -1,4 +1,4 @@
-package dev.therealdan.lights.ui.ui;
+package dev.therealdan.lights.panels.panels;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -10,12 +10,13 @@ import dev.therealdan.lights.programmer.Programmer;
 import dev.therealdan.lights.programmer.Sequence;
 import dev.therealdan.lights.renderer.Renderer;
 import dev.therealdan.lights.renderer.Task;
+import dev.therealdan.lights.panels.Panel;
 import dev.therealdan.lights.ui.UIHandler;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class SequenceProgrammerUI implements UI {
+public class SequenceProgrammerPanel implements Panel {
 
     private static Selected selected = Selected.NONE;
 
@@ -274,7 +275,7 @@ public class SequenceProgrammerUI implements UI {
     }
 
     public static void setSelected(Selected selected) {
-        SequenceProgrammerUI.selected = selected;
+        SequenceProgrammerPanel.selected = selected;
     }
 
     public static Selected getSelected() {

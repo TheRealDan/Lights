@@ -5,7 +5,7 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import dev.therealdan.lights.programmer.Sequence;
 import dev.therealdan.lights.ui.UIHandler;
-import dev.therealdan.lights.ui.ui.SequencesUI;
+import dev.therealdan.lights.panels.panels.SequencesPanel;
 import dev.therealdan.lights.util.sorting.Sortable;
 
 import java.util.ArrayList;
@@ -183,7 +183,7 @@ public class Button implements Sortable {
             } else if (sequences) {
                 String[] args = line.replaceFirst("  ", "").split(": ");
                 button.set(
-                        SequencesUI.byName(args[0]),
+                        SequencesPanel.byName(args[0]),
                         Integer.parseInt(args[1])
                 );
             }

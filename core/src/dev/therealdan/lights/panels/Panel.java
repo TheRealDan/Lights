@@ -1,4 +1,4 @@
-package dev.therealdan.lights.ui.ui;
+package dev.therealdan.lights.panels;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -10,7 +10,7 @@ import dev.therealdan.lights.ui.UIHandler;
 import java.util.HashMap;
 import java.util.HashSet;
 
-public interface UI {
+public interface Panel {
 
     HashSet<String> hidden = new HashSet<>();
     HashSet<String> allowInteract = new HashSet<>();
@@ -121,9 +121,9 @@ public interface UI {
 
     default void setAllowInteract(boolean allowInteract) {
         if (allowInteract) {
-            UI.allowInteract.add(getName());
+            Panel.allowInteract.add(getName());
         } else {
-            UI.allowInteract.remove(getName());
+            Panel.allowInteract.remove(getName());
         }
     }
 

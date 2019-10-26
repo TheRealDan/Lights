@@ -1,4 +1,4 @@
-package dev.therealdan.lights.ui.ui;
+package dev.therealdan.lights.panels.panels;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -11,14 +11,15 @@ import dev.therealdan.lights.programmer.Programmer;
 import dev.therealdan.lights.programmer.Sequence;
 import dev.therealdan.lights.programmer.Task;
 import dev.therealdan.lights.renderer.Renderer;
+import dev.therealdan.lights.panels.Panel;
 import dev.therealdan.lights.ui.UIHandler;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class SequencesUI implements UI {
+public class SequencesPanel implements Panel {
 
-    private static SequencesUI sequencesUI;
+    private static SequencesPanel sequencesUI;
 
     private final int MAX_ROWS = 13;
 
@@ -36,7 +37,7 @@ public class SequencesUI implements UI {
     private int tasksScroll = 0;
     private boolean canScrollTasks = false;
 
-    public SequencesUI() {
+    public SequencesPanel() {
         sequencesUI = this;
 
         FileHandle fileHandle = Gdx.files.local("Lights/Sequences/");
@@ -91,7 +92,7 @@ public class SequencesUI implements UI {
 
     @Override
     public void save() {
-        UI.super.save();
+        Panel.super.save();
 
         for (Sequence sequence : sequences()) {
             FileHandle fileHandle = Gdx.files.local("Lights/Sequences/" + sequence.getName() + ".txt");

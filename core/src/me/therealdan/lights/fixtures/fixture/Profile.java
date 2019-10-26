@@ -1,7 +1,6 @@
 package me.therealdan.lights.fixtures.fixture;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
+import me.therealdan.lights.files.ProfileFile;
 import me.therealdan.lights.fixtures.fixture.profile.Channel;
 import me.therealdan.lights.fixtures.fixture.profile.ModelDesign;
 import me.therealdan.lights.fixtures.fixture.profile.MutableProfile;
@@ -121,60 +120,14 @@ public class Profile implements Sortable {
     }
 
     public static void loadProfilesFromFile() {
-        FileHandle fileHandle = Gdx.files.local("Lights/Profiles/");
-        if (fileHandle.exists() && fileHandle.isDirectory())
-            for (FileHandle child : fileHandle.list())
-                loadProfileFromFile(child);
-    }
-
-    private static void loadProfileFromFile(FileHandle fileHandle) {
-        if (fileHandle.name().contains(".DS_Store")) return;
-
-        String name = fileHandle.name().replace(".txt", "");
-
-        List<Channel> channels = new ArrayList<>();
-        List<ModelDesign> modelDesigns = new ArrayList<>();
-
-        boolean isChannel = false, isModel = false;
-        for (String line : fileHandle.readString().split("\\r?\\n")) {
-            if (line.startsWith("Name: ")) {
-                name = line.split(": ")[1];
-                continue;
-            } else if (line.startsWith("Channels:")) {
-                isChannel = true;
-                isModel = false;
-                continue;
-            } else if (line.startsWith("Models:")) {
-                isChannel = false;
-                isModel = true;
-                continue;
-            }
-
-            if (isChannel) {
-                channels.add(new Channel(line.substring(2)));
-            } else if (isModel) {
-                modelDesigns.add(ModelDesign.fromString(line.substring(2)));
-            }
+        for (ProfileFile profileFile : ProfileFile.load()) {
+            add(profileFile.getProfile());
         }
-
-        Profile profile = new Profile(name, modelDesigns, channels);
-        Profile.add(profile);
     }
 
     public static void saveProfilesToFile() {
         for (Profile profile : Profile.profiles()) {
-            FileHandle fileHandle = Gdx.files.local("Lights/Profiles/" + profile.getName() + ".txt");
-            fileHandle.writeString("", false);
-
-            fileHandle.writeString("Name: " + profile.getName() + "\r\n", true);
-
-            fileHandle.writeString("Channels:\r\n", true);
-            for (Channel channel : profile.channels())
-                fileHandle.writeString("  " + channel.toString() + "\r\n", true);
-
-            fileHandle.writeString("Models:\r\n", true);
-            for (ModelDesign modelDesign : profile.getModelDesigns())
-                fileHandle.writeString("- " + modelDesign.toString() + "\r\n", true);
+            new ProfileFile(profile).saveAsTxt();
         }
     }
 
@@ -184,7 +137,6 @@ public class Profile implements Sortable {
 
     public static void delete(Profile profile) {
         profiles.remove(profile);
-        Gdx.files.local("Lights/Profiles/" + profile.getName() + ".txt").delete();
     }
 
     public static int count() {

@@ -34,7 +34,7 @@ public class FixturesPanel implements Panel {
         float y = getY();
         float width = getWidth();
 
-        renderer.box(x, y, width, cellHeight, Lights.color.DARK_BLUE, setWidth(renderer, "Fixtures"), Task.TextPosition.CENTER);
+        renderer.box(x, y, width, cellHeight, Lights.color.DARK_BLUE, setWidth(renderer, getFriendlyName()), Task.TextPosition.CENTER);
         if (Lights.mouse.contains(x, y, width, cellHeight) && Lights.mouse.rightClicked()) {
             interacted = true;
             Lights.openFixtureEditor();

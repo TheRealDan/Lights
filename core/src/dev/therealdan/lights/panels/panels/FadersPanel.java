@@ -113,7 +113,7 @@ public class FadersPanel implements Panel {
 
         float height = getHeight() - cellHeight - cellHeight;
 
-        renderer.box(x, y, getWidth(), cellHeight, Lights.color.DARK_BLUE, setWidth(renderer, "Faders"), Task.TextPosition.CENTER);
+        renderer.box(x, y, getWidth(), cellHeight, Lights.color.DARK_BLUE, setWidth(renderer, getFriendlyName()), Task.TextPosition.CENTER);
         drag(x, y, getWidth(), cellHeight);
         y -= cellHeight;
 

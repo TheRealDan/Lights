@@ -10,6 +10,7 @@ import dev.therealdan.lights.fixtures.Group;
 import dev.therealdan.lights.fixtures.fixture.Profile;
 import dev.therealdan.lights.main.Lights;
 import dev.therealdan.lights.panels.Panel;
+import dev.therealdan.lights.panels.panels.*;
 import dev.therealdan.lights.programmer.CondensedFrame;
 import dev.therealdan.lights.programmer.Frame;
 import dev.therealdan.lights.programmer.Programmer;
@@ -17,7 +18,6 @@ import dev.therealdan.lights.programmer.Sequence;
 import dev.therealdan.lights.renderer.Renderer;
 import dev.therealdan.lights.settings.Control;
 import dev.therealdan.lights.settings.Setting;
-import dev.therealdan.lights.panels.panels.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -358,7 +358,7 @@ public class UIHandler implements Visual {
 
     public static Panel byName(String name) {
         for (Panel panel : UIs())
-            if (panel.getName().equals(name))
+            if (panel.getName().equals(name) || panel.getFriendlyName().equalsIgnoreCase(name))
                 return panel;
 
         return null;

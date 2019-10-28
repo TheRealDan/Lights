@@ -36,7 +36,7 @@ public class FaderEditPanel implements Panel {
         float width = 250;
         float cellHeight = 30;
 
-        renderer.box(x, y, width, cellHeight, Lights.color.DARK_BLUE, "Fader Editor", Task.TextPosition.CENTER);
+        renderer.box(x, y, width, cellHeight, Lights.color.DARK_BLUE, getFriendlyName(), Task.TextPosition.CENTER);
         drag(x, y, uiWidth, cellHeight);
         y -= cellHeight;
 

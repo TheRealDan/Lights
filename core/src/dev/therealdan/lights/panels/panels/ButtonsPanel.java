@@ -27,7 +27,7 @@ public class ButtonsPanel implements Panel {
         float x = getX();
         float y = getY();
 
-        renderer.box(x, y, getWidth(), cellHeight, Lights.color.DARK_BLUE, "Buttons", Task.TextPosition.CENTER);
+        renderer.box(x, y, getWidth(), cellHeight, Lights.color.DARK_BLUE, getFriendlyName(), Task.TextPosition.CENTER);
         drag(x, y, getWidth(), cellHeight);
         y -= cellHeight;
 

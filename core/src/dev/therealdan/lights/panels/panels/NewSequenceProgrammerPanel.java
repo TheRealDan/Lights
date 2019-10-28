@@ -2,10 +2,10 @@ package dev.therealdan.lights.panels.panels;
 
 import com.badlogic.gdx.graphics.Color;
 import dev.therealdan.lights.main.Lights;
+import dev.therealdan.lights.panels.Panel;
 import dev.therealdan.lights.programmer.Programmer;
 import dev.therealdan.lights.renderer.Renderer;
 import dev.therealdan.lights.renderer.Task;
-import dev.therealdan.lights.panels.Panel;
 import dev.therealdan.lights.ui.UIHandler;
 
 public class NewSequenceProgrammerPanel implements Panel {
@@ -27,7 +27,7 @@ public class NewSequenceProgrammerPanel implements Panel {
         float width = getWidth();
 
         renderer.box(x, y, getWidth(), getHeight(), Lights.color.DARK);
-        renderer.box(x, y, width, cellHeight, Lights.color.DARK_BLUE, "New Sequence Programmer", Task.TextPosition.CENTER);
+        renderer.box(x, y, width, cellHeight, Lights.color.DARK_BLUE, getFriendlyName(), Task.TextPosition.CENTER);
         drag(x, y, width, cellHeight);
         y -= cellHeight;
 

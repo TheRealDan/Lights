@@ -119,7 +119,7 @@ public class SequenceProgrammerPanel implements Panel {
         float y = getY();
         float width = getWidth();
 
-        renderer.box(x, y, getWidth(), cellHeight, Lights.color.DARK_BLUE, setWidth(renderer, "Sequence Programmer"), Task.TextPosition.CENTER);
+        renderer.box(x, y, getWidth(), cellHeight, Lights.color.DARK_BLUE, setWidth(renderer, getFriendlyName()), Task.TextPosition.CENTER);
         drag(x, y, getWidth(), cellHeight);
         y -= cellHeight;
 

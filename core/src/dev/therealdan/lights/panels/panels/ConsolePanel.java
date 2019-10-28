@@ -48,7 +48,7 @@ public class ConsolePanel implements Panel {
         float width = getWidth();
         float cellHeight = 30;
 
-        renderer.box(x, y, width, cellHeight, Lights.color.DARK_BLUE, setWidth(renderer, "Console"), Task.TextPosition.CENTER);
+        renderer.box(x, y, width, cellHeight, Lights.color.DARK_BLUE, setWidth(renderer, getFriendlyName()), Task.TextPosition.CENTER);
         drag(x, y, width, cellHeight);
         y -= cellHeight;
 

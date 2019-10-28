@@ -44,7 +44,7 @@ public class ParametersPanel implements Panel {
         float cellHeight = 30;
 
         renderer.box(x, y, getWidth(), getHeight(), Lights.color.DARK);
-        renderer.box(x, y, getWidth(), cellHeight, Lights.color.DARK_BLUE, "Parameters", Task.TextPosition.CENTER);
+        renderer.box(x, y, getWidth(), cellHeight, Lights.color.DARK_BLUE, getFriendlyName(), Task.TextPosition.CENTER);
         drag(x, y, getWidth(), cellHeight);
         y -= cellHeight;
 

@@ -139,8 +139,17 @@ public interface Panel {
         return UIHandler.getDragging().equals(this);
     }
 
+    default String getFriendlyName() {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (char letter : getName().replace("DMX", "[dmx]").toCharArray()) {
+            if (Character.isUpperCase(letter) && stringBuilder.length() > 0) stringBuilder.append(" ");
+            stringBuilder.append(letter);
+        }
+        return stringBuilder.toString().replace("[dmx]", "DMX");
+    }
+
     default String getName() {
-        return getClass().getSimpleName().substring(0, getClass().getSimpleName().length() - 2);
+        return getClass().getSimpleName().substring(0, getClass().getSimpleName().length() - 5);
     }
 
     default float getX() {

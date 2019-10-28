@@ -22,7 +22,7 @@ public class ActiveSequencesPanel implements Panel {
         float y = getY();
         float width = getWidth();
 
-        renderer.box(x, y, width, cellHeight, Lights.color.DARK_BLUE, setWidth(renderer, "Active Sequences"), Task.TextPosition.CENTER);
+        renderer.box(x, y, width, cellHeight, Lights.color.DARK_BLUE, setWidth(renderer, getFriendlyName()), Task.TextPosition.CENTER);
         drag(x, y, width, cellHeight);
         y -= cellHeight;
 

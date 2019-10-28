@@ -41,7 +41,7 @@ public class PatchPanel implements Panel {
         }
 
         renderer.box(x, y, uiWidth, getHeight(), Lights.color.DARK);
-        renderer.box(x, y, uiWidth, cellHeight, Lights.color.DARK_BLUE, "Patch", Task.TextPosition.CENTER);
+        renderer.box(x, y, uiWidth, cellHeight, Lights.color.DARK_BLUE, getFriendlyName(), Task.TextPosition.CENTER);
         drag(x, y, uiWidth, cellHeight);
         y -= cellHeight;
 

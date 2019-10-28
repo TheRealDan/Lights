@@ -3,9 +3,9 @@ package dev.therealdan.lights.panels.panels;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import dev.therealdan.lights.main.Lights;
+import dev.therealdan.lights.panels.Panel;
 import dev.therealdan.lights.renderer.Renderer;
 import dev.therealdan.lights.renderer.Task;
-import dev.therealdan.lights.panels.Panel;
 import dev.therealdan.lights.ui.UIHandler;
 
 import java.util.List;
@@ -23,7 +23,7 @@ public class PanelVisibilityPanel implements Panel {
         float y = getY();
         float width = getWidth();
 
-        renderer.box(x, y, width, cellHeight, Lights.color.DARK_BLUE, setWidth(renderer, "Panel Visibility"), Task.TextPosition.CENTER);
+        renderer.box(x, y, width, cellHeight, Lights.color.DARK_BLUE, setWidth(renderer, getFriendlyName()), Task.TextPosition.CENTER);
         drag(x, y, width, cellHeight);
         y -= cellHeight;
 
@@ -43,7 +43,7 @@ public class PanelVisibilityPanel implements Panel {
                 if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(200))
                     panel.toggleVisibility();
             }
-            renderer.box(x, y, width, cellHeight, panel.isVisible() ? Lights.color.DARK_GREEN : Lights.color.MEDIUM, setWidth(renderer, panel.getName()));
+            renderer.box(x, y, width, cellHeight, panel.isVisible() ? Lights.color.DARK_GREEN : Lights.color.MEDIUM, setWidth(renderer, panel.getFriendlyName()));
             y -= cellHeight;
         }
 

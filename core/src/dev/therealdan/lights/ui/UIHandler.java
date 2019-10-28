@@ -69,8 +69,8 @@ public class UIHandler implements Visual {
         Group.loadGroupsFromFile();
 
         panels.add(new SequencesPanel());
-        panels.add(new FaderEditPanel());
-        panels.add(new ButtonEditPanel());
+        panels.add(new FaderEditorPanel());
+        panels.add(new ButtonEditorPanel());
 
         // Util
         panels.add(new ConsolePanel());

@@ -31,10 +31,10 @@ public class ButtonsPanel implements Panel {
         drag(x, y, getWidth(), cellHeight);
         y -= cellHeight;
 
-        ButtonEditPanel buttonEditUI = (ButtonEditPanel) UIHandler.byName("ButtonEdit");
+        ButtonEditorPanel buttonEditor = (ButtonEditorPanel) UIHandler.byName("ButtonEditor");
 
         int topPositionToDisplay = Button.getTopPosition();
-        if (buttonEditUI.isEditing()) {
+        if (buttonEditor.isEditing()) {
             while (topPositionToDisplay % PER_ROW != 0) topPositionToDisplay++;
             topPositionToDisplay += PER_ROW;
         }
@@ -49,14 +49,14 @@ public class ButtonsPanel implements Panel {
                         button.press();
                         renderer.box(x, y, size, size, new Color(button.getColor()).mul(1.5f));
                     } else if (Lights.mouse.rightClicked()) {
-                        buttonEditUI.edit(button);
+                        buttonEditor.edit(button);
                     }
                 }
             } else {
                 renderer.box(x, y, size, size, Lights.color.DARK);
-                if (Lights.mouse.contains(x, y, size, size) && canInteract() && buttonEditUI.isEditing()) {
+                if (Lights.mouse.contains(x, y, size, size) && canInteract() && buttonEditor.isEditing()) {
                     if (Lights.mouse.leftClicked()) {
-                        buttonEditUI.getEditing().setPosition(position);
+                        buttonEditor.getEditing().setPosition(position);
                     }
                 }
             }

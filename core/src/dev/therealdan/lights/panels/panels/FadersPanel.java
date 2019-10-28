@@ -140,7 +140,7 @@ public class FadersPanel implements Panel {
                     float bottom = y - height + 20;
                     fader.setValue(Math.min(Math.max((Gdx.graphics.getHeight() - Gdx.input.getY() - bottom) / (y - 20 - bottom), 0), 1));
                 } else if (Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) {
-                    FaderEditPanel.edit(fader);
+                    FaderEditorPanel.edit(fader);
                 }
             }
             x += faderWidth;

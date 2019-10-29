@@ -15,21 +15,19 @@ public class ButtonsPanel implements Panel {
 
     @Override
     public boolean draw(Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {
+        Panel.super.draw(renderer, X, Y, WIDTH, HEIGHT);
+
         if (containsMouse()) UIHandler.setSection(UIHandler.Section.BUTTONS);
         boolean interacted = false;
 
         setWidth(ButtonsPanel.WIDTH);
-
-        float cellHeight = 30;
 
         float size = getWidth() / ButtonsPanel.PER_ROW;
 
         float x = getX();
         float y = getY();
 
-        renderer.box(x, y, getWidth(), cellHeight, Lights.color.DARK_BLUE, getFriendlyName(), Task.TextPosition.CENTER);
-        drag(x, y, getWidth(), cellHeight);
-        y -= cellHeight;
+        y -= Panel.CELL_HEIGHT;
 
         ButtonEditorPanel buttonEditor = (ButtonEditorPanel) UIHandler.byName("ButtonEditor");
 

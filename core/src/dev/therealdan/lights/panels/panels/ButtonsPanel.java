@@ -3,15 +3,20 @@ package dev.therealdan.lights.panels.panels;
 import com.badlogic.gdx.graphics.Color;
 import dev.therealdan.lights.controllers.Button;
 import dev.therealdan.lights.main.Lights;
+import dev.therealdan.lights.panels.Panel;
+import dev.therealdan.lights.panels.menuicons.CloseIcon;
 import dev.therealdan.lights.renderer.Renderer;
 import dev.therealdan.lights.renderer.Task;
-import dev.therealdan.lights.panels.Panel;
 import dev.therealdan.lights.ui.UIHandler;
 
 public class ButtonsPanel implements Panel {
 
     public static float WIDTH = 800;
     public static final int PER_ROW = 10;
+
+    public ButtonsPanel() {
+        register(new CloseIcon());
+    }
 
     @Override
     public boolean draw(Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {

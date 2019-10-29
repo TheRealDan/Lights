@@ -8,8 +8,10 @@ import dev.therealdan.lights.renderer.Renderer;
 import dev.therealdan.lights.renderer.Task;
 import dev.therealdan.lights.ui.UIHandler;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 
 public interface Panel {
 
@@ -19,6 +21,7 @@ public interface Panel {
     HashSet<String> hidden = new HashSet<>();
     HashSet<String> allowInteract = new HashSet<>();
     HashMap<String, Float> uiLocation = new HashMap<>();
+    HashMap<String, List<MenuIcon>> menuIcons = new HashMap<>();
 
     default void load() {
         FileHandle fileHandle = Gdx.files.local("Lights/UI/" + getName() + ".txt");
@@ -53,6 +56,21 @@ public interface Panel {
     default boolean draw(Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {
         renderer.box(getX(), getY(), getWidth(), getHeight(), Lights.color.MEDIUM);
         renderer.box(getX(), getY(), getWidth(), Panel.MENU_HEIGHT, Lights.color.DARK_BLUE, getFriendlyName(), Task.TextPosition.CENTER);
+        int index = 0;
+        float x = getX() + getWidth();
+        float y = getY() - MenuIcon.getSpacing();
+        for (MenuIcon menuIcon : getMenuIcons()) {
+            boolean hover = false, click = false;
+            x -= MenuIcon.getSpacing() + MenuIcon.SIZE;
+            if (Lights.mouse.contains(x, y, MenuIcon.SIZE, MenuIcon.SIZE) && canInteract()) {
+                hover = true;
+                if (Lights.mouse.leftClicked(1000)) {
+                    click = true;
+                }
+            }
+            menuIcon.draw(renderer, x, y, MenuIcon.SIZE, MenuIcon.SIZE, index++, hover, click);
+            if (click) menuIcon.click(this);
+        }
         drag(getX(), getY(), getWidth(), Panel.MENU_HEIGHT);
         return true;
     }
@@ -143,6 +161,17 @@ public interface Panel {
 
     default boolean isDragging() {
         return UIHandler.getDragging().equals(this);
+    }
+
+    default void register(MenuIcon menuIcon) {
+        List<MenuIcon> menuIcons = getMenuIcons();
+        menuIcons.add(menuIcon);
+        Panel.menuIcons.put(getName(), menuIcons);
+    }
+
+    default List<MenuIcon> getMenuIcons() {
+        if (!menuIcons.containsKey(getName())) menuIcons.put(getName(), new ArrayList<>());
+        return menuIcons.get(getName());
     }
 
     default String getFriendlyName() {

@@ -5,12 +5,16 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.files.FileHandle;
 import dev.therealdan.lights.main.Lights;
 import dev.therealdan.lights.renderer.Renderer;
+import dev.therealdan.lights.renderer.Task;
 import dev.therealdan.lights.ui.UIHandler;
 
 import java.util.HashMap;
 import java.util.HashSet;
 
 public interface Panel {
+
+    float MENU_HEIGHT = 30;
+    float CELL_HEIGHT = 30;
 
     HashSet<String> hidden = new HashSet<>();
     HashSet<String> allowInteract = new HashSet<>();
@@ -48,6 +52,8 @@ public interface Panel {
 
     default boolean draw(Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {
         renderer.box(getX(), getY(), getWidth(), getHeight(), Lights.color.MEDIUM);
+        renderer.box(getX(), getY(), getWidth(), Panel.MENU_HEIGHT, Lights.color.DARK_BLUE, getFriendlyName(), Task.TextPosition.CENTER);
+        drag(getX(), getY(), getWidth(), Panel.MENU_HEIGHT);
         return true;
     }
 

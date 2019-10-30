@@ -65,8 +65,8 @@ public interface Panel {
 
     default boolean drawMenuBar(Renderer renderer, float x, float y, float width, float height, float menuIconWidth, float menuIconHeight, float spacing) {
         renderer.box(x, y, width, height, Lights.color.DARK_BLUE, getFriendlyName(), Task.TextPosition.CENTER);
-        drag(x, y, width, height);
 
+        boolean interacted = false;
         int index = 0;
         float mx = x + width;
         float my = y - spacing;
@@ -74,6 +74,7 @@ public interface Panel {
             boolean hover = false, click = false;
             mx -= spacing + menuIconWidth;
             if (Lights.mouse.contains(mx, my, menuIconWidth, menuIconHeight) && canInteract()) {
+                interacted = true;
                 hover = true;
                 if (Lights.mouse.leftClicked(1000)) {
                     click = true;
@@ -82,6 +83,8 @@ public interface Panel {
             menuIcon.draw(renderer, mx, my, menuIconWidth, menuIconHeight, index++, hover, click);
             if (click && !click(menuIcon)) menuIcon.click(this);
         }
+
+        if (!interacted) drag(x, y, width, height);
 
         return false;
     }

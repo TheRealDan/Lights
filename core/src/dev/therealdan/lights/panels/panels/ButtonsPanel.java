@@ -19,20 +19,13 @@ public class ButtonsPanel implements Panel {
     }
 
     @Override
-    public boolean draw(Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {
-        Panel.super.draw(renderer, X, Y, WIDTH, HEIGHT);
-
+    public boolean drawContent(Renderer renderer, float x, float y, float width, float height) {
         if (containsMouse()) UIHandler.setSection(UIHandler.Section.BUTTONS);
         boolean interacted = false;
 
         setWidth(ButtonsPanel.WIDTH);
 
         float size = getWidth() / ButtonsPanel.PER_ROW;
-
-        float x = getX();
-        float y = getY();
-
-        y -= Panel.CELL_HEIGHT;
 
         ButtonEditorPanel buttonEditor = (ButtonEditorPanel) UIHandler.byName("ButtonEditor");
 

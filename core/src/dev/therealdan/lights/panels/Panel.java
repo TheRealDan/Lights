@@ -63,9 +63,12 @@ public interface Panel {
         return false;
     }
 
-    default boolean drawMenuBar(Renderer renderer, float x, float y, float width, float height, float menuIconWidth, float menuIconHeight, float spacing) {
+    default boolean drawMenuBar(Renderer renderer, float x, float y, float width, float height) {
         renderer.box(x, y, width, height, Lights.color.DARK_BLUE, getFriendlyName(), Task.TextPosition.CENTER);
+        return false;
+    }
 
+    default boolean drawMenuIcons(Renderer renderer, float x, float y, float width, float height, float menuIconWidth, float menuIconHeight, float spacing) {
         boolean interacted = false;
         int index = 0;
         float mx = x + width;

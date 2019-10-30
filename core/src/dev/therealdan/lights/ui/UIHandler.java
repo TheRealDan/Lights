@@ -204,7 +204,8 @@ public class UIHandler implements Visual {
             if (panel.isVisible()) {
                 long timestamp = System.currentTimeMillis();
                 panel.drawBackground(renderer, panel.getX(), panel.getY(), panel.getWidth(), panel.getHeight());
-                panel.drawMenuBar(renderer, panel.getX(), panel.getY(), panel.getWidth(), Panel.MENU_HEIGHT, MenuIcon.SIZE, MenuIcon.SIZE, (Panel.MENU_HEIGHT - MenuIcon.SIZE) / 2);
+                panel.drawMenuBar(renderer, panel.getX(), panel.getY(), panel.getWidth(), Panel.MENU_HEIGHT);
+                panel.drawMenuIcons(renderer, panel.getX(), panel.getY(), panel.getWidth(), Panel.MENU_HEIGHT, MenuIcon.SIZE, MenuIcon.SIZE, (Panel.MENU_HEIGHT - MenuIcon.SIZE) / 2);
                 panel.drawContent(renderer, panel.getX(), panel.getY() - Panel.MENU_HEIGHT, panel.getWidth(), panel.getHeight() - Panel.MENU_HEIGHT);
                 panel.draw(renderer, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
                 renderer.draw();

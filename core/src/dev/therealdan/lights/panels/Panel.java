@@ -80,13 +80,18 @@ public interface Panel {
                 }
             }
             menuIcon.draw(renderer, mx, my, menuIconWidth, menuIconHeight, index++, hover, click);
-            if (click) menuIcon.click(this);
+            if (click && !click(menuIcon)) menuIcon.click(this);
         }
 
         return false;
     }
 
     default boolean drawContent(Renderer renderer, float x, float y, float width, float height) {
+        return false;
+    }
+
+    // Return whether click caused an action - MenuIcon.click() will only be called if this returns false
+    default boolean click(MenuIcon menuIcon) {
         return false;
     }
 

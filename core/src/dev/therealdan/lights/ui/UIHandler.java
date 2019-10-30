@@ -9,6 +9,7 @@ import dev.therealdan.lights.fixtures.Fixture;
 import dev.therealdan.lights.fixtures.Group;
 import dev.therealdan.lights.fixtures.fixture.Profile;
 import dev.therealdan.lights.main.Lights;
+import dev.therealdan.lights.panels.MenuIcon;
 import dev.therealdan.lights.panels.Panel;
 import dev.therealdan.lights.panels.panels.*;
 import dev.therealdan.lights.programmer.CondensedFrame;
@@ -202,6 +203,9 @@ public class UIHandler implements Visual {
         for (Panel panel : UIs()) {
             if (panel.isVisible()) {
                 long timestamp = System.currentTimeMillis();
+                panel.drawBackground(renderer, panel.getX(), panel.getY(), panel.getWidth(), panel.getHeight());
+                panel.drawMenuBar(renderer, panel.getX(), panel.getY(), panel.getWidth(), Panel.MENU_HEIGHT, MenuIcon.SIZE, MenuIcon.SIZE, (Panel.MENU_HEIGHT - MenuIcon.SIZE) / 2);
+                panel.drawContent(renderer, panel.getX(), panel.getY() - Panel.MENU_HEIGHT, panel.getWidth(), panel.getHeight() - Panel.MENU_HEIGHT);
                 panel.draw(renderer, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
                 renderer.draw();
                 TimingsPanel.set(panel.getName(), panel.getName() + " draw(): %mms %zms %ams", System.currentTimeMillis() - timestamp);

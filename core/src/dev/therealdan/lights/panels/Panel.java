@@ -53,26 +53,41 @@ public interface Panel {
         return true;
     }
 
+    @Deprecated
     default boolean draw(Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {
-        renderer.box(getX(), getY(), getWidth(), getHeight(), Lights.color.MEDIUM);
-        renderer.box(getX(), getY(), getWidth(), Panel.MENU_HEIGHT, Lights.color.DARK_BLUE, getFriendlyName(), Task.TextPosition.CENTER);
+        return false;
+    }
+
+    default boolean drawBackground(Renderer renderer, float x, float y, float width, float height) {
+        renderer.box(x, y, width, height, Lights.color.MEDIUM);
+        return false;
+    }
+
+    default boolean drawMenuBar(Renderer renderer, float x, float y, float width, float height, float menuIconWidth, float menuIconHeight, float spacing) {
+        renderer.box(x, y, width, height, Lights.color.DARK_BLUE, getFriendlyName(), Task.TextPosition.CENTER);
+        drag(x, y, width, height);
+
         int index = 0;
-        float x = getX() + getWidth();
-        float y = getY() - MenuIcon.getSpacing();
+        float mx = x + width;
+        float my = y - spacing;
         for (MenuIcon menuIcon : getMenuIcons()) {
             boolean hover = false, click = false;
-            x -= MenuIcon.getSpacing() + MenuIcon.SIZE;
-            if (Lights.mouse.contains(x, y, MenuIcon.SIZE, MenuIcon.SIZE) && canInteract()) {
+            mx -= spacing + menuIconWidth;
+            if (Lights.mouse.contains(mx, my, menuIconWidth, menuIconHeight) && canInteract()) {
                 hover = true;
                 if (Lights.mouse.leftClicked(1000)) {
                     click = true;
                 }
             }
-            menuIcon.draw(renderer, x, y, MenuIcon.SIZE, MenuIcon.SIZE, index++, hover, click);
+            menuIcon.draw(renderer, mx, my, menuIconWidth, menuIconHeight, index++, hover, click);
             if (click) menuIcon.click(this);
         }
-        drag(getX(), getY(), getWidth(), Panel.MENU_HEIGHT);
-        return true;
+
+        return false;
+    }
+
+    default boolean drawContent(Renderer renderer, float x, float y, float width, float height) {
+        return false;
     }
 
     default void setLocation(float x, float y) {
@@ -155,8 +170,12 @@ public interface Panel {
         return allowInteract.contains(getName());
     }
 
-    default void drag(float x, float y, float width, float cellHeight) {
-        if (canInteract() && isVisible() && Lights.mouse.contains(x, y, width, cellHeight) && Gdx.input.isButtonPressed(Input.Buttons.LEFT)) UIHandler.drag(this);
+    default boolean drag(float x, float y, float width, float height) {
+        if (canInteract() && isVisible() && Lights.mouse.contains(x, y, width, height) && Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
+            UIHandler.drag(this);
+            return true;
+        }
+        return false;
     }
 
     default boolean isDragging() {

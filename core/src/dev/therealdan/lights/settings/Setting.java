@@ -112,14 +112,11 @@ public class Setting {
         NEW_WRITE_TIMEOUT,
         CHANNELS_PER_SEND,
         CHANNELS_PER_TIME,
-        BUTTON_PANEL_WIDTH,
 
         SHOW_DMX_SEND_DEBUG,
         CONTINUOUS,
-        LIMIT_LED_STRIPS,
         DRAW_DMX,
-        REMEMBER_CAMERA_POSITION,
-        HAZE;
+        REMEMBER_CAMERA_POSITION;
 
         public String getName() {
             StringBuilder stringBuilder = new StringBuilder();
@@ -139,14 +136,11 @@ public class Setting {
         new Setting(Name.NEW_WRITE_TIMEOUT.getName(), 0).register();
         new Setting(Name.CHANNELS_PER_SEND.getName(), 512).register();
         new Setting(Name.CHANNELS_PER_TIME.getName(), 512).register();
-        new Setting(Name.BUTTON_PANEL_WIDTH.getName(), 800).register();
 
         new Setting(Name.SHOW_DMX_SEND_DEBUG.getName(), false).register();
         new Setting(Name.CONTINUOUS.getName(), false).register();
-        new Setting(Name.LIMIT_LED_STRIPS.getName(), false).register();
         new Setting(Name.DRAW_DMX.getName(), false).register();
         new Setting(Name.REMEMBER_CAMERA_POSITION.getName(), false).register();
-        new Setting(Name.HAZE.getName(), false).register();
     }
 
     public static void loadFromFile() {

@@ -1,13 +1,11 @@
 package dev.therealdan.lights.dmx;
 
 import com.badlogic.gdx.graphics.Color;
-import dev.therealdan.lights.fixtures.Fixture;
-import dev.therealdan.lights.fixtures.Group;
+import dev.therealdan.lights.panels.panels.ConsolePanel;
 import dev.therealdan.lights.renderer.Renderer;
 import dev.therealdan.lights.renderer.Task;
 import dev.therealdan.lights.settings.Setting;
 import dev.therealdan.lights.ui.UIHandler;
-import dev.therealdan.lights.panels.panels.ConsolePanel;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,7 +15,6 @@ public class DMX {
 
     public static final float MAX_CHANNELS = 512;
     public static boolean DRAW_DMX = false;
-    public static boolean LIMIT_LED_STRIPS = true;
 
     private static HashMap<String, DMX> dmx = new HashMap<>();
 
@@ -70,19 +67,6 @@ public class DMX {
     }
 
     private int pget(int channel) {
-        if (DMX.LIMIT_LED_STRIPS) {
-            Group group = Group.groupByName("LEDs");
-            if (group != null) {
-                for (Fixture fixture : group.fixtures()) {
-                    for (int address : fixture.getAddresses()) {
-                        if (address == channel) {
-                            return Math.min(channels.getOrDefault(channel, 0), 20);
-                        }
-                    }
-                }
-            }
-        }
-
         return channels.getOrDefault(channel, 0);
     }
 
@@ -139,7 +123,8 @@ public class DMX {
         }
 
         if (data.length() <= 1) return null;
-        if (Setting.byName(Setting.Name.SHOW_DMX_SEND_DEBUG).isTrue()) ConsolePanel.log("Preparing to send: " + data.toString());
+        if (Setting.byName(Setting.Name.SHOW_DMX_SEND_DEBUG).isTrue())
+            ConsolePanel.log("Preparing to send: " + data.toString());
         try {
             return data.toString().getBytes("UTF-8");
         } catch (Exception e) {

@@ -18,7 +18,6 @@ import dev.therealdan.lights.programmer.Programmer;
 import dev.therealdan.lights.programmer.Sequence;
 import dev.therealdan.lights.renderer.Renderer;
 import dev.therealdan.lights.settings.Control;
-import dev.therealdan.lights.settings.Setting;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -181,8 +180,6 @@ public class UIHandler implements Visual {
                 visualiser.set(address, currentCondensedFrame.getValue(address));
             }
         }
-
-        visualiser.set(13, Setting.byName(Setting.Name.HAZE).isTrue() ? 255 : 0);
 
         if (!Lights.output.isFrozen()) output.copy(visualiser);
 

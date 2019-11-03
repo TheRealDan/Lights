@@ -107,7 +107,7 @@ public class SequenceProgrammerPanel implements Panel {
         }
 
         if (!PanelHandler.getCurrentAction().equals(PanelHandler.Action.PANEL_INTERACT) ||
-                PanelHandler.getLastInteract().equals(PanelHandler.byName(getName()))) {
+                !PanelHandler.getLastInteract().equals(PanelHandler.byName(getName()))) {
             setSelected(Selected.NONE);
         }
     }

@@ -25,7 +25,7 @@ public interface Panel {
     HashSet<String> allowInteract = new HashSet<>();
 
     default void load() {
-        FileHandle fileHandle = Gdx.files.local("Lights/UI/" + getName() + ".txt");
+        FileHandle fileHandle = Gdx.files.local("Lights/Panels/" + getName() + ".txt");
         if (fileHandle.exists()) {
             String[] lines = fileHandle.readString().split("\\r?\\n");
             setLocation(
@@ -41,12 +41,12 @@ public interface Panel {
     }
 
     default void save() {
-        Gdx.files.local("Lights/UI/" + getName() + ".txt").writeString("X: " + getX() + "\r\n", false);
-        Gdx.files.local("Lights/UI/" + getName() + ".txt").writeString("Y: " + getYString() + "\r\n", true);
-        Gdx.files.local("Lights/UI/" + getName() + ".txt").writeString("Width: " + getWidth() + "\r\n", true);
-        Gdx.files.local("Lights/UI/" + getName() + ".txt").writeString("Height: " + getHeight() + "\r\n", true);
+        Gdx.files.local("Lights/Panels/" + getName() + ".txt").writeString("X: " + getX() + "\r\n", false);
+        Gdx.files.local("Lights/Panels/" + getName() + ".txt").writeString("Y: " + getYString() + "\r\n", true);
+        Gdx.files.local("Lights/Panels/" + getName() + ".txt").writeString("Width: " + getWidth() + "\r\n", true);
+        Gdx.files.local("Lights/Panels/" + getName() + ".txt").writeString("Height: " + getHeight() + "\r\n", true);
         if (!ignoreVisibilityUI())
-            Gdx.files.local("Lights/UI/" + getName() + ".txt").writeString("Visible: " + isVisible(), true);
+            Gdx.files.local("Lights/Panels/" + getName() + ".txt").writeString("Visible: " + isVisible(), true);
     }
 
     default void scrolled(int amount) {

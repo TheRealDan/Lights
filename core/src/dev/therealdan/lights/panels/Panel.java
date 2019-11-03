@@ -18,10 +18,10 @@ public interface Panel {
     float MENU_HEIGHT = 30;
     float CELL_HEIGHT = 30;
 
+    HashMap<String, Float> panelData = new HashMap<>();
+    HashMap<String, List<MenuIcon>> menuIcons = new HashMap<>();
     HashSet<String> hidden = new HashSet<>();
     HashSet<String> allowInteract = new HashSet<>();
-    HashMap<String, Float> uiLocation = new HashMap<>();
-    HashMap<String, List<MenuIcon>> menuIcons = new HashMap<>();
 
     default void load() {
         FileHandle fileHandle = Gdx.files.local("Lights/UI/" + getName() + ".txt");
@@ -129,6 +129,7 @@ public interface Panel {
     }
 
     default void setWidth(float width) {
+        if (width < getMinimumWidth()) width = getMinimumWidth();
         set(getName() + "_WIDTH", width);
     }
 
@@ -145,11 +146,20 @@ public interface Panel {
     }
 
     default void setHeight(float height) {
+        if (height < getMinimumHeight()) height = getMinimumHeight();
         set(getName() + "_HEIGHT", height);
     }
 
     default void setHeightBasedOnY(float y) {
         setHeight(getY() - y);
+    }
+
+    default void setMinimumWidth(float width) {
+        set(getName() + "_MIN_WIDTH", width);
+    }
+
+    default void setMinimumHEight(float height) {
+        set(getName() + "_MIN_HEIGHT", height);
     }
 
     default boolean containsMouse() {
@@ -240,20 +250,28 @@ public interface Panel {
         return get(getName() + "_Y", 10);
     }
 
+    default float getMinimumWidth() {
+        return get(getName() + "_MIN_WIDTH", 50);
+    }
+
+    default float getMinimumHeight() {
+        return get(getName() + "_MIN_HEIGHT", MENU_HEIGHT * 2);
+    }
+
     default float getWidth() {
-        return get(getName() + "_WIDTH", 10);
+        return get(getName() + "_WIDTH", getMinimumWidth());
     }
 
     default float getHeight() {
-        return get(getName() + "_HEIGHT", 10);
+        return get(getName() + "_HEIGHT", getMinimumHeight());
     }
 
     static void set(String key, float value) {
-        uiLocation.put(key, value);
+        panelData.put(key, value);
     }
 
     static float get(String key, float defaultValue) {
-        if (!uiLocation.containsKey(key)) set(key, defaultValue);
-        return uiLocation.get(key);
+        if (!panelData.containsKey(key)) set(key, defaultValue);
+        return panelData.get(key);
     }
 }

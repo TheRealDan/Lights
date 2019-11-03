@@ -31,8 +31,10 @@ public interface Panel {
             setLocation(
                     Float.parseFloat(lines[0].replace("X: ", "")),
                     Float.parseFloat(lines[1].replace("Y: ", "")));
-            if (!ignoreVisibilityUI() && lines.length > 2)
-                setVisible(Boolean.parseBoolean(lines[2].replace("Visible: ", "")));
+            setWidth(Float.parseFloat(lines[2].replace("Width: ", "")));
+            setHeight(Float.parseFloat(lines[3].replace("Height: ", "")));
+            if (!ignoreVisibilityUI() && lines.length > 4)
+                setVisible(Boolean.parseBoolean(lines[4].replace("Visible: ", "")));
         } else {
             if (!ignoreVisibilityUI()) setVisible(false);
         }
@@ -41,6 +43,8 @@ public interface Panel {
     default void save() {
         Gdx.files.local("Lights/UI/" + getName() + ".txt").writeString("X: " + getX() + "\r\n", false);
         Gdx.files.local("Lights/UI/" + getName() + ".txt").writeString("Y: " + getYString() + "\r\n", true);
+        Gdx.files.local("Lights/UI/" + getName() + ".txt").writeString("Width: " + getWidth() + "\r\n", true);
+        Gdx.files.local("Lights/UI/" + getName() + ".txt").writeString("Height: " + getHeight() + "\r\n", true);
         if (!ignoreVisibilityUI())
             Gdx.files.local("Lights/UI/" + getName() + ".txt").writeString("Visible: " + isVisible(), true);
     }

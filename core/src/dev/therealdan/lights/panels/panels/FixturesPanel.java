@@ -14,37 +14,40 @@ import static dev.therealdan.lights.util.sorting.Sortable.Sort.ID;
 
 public class FixturesPanel implements Panel {
 
-    public static float WIDTH = 800;
-    public static int FIXTURES_PER_ROW = 10;
+    public int fixturesPerRow = 8;
 
     public FixturesPanel() {
         register(new CloseIcon());
+
+        setWidth(800);
+        setHeight(200);
     }
 
     @Override
-    public boolean draw(Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {
-        boolean interacted = false;
-
-        setWidth(FixturesPanel.WIDTH);
-
-        float cellHeight = 30;
-        float cellSize = FixturesPanel.WIDTH / FixturesPanel.FIXTURES_PER_ROW;
-
-        float x = getX();
-        float y = getY();
-        float width = getWidth();
-
-        renderer.box(x, y, width, cellHeight, Lights.color.DARK_BLUE, setWidth(renderer, getFriendlyName()), Task.TextPosition.CENTER);
-        if (Lights.mouse.contains(x, y, width, cellHeight) && Lights.mouse.rightClicked()) {
-            interacted = true;
-            Lights.openFixtureEditor();
+    public boolean drawMenuIcons(Renderer renderer, float x, float y, float width, float height, float menuIconWidth, float menuIconHeight, float spacing, boolean interacted) {
+        interacted = Panel.super.drawMenuIcons(renderer, x, y, width, height, menuIconWidth, menuIconHeight, spacing, interacted);
+        if (!interacted) {
+            if (Lights.mouse.contains(x, y, width, height)) {
+                if (Lights.mouse.rightClicked()) {
+                    interacted = true;
+                    Lights.openFixtureEditor();
+                }
+            }
         }
-        drag(x, y, width, cellHeight);
-        y -= cellHeight;
+        return interacted;
+    }
+
+    @Override
+    public boolean drawContent(Renderer renderer, float x, float y, float width, float height, boolean interacted) {
+        int fixtures = Fixture.count();
+        while (fixtures % getFixturesPerRow() != 0) fixtures++;
+
+        float fixtureWidth = width / getFixturesPerRow();
+        float fixtureHeight = height / (fixtures / getFixturesPerRow());
 
         for (Fixture fixture : Fixture.fixtures(ID)) {
-            renderer.box(x, y, cellSize, cellSize, Programmer.isSelected(fixture) ? Lights.color.DARK_RED : Lights.color.MEDIUM, fixture.getName(), Task.TextPosition.CENTER);
-            if (Lights.mouse.contains(x, y, cellSize, cellSize) && canInteract()) {
+            renderer.box(x, y, fixtureWidth, fixtureHeight, Programmer.isSelected(fixture) ? Lights.color.DARK_RED : Lights.color.MEDIUM, fixture.getName(), Task.TextPosition.CENTER);
+            if (Lights.mouse.contains(x, y, fixtureWidth, fixtureHeight) && canInteract()) {
                 interacted = true;
                 if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(500)) {
                     if (Programmer.isSelected(fixture)) {
@@ -54,16 +57,26 @@ public class FixturesPanel implements Panel {
                     }
                 }
             }
-            x += cellSize;
+            x += fixtureWidth;
 
-            if (x + cellSize > getX() + getWidth()) {
+            if (x + fixtureWidth > getX() + getWidth()) {
                 x = getX();
-                y -= cellSize;
+                y -= fixtureHeight;
             }
         }
-        y -= cellSize;
-
-        setHeightBasedOnY(y);
         return interacted;
+    }
+
+    @Override
+    public boolean isResizeable() {
+        return true;
+    }
+
+    public void setFixturesPerRow(int fixtures) {
+        this.fixturesPerRow = fixtures;
+    }
+
+    public int getFixturesPerRow() {
+        return fixturesPerRow;
     }
 }

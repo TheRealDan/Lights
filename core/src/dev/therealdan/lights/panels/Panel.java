@@ -20,6 +20,7 @@ public interface Panel {
 
     HashMap<String, Float> panelData = new HashMap<>();
     HashMap<String, List<MenuIcon>> menuIcons = new HashMap<>();
+    HashMap<String, String> title = new HashMap<>();
     HashSet<String> hidden = new HashSet<>();
     HashSet<String> allowInteract = new HashSet<>();
 
@@ -65,7 +66,7 @@ public interface Panel {
 
     // Return whether menu bar was interacted with
     default boolean drawMenuBar(Renderer renderer, float x, float y, float width, float height, boolean interacted) {
-        renderer.box(x, y, width, height, Lights.color.DARK_BLUE, getFriendlyName(), Task.TextPosition.CENTER);
+        renderer.box(x, y, width, height, Lights.color.DARK_BLUE, getTitle(), Task.TextPosition.CENTER);
         return interacted;
     }
 
@@ -116,6 +117,15 @@ public interface Panel {
     default void resize(float width, float height) {
         setWidth(width);
         setHeight(height);
+    }
+
+    default void setTitle(String title) {
+        Panel.title.put(getName(), title);
+    }
+
+    default String getTitle() {
+        if (!title.containsKey(getName())) title.put(getName(), getFriendlyName());
+        return title.get(getName());
     }
 
     default String setWidth(Renderer renderer, String text) {

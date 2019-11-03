@@ -62,7 +62,7 @@ public interface Panel {
 
     // Return whether hovering over resize area
     default boolean drawBackground(Renderer renderer, float x, float y, float width, float height) {
-        renderer.box(x, y, width, height, Lights.color.MEDIUM);
+        renderer.box(x, y, width, height, Lights.color.DARK);
         if (isResizeable())
             return Lights.mouse.contains(x + width - 20, y - height + 20, 20, 20);
         return false;

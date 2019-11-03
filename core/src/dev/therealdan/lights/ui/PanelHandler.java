@@ -11,6 +11,7 @@ import dev.therealdan.lights.fixtures.fixture.Profile;
 import dev.therealdan.lights.main.Lights;
 import dev.therealdan.lights.panels.MenuIcon;
 import dev.therealdan.lights.panels.Panel;
+import dev.therealdan.lights.panels.menuicons.ResizeIcon;
 import dev.therealdan.lights.panels.panels.*;
 import dev.therealdan.lights.programmer.CondensedFrame;
 import dev.therealdan.lights.programmer.Frame;
@@ -27,8 +28,10 @@ public class PanelHandler implements Visual {
 
     private static PanelHandler panelHandler;
 
+    private ResizeIcon resizeIcon;
+
     private List<Panel> panels = new ArrayList<>();
-    private Panel lastInteract, lastDragged, dragging = null;
+    private Panel lastResize, resizing, lastInteract, lastDragged, dragging;
     private float xDifference, yDifference;
 
     private float master = 1.0f;
@@ -47,6 +50,8 @@ public class PanelHandler implements Visual {
 
     public PanelHandler() {
         panelHandler = this;
+
+        resizeIcon = new ResizeIcon();
 
         // Menu
         panels.add(new PanelVisibilityPanel());
@@ -198,14 +203,22 @@ public class PanelHandler implements Visual {
             if (panel.isVisible()) {
                 long timestamp = System.currentTimeMillis();
 
-                panel.drawBackground(renderer, panel.getX(), panel.getY(), panel.getWidth(), panel.getHeight());
-                panel.drawMenuBar(renderer, panel.getX(), panel.getY(), panel.getWidth(), Panel.MENU_HEIGHT);
-                boolean interacted = panel.drawMenuIcons(renderer, panel.getX(), panel.getY(), panel.getWidth(), Panel.MENU_HEIGHT, MenuIcon.SIZE, MenuIcon.SIZE, (Panel.MENU_HEIGHT - MenuIcon.SIZE) / 2);
+                boolean hoverResize = panel.drawBackground(renderer, panel.getX(), panel.getY(), panel.getWidth(), panel.getHeight());
+                boolean interacted = hoverResize;
+                interacted = panel.drawMenuBar(renderer, panel.getX(), panel.getY(), panel.getWidth(), Panel.MENU_HEIGHT, interacted);
+                interacted = panel.drawMenuIcons(renderer, panel.getX(), panel.getY(), panel.getWidth(), Panel.MENU_HEIGHT, MenuIcon.SIZE, MenuIcon.SIZE, (Panel.MENU_HEIGHT - MenuIcon.SIZE) / 2, interacted);
                 interacted = panel.drawContent(renderer, panel.getX(), panel.getY() - Panel.MENU_HEIGHT, panel.getWidth(), panel.getHeight() - Panel.MENU_HEIGHT, interacted);
 
                 if (panel.draw(renderer, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight())) interacted = true;
 
-                if (panel.containsMouse() && interacted) {
+                if (hoverResize) {
+                    setAction(Action.PANEL_RESIZE);
+                    lastResize = panel;
+
+                    boolean clicked = Lights.mouse.leftClicked(1000);
+                    resizeIcon.draw(renderer, panel.getX() + panel.getWidth() - 20, panel.getY() - panel.getHeight() + 20, 20, 20, -1, true, clicked);
+                    if (clicked) resize(panel);
+                } else if (panel.containsMouse() && interacted) {
                     setAction(Action.PANEL_INTERACT);
                     lastInteract = panel;
                 }
@@ -223,6 +236,12 @@ public class PanelHandler implements Visual {
             if (!getDragging().containsMouse()) drag(null);
         }
 
+        if (isResizing()) {
+            getResizing().setWidth(Gdx.input.getX() - getResizing().getX() + 10);
+            getResizing().setHeight(Gdx.input.getY() - getResizing().getYString() + 10);
+            if (!getResizing().containsMouse()) resize(null);
+        }
+
         return true;
     }
 
@@ -237,6 +256,7 @@ public class PanelHandler implements Visual {
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
         drag(null);
+        resize(null);
 
         return true;
     }
@@ -322,23 +342,45 @@ public class PanelHandler implements Visual {
     }
 
     public enum Action {
-        PANEL_INTERACT, DRAGGING_PANEL, OTHER;
+        PANEL_INTERACT, PANEL_DRAG, PANEL_RESIZE, OTHER;
+    }
+
+    public static void resize(Panel panel) {
+        if (panel == null) {
+            panelHandler.lastResize = panelHandler.resizing;
+        } else if (panelHandler.resizing == null) {
+            moveToTop(panel);
+        }
+
+        panelHandler.resizing = panel;
     }
 
     public static void drag(Panel panel) {
         if (panel == null) {
-            PanelHandler.panelHandler.lastDragged = PanelHandler.panelHandler.dragging;
-        } else if (PanelHandler.panelHandler.dragging == null) {
-            PanelHandler.panelHandler.xDifference = Math.abs(panel.getX() - Gdx.input.getX());
-            PanelHandler.panelHandler.yDifference = Math.abs(panel.getYString() - Gdx.input.getY());
+            panelHandler.lastDragged = panelHandler.dragging;
+        } else if (panelHandler.dragging == null) {
+            panelHandler.xDifference = Math.abs(panel.getX() - Gdx.input.getX());
+            panelHandler.yDifference = Math.abs(panel.getYString() - Gdx.input.getY());
             moveToTop(panel);
         }
 
-        PanelHandler.panelHandler.dragging = panel;
+        panelHandler.dragging = panel;
     }
 
     public static boolean isDragging() {
         return getDragging() != null;
+    }
+
+    public static boolean isResizing() {
+        return getResizing() != null;
+    }
+
+    public static Panel getLastResize() {
+        return panelHandler.lastResize;
+    }
+
+    public static Panel getResizing() {
+        return panelHandler.resizing;
     }
 
     public static Panel getLastInteract() {
@@ -427,7 +469,7 @@ public class PanelHandler implements Visual {
     }
 
     public static Action getCurrentAction() {
-        if (isDragging()) return Action.DRAGGING_PANEL;
+        if (isDragging()) return Action.PANEL_DRAG;
         if (System.currentTimeMillis() - panelHandler.lastActionUpdate > 500)
             panelHandler.currentAction = Action.OTHER;
         return panelHandler.currentAction;

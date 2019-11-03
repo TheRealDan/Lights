@@ -55,19 +55,22 @@ public interface Panel {
         return true;
     }
 
+    // Return whether hovering over resize area
     default boolean drawBackground(Renderer renderer, float x, float y, float width, float height) {
         renderer.box(x, y, width, height, Lights.color.MEDIUM);
+        if (isResizeable())
+            return Lights.mouse.contains(x + width - 20, y - height + 20, 20, 20);
         return false;
     }
 
-    default boolean drawMenuBar(Renderer renderer, float x, float y, float width, float height) {
+    // Return whether menu bar was interacted with
+    default boolean drawMenuBar(Renderer renderer, float x, float y, float width, float height, boolean interacted) {
         renderer.box(x, y, width, height, Lights.color.DARK_BLUE, getFriendlyName(), Task.TextPosition.CENTER);
-        return false;
+        return interacted;
     }
 
     // Return whether icons were interacted with
-    default boolean drawMenuIcons(Renderer renderer, float x, float y, float width, float height, float menuIconWidth, float menuIconHeight, float spacing) {
-        boolean interacted = false;
+    default boolean drawMenuIcons(Renderer renderer, float x, float y, float width, float height, float menuIconWidth, float menuIconHeight, float spacing, boolean interacted) {
         int index = 0;
         float mx = x + width;
         float my = y - spacing;

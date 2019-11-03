@@ -6,9 +6,10 @@ import com.badlogic.gdx.graphics.Color;
 import dev.therealdan.lights.dmx.DMX;
 import dev.therealdan.lights.fixtures.Fixture;
 import dev.therealdan.lights.main.Lights;
+import dev.therealdan.lights.panels.Panel;
+import dev.therealdan.lights.panels.menuicons.CloseIcon;
 import dev.therealdan.lights.renderer.Renderer;
 import dev.therealdan.lights.renderer.Task;
-import dev.therealdan.lights.panels.Panel;
 import dev.therealdan.lights.ui.UIHandler;
 
 import static dev.therealdan.lights.util.sorting.Sortable.Sort.ID;
@@ -16,6 +17,10 @@ import static dev.therealdan.lights.util.sorting.Sortable.Sort.ID;
 public class PatchPanel implements Panel {
 
     private Fixture selectedFixture = null;
+
+    public PatchPanel() {
+        register(new CloseIcon());
+    }
 
     @Override
     public boolean draw(Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {

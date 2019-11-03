@@ -4,10 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import dev.therealdan.lights.controllers.Fader;
 import dev.therealdan.lights.main.Lights;
+import dev.therealdan.lights.panels.Panel;
+import dev.therealdan.lights.panels.menuicons.CloseIcon;
 import dev.therealdan.lights.programmer.Sequence;
 import dev.therealdan.lights.renderer.Renderer;
 import dev.therealdan.lights.renderer.Task;
-import dev.therealdan.lights.panels.Panel;
 import dev.therealdan.lights.ui.UIHandler;
 
 import java.text.DecimalFormat;
@@ -22,6 +23,8 @@ public class FaderEditorPanel implements Panel {
 
     public FaderEditorPanel() {
         faderEditor = this;
+
+        register(new CloseIcon());
     }
 
     @Override

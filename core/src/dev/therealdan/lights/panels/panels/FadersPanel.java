@@ -6,9 +6,10 @@ import com.badlogic.gdx.files.FileHandle;
 import dev.therealdan.lights.controllers.Fader;
 import dev.therealdan.lights.controllers.FaderBank;
 import dev.therealdan.lights.main.Lights;
+import dev.therealdan.lights.panels.Panel;
+import dev.therealdan.lights.panels.menuicons.CloseIcon;
 import dev.therealdan.lights.renderer.Renderer;
 import dev.therealdan.lights.renderer.Task;
-import dev.therealdan.lights.panels.Panel;
 import dev.therealdan.lights.ui.UIHandler;
 import dev.therealdan.lights.util.Util;
 
@@ -30,6 +31,8 @@ public class FadersPanel implements Panel {
 
     public FadersPanel() {
         fadersUI = this;
+
+        register(new CloseIcon());
 
         FileHandle fileHandle = Gdx.files.local("Lights/Faders/");
         if (fileHandle.exists() && fileHandle.isDirectory())

@@ -4,9 +4,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import dev.therealdan.lights.dmx.DMX;
 import dev.therealdan.lights.main.Lights;
+import dev.therealdan.lights.panels.Panel;
+import dev.therealdan.lights.panels.menuicons.CloseIcon;
 import dev.therealdan.lights.renderer.Renderer;
 import dev.therealdan.lights.renderer.Task;
-import dev.therealdan.lights.panels.Panel;
 import dev.therealdan.lights.ui.UIHandler;
 
 public class DMXOutputPanel implements Panel {
@@ -15,6 +16,7 @@ public class DMXOutputPanel implements Panel {
     private boolean displayInCells = true;
 
     public DMXOutputPanel() {
+        register(new CloseIcon());
         // TODO - Save and load above settings
     }
 

@@ -2,13 +2,14 @@ package dev.therealdan.lights.panels.panels;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import dev.therealdan.lights.fixtures.fixture.profile.Channel;
 import dev.therealdan.lights.fixtures.Fixture;
+import dev.therealdan.lights.fixtures.fixture.profile.Channel;
 import dev.therealdan.lights.main.Lights;
+import dev.therealdan.lights.panels.Panel;
+import dev.therealdan.lights.panels.menuicons.CloseIcon;
 import dev.therealdan.lights.programmer.Programmer;
 import dev.therealdan.lights.renderer.Renderer;
 import dev.therealdan.lights.renderer.Task;
-import dev.therealdan.lights.panels.Panel;
 import dev.therealdan.lights.ui.UIHandler;
 
 import java.text.DecimalFormat;
@@ -28,6 +29,8 @@ public class ParametersPanel implements Panel {
 
     public ParametersPanel() {
         parametersUI = this;
+
+        register(new CloseIcon());
     }
 
     @Override

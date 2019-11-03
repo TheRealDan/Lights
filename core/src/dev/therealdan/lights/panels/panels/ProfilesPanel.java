@@ -4,9 +4,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import dev.therealdan.lights.fixtures.fixture.Profile;
 import dev.therealdan.lights.main.Lights;
+import dev.therealdan.lights.panels.Panel;
+import dev.therealdan.lights.panels.menuicons.CloseIcon;
 import dev.therealdan.lights.renderer.Renderer;
 import dev.therealdan.lights.renderer.Task;
-import dev.therealdan.lights.panels.Panel;
 import dev.therealdan.lights.ui.UIHandler;
 
 import java.util.ArrayList;
@@ -21,6 +22,10 @@ public class ProfilesPanel implements Panel {
 
     private int profileScroll = 0;
     private boolean canEditName = false;
+
+    public ProfilesPanel() {
+        register(new CloseIcon());
+    }
 
     @Override
     public boolean draw(Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {
@@ -164,7 +169,8 @@ public class ProfilesPanel implements Panel {
     public void scrolled(int amount) {
         profileScroll += amount;
         if (getProfileScroll() < 0) profileScroll = 0;
-        if (getProfileScroll() > Math.max(0, Profile.count() - (ROWS - 1))) profileScroll = Math.max(0, Profile.count() - (ROWS - 1));
+        if (getProfileScroll() > Math.max(0, Profile.count() - (ROWS - 1)))
+            profileScroll = Math.max(0, Profile.count() - (ROWS - 1));
     }
 
     private void toggleCanEditName() {

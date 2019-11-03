@@ -5,12 +5,13 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import dev.therealdan.lights.dmx.DMX;
 import dev.therealdan.lights.main.Lights;
+import dev.therealdan.lights.panels.Panel;
+import dev.therealdan.lights.panels.menuicons.CloseIcon;
 import dev.therealdan.lights.programmer.Frame;
 import dev.therealdan.lights.programmer.Programmer;
 import dev.therealdan.lights.programmer.Sequence;
 import dev.therealdan.lights.renderer.Renderer;
 import dev.therealdan.lights.renderer.Task;
-import dev.therealdan.lights.panels.Panel;
 import dev.therealdan.lights.ui.UIHandler;
 
 import java.util.ArrayList;
@@ -27,6 +28,10 @@ public class SequenceProgrammerPanel implements Panel {
 
     private String fadeMilliseconds = "";
     private long fadeTimestamp = System.currentTimeMillis();
+
+    public SequenceProgrammerPanel() {
+        register(new CloseIcon());
+    }
 
     @Override
     public boolean keyDown(int keycode) {

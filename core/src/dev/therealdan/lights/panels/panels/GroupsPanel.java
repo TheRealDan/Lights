@@ -4,10 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import dev.therealdan.lights.fixtures.Group;
 import dev.therealdan.lights.main.Lights;
+import dev.therealdan.lights.panels.Panel;
+import dev.therealdan.lights.panels.menuicons.CloseIcon;
 import dev.therealdan.lights.programmer.Programmer;
 import dev.therealdan.lights.renderer.Renderer;
 import dev.therealdan.lights.renderer.Task;
-import dev.therealdan.lights.panels.Panel;
 import dev.therealdan.lights.ui.UIHandler;
 
 import static dev.therealdan.lights.util.sorting.Sortable.Sort.NAME;
@@ -18,6 +19,7 @@ public class GroupsPanel implements Panel {
     public static int GROUPS_PER_ROW = 10;
 
     public GroupsPanel() {
+        register(new CloseIcon());
     }
 
     @Override

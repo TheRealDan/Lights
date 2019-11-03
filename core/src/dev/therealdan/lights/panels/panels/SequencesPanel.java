@@ -3,15 +3,16 @@ package dev.therealdan.lights.panels.panels;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.files.FileHandle;
-import dev.therealdan.lights.fixtures.fixture.profile.Channel;
 import dev.therealdan.lights.fixtures.Fixture;
+import dev.therealdan.lights.fixtures.fixture.profile.Channel;
 import dev.therealdan.lights.main.Lights;
+import dev.therealdan.lights.panels.Panel;
+import dev.therealdan.lights.panels.menuicons.CloseIcon;
 import dev.therealdan.lights.programmer.Frame;
 import dev.therealdan.lights.programmer.Programmer;
 import dev.therealdan.lights.programmer.Sequence;
 import dev.therealdan.lights.programmer.Task;
 import dev.therealdan.lights.renderer.Renderer;
-import dev.therealdan.lights.panels.Panel;
 import dev.therealdan.lights.ui.UIHandler;
 
 import java.util.ArrayList;
@@ -39,6 +40,8 @@ public class SequencesPanel implements Panel {
 
     public SequencesPanel() {
         sequencesUI = this;
+
+        register(new CloseIcon());
 
         FileHandle fileHandle = Gdx.files.local("Lights/Sequences/");
         if (fileHandle.exists() && fileHandle.isDirectory())
@@ -437,7 +440,8 @@ public class SequencesPanel implements Panel {
 
         if (canScrollFrames()) {
             if (amount > 0) {
-                if (getFramesScroll() < getSelectedSequence().frames().size() - MAX_ROWS) setFramesScroll(getFramesScroll() + 1);
+                if (getFramesScroll() < getSelectedSequence().frames().size() - MAX_ROWS)
+                    setFramesScroll(getFramesScroll() + 1);
             } else {
                 setFramesScroll(getFramesScroll() - 1);
                 if (getFramesScroll() < 0) setFramesScroll(0);
@@ -446,7 +450,8 @@ public class SequencesPanel implements Panel {
 
         if (canScrollTasks()) {
             if (amount > 0) {
-                if (getTasksScroll() < selectedFrames().get(0).tasks().size() - MAX_ROWS) setTasksScroll(getTasksScroll() + 1);
+                if (getTasksScroll() < selectedFrames().get(0).tasks().size() - MAX_ROWS)
+                    setTasksScroll(getTasksScroll() + 1);
             } else {
                 setTasksScroll(getTasksScroll() - 1);
                 if (getTasksScroll() < 0) setTasksScroll(0);

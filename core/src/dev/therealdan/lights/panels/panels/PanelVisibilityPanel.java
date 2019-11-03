@@ -19,7 +19,6 @@ public class PanelVisibilityPanel implements Panel {
 
     @Override
     public boolean draw(Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {
-        if (containsMouse()) PanelHandler.setSection(PanelHandler.Section.PANEL_VISIBILITY);
         boolean interacted = false;
 
         float cellHeight = 30;

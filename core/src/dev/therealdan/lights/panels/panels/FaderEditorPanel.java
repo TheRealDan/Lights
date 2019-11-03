@@ -9,7 +9,6 @@ import dev.therealdan.lights.panels.menuicons.CloseIcon;
 import dev.therealdan.lights.programmer.Sequence;
 import dev.therealdan.lights.renderer.Renderer;
 import dev.therealdan.lights.renderer.Task;
-import dev.therealdan.lights.ui.PanelHandler;
 
 import java.text.DecimalFormat;
 
@@ -29,7 +28,6 @@ public class FaderEditorPanel implements Panel {
 
     @Override
     public boolean draw(Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {
-        if (containsMouse()) PanelHandler.setSection(PanelHandler.Section.FADER_EDIT);
         boolean interacted = false;
         boolean shift = Lights.keyboard.isShift();
 

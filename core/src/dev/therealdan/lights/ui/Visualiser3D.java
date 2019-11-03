@@ -103,7 +103,7 @@ public class Visualiser3D implements Visual {
     }
 
     private void mouseSelectFixtures() {
-        if (PanelHandler.getSection().equals(PanelHandler.Section.VISUALISER3D)) {
+        if (PanelHandler.getCurrentAction().equals(PanelHandler.Action.OTHER)) {
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
                 Fixture fixture = getFixture(Gdx.input.getX(), Gdx.input.getY());
                 if (fixture != null)
@@ -161,7 +161,7 @@ public class Visualiser3D implements Visual {
         controls(Gdx.graphics.getDeltaTime());
 
         camera.update();
-        
+
         modelBatch.begin(camera);
         for (Fixture fixture : Fixture.fixtures()) {
             modelBatch.render(fixture.getModelInstances(), environment);
@@ -180,7 +180,7 @@ public class Visualiser3D implements Visual {
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
-        if (PanelHandler.getSection().equals(PanelHandler.Section.VISUALISER3D)) {
+        if (PanelHandler.getCurrentAction().equals(PanelHandler.Action.OTHER)) {
             float deltaX = -Gdx.input.getDeltaX() * degreesPerPixel;
             float deltaY = -Gdx.input.getDeltaY() * degreesPerPixel;
             camera.direction.rotate(camera.up, deltaX);

@@ -55,11 +55,6 @@ public interface Panel {
         return true;
     }
 
-    @Deprecated
-    default boolean draw(Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {
-        return false;
-    }
-
     default boolean drawBackground(Renderer renderer, float x, float y, float width, float height) {
         renderer.box(x, y, width, height, Lights.color.MEDIUM);
         return false;
@@ -70,6 +65,7 @@ public interface Panel {
         return false;
     }
 
+    // Return whether icons were interacted with
     default boolean drawMenuIcons(Renderer renderer, float x, float y, float width, float height, float menuIconWidth, float menuIconHeight, float spacing) {
         boolean interacted = false;
         int index = 0;
@@ -90,11 +86,17 @@ public interface Panel {
         }
 
         if (!interacted) drag(x, y, width, height);
-
-        return false;
+        return interacted;
     }
 
-    default boolean drawContent(Renderer renderer, float x, float y, float width, float height) {
+    // Return whether Panel was interacted with
+    default boolean drawContent(Renderer renderer, float x, float y, float width, float height, boolean interacted) {
+        return interacted;
+    }
+
+    // Return whether Panel was interacted with
+    @Deprecated
+    default boolean draw(Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {
         return false;
     }
 

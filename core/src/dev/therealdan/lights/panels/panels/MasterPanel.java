@@ -30,7 +30,6 @@ public class MasterPanel implements Panel {
 
     @Override
     public boolean draw(Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {
-        if (containsMouse()) PanelHandler.setSection(PanelHandler.Section.MASTER);
         boolean interacted = false;
 
         setHeight(MasterPanel.HEIGHT);

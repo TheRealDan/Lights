@@ -43,7 +43,6 @@ public class ConsolePanel implements Panel {
 
     @Override
     public boolean draw(Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {
-        if (containsMouse()) PanelHandler.setSection(PanelHandler.Section.CONSOLE);
         boolean interacted = false;
 
         float x = getX();

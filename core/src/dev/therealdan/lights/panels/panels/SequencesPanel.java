@@ -13,7 +13,6 @@ import dev.therealdan.lights.programmer.Programmer;
 import dev.therealdan.lights.programmer.Sequence;
 import dev.therealdan.lights.programmer.Task;
 import dev.therealdan.lights.renderer.Renderer;
-import dev.therealdan.lights.ui.PanelHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -121,7 +120,6 @@ public class SequencesPanel implements Panel {
 
     @Override
     public boolean draw(Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {
-        if (containsMouse()) PanelHandler.setSection(PanelHandler.Section.SEQUENCES);
         boolean interacted = false;
         boolean shift = Lights.keyboard.isShift();
 

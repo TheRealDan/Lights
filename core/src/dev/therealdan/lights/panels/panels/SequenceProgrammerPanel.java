@@ -105,13 +105,17 @@ public class SequenceProgrammerPanel implements Panel {
                 frame.setFadeTime(Long.parseLong(fadeMilliseconds));
             fadeMilliseconds = "";
         }
+
+        if (!PanelHandler.getCurrentAction().equals(PanelHandler.Action.PANEL_INTERACT) ||
+                PanelHandler.getLastInteract().equals(PanelHandler.byName(getName()))) {
+            setSelected(Selected.NONE);
+        }
     }
 
     @Override
     public boolean draw(Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {
         update();
 
-        if (containsMouse()) PanelHandler.setSection(PanelHandler.Section.SEQUENCE_PROGRAMMER);
         boolean interacted = false;
         boolean shift = Lights.keyboard.isShift();
 

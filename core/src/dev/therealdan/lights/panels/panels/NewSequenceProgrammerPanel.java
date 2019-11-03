@@ -7,7 +7,6 @@ import dev.therealdan.lights.panels.menuicons.CloseIcon;
 import dev.therealdan.lights.programmer.Programmer;
 import dev.therealdan.lights.renderer.Renderer;
 import dev.therealdan.lights.renderer.Task;
-import dev.therealdan.lights.ui.PanelHandler;
 
 public class NewSequenceProgrammerPanel implements Panel {
 
@@ -19,7 +18,6 @@ public class NewSequenceProgrammerPanel implements Panel {
 
     @Override
     public boolean draw(Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {
-        if (containsMouse()) PanelHandler.setSection(PanelHandler.Section.NEW_SEQUENCE_PROGRAMMER);
         boolean interacted = false;
 
         float optionsWidth = getOptionsWidth(renderer);

@@ -28,13 +28,13 @@ public class PanelHandler implements Visual {
     private static PanelHandler panelHandler;
 
     private List<Panel> panels = new ArrayList<>();
-    private Panel dragging = null;
+    private Panel lastInteract, lastDragged, dragging = null;
     private float xDifference, yDifference;
 
     private float master = 1.0f;
 
-    private Section section = Section.VISUALISER3D;
-    private long lastSet = System.currentTimeMillis();
+    private Action currentAction = Action.OTHER;
+    private long lastActionUpdate = System.currentTimeMillis();
 
     private HashMap<Integer, Sequence> sequenceStack = new HashMap<>();
     private HashMap<Sequence, Long> clear = new HashMap<>();
@@ -182,9 +182,6 @@ public class PanelHandler implements Visual {
         }
 
         if (!Lights.output.isFrozen()) output.copy(visualiser);
-
-        if (!getSection().equals(Section.SEQUENCE_PROGRAMMER))
-            SequenceProgrammerPanel.setSelected(SequenceProgrammerPanel.Selected.NONE);
     }
 
     @Override
@@ -200,12 +197,21 @@ public class PanelHandler implements Visual {
         for (Panel panel : UIs()) {
             if (panel.isVisible()) {
                 long timestamp = System.currentTimeMillis();
+
                 panel.drawBackground(renderer, panel.getX(), panel.getY(), panel.getWidth(), panel.getHeight());
                 panel.drawMenuBar(renderer, panel.getX(), panel.getY(), panel.getWidth(), Panel.MENU_HEIGHT);
-                panel.drawMenuIcons(renderer, panel.getX(), panel.getY(), panel.getWidth(), Panel.MENU_HEIGHT, MenuIcon.SIZE, MenuIcon.SIZE, (Panel.MENU_HEIGHT - MenuIcon.SIZE) / 2);
-                panel.drawContent(renderer, panel.getX(), panel.getY() - Panel.MENU_HEIGHT, panel.getWidth(), panel.getHeight() - Panel.MENU_HEIGHT);
-                panel.draw(renderer, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+                boolean interacted = panel.drawMenuIcons(renderer, panel.getX(), panel.getY(), panel.getWidth(), Panel.MENU_HEIGHT, MenuIcon.SIZE, MenuIcon.SIZE, (Panel.MENU_HEIGHT - MenuIcon.SIZE) / 2);
+                interacted = panel.drawContent(renderer, panel.getX(), panel.getY() - Panel.MENU_HEIGHT, panel.getWidth(), panel.getHeight() - Panel.MENU_HEIGHT, interacted);
+
+                if (panel.draw(renderer, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight())) interacted = true;
+
+                if (panel.containsMouse() && interacted) {
+                    setAction(Action.PANEL_INTERACT);
+                    lastInteract = panel;
+                }
+
                 renderer.draw();
+
                 TimingsPanel.set(panel.getName(), panel.getName() + " draw(): %mms %zms %ams", System.currentTimeMillis() - timestamp);
             } else {
                 TimingsPanel.clear(panel.getName());
@@ -315,33 +321,14 @@ public class PanelHandler implements Visual {
         return true;
     }
 
-    public enum Section {
-        DRAGGING,
-
-        VISUALISER3D,
-
-        PANEL_VISIBILITY,
-
-        SETTINGS, CONTROLS, DMX_INTERFACE,
-
-        PROFILES, PATCH,
-        SEQUENCES, FADER_EDIT, BUTTON_EDIT,
-
-        CONSOLE, DMX_OUTPUT,
-
-        SEQUENCE_PROGRAMMER, NEW_SEQUENCE_PROGRAMMER,
-        FIXTURES, GROUPS, COLOR_WHEEL,
-        PARAMETERS,
-
-        FROZEN,
-        ACTIVE_SEQUENCES,
-        TIMINGS,
-
-        MASTER, FADERS, BUTTONS,
+    public enum Action {
+        PANEL_INTERACT, DRAGGING_PANEL, OTHER;
     }
 
     public static void drag(Panel panel) {
-        if (PanelHandler.panelHandler.dragging == null && panel != null) {
+        if (panel == null) {
+            PanelHandler.panelHandler.lastDragged = PanelHandler.panelHandler.dragging;
+        } else if (PanelHandler.panelHandler.dragging == null) {
             PanelHandler.panelHandler.xDifference = Math.abs(panel.getX() - Gdx.input.getX());
             PanelHandler.panelHandler.yDifference = Math.abs(panel.getYString() - Gdx.input.getY());
             moveToTop(panel);
@@ -352,6 +339,14 @@ public class PanelHandler implements Visual {
 
     public static boolean isDragging() {
         return getDragging() != null;
+    }
+
+    public static Panel getLastInteract() {
+        return panelHandler.lastInteract;
+    }
+
+    public static Panel getLastDragged() {
+        return panelHandler.lastDragged;
     }
 
     public static Panel getDragging() {
@@ -426,15 +421,15 @@ public class PanelHandler implements Visual {
         return panelHandler.master;
     }
 
-    public static void setSection(Section section) {
-        panelHandler.lastSet = System.currentTimeMillis();
-        panelHandler.section = section;
+    public static void setAction(Action action) {
+        panelHandler.lastActionUpdate = System.currentTimeMillis();
+        panelHandler.currentAction = action;
     }
 
-    public static Section getSection() {
-        if (isDragging()) return Section.DRAGGING;
-        if (System.currentTimeMillis() - panelHandler.lastSet > 500)
-            panelHandler.section = Section.VISUALISER3D;
-        return panelHandler.section;
+    public static Action getCurrentAction() {
+        if (isDragging()) return Action.DRAGGING_PANEL;
+        if (System.currentTimeMillis() - panelHandler.lastActionUpdate > 500)
+            panelHandler.currentAction = Action.OTHER;
+        return panelHandler.currentAction;
     }
 }

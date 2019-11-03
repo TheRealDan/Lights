@@ -20,10 +20,7 @@ public class ButtonsPanel implements Panel {
     }
 
     @Override
-    public boolean drawContent(Renderer renderer, float x, float y, float width, float height) {
-        if (containsMouse()) PanelHandler.setSection(PanelHandler.Section.BUTTONS);
-        boolean interacted = false;
-
+    public boolean drawContent(Renderer renderer, float x, float y, float width, float height, boolean interacted) {
         float size = getWidth() / getButtonsPerRow();
 
         ButtonEditorPanel buttonEditor = (ButtonEditorPanel) PanelHandler.byName("ButtonEditor");

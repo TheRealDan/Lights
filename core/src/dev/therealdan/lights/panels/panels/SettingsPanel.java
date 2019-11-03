@@ -8,7 +8,6 @@ import dev.therealdan.lights.panels.menuicons.CloseIcon;
 import dev.therealdan.lights.renderer.Renderer;
 import dev.therealdan.lights.renderer.Task;
 import dev.therealdan.lights.settings.Setting;
-import dev.therealdan.lights.ui.PanelHandler;
 
 public class SettingsPanel implements Panel {
 
@@ -18,7 +17,6 @@ public class SettingsPanel implements Panel {
 
     @Override
     public boolean draw(Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {
-        if (containsMouse()) PanelHandler.setSection(PanelHandler.Section.SETTINGS);
         boolean interacted = false;
 
         float cellHeight = 30;

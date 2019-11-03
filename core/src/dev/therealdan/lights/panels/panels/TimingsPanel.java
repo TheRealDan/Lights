@@ -5,7 +5,6 @@ import dev.therealdan.lights.panels.Panel;
 import dev.therealdan.lights.panels.menuicons.CloseIcon;
 import dev.therealdan.lights.renderer.Renderer;
 import dev.therealdan.lights.renderer.Task;
-import dev.therealdan.lights.ui.PanelHandler;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -26,7 +25,6 @@ public class TimingsPanel implements Panel {
 
     @Override
     public boolean draw(Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {
-        if (containsMouse()) PanelHandler.setSection(PanelHandler.Section.TIMINGS);
         boolean interacted = false;
 
         float x = getX();

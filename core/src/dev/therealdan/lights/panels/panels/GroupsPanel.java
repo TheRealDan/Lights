@@ -9,7 +9,6 @@ import dev.therealdan.lights.panels.menuicons.CloseIcon;
 import dev.therealdan.lights.programmer.Programmer;
 import dev.therealdan.lights.renderer.Renderer;
 import dev.therealdan.lights.renderer.Task;
-import dev.therealdan.lights.ui.PanelHandler;
 
 import static dev.therealdan.lights.util.sorting.Sortable.Sort.NAME;
 
@@ -24,7 +23,6 @@ public class GroupsPanel implements Panel {
 
     @Override
     public boolean draw(Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {
-        if (containsMouse()) PanelHandler.setSection(PanelHandler.Section.GROUPS);
         boolean interacted = false;
 
         setWidth(GroupsPanel.WIDTH);

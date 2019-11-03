@@ -36,12 +36,10 @@ public class FrozenPanel implements Panel {
     }
 
     @Override
-    public boolean drawContent(Renderer renderer, float x, float y, float width, float height) {
-        if (containsMouse()) PanelHandler.setSection(PanelHandler.Section.FROZEN);
-
+    public boolean drawContent(Renderer renderer, float x, float y, float width, float height, boolean interacted) {
         renderer.box(x, y, width, height, Lights.color.MEDIUM, setWidth(renderer, "Press Escape to unfreeze"), Task.TextPosition.CENTER);
         drag(x, y, width, height);
-        return false;
+        return interacted;
     }
 
     @Override

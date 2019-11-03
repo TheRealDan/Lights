@@ -18,7 +18,6 @@ public class ActiveSequencesPanel implements Panel {
 
     @Override
     public boolean draw(Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {
-        if (containsMouse()) PanelHandler.setSection(PanelHandler.Section.ACTIVE_SEQUENCES);
         boolean interacted = false;
 
         float x = getX();

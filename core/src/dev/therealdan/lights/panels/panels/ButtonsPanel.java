@@ -11,11 +11,12 @@ import dev.therealdan.lights.ui.PanelHandler;
 
 public class ButtonsPanel implements Panel {
 
-    public static float WIDTH = 800;
-    public static final int PER_ROW = 10;
+    private int buttonsPerRow = 8;
 
     public ButtonsPanel() {
         register(new CloseIcon());
+
+        setWidth(800);
     }
 
     @Override
@@ -23,16 +24,14 @@ public class ButtonsPanel implements Panel {
         if (containsMouse()) PanelHandler.setSection(PanelHandler.Section.BUTTONS);
         boolean interacted = false;
 
-        setWidth(ButtonsPanel.WIDTH);
-
-        float size = getWidth() / ButtonsPanel.PER_ROW;
+        float size = getWidth() / getButtonsPerRow();
 
         ButtonEditorPanel buttonEditor = (ButtonEditorPanel) PanelHandler.byName("ButtonEditor");
 
         int topPositionToDisplay = Button.getTopPosition();
         if (buttonEditor.isEditing()) {
-            while (topPositionToDisplay % PER_ROW != 0) topPositionToDisplay++;
-            topPositionToDisplay += PER_ROW;
+            while (topPositionToDisplay % getButtonsPerRow() != 0) topPositionToDisplay++;
+            topPositionToDisplay += getButtonsPerRow();
         }
 
         for (int position = 1; position <= topPositionToDisplay; position++) {
@@ -75,5 +74,18 @@ public class ButtonsPanel implements Panel {
 
         setHeightBasedOnY(y);
         return interacted;
+    }
+
+    @Override
+    public boolean isResizeable() {
+        return true;
+    }
+
+    public void setButtonsPerRow(int buttonsPerRow) {
+        this.buttonsPerRow = buttonsPerRow;
+    }
+
+    public int getButtonsPerRow() {
+        return buttonsPerRow;
     }
 }

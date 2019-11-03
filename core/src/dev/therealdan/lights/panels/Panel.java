@@ -30,7 +30,8 @@ public interface Panel {
             setLocation(
                     Float.parseFloat(lines[0].replace("X: ", "")),
                     Float.parseFloat(lines[1].replace("Y: ", "")));
-            if (!ignoreVisibilityUI() && lines.length > 2) setVisible(Boolean.parseBoolean(lines[2].replace("Visible: ", "")));
+            if (!ignoreVisibilityUI() && lines.length > 2)
+                setVisible(Boolean.parseBoolean(lines[2].replace("Visible: ", "")));
         } else {
             if (!ignoreVisibilityUI()) setVisible(false);
         }
@@ -39,7 +40,8 @@ public interface Panel {
     default void save() {
         Gdx.files.local("Lights/UI/" + getName() + ".txt").writeString("X: " + getX() + "\r\n", false);
         Gdx.files.local("Lights/UI/" + getName() + ".txt").writeString("Y: " + getYString() + "\r\n", true);
-        if (!ignoreVisibilityUI()) Gdx.files.local("Lights/UI/" + getName() + ".txt").writeString("Visible: " + isVisible(), true);
+        if (!ignoreVisibilityUI())
+            Gdx.files.local("Lights/UI/" + getName() + ".txt").writeString("Visible: " + isVisible(), true);
     }
 
     default void scrolled(int amount) {
@@ -166,6 +168,10 @@ public interface Panel {
     }
 
     default boolean ignoreVisibilityUI() {
+        return false;
+    }
+
+    default boolean isResizeable() {
         return false;
     }
 

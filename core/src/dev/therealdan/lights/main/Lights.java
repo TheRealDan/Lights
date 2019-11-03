@@ -24,7 +24,7 @@ public class Lights extends ApplicationAdapter {
     private TheInputProcessor theInputProcessor;
 
     private Visualiser3D visualiser3D;
-    private UIHandler uiHandler;
+    private PanelHandler panelHandler;
     private ProfileEditor profileEditor;
     private FixtureEditor fixtureEditor;
 
@@ -46,7 +46,7 @@ public class Lights extends ApplicationAdapter {
         renderer = new Renderer();
         theInputProcessor = new TheInputProcessor();
 
-        uiHandler = new UIHandler();
+        panelHandler = new PanelHandler();
         visualiser3D = new Visualiser3D();
         profileEditor = new ProfileEditor();
         fixtureEditor = new FixtureEditor();
@@ -66,7 +66,7 @@ public class Lights extends ApplicationAdapter {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
         mouse.update();
-        uiHandler.update();
+        panelHandler.update();
 
         theInputProcessor.draw(renderer);
 
@@ -85,7 +85,7 @@ public class Lights extends ApplicationAdapter {
         Setting.saveToFile();
         Control.saveToFile();
 
-        uiHandler.save();
+        panelHandler.save();
         visualiser3D.save();
 
         renderer.dispose();
@@ -94,7 +94,7 @@ public class Lights extends ApplicationAdapter {
     public static void openMainView() {
         lights.theInputProcessor.clear();
         lights.theInputProcessor.add(lights.visualiser3D);
-        lights.theInputProcessor.add(lights.uiHandler);
+        lights.theInputProcessor.add(lights.panelHandler);
     }
 
     public static void openProfileEditor(Profile profile) {

@@ -9,7 +9,7 @@ import dev.therealdan.lights.panels.menuicons.CloseIcon;
 import dev.therealdan.lights.programmer.Programmer;
 import dev.therealdan.lights.renderer.Renderer;
 import dev.therealdan.lights.renderer.Task;
-import dev.therealdan.lights.ui.UIHandler;
+import dev.therealdan.lights.ui.PanelHandler;
 
 import static dev.therealdan.lights.util.sorting.Sortable.Sort.ID;
 
@@ -24,7 +24,7 @@ public class FixturesPanel implements Panel {
 
     @Override
     public boolean draw(Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {
-        if (containsMouse()) UIHandler.setSection(UIHandler.Section.FIXTURES);
+        if (containsMouse()) PanelHandler.setSection(PanelHandler.Section.FIXTURES);
         boolean interacted = false;
 
         setWidth(FixturesPanel.WIDTH);

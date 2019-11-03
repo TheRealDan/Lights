@@ -103,7 +103,7 @@ public class Visualiser3D implements Visual {
     }
 
     private void mouseSelectFixtures() {
-        if (UIHandler.getSection().equals(UIHandler.Section.VISUALISER3D)) {
+        if (PanelHandler.getSection().equals(PanelHandler.Section.VISUALISER3D)) {
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
                 Fixture fixture = getFixture(Gdx.input.getX(), Gdx.input.getY());
                 if (fixture != null)
@@ -180,7 +180,7 @@ public class Visualiser3D implements Visual {
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
-        if (UIHandler.getSection().equals(UIHandler.Section.VISUALISER3D)) {
+        if (PanelHandler.getSection().equals(PanelHandler.Section.VISUALISER3D)) {
             float deltaX = -Gdx.input.getDeltaX() * degreesPerPixel;
             float deltaY = -Gdx.input.getDeltaY() * degreesPerPixel;
             camera.direction.rotate(camera.up, deltaX);

@@ -8,7 +8,7 @@ import dev.therealdan.lights.panels.Panel;
 import dev.therealdan.lights.panels.menuicons.CloseIcon;
 import dev.therealdan.lights.renderer.Renderer;
 import dev.therealdan.lights.renderer.Task;
-import dev.therealdan.lights.ui.UIHandler;
+import dev.therealdan.lights.ui.PanelHandler;
 
 public class DMXOutputPanel implements Panel {
 
@@ -22,7 +22,7 @@ public class DMXOutputPanel implements Panel {
 
     @Override
     public boolean draw(Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {
-        if (containsMouse()) UIHandler.setSection(UIHandler.Section.DMX_OUTPUT);
+        if (containsMouse()) PanelHandler.setSection(PanelHandler.Section.DMX_OUTPUT);
         boolean interacted = false;
         boolean heightSet = false;
 

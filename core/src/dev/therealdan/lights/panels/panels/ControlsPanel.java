@@ -9,7 +9,7 @@ import dev.therealdan.lights.panels.menuicons.CloseIcon;
 import dev.therealdan.lights.renderer.Renderer;
 import dev.therealdan.lights.renderer.Task;
 import dev.therealdan.lights.settings.Control;
-import dev.therealdan.lights.ui.UIHandler;
+import dev.therealdan.lights.ui.PanelHandler;
 
 import java.util.List;
 
@@ -26,7 +26,7 @@ public class ControlsPanel implements Panel {
 
     @Override
     public boolean draw(Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {
-        if (containsMouse()) UIHandler.setSection(UIHandler.Section.CONTROLS);
+        if (containsMouse()) PanelHandler.setSection(PanelHandler.Section.CONTROLS);
         boolean interacted = false;
 
         float x = getX();

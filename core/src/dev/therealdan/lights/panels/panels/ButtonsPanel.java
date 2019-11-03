@@ -7,7 +7,7 @@ import dev.therealdan.lights.panels.Panel;
 import dev.therealdan.lights.panels.menuicons.CloseIcon;
 import dev.therealdan.lights.renderer.Renderer;
 import dev.therealdan.lights.renderer.Task;
-import dev.therealdan.lights.ui.UIHandler;
+import dev.therealdan.lights.ui.PanelHandler;
 
 public class ButtonsPanel implements Panel {
 
@@ -20,14 +20,14 @@ public class ButtonsPanel implements Panel {
 
     @Override
     public boolean drawContent(Renderer renderer, float x, float y, float width, float height) {
-        if (containsMouse()) UIHandler.setSection(UIHandler.Section.BUTTONS);
+        if (containsMouse()) PanelHandler.setSection(PanelHandler.Section.BUTTONS);
         boolean interacted = false;
 
         setWidth(ButtonsPanel.WIDTH);
 
         float size = getWidth() / ButtonsPanel.PER_ROW;
 
-        ButtonEditorPanel buttonEditor = (ButtonEditorPanel) UIHandler.byName("ButtonEditor");
+        ButtonEditorPanel buttonEditor = (ButtonEditorPanel) PanelHandler.byName("ButtonEditor");
 
         int topPositionToDisplay = Button.getTopPosition();
         if (buttonEditor.isEditing()) {

@@ -7,7 +7,7 @@ import dev.therealdan.lights.panels.Panel;
 import dev.therealdan.lights.panels.menuicons.CloseIcon;
 import dev.therealdan.lights.renderer.Renderer;
 import dev.therealdan.lights.renderer.Task;
-import dev.therealdan.lights.ui.UIHandler;
+import dev.therealdan.lights.ui.PanelHandler;
 import dev.therealdan.lights.util.Util;
 
 public class MasterPanel implements Panel {
@@ -30,7 +30,7 @@ public class MasterPanel implements Panel {
 
     @Override
     public boolean draw(Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {
-        if (containsMouse()) UIHandler.setSection(UIHandler.Section.MASTER);
+        if (containsMouse()) PanelHandler.setSection(PanelHandler.Section.MASTER);
         boolean interacted = false;
 
         setHeight(MasterPanel.HEIGHT);
@@ -45,7 +45,7 @@ public class MasterPanel implements Panel {
         drag(x, y, width, cellHeight);
         y -= cellHeight;
 
-        String currentAction = UIHandler.getMaster() > 0.0 ? "Fade to Zero" : "Fade to Max";
+        String currentAction = PanelHandler.getMaster() > 0.0 ? "Fade to Zero" : "Fade to Max";
         if (isFadeToMax()) currentAction = "Fading to Max..";
         if (isFadeToZero()) currentAction = "Fading to Zero..";
         renderer.box(x, y, width, cellHeight, Lights.color.MEDIUM, setWidth(renderer, currentAction), Task.TextPosition.CENTER);
@@ -58,15 +58,15 @@ public class MasterPanel implements Panel {
         y -= cellHeight;
 
         float height = getHeight() - cellHeight - cellHeight;
-        renderer.box(x, y, width, height, Lights.color.MEDIUM, setWidth(renderer, Util.getPercentage(UIHandler.getMaster())), Task.TextPosition.CENTER);
-        float fill = UIHandler.getMaster() * height;
+        renderer.box(x, y, width, height, Lights.color.MEDIUM, setWidth(renderer, Util.getPercentage(PanelHandler.getMaster())), Task.TextPosition.CENTER);
+        float fill = PanelHandler.getMaster() * height;
         renderer.box(x, y - height + fill, width, fill, Lights.color.BLACK);
 
         if (Lights.mouse.contains(x, y, width, height) && canInteract()) {
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
                 interacted = true;
                 float bottom = y - height + 20;
-                UIHandler.setMaster(Math.min(Math.max((Gdx.graphics.getHeight() - Gdx.input.getY() - bottom) / (y - 20 - bottom), 0), 1));
+                PanelHandler.setMaster(Math.min(Math.max((Gdx.graphics.getHeight() - Gdx.input.getY() - bottom) / (y - 20 - bottom), 0), 1));
             }
         }
 
@@ -77,11 +77,11 @@ public class MasterPanel implements Panel {
             if (percentage > 1) percentage = 1;
 
             if (isFadeToMax()) {
-                UIHandler.setMaster(startingValue + (float) percentage);
-                if (UIHandler.getMaster() == 1.0) fadeToMax = false;
+                PanelHandler.setMaster(startingValue + (float) percentage);
+                if (PanelHandler.getMaster() == 1.0) fadeToMax = false;
             } else {
-                UIHandler.setMaster(startingValue - (float) percentage);
-                if (UIHandler.getMaster() == 0.0) fadeToZero = false;
+                PanelHandler.setMaster(startingValue - (float) percentage);
+                if (PanelHandler.getMaster() == 0.0) fadeToZero = false;
             }
         }
 
@@ -95,7 +95,7 @@ public class MasterPanel implements Panel {
             return;
         }
 
-        if (UIHandler.getMaster() == 0.0) {
+        if (PanelHandler.getMaster() == 0.0) {
             fadeToMax();
         } else {
             fadeToZero();
@@ -104,14 +104,14 @@ public class MasterPanel implements Panel {
 
     public static void fadeToZero() {
         masterUI.timestamp = System.currentTimeMillis();
-        masterUI.startingValue = UIHandler.getMaster();
+        masterUI.startingValue = PanelHandler.getMaster();
         masterUI.fadeToMax = false;
         masterUI.fadeToZero = true;
     }
 
     public static void fadeToMax() {
         masterUI.timestamp = System.currentTimeMillis();
-        masterUI.startingValue = UIHandler.getMaster();
+        masterUI.startingValue = PanelHandler.getMaster();
         masterUI.fadeToMax = true;
         masterUI.fadeToZero = false;
     }

@@ -23,9 +23,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class UIHandler implements Visual {
+public class PanelHandler implements Visual {
 
-    private static UIHandler uiHandler;
+    private static PanelHandler panelHandler;
 
     private List<Panel> panels = new ArrayList<>();
     private Panel dragging = null;
@@ -45,8 +45,8 @@ public class UIHandler implements Visual {
     private CondensedFrame targetCondensedFrame, currentCondensedFrame, previousCondensedFrame;
     private long condensedFrameTimestamp = System.currentTimeMillis();
 
-    public UIHandler() {
-        uiHandler = this;
+    public PanelHandler() {
+        panelHandler = this;
 
         // Menu
         panels.add(new PanelVisibilityPanel());
@@ -341,13 +341,13 @@ public class UIHandler implements Visual {
     }
 
     public static void drag(Panel panel) {
-        if (UIHandler.uiHandler.dragging == null && panel != null) {
-            UIHandler.uiHandler.xDifference = Math.abs(panel.getX() - Gdx.input.getX());
-            UIHandler.uiHandler.yDifference = Math.abs(panel.getYString() - Gdx.input.getY());
+        if (PanelHandler.panelHandler.dragging == null && panel != null) {
+            PanelHandler.panelHandler.xDifference = Math.abs(panel.getX() - Gdx.input.getX());
+            PanelHandler.panelHandler.yDifference = Math.abs(panel.getYString() - Gdx.input.getY());
             moveToTop(panel);
         }
 
-        UIHandler.uiHandler.dragging = panel;
+        PanelHandler.panelHandler.dragging = panel;
     }
 
     public static boolean isDragging() {
@@ -355,7 +355,7 @@ public class UIHandler implements Visual {
     }
 
     public static Panel getDragging() {
-        return uiHandler.dragging;
+        return panelHandler.dragging;
     }
 
     public static Panel byName(String name) {
@@ -367,23 +367,23 @@ public class UIHandler implements Visual {
     }
 
     public static void clearSequence(int priority) {
-        uiHandler.sequenceStack.remove(priority);
+        panelHandler.sequenceStack.remove(priority);
     }
 
     public static void setSequence(int priority, Sequence sequence) {
-        uiHandler.sequenceStack.put(priority, sequence);
+        panelHandler.sequenceStack.put(priority, sequence);
     }
 
     public static boolean contains(int priority) {
-        return uiHandler.sequenceStack.containsKey(priority);
+        return panelHandler.sequenceStack.containsKey(priority);
     }
 
     public static Sequence getSequence(int priority) {
-        return uiHandler.sequenceStack.getOrDefault(priority, null);
+        return panelHandler.sequenceStack.getOrDefault(priority, null);
     }
 
     public static int getPriority(Sequence sequence) {
-        for (int priority : uiHandler.sequenceStack.keySet())
+        for (int priority : panelHandler.sequenceStack.keySet())
             if (sequence.equals(getSequence(priority)))
                 return priority;
 
@@ -399,42 +399,42 @@ public class UIHandler implements Visual {
     }
 
     public static void moveToTop(Panel panel) {
-        UIHandler.uiHandler.panels.remove(panel);
-        UIHandler.uiHandler.panels.add(panel);
+        PanelHandler.panelHandler.panels.remove(panel);
+        PanelHandler.panelHandler.panels.add(panel);
     }
 
     public static List<Panel> UIs() {
-        return new ArrayList<>(uiHandler.panels);
+        return new ArrayList<>(panelHandler.panels);
     }
 
     public static long getTempo() {
-        return uiHandler.tempo;
+        return panelHandler.tempo;
     }
 
     public static int getTopPriority() {
         int highest = 0;
-        for (int priority : uiHandler.sequenceStack.keySet())
+        for (int priority : panelHandler.sequenceStack.keySet())
             if (priority > highest) highest = priority;
         return highest;
     }
 
     public static void setMaster(float master) {
-        uiHandler.master = Math.min(Math.max(master, 0), 1);
+        panelHandler.master = Math.min(Math.max(master, 0), 1);
     }
 
     public static float getMaster() {
-        return uiHandler.master;
+        return panelHandler.master;
     }
 
     public static void setSection(Section section) {
-        uiHandler.lastSet = System.currentTimeMillis();
-        uiHandler.section = section;
+        panelHandler.lastSet = System.currentTimeMillis();
+        panelHandler.section = section;
     }
 
     public static Section getSection() {
         if (isDragging()) return Section.DRAGGING;
-        if (System.currentTimeMillis() - uiHandler.lastSet > 500)
-            uiHandler.section = Section.VISUALISER3D;
-        return uiHandler.section;
+        if (System.currentTimeMillis() - panelHandler.lastSet > 500)
+            panelHandler.section = Section.VISUALISER3D;
+        return panelHandler.section;
     }
 }

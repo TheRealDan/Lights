@@ -7,7 +7,7 @@ import dev.therealdan.lights.programmer.Programmer;
 import dev.therealdan.lights.renderer.Renderer;
 import dev.therealdan.lights.renderer.Task;
 import dev.therealdan.lights.panels.Panel;
-import dev.therealdan.lights.ui.UIHandler;
+import dev.therealdan.lights.ui.PanelHandler;
 
 public class ColorWheelPanel implements Panel {
 
@@ -19,7 +19,7 @@ public class ColorWheelPanel implements Panel {
     @Override
     public boolean draw(Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {
         Panel.super.draw(renderer, X, Y, WIDTH, HEIGHT);
-        if (containsMouse()) UIHandler.setSection(UIHandler.Section.COLOR_WHEEL);
+        if (containsMouse()) PanelHandler.setSection(PanelHandler.Section.COLOR_WHEEL);
         boolean interacted = false;
 
 //        List<Channel.Type> channelTypes = Programmer.getSelectedChannelTypes();

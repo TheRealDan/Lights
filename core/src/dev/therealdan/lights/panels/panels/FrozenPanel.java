@@ -6,7 +6,7 @@ import dev.therealdan.lights.panels.Panel;
 import dev.therealdan.lights.panels.menuicons.CloseIcon;
 import dev.therealdan.lights.renderer.Renderer;
 import dev.therealdan.lights.renderer.Task;
-import dev.therealdan.lights.ui.UIHandler;
+import dev.therealdan.lights.ui.PanelHandler;
 
 public class FrozenPanel implements Panel {
 
@@ -37,7 +37,7 @@ public class FrozenPanel implements Panel {
 
     @Override
     public boolean drawContent(Renderer renderer, float x, float y, float width, float height) {
-        if (containsMouse()) UIHandler.setSection(UIHandler.Section.FROZEN);
+        if (containsMouse()) PanelHandler.setSection(PanelHandler.Section.FROZEN);
 
         renderer.box(x, y, width, height, Lights.color.MEDIUM, setWidth(renderer, "Press Escape to unfreeze"), Task.TextPosition.CENTER);
         drag(x, y, width, height);

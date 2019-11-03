@@ -10,7 +10,7 @@ import dev.therealdan.lights.panels.Panel;
 import dev.therealdan.lights.panels.menuicons.CloseIcon;
 import dev.therealdan.lights.renderer.Renderer;
 import dev.therealdan.lights.renderer.Task;
-import dev.therealdan.lights.ui.UIHandler;
+import dev.therealdan.lights.ui.PanelHandler;
 import dev.therealdan.lights.util.Util;
 
 import java.util.ArrayList;
@@ -104,7 +104,7 @@ public class FadersPanel implements Panel {
 
     @Override
     public boolean draw(Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {
-        if (containsMouse()) UIHandler.setSection(UIHandler.Section.FADERS);
+        if (containsMouse()) PanelHandler.setSection(PanelHandler.Section.FADERS);
         boolean interacted = false;
 
         setHeight(FadersPanel.HEIGHT);

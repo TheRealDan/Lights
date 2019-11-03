@@ -5,7 +5,7 @@ import dev.therealdan.lights.panels.panels.ConsolePanel;
 import dev.therealdan.lights.renderer.Renderer;
 import dev.therealdan.lights.renderer.Task;
 import dev.therealdan.lights.settings.Setting;
-import dev.therealdan.lights.ui.UIHandler;
+import dev.therealdan.lights.ui.PanelHandler;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -63,7 +63,7 @@ public class DMX {
 
     public int get(int channel) {
         float value = pget(channel);
-        return (int) (value * UIHandler.getMaster());
+        return (int) (value * PanelHandler.getMaster());
     }
 
     private int pget(int channel) {

@@ -12,7 +12,7 @@ import dev.therealdan.lights.programmer.Programmer;
 import dev.therealdan.lights.programmer.Sequence;
 import dev.therealdan.lights.renderer.Renderer;
 import dev.therealdan.lights.renderer.Task;
-import dev.therealdan.lights.ui.UIHandler;
+import dev.therealdan.lights.ui.PanelHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -111,7 +111,7 @@ public class SequenceProgrammerPanel implements Panel {
     public boolean draw(Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {
         update();
 
-        if (containsMouse()) UIHandler.setSection(UIHandler.Section.SEQUENCE_PROGRAMMER);
+        if (containsMouse()) PanelHandler.setSection(PanelHandler.Section.SEQUENCE_PROGRAMMER);
         boolean interacted = false;
         boolean shift = Lights.keyboard.isShift();
 

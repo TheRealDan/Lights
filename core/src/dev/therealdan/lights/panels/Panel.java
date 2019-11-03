@@ -6,7 +6,7 @@ import com.badlogic.gdx.files.FileHandle;
 import dev.therealdan.lights.main.Lights;
 import dev.therealdan.lights.renderer.Renderer;
 import dev.therealdan.lights.renderer.Task;
-import dev.therealdan.lights.ui.UIHandler;
+import dev.therealdan.lights.ui.PanelHandler;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -183,14 +183,14 @@ public interface Panel {
 
     default boolean drag(float x, float y, float width, float height) {
         if (canInteract() && isVisible() && Lights.mouse.contains(x, y, width, height) && Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
-            UIHandler.drag(this);
+            PanelHandler.drag(this);
             return true;
         }
         return false;
     }
 
     default boolean isDragging() {
-        return UIHandler.getDragging().equals(this);
+        return PanelHandler.getDragging().equals(this);
     }
 
     default void register(MenuIcon menuIcon) {

@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import dev.therealdan.lights.programmer.Sequence;
-import dev.therealdan.lights.ui.UIHandler;
+import dev.therealdan.lights.ui.PanelHandler;
 import dev.therealdan.lights.panels.panels.SequencesPanel;
 import dev.therealdan.lights.util.sorting.Sortable;
 
@@ -38,7 +38,7 @@ public class Button implements Sortable {
     public void press() {
         for (Sequence sequence : sequences()) {
             sequence.resetLastFrame();
-            UIHandler.setSequence(getPriority(sequence), sequence);
+            PanelHandler.setSequence(getPriority(sequence), sequence);
         }
     }
 

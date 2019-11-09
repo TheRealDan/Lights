@@ -212,7 +212,7 @@ public class FixtureEditor implements Visual {
     }
 
     public void setAddress(int address) {
-        this.address = address;
+        this.address = Math.min(address, 512);
     }
 
     public void setCount(int count) {

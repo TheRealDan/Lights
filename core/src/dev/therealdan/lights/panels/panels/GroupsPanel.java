@@ -14,33 +14,26 @@ import static dev.therealdan.lights.util.sorting.Sortable.Sort.NAME;
 
 public class GroupsPanel implements Panel {
 
-    public static float WIDTH = 800;
-    public static int GROUPS_PER_ROW = 10;
+    private int groupsPerRow = 8;
 
     public GroupsPanel() {
         register(new CloseIcon());
+
+        setWidth(800);
+        setHeight(200);
     }
 
     @Override
-    public boolean draw(Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {
-        boolean interacted = false;
+    public boolean drawContent(Renderer renderer, float x, float y, float width, float height, boolean interacted) {
+        int groups = Group.count();
+        while (groups % getGroupsPerRow() != 0) groups++;
 
-        setWidth(GroupsPanel.WIDTH);
-
-        float cellHeight = 30;
-        float cellSize = GroupsPanel.WIDTH / GroupsPanel.GROUPS_PER_ROW;
-
-        float x = getX();
-        float y = getY();
-        float width = getWidth();
-
-        renderer.box(x, y, width, cellHeight, Lights.color.DARK_BLUE, setWidth(renderer, getFriendlyName()), Task.TextPosition.CENTER);
-        drag(x, y, width, cellHeight);
-        y -= cellHeight;
+        float groupWidth = width / getGroupsPerRow();
+        float groupHeight = height / (groups / getGroupsPerRow());
 
         for (Group group : Group.groups(NAME)) {
-            renderer.box(x, y, cellSize, cellSize, Programmer.isSelected(group) ? Lights.color.DARK_RED : Lights.color.MEDIUM, setWidth(renderer, group.getName()), Task.TextPosition.CENTER);
-            if (Lights.mouse.contains(x, y, cellSize, cellSize) && canInteract()) {
+            renderer.box(x, y, groupWidth, groupHeight, Programmer.isSelected(group) ? Lights.color.DARK_RED : Lights.color.MEDIUM, setWidth(renderer, group.getName()), Task.TextPosition.CENTER);
+            if (Lights.mouse.contains(x, y, groupWidth, groupHeight) && canInteract()) {
                 interacted = true;
                 if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(500)) {
                     if (Programmer.isSelected(group)) {
@@ -50,16 +43,27 @@ public class GroupsPanel implements Panel {
                     }
                 }
             }
-            x += cellSize;
+            x += groupWidth;
 
-            if (x + cellSize > getX() + getWidth()) {
+            if (x + groupWidth > getX() + width) {
                 x = getX();
-                y -= cellSize;
+                y -= groupHeight;
             }
         }
-        y -= cellSize;
 
-        setHeightBasedOnY(y);
         return interacted;
+    }
+
+    @Override
+    public boolean isResizeable() {
+        return true;
+    }
+
+    public void setGroupsPerRow(int groupsPerRow) {
+        this.groupsPerRow = groupsPerRow;
+    }
+
+    public int getGroupsPerRow() {
+        return groupsPerRow;
     }
 }

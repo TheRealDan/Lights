@@ -34,6 +34,10 @@ public interface MenuIcon {
         return getClass().getSimpleName();
     }
 
+    default boolean isVisible() {
+        return true;
+    }
+
     static float getSpacing() {
         return (Panel.MENU_HEIGHT - SIZE) / 2;
     }

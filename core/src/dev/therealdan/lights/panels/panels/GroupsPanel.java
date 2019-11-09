@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import dev.therealdan.lights.fixtures.Group;
 import dev.therealdan.lights.main.Lights;
 import dev.therealdan.lights.panels.Panel;
+import dev.therealdan.lights.panels.menuicons.AddGroupIcon;
 import dev.therealdan.lights.panels.menuicons.CloseIcon;
 import dev.therealdan.lights.programmer.Programmer;
 import dev.therealdan.lights.renderer.Renderer;
@@ -18,6 +19,7 @@ public class GroupsPanel implements Panel {
 
     public GroupsPanel() {
         register(new CloseIcon());
+        register(new AddGroupIcon());
 
         setWidth(800);
         setHeight(200);

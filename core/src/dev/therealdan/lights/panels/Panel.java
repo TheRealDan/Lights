@@ -80,6 +80,7 @@ public interface Panel {
         float mx = x + width;
         float my = y - spacing;
         for (MenuIcon menuIcon : getMenuIcons()) {
+            if (!menuIcon.isVisible()) continue;
             boolean hover = false, click = false;
             mx -= spacing + menuIconWidth;
             if (Lights.mouse.contains(mx, my, menuIconWidth, menuIconHeight) && canInteract()) {

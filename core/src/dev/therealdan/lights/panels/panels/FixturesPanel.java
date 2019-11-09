@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import dev.therealdan.lights.fixtures.Fixture;
 import dev.therealdan.lights.main.Lights;
 import dev.therealdan.lights.panels.Panel;
+import dev.therealdan.lights.panels.menuicons.AddFixtureIcon;
 import dev.therealdan.lights.panels.menuicons.CloseIcon;
 import dev.therealdan.lights.programmer.Programmer;
 import dev.therealdan.lights.renderer.Renderer;
@@ -18,23 +19,10 @@ public class FixturesPanel implements Panel {
 
     public FixturesPanel() {
         register(new CloseIcon());
+        register(new AddFixtureIcon());
 
         setWidth(800);
         setHeight(200);
-    }
-
-    @Override
-    public boolean drawMenuIcons(Renderer renderer, float x, float y, float width, float height, float menuIconWidth, float menuIconHeight, float spacing, boolean interacted) {
-        interacted = Panel.super.drawMenuIcons(renderer, x, y, width, height, menuIconWidth, menuIconHeight, spacing, interacted);
-        if (!interacted) {
-            if (Lights.mouse.contains(x, y, width, height)) {
-                if (Lights.mouse.rightClicked()) {
-                    interacted = true;
-                    Lights.openFixtureEditor();
-                }
-            }
-        }
-        return interacted;
     }
 
     @Override

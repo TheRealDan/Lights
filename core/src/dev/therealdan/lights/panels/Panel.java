@@ -173,7 +173,7 @@ public interface Panel {
         set(getName() + "_MIN_WIDTH", width);
     }
 
-    default void setMinimumHEight(float height) {
+    default void setMinimumHeight(float height) {
         set(getName() + "_MIN_HEIGHT", height);
     }
 

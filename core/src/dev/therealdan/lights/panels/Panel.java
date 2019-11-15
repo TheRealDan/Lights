@@ -213,6 +213,11 @@ public interface Panel {
         }
     }
 
+    default boolean canInteract(boolean interacted) {
+        if (interacted) setAllowInteract(false);
+        return canInteract();
+    }
+
     default boolean canInteract() {
         return allowInteract.contains(getName());
     }

@@ -427,6 +427,10 @@ public class PanelHandler implements Visual {
         return -1;
     }
 
+    public static int countSeqeunces() {
+        return panelHandler.sequenceStack.size();
+    }
+
     public static List<Sequence> getSequences() {
         List<Sequence> sequences = new ArrayList<>();
         for (int priority = 0; priority <= getTopPriority(); priority++)

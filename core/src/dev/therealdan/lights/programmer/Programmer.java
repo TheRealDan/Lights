@@ -1,8 +1,8 @@
 package dev.therealdan.lights.programmer;
 
-import dev.therealdan.lights.fixtures.fixture.profile.Channel;
 import dev.therealdan.lights.fixtures.Fixture;
 import dev.therealdan.lights.fixtures.Group;
+import dev.therealdan.lights.fixtures.fixture.profile.Channel;
 import dev.therealdan.lights.panels.panels.SequencesPanel;
 
 import java.util.ArrayList;
@@ -83,6 +83,14 @@ public class Programmer {
         selectedFrames.clear();
     }
 
+    public static int countSelectedGroups() {
+        int count = 0;
+        for (Group group : Group.groups())
+            if (isSelected(group))
+                count++;
+        return count;
+    }
+
     public static int countSelectedFixtures() {
         return selectedFixtures.size();
     }
@@ -144,6 +152,14 @@ public class Programmer {
     public static Frame getFirstSelectedFrame() {
         if (countSelectedFrames() > 0) return getSelectedFrames().get(0);
         return null;
+    }
+
+    public static List<Group> getSelectedGroups() {
+        List<Group> groups = new ArrayList<>();
+        for (Group group : Group.groups())
+            if (isSelected(group))
+                groups.add(group);
+        return groups;
     }
 
     public static List<Fixture> getSelectedFixtures() {

@@ -7,7 +7,6 @@ import dev.therealdan.lights.main.Lights;
 import dev.therealdan.lights.panels.Panel;
 import dev.therealdan.lights.panels.menuicons.CloseIcon;
 import dev.therealdan.lights.renderer.Renderer;
-import dev.therealdan.lights.renderer.Task;
 
 import java.util.ArrayList;
 
@@ -24,27 +23,20 @@ public class ProfilesPanel implements Panel {
 
     public ProfilesPanel() {
         register(new CloseIcon());
+
+        setMinimumWidth(200);
+        setMinimumHeight(7 * 30);
     }
 
     @Override
-    public boolean draw(Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {
-        boolean interacted = false;
-        boolean shift = Lights.keyboard.isShift();
+    public boolean drawContent(Renderer renderer, float x, float y, float width, float height, boolean interacted) {
+        setTitle("Profiles: " + Profile.count());
 
-        // PROFILES: #
+        if (hasSelectedProfile()) {
+            width /= 2;
+        }
 
-        float x = getX();
-        float y = getY();
-        float profilesWidth = renderer.getWidth("Profiles: " + Profile.count()) + 10;
         float cellHeight = 30;
-
-        for (Profile profile : Profile.profiles())
-            profilesWidth = Math.max(profilesWidth, renderer.getWidth(profile.getName()) + 25);
-
-        renderer.box(x, y, getWidth(), getHeight(), Lights.color.DARK);
-        renderer.box(x, y, profilesWidth, cellHeight, Lights.color.DARK_BLUE, "Profiles: " + Profile.count(), Task.TextPosition.CENTER);
-        drag(x, y, profilesWidth, cellHeight);
-        y -= cellHeight;
 
         int i = 0;
         boolean display = false;
@@ -53,8 +45,8 @@ public class ProfilesPanel implements Panel {
             if (current == getProfileScroll()) display = true;
             current++;
             if (display) {
-                renderer.box(x, y, profilesWidth, cellHeight, profile.equals(getSelectedProfile()) ? Lights.color.DARK_GREEN : Lights.color.MEDIUM, setWidth(renderer, profile.getName()));
-                if (Lights.mouse.contains(x, y, profilesWidth, cellHeight) && canInteract()) {
+                renderer.box(x, y, width, cellHeight, profile.equals(getSelectedProfile()) ? Lights.color.DARK_GREEN : Lights.color.MEDIUM, profile.getName());
+                if (Lights.mouse.contains(x, y, width, cellHeight) && canInteract(interacted)) {
                     interacted = true;
                     if (Lights.mouse.leftClicked()) {
                         select(profile);
@@ -65,8 +57,8 @@ public class ProfilesPanel implements Panel {
             }
         }
 
-        renderer.box(x, y, profilesWidth, cellHeight, Lights.color.MEDIUM, Lights.color.GREEN, "Add New");
-        if (Lights.mouse.contains(x, y, profilesWidth, cellHeight) && canInteract()) {
+        renderer.box(x, y, width, cellHeight, Lights.color.MEDIUM, Lights.color.GREEN, "Add New");
+        if (Lights.mouse.contains(x, y, width, cellHeight) && canInteract(interacted)) {
             interacted = true;
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(500)) {
                 Profile newProfile = new Profile("New Profile", new ArrayList<>(), new ArrayList<>());
@@ -78,62 +70,51 @@ public class ProfilesPanel implements Panel {
 
         while (++i < ROWS) y -= cellHeight;
 
-        setHeightBasedOnY(y);
-        if (!hasSelectedProfile()) {
-            setWidth(profilesWidth);
-            return interacted;
-        }
-
         // PROFILE OPTIONS
 
-        float optionsWidth = 200;
+        if (!hasSelectedProfile()) return interacted;
 
-        x += profilesWidth;
-        y = getY();
-        renderer.box(x, y, optionsWidth, cellHeight, Lights.color.DARK_BLUE, "Profile Options", Task.TextPosition.CENTER);
-        drag(x, y, optionsWidth, cellHeight);
-        y -= cellHeight;
+        x += width;
+        y = getY() - cellHeight;
 
-        renderer.box(x, y, optionsWidth, cellHeight, canEditName() ? Lights.color.DARK_RED : Lights.color.MEDIUM, "Name: " + getSelectedProfile().getName());
-        if (Lights.mouse.contains(x, y, optionsWidth, cellHeight) && canInteract()) {
+        renderer.box(x, y, width, cellHeight, canEditName() ? Lights.color.DARK_RED : Lights.color.MEDIUM, "Name: " + getSelectedProfile().getName());
+        if (Lights.mouse.contains(x, y, width, cellHeight) && canInteract(interacted)) {
             interacted = true;
             if (Lights.mouse.leftClicked(500)) toggleCanEditName();
         }
         y -= cellHeight;
 
-        renderer.box(x, y, optionsWidth, cellHeight, Lights.color.MEDIUM, "Physical Channels: " + getSelectedProfile().getPhysicalChannels());
-        if (Lights.mouse.contains(x, y, optionsWidth, cellHeight) && canInteract()) interacted = true;
+        renderer.box(x, y, width, cellHeight, Lights.color.MEDIUM, "Physical Channels: " + getSelectedProfile().getPhysicalChannels());
+        if (Lights.mouse.contains(x, y, width, cellHeight) && canInteract(interacted)) interacted = true;
         y -= cellHeight;
 
-        renderer.box(x, y, optionsWidth, cellHeight, Lights.color.MEDIUM, "Virtual Channels: " + getSelectedProfile().getVirtualChannels());
-        if (Lights.mouse.contains(x, y, optionsWidth, cellHeight) && canInteract()) interacted = true;
+        renderer.box(x, y, width, cellHeight, Lights.color.MEDIUM, "Virtual Channels: " + getSelectedProfile().getVirtualChannels());
+        if (Lights.mouse.contains(x, y, width, cellHeight) && canInteract(interacted)) interacted = true;
         y -= cellHeight;
 
-        renderer.box(x, y, optionsWidth, cellHeight, Lights.color.MEDIUM, "Model: " + getSelectedProfile().countModels());
-        if (Lights.mouse.contains(x, y, optionsWidth, cellHeight) && canInteract()) interacted = true;
+        renderer.box(x, y, width, cellHeight, Lights.color.MEDIUM, "Model: " + getSelectedProfile().countModels());
+        if (Lights.mouse.contains(x, y, width, cellHeight) && canInteract(interacted)) interacted = true;
         y -= cellHeight;
 
-        renderer.box(x, y, optionsWidth, cellHeight, Lights.color.MEDIUM, Lights.color.YELLOW, "Advanced");
-        if (Lights.mouse.contains(x, y, optionsWidth, cellHeight) && canInteract()) {
+        renderer.box(x, y, width, cellHeight, Lights.color.MEDIUM, Lights.color.YELLOW, "Advanced");
+        if (Lights.mouse.contains(x, y, width, cellHeight) && canInteract(interacted)) {
             interacted = true;
             if (Lights.mouse.leftClicked()) Lights.openProfileEditor(getSelectedProfile());
         }
         y -= cellHeight;
 
-        renderer.box(x, y, optionsWidth, cellHeight, Lights.color.MEDIUM, Lights.color.RED, "Delete");
-        if (Lights.mouse.contains(x, y, optionsWidth, cellHeight) && canInteract()) {
+        renderer.box(x, y, width, cellHeight, Lights.color.MEDIUM, Lights.color.RED, "Delete");
+        if (Lights.mouse.contains(x, y, width, cellHeight) && canInteract(interacted)) {
             interacted = true;
             if (Lights.mouse.leftClicked()) {
-                if (shift) {
+                if (Lights.keyboard.isShift()) {
                     Profile.delete(getSelectedProfile());
                     select(null);
                     return interacted;
                 }
             }
         }
-        y -= cellHeight;
 
-        setWidth(profilesWidth + optionsWidth);
         return interacted;
     }
 
@@ -193,5 +174,10 @@ public class ProfilesPanel implements Panel {
 
     private Profile getSelectedProfile() {
         return selectedProfile;
+    }
+
+    @Override
+    public boolean isResizeable() {
+        return true;
     }
 }

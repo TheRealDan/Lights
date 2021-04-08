@@ -34,6 +34,9 @@ allprojects {
         google()
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
         maven { url "https://oss.sonatype.org/content/repositories/releases/" }
+        flatDir {
+            dirs '..\\lib'
+        }
     }
 }
 
@@ -47,6 +50,7 @@ project(":desktop") {
         api "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
         api "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
         api "com.fazecast:jSerialComm:2.2.0"
+        implementation name: 'OpenDmx'
     }
 }
 
@@ -57,5 +61,6 @@ project(":core") {
     dependencies {
         api "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
         api "com.fazecast:jSerialComm:2.2.0"
+        implementation name: 'OpenDmx'
     }
 }

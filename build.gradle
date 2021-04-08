@@ -10,14 +10,14 @@ buildscript {
         google()
     }
     dependencies {
-        
 
+
+        }
     }
-}
 
 allprojects {
 
-    version = '1.0'
+    version = 'latest'
     ext {
         appName = "Lights"
         gdxVersion = '1.9.10'

@@ -9,6 +9,6 @@ FOR /f "tokens=2 delims=-" %%a in ("%describe%") do (SET build=%%a)
 FOR /f "tokens=3 delims=-" %%a in ("%describe%") do (SET hash=%%a)
 
 CD "desktop/build/libs"
-COPY "desktop-latest.jar" "Lights %tag%.%build%-%hash%.jar"
+COPY "desktop-latest.jar" "Lights %tag%.%build%.jar"
 
 PAUSE

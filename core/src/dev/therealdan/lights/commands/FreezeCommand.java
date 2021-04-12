@@ -1,15 +1,21 @@
 package dev.therealdan.lights.commands;
 
-import dev.therealdan.lights.main.Lights;
+import dev.therealdan.lights.dmx.Output;
 import dev.therealdan.lights.panels.panels.ConsolePanel;
 
 public class FreezeCommand implements Command {
+
+    private Output _output;
+
+    public FreezeCommand(Output output) {
+        _output = output;
+    }
 
     @Override
     public boolean onCommand(ConsolePanel console, String command, String[] args) {
         if (!command.equalsIgnoreCase(getCommand())) return false;
 
-        Lights.output.toggleFreeze();
+        _output.toggleFreeze();
 
         return true;
     }

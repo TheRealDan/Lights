@@ -5,10 +5,12 @@ import com.badlogic.gdx.Input;
 import dev.therealdan.lights.controllers.Button;
 import dev.therealdan.lights.controllers.Fader;
 import dev.therealdan.lights.dmx.DMX;
+import dev.therealdan.lights.dmx.Output;
 import dev.therealdan.lights.fixtures.Fixture;
 import dev.therealdan.lights.fixtures.Group;
 import dev.therealdan.lights.fixtures.fixture.Profile;
-import dev.therealdan.lights.main.Lights;
+import dev.therealdan.lights.interfaces.CustomSerialInterface;
+import dev.therealdan.lights.interfaces.DMXInterface;
 import dev.therealdan.lights.main.Mouse;
 import dev.therealdan.lights.main.Theme;
 import dev.therealdan.lights.panels.MenuIcon;
@@ -34,6 +36,7 @@ public class PanelHandler implements Visual {
     private SettingsStore _settingsStore;
     private ControlsStore _controlsStore;
     private Mouse _mouse;
+    private Output _output;
 
     private static PanelHandler panelHandler;
 
@@ -57,10 +60,11 @@ public class PanelHandler implements Visual {
     private CondensedFrame targetCondensedFrame, currentCondensedFrame, previousCondensedFrame;
     private long condensedFrameTimestamp = System.currentTimeMillis();
 
-    public PanelHandler(SettingsStore settingsStore, ControlsStore controlsStore, Mouse mouse, Theme theme) {
+    public PanelHandler(SettingsStore settingsStore, ControlsStore controlsStore, Mouse mouse, Theme theme, Output output) {
         _settingsStore = settingsStore;
         _controlsStore = controlsStore;
         _mouse = mouse;
+        _output = output;
 
         panelHandler = this;
 
@@ -72,7 +76,10 @@ public class PanelHandler implements Visual {
         // Settings
         panels.add(new SettingsPanel(settingsStore));
         panels.add(new ControlsPanel(controlsStore));
-        panels.add(new DMXInterfacePanel());
+
+        for (DMXInterface dmxInterface : output.getDMXInterfaces())
+            if (dmxInterface instanceof CustomSerialInterface)
+                panels.add(new DMXInterfacePanel((CustomSerialInterface) dmxInterface));
 
         // Setup
         panels.add(new ProfilesPanel());
@@ -91,7 +98,7 @@ public class PanelHandler implements Visual {
         panels.add(new ButtonEditorPanel());
 
         // Util
-        panels.add(new ConsolePanel(settingsStore, theme));
+        panels.add(new ConsolePanel(settingsStore, theme, output));
         panels.add(new DMXOutputPanel(settingsStore));
 
         // Programmer
@@ -102,7 +109,7 @@ public class PanelHandler implements Visual {
         panels.add(new ParametersPanel());
 
         // Info
-        panels.add(new FrozenPanel());
+        panels.add(new FrozenPanel(output));
         panels.add(new ActiveSequencesPanel());
         panels.add(new TimingsPanel());
 
@@ -199,7 +206,7 @@ public class PanelHandler implements Visual {
             }
         }
 
-        if (!Lights.output.isFrozen()) output.copy(visualiser);
+        if (!_output.isFrozen()) output.copy(visualiser);
     }
 
     @Override
@@ -283,7 +290,7 @@ public class PanelHandler implements Visual {
             lastTempo = System.currentTimeMillis();
         }
 
-        if (Input.Keys.ESCAPE == keycode) Lights.output.toggleFreeze();
+        if (Input.Keys.ESCAPE == keycode) _output.toggleFreeze();
 
         for (Panel panel : UIs()) {
             if (panel.isVisible() && _mouse.within(panel) && panel.canInteract()) {

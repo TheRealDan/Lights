@@ -3,6 +3,7 @@ package dev.therealdan.lights.panels.panels;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import dev.therealdan.lights.commands.*;
+import dev.therealdan.lights.dmx.Output;
 import dev.therealdan.lights.main.Mouse;
 import dev.therealdan.lights.main.Theme;
 import dev.therealdan.lights.panels.Panel;
@@ -33,7 +34,7 @@ public class ConsolePanel implements Panel {
     private boolean commandHistoryActive = false;
     private String input = "";
 
-    public ConsolePanel(SettingsStore settingsStore, Theme theme) {
+    public ConsolePanel(SettingsStore settingsStore, Theme theme, Output output) {
         _theme = theme;
 
         console = this;
@@ -41,7 +42,7 @@ public class ConsolePanel implements Panel {
         register(new HelpCommand());
         register(new ClearCommand());
         register(new ChannelCommand());
-        register(new FreezeCommand());
+        register(new FreezeCommand(output));
         register(new SettingsCommand(settingsStore));
 
         register(new CloseIcon());

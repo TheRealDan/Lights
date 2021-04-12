@@ -19,8 +19,7 @@ public class Lights extends ApplicationAdapter {
     private ControlsStore _controlsStore;
     private Mouse _mouse;
     private Renderer _renderer;
-
-    public static Output output;
+    private Output _output;
 
     private TheInputProcessor theInputProcessor;
 
@@ -37,20 +36,17 @@ public class Lights extends ApplicationAdapter {
         _controlsStore = new ControlsStore();
         _mouse = new Mouse();
         _renderer = new Renderer();
-
-        output = new Output(_settingsStore);
+        _output = new Output(_settingsStore);
 
         theInputProcessor = new TheInputProcessor();
 
-        panelHandler = new PanelHandler(_settingsStore, _controlsStore, _mouse, _renderer.getTheme());
+        panelHandler = new PanelHandler(_settingsStore, _controlsStore, _mouse, _renderer.getTheme(), _output);
         visualiser3D = new Visualiser3D(_settingsStore, _controlsStore);
         profileEditor = new ProfileEditor();
         fixtureEditor = new FixtureEditor();
 
         Gdx.graphics.setVSync(true);
         Gdx.input.setInputProcessor(theInputProcessor);
-
-        output.start();
 
         openMainView();
     }

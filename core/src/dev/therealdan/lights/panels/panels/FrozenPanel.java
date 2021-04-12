@@ -1,6 +1,6 @@
 package dev.therealdan.lights.panels.panels;
 
-import dev.therealdan.lights.main.Lights;
+import dev.therealdan.lights.dmx.Output;
 import dev.therealdan.lights.main.Mouse;
 import dev.therealdan.lights.panels.MenuIcon;
 import dev.therealdan.lights.panels.Panel;
@@ -10,7 +10,11 @@ import dev.therealdan.lights.renderer.Task;
 
 public class FrozenPanel implements Panel {
 
-    public FrozenPanel() {
+    private Output _output;
+
+    public FrozenPanel(Output output) {
+        _output = output;
+
         setHeight(Panel.CELL_HEIGHT * 2);
 
         register(new CloseIcon());
@@ -45,7 +49,7 @@ public class FrozenPanel implements Panel {
     @Override
     public boolean click(MenuIcon menuIcon) {
         if (menuIcon instanceof CloseIcon) {
-            Lights.output.unfreeze();
+            _output.unfreeze();
         }
         return false;
     }
@@ -57,6 +61,6 @@ public class FrozenPanel implements Panel {
 
     @Override
     public boolean isVisible() {
-        return Lights.output.isFrozen();
+        return _output.isFrozen();
     }
 }

@@ -2,7 +2,7 @@ package dev.therealdan.lights.panels.panels;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import dev.therealdan.lights.main.Lights;
+import dev.therealdan.lights.interfaces.CustomSerialInterface;
 import dev.therealdan.lights.main.Mouse;
 import dev.therealdan.lights.panels.Panel;
 import dev.therealdan.lights.panels.menuicons.CloseIcon;
@@ -11,7 +11,11 @@ import dev.therealdan.lights.renderer.Task;
 
 public class DMXInterfacePanel implements Panel {
 
-    public DMXInterfacePanel() {
+    private CustomSerialInterface _customSerialInterface;
+
+    public DMXInterfacePanel(CustomSerialInterface customSerialInterface) {
+        _customSerialInterface = customSerialInterface;
+
         register(new CloseIcon());
     }
 
@@ -29,17 +33,17 @@ public class DMXInterfacePanel implements Panel {
         drag(mouse, x, y, width, cellHeight);
         y -= cellHeight;
 
-        for (String port : Lights.output.openPorts()) {
+        for (String port : _customSerialInterface.openPorts()) {
             if (mouse.within(x, y, width, cellHeight) && canInteract()) {
                 if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && mouse.leftReady(500)) {
-                    if (Lights.output.getActivePort().equals(port)) {
-                        Lights.output.disconnect();
+                    if (_customSerialInterface.getActivePort().equals(port)) {
+                        _customSerialInterface.disconnect();
                     } else {
-                        Lights.output.setActivePort(port);
+                        _customSerialInterface.setActivePort(port);
                     }
                 }
             }
-            renderer.box(x, y, width, cellHeight, Lights.output.getActivePort().equals(port) ? renderer.getTheme().DARK_RED : renderer.getTheme().MEDIUM, setWidth(renderer, port));
+            renderer.box(x, y, width, cellHeight, _customSerialInterface.getActivePort().equals(port) ? renderer.getTheme().DARK_RED : renderer.getTheme().MEDIUM, setWidth(renderer, port));
             y -= cellHeight;
         }
 

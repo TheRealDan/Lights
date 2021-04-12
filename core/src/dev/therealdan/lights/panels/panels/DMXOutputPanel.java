@@ -3,6 +3,7 @@ package dev.therealdan.lights.panels.panels;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import dev.therealdan.lights.dmx.DMX;
+import dev.therealdan.lights.dmx.Output;
 import dev.therealdan.lights.main.Mouse;
 import dev.therealdan.lights.panels.Panel;
 import dev.therealdan.lights.panels.menuicons.CloseIcon;
@@ -13,14 +14,19 @@ import dev.therealdan.lights.settings.SettingsStore;
 public class DMXOutputPanel implements Panel {
 
     private SettingsStore _settingsStore;
+    private Output _output;
 
-    private String dmxToDisplay = "VISUALISER";
+    private DMX _dmx;
     private boolean displayInCells = true;
 
-    public DMXOutputPanel(SettingsStore settingsStore) {
+    public DMXOutputPanel(SettingsStore settingsStore, Output output) {
         _settingsStore = settingsStore;
+        _output = output;
+
         register(new CloseIcon());
         // TODO - Save and load above settings
+
+        _dmx = output.getDMX().get(0);
     }
 
     @Override
@@ -39,7 +45,7 @@ public class DMXOutputPanel implements Panel {
         drag(mouse, x, y, width, cellHeight);
         y -= cellHeight;
 
-        renderer.box(x, y, width, cellHeight, renderer.getTheme().MEDIUM, setWidth(renderer, "DMX: " + getDmxToDisplay()));
+        renderer.box(x, y, width, cellHeight, renderer.getTheme().MEDIUM, setWidth(renderer, "DMX: " + getDMX().getLevel()));
         if (mouse.within(x, y, width, cellHeight) && canInteract()) {
             interacted = true;
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && mouse.leftReady(500))
@@ -55,12 +61,11 @@ public class DMXOutputPanel implements Panel {
         }
         y -= cellHeight;
 
-        DMX dmx = DMX.get(_settingsStore, getDmxToDisplay());
         if (displayInCells()) {
-            for (int address : dmx.active()) {
+            for (int address : getDMX().active()) {
                 renderer.box(x, y, cellHeight, cellHeight, renderer.getTheme().MEDIUM, Integer.toString(address));
                 drag(mouse, x, y, cellHeight, cellHeight);
-                float fill = cellHeight * dmx.get(address) / 255f;
+                float fill = cellHeight * getDMX().get(address) / 255f;
                 renderer.box(x, y - cellHeight + fill, cellHeight, fill, renderer.getTheme().DARK_RED);
                 x += cellHeight;
 
@@ -73,10 +78,10 @@ public class DMXOutputPanel implements Panel {
             setHeightBasedOnY(y);
         } else {
             int shown = 0;
-            for (int address : dmx.active()) {
-                if (dmx.get(address) > 0) {
+            for (int address : getDMX().active()) {
+                if (getDMX().get(address) > 0) {
                     shown++;
-                    renderer.box(x, y, width, cellHeight, renderer.getTheme().MEDIUM, setWidth(renderer, address + ": " + dmx.get(address)));
+                    renderer.box(x, y, width, cellHeight, renderer.getTheme().MEDIUM, setWidth(renderer, address + ": " + _dmx.get(address)));
                     y -= cellHeight;
 
                     if (shown == 13 || (shown - 13) % 16 == 0) {
@@ -95,20 +100,19 @@ public class DMXOutputPanel implements Panel {
     }
 
     private void next() {
-        String current = getDmxToDisplay();
         boolean next = false;
-        for (String level : DMX.levels()) {
+        for (DMX dmx : _output.getDMX()) {
             if (next) {
-                dmxToDisplay = level;
+                _dmx = dmx;
                 return;
             }
-            if (current.equals(level)) next = true;
+            if (getDMX().getLevel().equals(dmx.getLevel())) next = true;
         }
-        dmxToDisplay = DMX.levels().get(0);
+        _dmx = _output.getDMX().get(0);
     }
 
-    private String getDmxToDisplay() {
-        return dmxToDisplay;
+    private DMX getDMX() {
+        return _dmx;
     }
 
     private void toggleDisplayInCells() {

@@ -10,38 +10,54 @@ import java.util.List;
 
 public class Output {
 
+    private List<DMX> _dmx = new ArrayList<>();
     private List<DMXInterface> _dmxInterfaces = new ArrayList<>();
 
     private boolean _frozen = false;
 
     public Output(SettingsStore settingsStore) {
+        _dmx.add(new DMX("VISUALISER"));
+        _dmx.add(new DMX("LIVE"));
+
         _dmxInterfaces.add(new CustomSerialInterface(settingsStore, this));
     }
 
     public void toggleFreeze() {
         _frozen = !_frozen;
-        log();
+        logFreeze();
     }
 
     public void freeze() {
         _frozen = true;
-        log();
+        logFreeze();
     }
 
     public void unfreeze() {
         _frozen = false;
-        log();
+        logFreeze();
     }
 
     public boolean isFrozen() {
         return _frozen;
     }
 
-    private void log() {
+    private void logFreeze() {
         ConsolePanel.log(ConsolePanel.ConsoleColor.CYAN, isFrozen() ?
                 "DMX Output frozen." :
                 "DMX Output unfrozen."
         );
+    }
+
+    public DMX getDMXByLevel(String level) {
+        for (DMX dmx : _dmx)
+            if (dmx.getLevel().equalsIgnoreCase(level))
+                return dmx;
+
+        return null;
+    }
+
+    public List<DMX> getDMX() {
+        return new ArrayList<>(_dmx);
     }
 
     public List<DMXInterface> getDMXInterfaces() {

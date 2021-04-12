@@ -12,7 +12,7 @@ import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.Ray;
 import com.badlogic.gdx.utils.IntIntMap;
-import dev.therealdan.lights.dmx.DMX;
+import dev.therealdan.lights.dmx.Output;
 import dev.therealdan.lights.fixtures.Fixture;
 import dev.therealdan.lights.fixtures.fixture.Model;
 import dev.therealdan.lights.main.Mouse;
@@ -28,6 +28,7 @@ public class Visualiser3D implements Visual {
 
     private SettingsStore _settingsStore;
     private ControlsStore _controlsStore;
+    private Output _output;
 
     private PerspectiveCamera camera;
 
@@ -40,9 +41,10 @@ public class Visualiser3D implements Visual {
     private float degreesPerPixel = 0.5f;
     private final Vector3 tmp = new Vector3();
 
-    public Visualiser3D(SettingsStore settingsStore, ControlsStore controlsStore) {
+    public Visualiser3D(SettingsStore settingsStore, ControlsStore controlsStore, Output output) {
         _settingsStore = settingsStore;
         _controlsStore = controlsStore;
+        _output = output;
 
         camera = new PerspectiveCamera(75, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.position.set(0f, 0f, 10f);
@@ -122,10 +124,8 @@ public class Visualiser3D implements Visual {
     }
 
     private void updateFixtureColors() {
-        DMX visualiser = DMX.get(_settingsStore, "VISUALISER");
-        for (Fixture fixture : Fixture.fixtures()) {
-            fixture.updateColor(visualiser);
-        }
+        for (Fixture fixture : Fixture.fixtures())
+            fixture.updateColor(_output.getDMXByLevel("VISUALISER"));
     }
 
     private void controls(float deltaTime) {

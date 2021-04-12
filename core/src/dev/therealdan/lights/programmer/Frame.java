@@ -2,8 +2,8 @@ package dev.therealdan.lights.programmer;
 
 import com.badlogic.gdx.graphics.Color;
 import dev.therealdan.lights.dmx.DMX;
-import dev.therealdan.lights.fixtures.fixture.profile.Channel;
 import dev.therealdan.lights.fixtures.Fixture;
+import dev.therealdan.lights.fixtures.fixture.profile.Channel;
 import dev.therealdan.lights.renderer.Renderer;
 
 import java.util.ArrayList;
@@ -31,7 +31,33 @@ public class Frame {
         List<Integer> values = new ArrayList<>();
         for (int address = 1; address <= DMX.MAX_CHANNELS; address++)
             values.add((int) getValueFor(address));
-        DMX.draw(renderer, x, y, width, height, color, values);
+        draw(renderer, x, y, width, height, color, values);
+    }
+
+    public void draw(Renderer renderer, float x, float y, float width, float height, Color color, List<Integer> originalValues) {
+        long timestamp = System.currentTimeMillis();
+        int overflow = (int) (DMX.MAX_CHANNELS - width);
+        List<Integer> values = new ArrayList<>();
+        int previousValue = -1;
+        for (int address = 1; address <= DMX.MAX_CHANNELS; address++) {
+            int value = originalValues.get(address - 1);
+            if (previousValue != -1 && overflow > 0) {
+                if (previousValue == value) {
+                    overflow--;
+                    continue;
+                }
+            }
+            values.add(value);
+            previousValue = value;
+        }
+
+        for (int value : values) {
+            renderer.queue(new dev.therealdan.lights.renderer.Task(x, y - height).line(x, y - height + (height * value / 255f)).setColor(color));
+            x++;
+        }
+
+        long timepassed = System.currentTimeMillis() - timestamp;
+        if (timepassed > 1) System.out.println(timepassed + "ms");
     }
 
     public void set(Fixture fixture, Channel.Type channelType, float value, int... parameters) {

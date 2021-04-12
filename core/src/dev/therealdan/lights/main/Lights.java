@@ -41,7 +41,7 @@ public class Lights extends ApplicationAdapter {
         theInputProcessor = new TheInputProcessor();
 
         panelHandler = new PanelHandler(_settingsStore, _controlsStore, _mouse, _renderer.getTheme(), _output);
-        visualiser3D = new Visualiser3D(_settingsStore, _controlsStore);
+        visualiser3D = new Visualiser3D(_settingsStore, _controlsStore, _output);
         profileEditor = new ProfileEditor();
         fixtureEditor = new FixtureEditor();
 

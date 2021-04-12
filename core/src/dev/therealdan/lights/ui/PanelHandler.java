@@ -99,7 +99,7 @@ public class PanelHandler implements Visual {
 
         // Util
         panels.add(new ConsolePanel(settingsStore, theme, output));
-        panels.add(new DMXOutputPanel(settingsStore));
+        panels.add(new DMXOutputPanel(settingsStore, output));
 
         // Programmer
         panels.add(new SequenceProgrammerPanel(settingsStore));
@@ -139,8 +139,7 @@ public class PanelHandler implements Visual {
     }
 
     public void update() {
-        DMX output = DMX.get(_settingsStore, "OUTPUT");
-        DMX visualiser = DMX.get(_settingsStore, "VISUALISER");
+        DMX visualiser = _output.getDMXByLevel("VISUALISER");
 
         for (Sequence sequence : getSequences()) {
             if (!sequence.isPlaying())
@@ -206,7 +205,9 @@ public class PanelHandler implements Visual {
             }
         }
 
-        if (!_output.isFrozen()) output.copy(visualiser);
+        if (!_output.isFrozen()) {
+            _output.getDMXByLevel("LIVE").copy(visualiser);
+        }
     }
 
     @Override

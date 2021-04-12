@@ -15,7 +15,6 @@ import java.util.List;
 public class DMX {
 
     public static final float MAX_CHANNELS = 512;
-    public static boolean DRAW_DMX = false;
 
     private SettingsStore _settingsStore;
 

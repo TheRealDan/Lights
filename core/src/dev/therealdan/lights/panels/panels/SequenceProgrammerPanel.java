@@ -3,7 +3,6 @@ package dev.therealdan.lights.panels.panels;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
-import dev.therealdan.lights.dmx.DMX;
 import dev.therealdan.lights.main.Mouse;
 import dev.therealdan.lights.panels.Panel;
 import dev.therealdan.lights.panels.menuicons.CloseIcon;
@@ -12,13 +11,18 @@ import dev.therealdan.lights.programmer.Programmer;
 import dev.therealdan.lights.programmer.Sequence;
 import dev.therealdan.lights.renderer.Renderer;
 import dev.therealdan.lights.renderer.Task;
+import dev.therealdan.lights.settings.SettingsStore;
 import dev.therealdan.lights.ui.PanelHandler;
 import dev.therealdan.lights.util.Util;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static dev.therealdan.lights.settings.Setting.Key.DRAW_DMX;
+
 public class SequenceProgrammerPanel implements Panel {
+
+    private SettingsStore _settingsStore;
 
     private static Selected selected = Selected.NONE;
 
@@ -30,7 +34,9 @@ public class SequenceProgrammerPanel implements Panel {
     private String fadeMilliseconds = "";
     private long fadeTimestamp = System.currentTimeMillis();
 
-    public SequenceProgrammerPanel() {
+    public SequenceProgrammerPanel(SettingsStore settingsStore) {
+        _settingsStore = settingsStore;
+
         register(new CloseIcon());
     }
 
@@ -193,7 +199,7 @@ public class SequenceProgrammerPanel implements Panel {
                 if (Programmer.isSelected(frame)) color = renderer.getTheme().DARK_YELLOW;
             }
             renderer.box(x, y, width, cellHeight, color, setWidth(renderer, frame.getInfo()));
-            if (DMX.DRAW_DMX) {
+            if (_settingsStore.getByKey(DRAW_DMX).isTrue()) {
                 if (color == renderer.getTheme().MEDIUM) color = renderer.getTheme().LIGHT;
                 frame.draw(renderer, x, y, width, cellHeight, color);
             }

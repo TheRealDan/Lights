@@ -102,7 +102,7 @@ public class PanelHandler implements Visual {
         panels.add(new DMXOutputPanel(settingsStore));
 
         // Programmer
-        panels.add(new SequenceProgrammerPanel());
+        panels.add(new SequenceProgrammerPanel(settingsStore));
         panels.add(new NewSequenceProgrammerPanel());
         panels.add(new FixturesPanel());
         panels.add(new GroupsPanel());

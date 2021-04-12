@@ -9,17 +9,20 @@ import dev.therealdan.lights.panels.menuicons.CloseIcon;
 import dev.therealdan.lights.renderer.Renderer;
 import dev.therealdan.lights.renderer.Task;
 import dev.therealdan.lights.settings.Control;
-
-import java.util.List;
+import dev.therealdan.lights.settings.ControlsStore;
 
 import static dev.therealdan.lights.util.sorting.Sortable.Sort.POSITION;
 
 public class ControlsPanel implements Panel {
 
+    private ControlsStore _controlsStore;
+
     private Control.Category selectedCategory;
     private Control selectedControl = null;
 
-    public ControlsPanel() {
+    public ControlsPanel(ControlsStore controlsStore) {
+        _controlsStore = controlsStore;
+
         register(new CloseIcon());
     }
 
@@ -36,7 +39,7 @@ public class ControlsPanel implements Panel {
         drag(mouse, x, y, width, cellHeight);
         y -= cellHeight;
 
-        renderer.box(x, y, width, cellHeight, renderer.getTheme().MEDIUM, setWidth(renderer, "Category: " + getSelectedCategory().formatString()), Task.TextPosition.LEFT_CENTER);
+        renderer.box(x, y, width, cellHeight, renderer.getTheme().MEDIUM, setWidth(renderer, "Category: " + getSelectedCategory().format()), Task.TextPosition.LEFT_CENTER);
         if (mouse.within(x, y, width, cellHeight) && canInteract()) {
             interacted = true;
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && mouse.leftReady(500)) {
@@ -49,7 +52,7 @@ public class ControlsPanel implements Panel {
 
         if (getSelectedCategory().equals(Control.Category.BUTTONS)) {
             for (Button button : Button.buttons(POSITION)) {
-                Control control = Control.byButton(button);
+                Control control = _controlsStore.getByButton(button);
                 setWidth(renderer, button.getName(), 2);
                 renderer.box(x, y, width / 2, cellHeight, isSelected(control) ? renderer.getTheme().DARK_RED : renderer.getTheme().MEDIUM, button.getName());
                 renderer.box(x + width / 2, y, width / 2, cellHeight, isSelected(control) ? renderer.getTheme().DARK_RED : renderer.getTheme().MEDIUM, control.formatKeycode());
@@ -62,7 +65,7 @@ public class ControlsPanel implements Panel {
                 y -= cellHeight;
             }
         } else {
-            for (Control control : getSelectedCategory().getControls()) {
+            for (Control control : _controlsStore.getControls(getSelectedCategory())) {
                 setWidth(renderer, control.getName(), 2);
                 renderer.box(x, y, width / 2, cellHeight, isSelected(control) ? renderer.getTheme().DARK_RED : renderer.getTheme().MEDIUM, control.getName());
                 renderer.box(x + width / 2, y, width / 2, cellHeight, isSelected(control) ? renderer.getTheme().DARK_RED : renderer.getTheme().MEDIUM, control.formatKeycode());
@@ -90,13 +93,12 @@ public class ControlsPanel implements Panel {
 
     public void select(boolean next) {
         int i = 0;
-        List<Control.Category> categories = Control.categories();
-        for (Control.Category category : categories) {
+        for (Control.Category category : Control.Category.values()) {
             if (getSelectedCategory().equals(category)) {
                 i += next ? 1 : -1;
-                if (i >= categories.size()) i = 0;
-                if (i < 0) i = categories.size() - 1;
-                select(categories.get(i));
+                if (i >= Control.Category.values().length) i = 0;
+                if (i < 0) i = Control.Category.values().length - 1;
+                select(Control.Category.values()[i]);
                 return;
             }
             i++;

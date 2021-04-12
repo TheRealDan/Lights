@@ -21,6 +21,7 @@ import dev.therealdan.lights.programmer.Programmer;
 import dev.therealdan.lights.programmer.Sequence;
 import dev.therealdan.lights.renderer.Renderer;
 import dev.therealdan.lights.settings.Control;
+import dev.therealdan.lights.settings.ControlsStore;
 import dev.therealdan.lights.settings.SettingsStore;
 import dev.therealdan.lights.util.Util;
 
@@ -31,6 +32,7 @@ import java.util.List;
 public class PanelHandler implements Visual {
 
     private SettingsStore _settingsStore;
+    private ControlsStore _controlsStore;
     private Mouse _mouse;
 
     private static PanelHandler panelHandler;
@@ -55,8 +57,9 @@ public class PanelHandler implements Visual {
     private CondensedFrame targetCondensedFrame, currentCondensedFrame, previousCondensedFrame;
     private long condensedFrameTimestamp = System.currentTimeMillis();
 
-    public PanelHandler(SettingsStore settingsStore, Mouse mouse, Theme theme) {
+    public PanelHandler(SettingsStore settingsStore, ControlsStore controlsStore, Mouse mouse, Theme theme) {
         _settingsStore = settingsStore;
+        _controlsStore = controlsStore;
         _mouse = mouse;
 
         panelHandler = this;
@@ -68,7 +71,7 @@ public class PanelHandler implements Visual {
 
         // Settings
         panels.add(new SettingsPanel(settingsStore));
-        panels.add(new ControlsPanel());
+        panels.add(new ControlsPanel(controlsStore));
         panels.add(new DMXInterfacePanel());
 
         // Setup
@@ -149,7 +152,7 @@ public class PanelHandler implements Visual {
                     clear.put(sequence, System.currentTimeMillis());
                 } else if (System.currentTimeMillis() - clear.get(sequence) > sequence.getActiveFrame().getFrameTime()) {
                     for (Button button : Button.buttons()) {
-                        Control control = Control.byButton(button);
+                        Control control = _controlsStore.getByButton(button);
                         if (control != null && Gdx.input.isKeyPressed(control.getKeycode())) {
                             skip = true;
                             continue;
@@ -289,7 +292,7 @@ public class PanelHandler implements Visual {
         }
 
         for (Button button : Button.buttons()) {
-            Control control = Control.byButton(button);
+            Control control = _controlsStore.getByButton(button);
             if (control != null && control.getKeycode() == keycode) {
                 button.press();
             }

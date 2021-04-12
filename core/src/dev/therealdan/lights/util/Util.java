@@ -12,4 +12,14 @@ public abstract class Util {
     public static boolean isShiftHeld() {
         return Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT);
     }
+
+    public static String format(String string) {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (String piece : string.split("_")) {
+            stringBuilder.append(" ");
+            stringBuilder.append(piece.substring(0, 1).toUpperCase());
+            stringBuilder.append(piece.substring(1).toLowerCase());
+        }
+        return stringBuilder.toString().substring(1);
+    }
 }

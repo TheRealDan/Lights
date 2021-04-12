@@ -19,6 +19,7 @@ import dev.therealdan.lights.main.Mouse;
 import dev.therealdan.lights.programmer.Programmer;
 import dev.therealdan.lights.renderer.Renderer;
 import dev.therealdan.lights.settings.Control;
+import dev.therealdan.lights.settings.ControlsStore;
 import dev.therealdan.lights.settings.Setting;
 import dev.therealdan.lights.settings.SettingsStore;
 import dev.therealdan.lights.util.Util;
@@ -26,6 +27,7 @@ import dev.therealdan.lights.util.Util;
 public class Visualiser3D implements Visual {
 
     private SettingsStore _settingsStore;
+    private ControlsStore _controlsStore;
 
     private PerspectiveCamera camera;
 
@@ -38,8 +40,9 @@ public class Visualiser3D implements Visual {
     private float degreesPerPixel = 0.5f;
     private final Vector3 tmp = new Vector3();
 
-    public Visualiser3D(SettingsStore settingsStore) {
+    public Visualiser3D(SettingsStore settingsStore, ControlsStore controlsStore) {
         _settingsStore = settingsStore;
+        _controlsStore = controlsStore;
 
         camera = new PerspectiveCamera(75, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.position.set(0f, 0f, 10f);
@@ -131,30 +134,30 @@ public class Visualiser3D implements Visual {
 
         if (Programmer.getSelectedFixtures().size() == 1) {
             Fixture fixture = Programmer.getSelectedFixtures().get(0);
-            if (keys.containsKey(Control.byName(Control.Name.CAMERA_FORWARD).getKeycode()))
+            if (keys.containsKey(_controlsStore.getByKey(Control.Key.CAMERA_FORWARD).getKeycode()))
                 fixture.move(0, 0, -fixtureVelocity);
-            if (keys.containsKey(Control.byName(Control.Name.CAMERA_BACKWARD).getKeycode()))
+            if (keys.containsKey(_controlsStore.getByKey(Control.Key.CAMERA_BACKWARD).getKeycode()))
                 fixture.move(0, 0, fixtureVelocity);
-            if (keys.containsKey(Control.byName(Control.Name.CAMERA_STRAFE_LEFT).getKeycode()))
+            if (keys.containsKey(_controlsStore.getByKey(Control.Key.CAMERA_STRAFE_LEFT).getKeycode()))
                 fixture.move(-fixtureVelocity, 0, 0);
-            if (keys.containsKey(Control.byName(Control.Name.CAMERA_STRAFE_RIGHT).getKeycode()))
+            if (keys.containsKey(_controlsStore.getByKey(Control.Key.CAMERA_STRAFE_RIGHT).getKeycode()))
                 fixture.move(fixtureVelocity, 0, 0);
-            if (keys.containsKey(Control.byName(Control.Name.CAMERA_UP).getKeycode()))
+            if (keys.containsKey(_controlsStore.getByKey(Control.Key.CAMERA_UP).getKeycode()))
                 fixture.move(0, fixtureVelocity, 0);
-            if (keys.containsKey(Control.byName(Control.Name.CAMERA_DOWN).getKeycode()))
+            if (keys.containsKey(_controlsStore.getByKey(Control.Key.CAMERA_DOWN).getKeycode()))
                 fixture.move(0, -fixtureVelocity, 0);
         } else {
-            if (keys.containsKey(Control.byName(Control.Name.CAMERA_FORWARD).getKeycode()))
+            if (keys.containsKey(_controlsStore.getByKey(Control.Key.CAMERA_FORWARD).getKeycode()))
                 camera.position.add(tmp.set(camera.direction).nor().scl(deltaTime * velocity));
-            if (keys.containsKey(Control.byName(Control.Name.CAMERA_BACKWARD).getKeycode()))
+            if (keys.containsKey(_controlsStore.getByKey(Control.Key.CAMERA_BACKWARD).getKeycode()))
                 camera.position.add(tmp.set(camera.direction).nor().scl(-deltaTime * velocity));
-            if (keys.containsKey(Control.byName(Control.Name.CAMERA_STRAFE_LEFT).getKeycode()))
+            if (keys.containsKey(_controlsStore.getByKey(Control.Key.CAMERA_STRAFE_LEFT).getKeycode()))
                 camera.position.add(tmp.set(camera.direction).crs(camera.up).nor().scl(-deltaTime * velocity));
-            if (keys.containsKey(Control.byName(Control.Name.CAMERA_STRAFE_RIGHT).getKeycode()))
+            if (keys.containsKey(_controlsStore.getByKey(Control.Key.CAMERA_STRAFE_RIGHT).getKeycode()))
                 camera.position.add(tmp.set(camera.direction).crs(camera.up).nor().scl(deltaTime * velocity));
-            if (keys.containsKey(Control.byName(Control.Name.CAMERA_UP).getKeycode()))
+            if (keys.containsKey(_controlsStore.getByKey(Control.Key.CAMERA_UP).getKeycode()))
                 camera.position.add(tmp.set(camera.up).nor().scl(deltaTime * velocity));
-            if (keys.containsKey(Control.byName(Control.Name.CAMERA_DOWN).getKeycode()))
+            if (keys.containsKey(_controlsStore.getByKey(Control.Key.CAMERA_DOWN).getKeycode()))
                 camera.position.add(tmp.set(camera.up).nor().scl(-deltaTime * velocity));
         }
     }

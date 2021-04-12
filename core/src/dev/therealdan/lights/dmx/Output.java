@@ -1,9 +1,9 @@
 package dev.therealdan.lights.dmx;
 
-import com.juanjo.openDmx.OpenDmx;
+import com.fazecast.jSerialComm.SerialPort;
+import dev.therealdan.lights.settings.Setting;
 import dev.therealdan.lights.panels.panels.ConsolePanel;
 import dev.therealdan.lights.panels.panels.TimingsPanel;
-import dev.therealdan.lights.settings.Setting;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +15,7 @@ public class Output {
     private Thread thread;
 
     private List<String> openPorts = new ArrayList<>();
+    private SerialPort serialPort = null;
     private String activePort = "Not Connected";
     private boolean connected = false;
 
@@ -37,14 +38,6 @@ public class Output {
     public void start() {
         if (thread.isAlive()) return;
         thread.start();
-
-        if (OpenDmx.connect(OpenDmx.OPENDMX_TX)) {
-            this.connected = true;
-            this.lastConnect = System.currentTimeMillis();
-            ConsolePanel.log(ConsolePanel.ConsoleColor.YELLOW, "Dmx interface connected");
-        } else {
-            ConsolePanel.log(ConsolePanel.ConsoleColor.RED, "Error connecting to Dmx interface");
-        }
     }
 
     private void tick() {
@@ -52,19 +45,54 @@ public class Output {
         long timestamp = System.currentTimeMillis();
         lastSend = System.currentTimeMillis();
 
+        if (this.serialPort != null && !this.serialPort.getSystemPortName().equals(activePort)) {
+            this.serialPort = null;
+            if (Setting.byName(Setting.Name.SHOW_DMX_SEND_DEBUG).isTrue())
+                ConsolePanel.log(ConsolePanel.ConsoleColor.YELLOW, "Port dropped");
+        }
+
+        boolean connected = false;
+        List<String> openPorts = new ArrayList<>();
+        for (SerialPort openPort : SerialPort.getCommPorts()) {
+            openPorts.add(openPort.getSystemPortName());
+            if (openPort.getSystemPortName().equals(activePort)) {
+                if (this.serialPort == null) {
+                    this.serialPort = openPort;
+                    this.serialPort.openPort();
+                    this.serialPort.setBaudRate(BAUDRATE);
+                    this.serialPort.setComPortTimeouts(SerialPort.TIMEOUT_WRITE_BLOCKING, Setting.byName(Setting.Name.NEW_READ_TIMEOUT).getInt(), Setting.byName(Setting.Name.NEW_WRITE_TIMEOUT).getInt());
+                    this.lastConnect = System.currentTimeMillis();
+                    if (Setting.byName(Setting.Name.SHOW_DMX_SEND_DEBUG).isTrue())
+                        ConsolePanel.log(ConsolePanel.ConsoleColor.YELLOW, "Port Connected");
+                    break;
+                } else if (this.serialPort != null) {
+                    connected = true;
+                }
+            }
+        }
+        this.openPorts = openPorts;
+
+        this.connected = connected;
         if (!connected) return;
+
+        if (!serialPort.isOpen()) {
+            serialPort.openPort();
+            this.lastConnect = System.currentTimeMillis();
+            if (Setting.byName(Setting.Name.SHOW_DMX_SEND_DEBUG).isTrue())
+                ConsolePanel.log(ConsolePanel.ConsoleColor.YELLOW, "Port Opened");
+        }
 
         if (System.currentTimeMillis() - lastConnect < Setting.byName(Setting.Name.CONNECTION_WAIT).getLong()) return;
         if (isFrozen()) return;
 
         try {
-            for (int i = 0; i < 512; i++) {
-                OpenDmx.setValue(i, DMX.get("OUTPUT").get(i + 1));
-            }
-
+            byte[] bytes = DMX.get("OUTPUT").getNext();
+            if (bytes == null) return;
+            serialPort.getOutputStream().write(bytes);
             if (Setting.byName(Setting.Name.SHOW_DMX_SEND_DEBUG).isTrue())
                 ConsolePanel.log(ConsolePanel.ConsoleColor.YELLOW, "DMX Sent");
         } catch (Exception e) {
+            serialPort = null;
             ConsolePanel.log(ConsolePanel.ConsoleColor.RED, e.getMessage());
         }
         long timeTaken = System.currentTimeMillis() - timestamp;
@@ -97,12 +125,13 @@ public class Output {
 
     public void disconnect() {
         try {
-            OpenDmx.disconnect();
+            serialPort.closePort();
         } catch (Exception e) {
             ConsolePanel.log(ConsolePanel.ConsoleColor.RED, e.getMessage());
             e.printStackTrace();
         }
-        ConsolePanel.log(ConsolePanel.ConsoleColor.YELLOW, "Dmx interface disconnected");
+        serialPort = null;
+        ConsolePanel.log(ConsolePanel.ConsoleColor.YELLOW, "Port Disconnected");
         activePort = "Not Connected";
         connected = false;
     }

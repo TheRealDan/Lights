@@ -1,9 +1,8 @@
 package dev.therealdan.lights.controllers;
 
 import com.badlogic.gdx.graphics.Color;
-import dev.therealdan.lights.main.Lights;
-import dev.therealdan.lights.programmer.Sequence;
 import dev.therealdan.lights.panels.panels.FadersPanel;
+import dev.therealdan.lights.programmer.Sequence;
 
 public class Fader {
 
@@ -16,16 +15,8 @@ public class Fader {
     private Sequence sequence = new Sequence("No Sequence");
 
     public Fader(int id, String fileName) {
-        this(id);
-        this.fileName = fileName;
-    }
-
-    public Fader(int id) {
-        this(id, "New fader", Lights.theme.MEDIUM);
-    }
-
-    public Fader(int id, String fileName, String name, Color color) {
-        this(id, name, color);
+        this.id = id;
+        this.name = "New fader";
         this.fileName = fileName;
     }
 

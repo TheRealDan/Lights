@@ -1,6 +1,5 @@
 package dev.therealdan.lights.panels.menuicons;
 
-import dev.therealdan.lights.main.Lights;
 import dev.therealdan.lights.panels.MenuIcon;
 import dev.therealdan.lights.panels.Panel;
 import dev.therealdan.lights.renderer.Renderer;
@@ -16,11 +15,11 @@ public class CloseIcon implements MenuIcon {
 
     @Override
     public boolean draw(Renderer renderer, float x, float y, float width, float height, int index, boolean hover, boolean click) {
-        if (hover) renderer.box(x, y, width, height, Lights.theme.RED);
+        if (hover) renderer.box(x, y, width, height, renderer.getTheme().RED);
 
         float offset = 4;
-        renderer.queue(new Task(x + offset, y - offset).setColor(Lights.theme.WHITE).line(x + width - offset, y - height + offset));
-        renderer.queue(new Task(x + width - offset, y - offset).setColor(Lights.theme.WHITE).line(x + offset, y - height + offset));
+        renderer.queue(new Task(x + offset, y - offset).setColor(renderer.getTheme().WHITE).line(x + width - offset, y - height + offset));
+        renderer.queue(new Task(x + width - offset, y - offset).setColor(renderer.getTheme().WHITE).line(x + offset, y - height + offset));
         return false;
     }
 }

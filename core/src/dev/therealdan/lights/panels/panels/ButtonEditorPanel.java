@@ -34,11 +34,11 @@ public class ButtonEditorPanel implements Panel {
         float uiWidth = getWidth();
         float width = 250;
 
-        renderer.box(x, y, width, Panel.CELL_HEIGHT, Lights.theme.DARK_BLUE, getFriendlyName(), Task.TextPosition.CENTER);
+        renderer.box(x, y, width, Panel.CELL_HEIGHT, renderer.getTheme().DARK_BLUE, getFriendlyName(), Task.TextPosition.CENTER);
         drag(x, y, uiWidth, Panel.CELL_HEIGHT);
         y -= Panel.CELL_HEIGHT;
 
-        renderer.box(x, y, width, Panel.CELL_HEIGHT, canEdit(Section.NAME) ? Lights.theme.DARK_RED : Lights.theme.MEDIUM, "Name: " + getEditing().getName());
+        renderer.box(x, y, width, Panel.CELL_HEIGHT, canEdit(Section.NAME) ? renderer.getTheme().DARK_RED : renderer.getTheme().MEDIUM, "Name: " + getEditing().getName());
         if (Lights.mouse.contains(x, y, width, Panel.CELL_HEIGHT) && canInteract()) {
             interacted = true;
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(-1)) {
@@ -47,7 +47,7 @@ public class ButtonEditorPanel implements Panel {
         }
         y -= Panel.CELL_HEIGHT;
 
-        renderer.box(x, y, width, Panel.CELL_HEIGHT, canEdit(Section.SEQUENCE) ? Lights.theme.DARK_RED : Lights.theme.MEDIUM, "Sequences: " + getEditing().sequences().size());
+        renderer.box(x, y, width, Panel.CELL_HEIGHT, canEdit(Section.SEQUENCE) ? renderer.getTheme().DARK_RED : renderer.getTheme().MEDIUM, "Sequences: " + getEditing().sequences().size());
         if (Lights.mouse.contains(x, y, width, Panel.CELL_HEIGHT) && canInteract()) {
             interacted = true;
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(-1)) {
@@ -56,8 +56,8 @@ public class ButtonEditorPanel implements Panel {
         }
         y -= Panel.CELL_HEIGHT;
 
-        renderer.box(x, y, width, Panel.CELL_HEIGHT, Lights.theme.MEDIUM, "Red: " + getEditing().getColor().r);
-        renderer.box(x, y, getEditing().getColor().r * width, Panel.CELL_HEIGHT, canEdit(Section.RED) ? Lights.theme.RED : getEditing().getColor());
+        renderer.box(x, y, width, Panel.CELL_HEIGHT, renderer.getTheme().MEDIUM, "Red: " + getEditing().getColor().r);
+        renderer.box(x, y, getEditing().getColor().r * width, Panel.CELL_HEIGHT, canEdit(Section.RED) ? renderer.getTheme().RED : getEditing().getColor());
         if (Lights.mouse.contains(x, y, width, Panel.CELL_HEIGHT) && canInteract()) {
             interacted = true;
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(-1)) {
@@ -68,8 +68,8 @@ public class ButtonEditorPanel implements Panel {
         }
         y -= Panel.CELL_HEIGHT;
 
-        renderer.box(x, y, width, Panel.CELL_HEIGHT, Lights.theme.MEDIUM, "Green: " + getEditing().getColor().g);
-        renderer.box(x, y, getEditing().getColor().g * width, Panel.CELL_HEIGHT, canEdit(Section.GREEN) ? Lights.theme.GREEN : getEditing().getColor());
+        renderer.box(x, y, width, Panel.CELL_HEIGHT, renderer.getTheme().MEDIUM, "Green: " + getEditing().getColor().g);
+        renderer.box(x, y, getEditing().getColor().g * width, Panel.CELL_HEIGHT, canEdit(Section.GREEN) ? renderer.getTheme().GREEN : getEditing().getColor());
         if (Lights.mouse.contains(x, y, width, Panel.CELL_HEIGHT) && canInteract()) {
             interacted = true;
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(-1)) {
@@ -80,8 +80,8 @@ public class ButtonEditorPanel implements Panel {
         }
         y -= Panel.CELL_HEIGHT;
 
-        renderer.box(x, y, width, Panel.CELL_HEIGHT, Lights.theme.MEDIUM, "Blue: " + getEditing().getColor().b);
-        renderer.box(x, y, getEditing().getColor().b * width, Panel.CELL_HEIGHT, canEdit(Section.BLUE) ? Lights.theme.BLUE : getEditing().getColor());
+        renderer.box(x, y, width, Panel.CELL_HEIGHT, renderer.getTheme().MEDIUM, "Blue: " + getEditing().getColor().b);
+        renderer.box(x, y, getEditing().getColor().b * width, Panel.CELL_HEIGHT, canEdit(Section.BLUE) ? renderer.getTheme().BLUE : getEditing().getColor());
         if (Lights.mouse.contains(x, y, width, Panel.CELL_HEIGHT) && canInteract()) {
             interacted = true;
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(-1)) {
@@ -92,7 +92,7 @@ public class ButtonEditorPanel implements Panel {
         }
         y -= Panel.CELL_HEIGHT;
 
-        renderer.box(x, y, width, Panel.CELL_HEIGHT, Lights.theme.MEDIUM, Lights.theme.RED, "Delete");
+        renderer.box(x, y, width, Panel.CELL_HEIGHT, renderer.getTheme().MEDIUM, renderer.getTheme().RED, "Delete");
         if (Lights.mouse.contains(x, y, width, Panel.CELL_HEIGHT) && canInteract()) {
             interacted = true;
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && shift && Lights.mouse.leftReady(-1)) {
@@ -103,7 +103,7 @@ public class ButtonEditorPanel implements Panel {
         }
         y -= Panel.CELL_HEIGHT;
 
-        renderer.box(x, y, width, Panel.CELL_HEIGHT, Lights.theme.MEDIUM, "Close");
+        renderer.box(x, y, width, Panel.CELL_HEIGHT, renderer.getTheme().MEDIUM, "Close");
         if (Lights.mouse.contains(x, y, width, Panel.CELL_HEIGHT) && canInteract()) {
             interacted = true;
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(-1)) {
@@ -123,7 +123,7 @@ public class ButtonEditorPanel implements Panel {
             x += width;
             y = getY();
 
-            renderer.box(x, y, sequencesWidth, Panel.CELL_HEIGHT, Lights.theme.DARK_BLUE, "All Sequences", Task.TextPosition.CENTER);
+            renderer.box(x, y, sequencesWidth, Panel.CELL_HEIGHT, renderer.getTheme().DARK_BLUE, "All Sequences", Task.TextPosition.CENTER);
             drag(x, y, sequencesWidth, Panel.CELL_HEIGHT);
             y -= Panel.CELL_HEIGHT;
 
@@ -132,7 +132,7 @@ public class ButtonEditorPanel implements Panel {
             for (Sequence sequence : SequencesPanel.sequences(true)) {
                 if (sequence.equals(getScroll())) display = true;
                 if (display) {
-                    renderer.box(x, y, sequencesWidth, Panel.CELL_HEIGHT, getEditing().contains(sequence) ? Lights.theme.DARK_GREEN : Lights.theme.MEDIUM, sequence.getName());
+                    renderer.box(x, y, sequencesWidth, Panel.CELL_HEIGHT, getEditing().contains(sequence) ? renderer.getTheme().DARK_GREEN : renderer.getTheme().MEDIUM, sequence.getName());
                     if (Lights.mouse.contains(x, y, sequencesWidth, Panel.CELL_HEIGHT) && canInteract()) {
                         interacted = true;
                         if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(500)) {
@@ -151,12 +151,12 @@ public class ButtonEditorPanel implements Panel {
             x += sequencesWidth;
             y = getY();
 
-            renderer.box(x, y, sequencesWidth, Panel.CELL_HEIGHT, Lights.theme.DARK_BLUE, "Selected Sequences", Task.TextPosition.CENTER);
+            renderer.box(x, y, sequencesWidth, Panel.CELL_HEIGHT, renderer.getTheme().DARK_BLUE, "Selected Sequences", Task.TextPosition.CENTER);
             drag(x, y, sequencesWidth, Panel.CELL_HEIGHT);
             y -= Panel.CELL_HEIGHT;
 
             for (Sequence sequence : getEditing().sequences(true)) {
-                renderer.box(x, y, sequencesWidth, Panel.CELL_HEIGHT, Lights.theme.MEDIUM, sequence.getName() + ": " + getEditing().getPriority(sequence));
+                renderer.box(x, y, sequencesWidth, Panel.CELL_HEIGHT, renderer.getTheme().MEDIUM, sequence.getName() + ": " + getEditing().getPriority(sequence));
                 if (Lights.mouse.contains(x, y, sequencesWidth, Panel.CELL_HEIGHT) && canInteract()) {
                     interacted = true;
                     if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(500)) {

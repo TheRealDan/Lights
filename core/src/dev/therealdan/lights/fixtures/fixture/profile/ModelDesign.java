@@ -1,12 +1,12 @@
 package dev.therealdan.lights.fixtures.fixture.profile;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.VertexAttributes;
 import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.math.Vector3;
-import dev.therealdan.lights.main.Lights;
 
 public class ModelDesign {
 
@@ -32,7 +32,7 @@ public class ModelDesign {
     }
 
     private void build(float width, float height, float depth, float xOffset, float yOffset, float zOffset) {
-        this.model = modelBuilder.createBox(width, height, depth, new Material(ColorAttribute.createDiffuse(Lights.theme.BLACK)), VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal);
+        this.model = modelBuilder.createBox(width, height, depth, new Material(ColorAttribute.createDiffuse(new Color(0, 0, 0, 1))), VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal);
         this.dimensions = new Vector3(width, height, depth);
         this.offset = new Vector3(xOffset, yOffset, zOffset);
     }

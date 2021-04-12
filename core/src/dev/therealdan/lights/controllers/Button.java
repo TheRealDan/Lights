@@ -3,9 +3,9 @@ package dev.therealdan.lights.controllers;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
+import dev.therealdan.lights.panels.panels.SequencesPanel;
 import dev.therealdan.lights.programmer.Sequence;
 import dev.therealdan.lights.ui.PanelHandler;
-import dev.therealdan.lights.panels.panels.SequencesPanel;
 import dev.therealdan.lights.util.sorting.Sortable;
 
 import java.util.ArrayList;

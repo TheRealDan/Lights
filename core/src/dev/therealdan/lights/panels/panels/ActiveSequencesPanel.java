@@ -21,7 +21,7 @@ public class ActiveSequencesPanel implements Panel {
     @Override
     public boolean drawContent(Renderer renderer, float x, float y, float width, float height, boolean interacted) {
         if (PanelHandler.getSequences().size() == 0) {
-            renderer.box(x, y, width, height, Lights.theme.MEDIUM, "No Sequences Active", Task.TextPosition.CENTER);
+            renderer.box(x, y, width, height, renderer.getTheme().MEDIUM, "No Sequences Active", Task.TextPosition.CENTER);
             return interacted;
         }
 
@@ -30,7 +30,7 @@ public class ActiveSequencesPanel implements Panel {
             Sequence sequence = PanelHandler.getSequence(priority);
             if (sequence == null) continue;
 
-            renderer.box(x, y, width, rowHeight, Lights.theme.MEDIUM, sequence.getName() + " - " + priority);
+            renderer.box(x, y, width, rowHeight, renderer.getTheme().MEDIUM, sequence.getName() + " - " + priority);
             if (Lights.mouse.contains(x, y, width, rowHeight) && canInteract(interacted)) {
                 interacted = true;
                 if (Lights.mouse.leftClicked(1000)) {

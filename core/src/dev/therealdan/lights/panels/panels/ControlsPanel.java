@@ -32,11 +32,11 @@ public class ControlsPanel implements Panel {
         float width = getWidth();
         float cellHeight = 30;
 
-        renderer.box(x, y, width, cellHeight, Lights.theme.DARK_BLUE, setWidth(renderer, getFriendlyName()), Task.TextPosition.CENTER);
+        renderer.box(x, y, width, cellHeight, renderer.getTheme().DARK_BLUE, setWidth(renderer, getFriendlyName()), Task.TextPosition.CENTER);
         drag(x, y, width, cellHeight);
         y -= cellHeight;
 
-        renderer.box(x, y, width, cellHeight, Lights.theme.MEDIUM, setWidth(renderer, "Category: " + getSelectedCategory().formatString()), Task.TextPosition.LEFT_CENTER);
+        renderer.box(x, y, width, cellHeight, renderer.getTheme().MEDIUM, setWidth(renderer, "Category: " + getSelectedCategory().formatString()), Task.TextPosition.LEFT_CENTER);
         if (Lights.mouse.contains(x, y, width, cellHeight) && canInteract()) {
             interacted = true;
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(500)) {
@@ -51,8 +51,8 @@ public class ControlsPanel implements Panel {
             for (Button button : Button.buttons(POSITION)) {
                 Control control = Control.byButton(button);
                 setWidth(renderer, button.getName(), 2);
-                renderer.box(x, y, width / 2, cellHeight, isSelected(control) ? Lights.theme.DARK_RED : Lights.theme.MEDIUM, button.getName());
-                renderer.box(x + width / 2, y, width / 2, cellHeight, isSelected(control) ? Lights.theme.DARK_RED : Lights.theme.MEDIUM, control.formatKeycode());
+                renderer.box(x, y, width / 2, cellHeight, isSelected(control) ? renderer.getTheme().DARK_RED : renderer.getTheme().MEDIUM, button.getName());
+                renderer.box(x + width / 2, y, width / 2, cellHeight, isSelected(control) ? renderer.getTheme().DARK_RED : renderer.getTheme().MEDIUM, control.formatKeycode());
                 if (Lights.mouse.contains(x, y, width, cellHeight) && canInteract()) {
                     interacted = true;
                     if (Lights.mouse.leftClicked(500, getSelectedControl() != null && !control.equals(getSelectedControl()))) {
@@ -64,8 +64,8 @@ public class ControlsPanel implements Panel {
         } else {
             for (Control control : getSelectedCategory().getControls()) {
                 setWidth(renderer, control.getName(), 2);
-                renderer.box(x, y, width / 2, cellHeight, isSelected(control) ? Lights.theme.DARK_RED : Lights.theme.MEDIUM, control.getName());
-                renderer.box(x + width / 2, y, width / 2, cellHeight, isSelected(control) ? Lights.theme.DARK_RED : Lights.theme.MEDIUM, control.formatKeycode());
+                renderer.box(x, y, width / 2, cellHeight, isSelected(control) ? renderer.getTheme().DARK_RED : renderer.getTheme().MEDIUM, control.getName());
+                renderer.box(x + width / 2, y, width / 2, cellHeight, isSelected(control) ? renderer.getTheme().DARK_RED : renderer.getTheme().MEDIUM, control.formatKeycode());
                 if (Lights.mouse.contains(x, y, width, cellHeight) && canInteract()) {
                     interacted = true;
                     if (Lights.mouse.leftClicked(500, getSelectedControl() != null && !control.equals(getSelectedControl()))) {

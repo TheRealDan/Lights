@@ -4,12 +4,14 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import dev.therealdan.lights.main.Lights;
+import dev.therealdan.lights.main.Theme;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Renderer {
+
+    private Theme _theme;
 
     private ShapeRenderer shapeRenderer;
     private BitmapFont bitmapFont;
@@ -20,6 +22,8 @@ public class Renderer {
     private List<Task> tasks = new ArrayList<>();
 
     public Renderer() {
+        _theme = new Theme();
+
         shapeRenderer = new ShapeRenderer();
         bitmapFont = new BitmapFont();
         spriteBatch = new SpriteBatch();
@@ -76,11 +80,11 @@ public class Renderer {
     // CONVENIENCE
 
     public void box(float x, float y, float width, float height, Color background, String text) {
-        box(x, y, width, height, background, Lights.theme.TEXT, text);
+        box(x, y, width, height, background, _theme.TEXT, text);
     }
 
     public void box(float x, float y, float width, float height, Color background, String text, Task.TextPosition textPosition) {
-        box(x, y, width, height, background, Lights.theme.TEXT, text, textPosition);
+        box(x, y, width, height, background, _theme.TEXT, text, textPosition);
     }
 
     public void box(float x, float y, float width, float height, Color background, Color textColor, String text) {
@@ -94,6 +98,10 @@ public class Renderer {
 
     public void box(float x, float y, float width, float height, Color background) {
         queue(new Task(x, y - height).rect(width, height).setColor(background));
-        queue(new Task(x, y - height).rectOutline(width, height).setColor(Lights.theme.LIGHT));
+        queue(new Task(x, y - height).rectOutline(width, height).setColor(_theme.LIGHT));
+    }
+
+    public Theme getTheme() {
+        return _theme;
     }
 }

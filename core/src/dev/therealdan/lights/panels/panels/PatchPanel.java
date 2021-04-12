@@ -43,15 +43,15 @@ public class PatchPanel implements Panel {
             width = Math.max(width, idWidth + nameWidth + profileWidth + addressWidth);
         }
 
-        renderer.box(x, y, uiWidth, getHeight(), Lights.theme.DARK);
-        renderer.box(x, y, uiWidth, cellHeight, Lights.theme.DARK_BLUE, getFriendlyName(), Task.TextPosition.CENTER);
+        renderer.box(x, y, uiWidth, getHeight(), renderer.getTheme().DARK);
+        renderer.box(x, y, uiWidth, cellHeight, renderer.getTheme().DARK_BLUE, getFriendlyName(), Task.TextPosition.CENTER);
         drag(x, y, uiWidth, cellHeight);
         y -= cellHeight;
 
-        renderer.box(x, y, idWidth, cellHeight, Lights.theme.DARK_BLUE, "ID", Task.TextPosition.CENTER);
-        renderer.box(x + idWidth, y, nameWidth, cellHeight, Lights.theme.DARK_BLUE, "Name", Task.TextPosition.CENTER);
-        renderer.box(x + idWidth + nameWidth, y, profileWidth, cellHeight, Lights.theme.DARK_BLUE, "Profile", Task.TextPosition.CENTER);
-        renderer.box(x + idWidth + nameWidth + profileWidth, y, addressWidth, cellHeight, Lights.theme.DARK_BLUE, "Address", Task.TextPosition.CENTER);
+        renderer.box(x, y, idWidth, cellHeight, renderer.getTheme().DARK_BLUE, "ID", Task.TextPosition.CENTER);
+        renderer.box(x + idWidth, y, nameWidth, cellHeight, renderer.getTheme().DARK_BLUE, "Name", Task.TextPosition.CENTER);
+        renderer.box(x + idWidth + nameWidth, y, profileWidth, cellHeight, renderer.getTheme().DARK_BLUE, "Profile", Task.TextPosition.CENTER);
+        renderer.box(x + idWidth + nameWidth + profileWidth, y, addressWidth, cellHeight, renderer.getTheme().DARK_BLUE, "Address", Task.TextPosition.CENTER);
         drag(x, y, width, cellHeight);
         y -= cellHeight;
 
@@ -62,7 +62,7 @@ public class PatchPanel implements Panel {
                     select(fixture);
                 }
             }
-            Color color = fixture.equals(getSelectedFixture()) ? Lights.theme.DARK_GREEN : Lights.theme.MEDIUM;
+            Color color = fixture.equals(getSelectedFixture()) ? renderer.getTheme().DARK_GREEN : renderer.getTheme().MEDIUM;
             renderer.box(x, y, idWidth, cellHeight, color, setWidth(renderer, Integer.toString(fixture.getID())), Task.TextPosition.CENTER);
             renderer.box(x + idWidth, y, nameWidth, cellHeight, color, setWidth(renderer, fixture.getName()));
             renderer.box(x + idWidth + nameWidth, y, profileWidth, cellHeight, color, setWidth(renderer, fixture.getProfile()));
@@ -87,10 +87,10 @@ public class PatchPanel implements Panel {
                     }
                 }
                 boolean selected = getSelectedFixture().getAddress() <= address && address <= getSelectedFixture().getAddress() + getSelectedFixture().getPhysicalChannels() - 1;
-                Color color = Lights.theme.MEDIUM;
-                if (selected) color = Lights.theme.DARK_GREEN;
-                if (occupied) color = Lights.theme.DARK_BLUE;
-                if (selected && occupied) color = Lights.theme.DARK_CYAN;
+                Color color = renderer.getTheme().MEDIUM;
+                if (selected) color = renderer.getTheme().DARK_GREEN;
+                if (occupied) color = renderer.getTheme().DARK_BLUE;
+                if (selected && occupied) color = renderer.getTheme().DARK_CYAN;
                 renderer.box(x, y, cellHeight, cellHeight, color, Integer.toString(address));
                 if (Lights.mouse.contains(x, y, cellHeight, cellHeight) && canInteract()) {
                     interacted = true;

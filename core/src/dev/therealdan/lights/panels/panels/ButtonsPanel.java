@@ -3,6 +3,7 @@ package dev.therealdan.lights.panels.panels;
 import com.badlogic.gdx.graphics.Color;
 import dev.therealdan.lights.controllers.Button;
 import dev.therealdan.lights.main.Lights;
+import dev.therealdan.lights.main.Theme;
 import dev.therealdan.lights.panels.Panel;
 import dev.therealdan.lights.panels.menuicons.AddButtonIcon;
 import dev.therealdan.lights.panels.menuicons.CloseIcon;
@@ -14,9 +15,9 @@ public class ButtonsPanel implements Panel {
 
     private int buttonsPerRow = 8;
 
-    public ButtonsPanel() {
+    public ButtonsPanel(Theme theme) {
         register(new CloseIcon());
-        register(new AddButtonIcon());
+        register(new AddButtonIcon(theme.MEDIUM));
 
         setWidth(800);
         setHeight(200);
@@ -47,7 +48,7 @@ public class ButtonsPanel implements Panel {
                     }
                 }
             } else {
-                renderer.box(x, y, buttonWidth, buttonHeight, Lights.theme.DARK);
+                renderer.box(x, y, buttonWidth, buttonHeight, renderer.getTheme().DARK);
                 if (Lights.mouse.contains(x, y, buttonWidth, buttonHeight) && canInteract() && buttonEditor.isEditing()) {
                     if (Lights.mouse.leftClicked()) {
                         buttonEditor.getEditing().setPosition(position);

@@ -15,7 +15,6 @@ public class Lights extends ApplicationAdapter {
 
     private static Lights lights;
 
-    public static Theme theme;
     public static Keyboard keyboard;
     public static Mouse mouse;
     public static Output output;
@@ -32,7 +31,6 @@ public class Lights extends ApplicationAdapter {
     public void create() {
         lights = this;
 
-        theme = new Theme();
         keyboard = new Keyboard();
         mouse = new Mouse();
         output = new Output();
@@ -46,7 +44,7 @@ public class Lights extends ApplicationAdapter {
         renderer = new Renderer();
         theInputProcessor = new TheInputProcessor();
 
-        panelHandler = new PanelHandler();
+        panelHandler = new PanelHandler(renderer.getTheme());
         visualiser3D = new Visualiser3D();
         profileEditor = new ProfileEditor();
         fixtureEditor = new FixtureEditor();
@@ -61,7 +59,7 @@ public class Lights extends ApplicationAdapter {
 
     @Override
     public void render() {
-        Color background = Lights.theme.BACKGROUND;
+        Color background = renderer.getTheme().BACKGROUND;
         Gdx.gl.glClearColor(background.r, background.g, background.b, background.a);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 

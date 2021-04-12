@@ -25,14 +25,14 @@ public class SettingsPanel implements Panel {
         float y = getY();
         float width = getWidth();
 
-        renderer.box(x, y, width, cellHeight, Lights.theme.DARK_BLUE, setWidth(renderer, getFriendlyName()), Task.TextPosition.CENTER);
+        renderer.box(x, y, width, cellHeight, renderer.getTheme().DARK_BLUE, setWidth(renderer, getFriendlyName()), Task.TextPosition.CENTER);
         drag(x, y, width, cellHeight);
         y -= cellHeight;
 
         for (Setting setting : Setting.settings()) {
             switch (setting.getType()) {
                 case LONG:
-                    renderer.box(x, y, width, cellHeight, Lights.theme.MEDIUM, setWidth(renderer, setting.getName() + ": " + setting.getValue()));
+                    renderer.box(x, y, width, cellHeight, renderer.getTheme().MEDIUM, setWidth(renderer, setting.getName() + ": " + setting.getValue()));
                     if (Lights.mouse.contains(x, y, width, cellHeight) && canInteract()) {
                         interacted = true;
                         if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(100)) {
@@ -45,7 +45,7 @@ public class SettingsPanel implements Panel {
                     }
                     break;
                 case BOOLEAN:
-                    renderer.box(x, y, width, cellHeight, setting.isTrue() ? Lights.theme.DARK_GREEN : Lights.theme.MEDIUM, setWidth(renderer, setting.getName()));
+                    renderer.box(x, y, width, cellHeight, setting.isTrue() ? renderer.getTheme().DARK_GREEN : renderer.getTheme().MEDIUM, setWidth(renderer, setting.getName()));
                     if (Lights.mouse.contains(x, y, width, cellHeight) && canInteract()) {
                         interacted = true;
                         if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(250))

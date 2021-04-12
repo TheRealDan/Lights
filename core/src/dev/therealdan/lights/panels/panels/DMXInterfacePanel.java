@@ -24,7 +24,7 @@ public class DMXInterfacePanel implements Panel {
         float y = getY();
         float width = getWidth();
 
-        renderer.box(x, y, width, cellHeight, Lights.theme.DARK_BLUE, setWidth(renderer, getFriendlyName()), Task.TextPosition.CENTER);
+        renderer.box(x, y, width, cellHeight, renderer.getTheme().DARK_BLUE, setWidth(renderer, getFriendlyName()), Task.TextPosition.CENTER);
         drag(x, y, width, cellHeight);
         y -= cellHeight;
 
@@ -38,7 +38,7 @@ public class DMXInterfacePanel implements Panel {
                     }
                 }
             }
-            renderer.box(x, y, width, cellHeight, Lights.output.getActivePort().equals(port) ? Lights.theme.DARK_RED : Lights.theme.MEDIUM, setWidth(renderer, port));
+            renderer.box(x, y, width, cellHeight, Lights.output.getActivePort().equals(port) ? renderer.getTheme().DARK_RED : renderer.getTheme().MEDIUM, setWidth(renderer, port));
             y -= cellHeight;
         }
 

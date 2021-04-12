@@ -128,11 +128,11 @@ public class SequenceProgrammerPanel implements Panel {
         float y = getY();
         float width = getWidth();
 
-        renderer.box(x, y, getWidth(), cellHeight, Lights.theme.DARK_BLUE, setWidth(renderer, getFriendlyName()), Task.TextPosition.CENTER);
+        renderer.box(x, y, getWidth(), cellHeight, renderer.getTheme().DARK_BLUE, setWidth(renderer, getFriendlyName()), Task.TextPosition.CENTER);
         drag(x, y, getWidth(), cellHeight);
         y -= cellHeight;
 
-        renderer.box(x, y, getWidth(), cellHeight, selected.equals(Selected.NAME) ? Lights.theme.DARK_RED : Lights.theme.MEDIUM, setWidth(renderer, sequence.getName()), Task.TextPosition.CENTER);
+        renderer.box(x, y, getWidth(), cellHeight, selected.equals(Selected.NAME) ? renderer.getTheme().DARK_RED : renderer.getTheme().MEDIUM, setWidth(renderer, sequence.getName()), Task.TextPosition.CENTER);
         if (Lights.mouse.contains(x, y, width, cellHeight) && canInteract()) {
             interacted = true;
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT))
@@ -142,7 +142,7 @@ public class SequenceProgrammerPanel implements Panel {
 
         x = getX();
         width = getWidth() / 2f;
-        renderer.box(x, y, width, cellHeight, selected.equals(Selected.FRAME) ? Lights.theme.DARK_RED : Lights.theme.MEDIUM, setWidth(renderer,
+        renderer.box(x, y, width, cellHeight, selected.equals(Selected.FRAME) ? renderer.getTheme().DARK_RED : renderer.getTheme().MEDIUM, setWidth(renderer,
                 firstSelectedFrame != null ?
                         "Frame time: " + Frame.format(firstSelectedFrame.getFrameTime()) :
                         "N/A"
@@ -153,7 +153,7 @@ public class SequenceProgrammerPanel implements Panel {
                 setSelected(Selected.FRAME);
         }
         x += width;
-        renderer.box(x, y, width, cellHeight, selected.equals(Selected.FADE) ? Lights.theme.DARK_RED : Lights.theme.MEDIUM, setWidth(renderer,
+        renderer.box(x, y, width, cellHeight, selected.equals(Selected.FADE) ? renderer.getTheme().DARK_RED : renderer.getTheme().MEDIUM, setWidth(renderer,
                 firstSelectedFrame != null ?
                         "Fade time: " + Frame.format(firstSelectedFrame.getFadeTime()) :
                         "N/A"
@@ -171,7 +171,7 @@ public class SequenceProgrammerPanel implements Panel {
             boolean highlight = false;
             if (button.equals(Button.LOOP)) highlight = sequence.doesLoop();
             setWidth((renderer.getWidth(button.getName()) + 10) * Button.values().length, true);
-            renderer.box(x, y, width, cellHeight, highlight ? Lights.theme.DARK_GREEN : Lights.theme.MEDIUM, button.getName(), Task.TextPosition.CENTER);
+            renderer.box(x, y, width, cellHeight, highlight ? renderer.getTheme().DARK_GREEN : renderer.getTheme().MEDIUM, button.getName(), Task.TextPosition.CENTER);
             if (Lights.mouse.contains(x, y, width, cellHeight) && canInteract()) {
                 interacted = true;
                 if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(500))
@@ -185,15 +185,15 @@ public class SequenceProgrammerPanel implements Panel {
         width = getWidth();
         int index = 0;
         for (Frame frame : sequence.frames()) {
-            Color color = Lights.theme.MEDIUM;
-            if (Programmer.isSelected(frame)) color = Lights.theme.DARK_RED;
+            Color color = renderer.getTheme().MEDIUM;
+            if (Programmer.isSelected(frame)) color = renderer.getTheme().DARK_RED;
             if (sequence.getCurrentFrame() == index) {
-                color = Lights.theme.DARK_GREEN;
-                if (Programmer.isSelected(frame)) color = Lights.theme.DARK_YELLOW;
+                color = renderer.getTheme().DARK_GREEN;
+                if (Programmer.isSelected(frame)) color = renderer.getTheme().DARK_YELLOW;
             }
             renderer.box(x, y, width, cellHeight, color, setWidth(renderer, frame.getInfo()));
             if (DMX.DRAW_DMX) {
-                if (color == Lights.theme.MEDIUM) color = Lights.theme.LIGHT;
+                if (color == renderer.getTheme().MEDIUM) color = renderer.getTheme().LIGHT;
                 frame.draw(renderer, x, y, width, cellHeight, color);
             }
             if (Lights.mouse.contains(x, y, width, cellHeight) && canInteract()) {

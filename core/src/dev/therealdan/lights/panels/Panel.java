@@ -62,7 +62,7 @@ public interface Panel {
 
     // Return whether hovering over resize area
     default boolean drawBackground(Renderer renderer, float x, float y, float width, float height) {
-        renderer.box(x, y, width, height, Lights.theme.DARK);
+        renderer.box(x, y, width, height, renderer.getTheme().DARK);
         if (isResizeable())
             return Lights.mouse.contains(x + width - 20, y - height + 20, 20, 20);
         return false;
@@ -70,7 +70,7 @@ public interface Panel {
 
     // Return whether menu bar was interacted with
     default boolean drawMenuBar(Renderer renderer, float x, float y, float width, float height, boolean interacted) {
-        renderer.box(x, y, width, height, Lights.theme.DARK_BLUE, getTitle(), Task.TextPosition.CENTER);
+        renderer.box(x, y, width, height, renderer.getTheme().DARK_BLUE, getTitle(), Task.TextPosition.CENTER);
         return interacted;
     }
 

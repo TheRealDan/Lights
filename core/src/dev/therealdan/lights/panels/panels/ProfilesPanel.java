@@ -45,7 +45,7 @@ public class ProfilesPanel implements Panel {
             if (current == getProfileScroll()) display = true;
             current++;
             if (display) {
-                renderer.box(x, y, width, cellHeight, profile.equals(getSelectedProfile()) ? Lights.theme.DARK_GREEN : Lights.theme.MEDIUM, profile.getName());
+                renderer.box(x, y, width, cellHeight, profile.equals(getSelectedProfile()) ? renderer.getTheme().DARK_GREEN : renderer.getTheme().MEDIUM, profile.getName());
                 if (Lights.mouse.contains(x, y, width, cellHeight) && canInteract(interacted)) {
                     interacted = true;
                     if (Lights.mouse.leftClicked()) {
@@ -57,7 +57,7 @@ public class ProfilesPanel implements Panel {
             }
         }
 
-        renderer.box(x, y, width, cellHeight, Lights.theme.MEDIUM, Lights.theme.GREEN, "Add New");
+        renderer.box(x, y, width, cellHeight, renderer.getTheme().MEDIUM, renderer.getTheme().GREEN, "Add New");
         if (Lights.mouse.contains(x, y, width, cellHeight) && canInteract(interacted)) {
             interacted = true;
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(500)) {
@@ -77,33 +77,33 @@ public class ProfilesPanel implements Panel {
         x += width;
         y = getY() - cellHeight;
 
-        renderer.box(x, y, width, cellHeight, canEditName() ? Lights.theme.DARK_RED : Lights.theme.MEDIUM, "Name: " + getSelectedProfile().getName());
+        renderer.box(x, y, width, cellHeight, canEditName() ? renderer.getTheme().DARK_RED : renderer.getTheme().MEDIUM, "Name: " + getSelectedProfile().getName());
         if (Lights.mouse.contains(x, y, width, cellHeight) && canInteract(interacted)) {
             interacted = true;
             if (Lights.mouse.leftClicked(500)) toggleCanEditName();
         }
         y -= cellHeight;
 
-        renderer.box(x, y, width, cellHeight, Lights.theme.MEDIUM, "Physical Channels: " + getSelectedProfile().getPhysicalChannels());
+        renderer.box(x, y, width, cellHeight, renderer.getTheme().MEDIUM, "Physical Channels: " + getSelectedProfile().getPhysicalChannels());
         if (Lights.mouse.contains(x, y, width, cellHeight) && canInteract(interacted)) interacted = true;
         y -= cellHeight;
 
-        renderer.box(x, y, width, cellHeight, Lights.theme.MEDIUM, "Virtual Channels: " + getSelectedProfile().getVirtualChannels());
+        renderer.box(x, y, width, cellHeight, renderer.getTheme().MEDIUM, "Virtual Channels: " + getSelectedProfile().getVirtualChannels());
         if (Lights.mouse.contains(x, y, width, cellHeight) && canInteract(interacted)) interacted = true;
         y -= cellHeight;
 
-        renderer.box(x, y, width, cellHeight, Lights.theme.MEDIUM, "Model: " + getSelectedProfile().countModels());
+        renderer.box(x, y, width, cellHeight, renderer.getTheme().MEDIUM, "Model: " + getSelectedProfile().countModels());
         if (Lights.mouse.contains(x, y, width, cellHeight) && canInteract(interacted)) interacted = true;
         y -= cellHeight;
 
-        renderer.box(x, y, width, cellHeight, Lights.theme.MEDIUM, Lights.theme.YELLOW, "Advanced");
+        renderer.box(x, y, width, cellHeight, renderer.getTheme().MEDIUM, renderer.getTheme().YELLOW, "Advanced");
         if (Lights.mouse.contains(x, y, width, cellHeight) && canInteract(interacted)) {
             interacted = true;
             if (Lights.mouse.leftClicked()) Lights.openProfileEditor(getSelectedProfile());
         }
         y -= cellHeight;
 
-        renderer.box(x, y, width, cellHeight, Lights.theme.MEDIUM, Lights.theme.RED, "Delete");
+        renderer.box(x, y, width, cellHeight, renderer.getTheme().MEDIUM, renderer.getTheme().RED, "Delete");
         if (Lights.mouse.contains(x, y, width, cellHeight) && canInteract(interacted)) {
             interacted = true;
             if (Lights.mouse.leftClicked()) {

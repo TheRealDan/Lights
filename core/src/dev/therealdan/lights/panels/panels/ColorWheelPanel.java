@@ -1,7 +1,6 @@
 package dev.therealdan.lights.panels.panels;
 
 import com.badlogic.gdx.graphics.Color;
-import dev.therealdan.lights.main.Lights;
 import dev.therealdan.lights.panels.Panel;
 import dev.therealdan.lights.programmer.Frame;
 import dev.therealdan.lights.programmer.Programmer;
@@ -32,7 +31,7 @@ public class ColorWheelPanel implements Panel {
         float width = getWidth();
         float height = getHeight() - cellHeight;
 
-        renderer.box(x, y, width, cellHeight, Lights.theme.DARK_BLUE, setWidth(renderer, getFriendlyName()));
+        renderer.box(x, y, width, cellHeight, renderer.getTheme().DARK_BLUE, setWidth(renderer, getFriendlyName()));
 
         float third = width / 3f;
         float seventh = width / 7f;

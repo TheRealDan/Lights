@@ -2,6 +2,7 @@ package dev.therealdan.lights.panels.panels;
 
 import com.badlogic.gdx.graphics.Color;
 import dev.therealdan.lights.main.Lights;
+import dev.therealdan.lights.main.Theme;
 import dev.therealdan.lights.panels.Panel;
 import dev.therealdan.lights.panels.menuicons.CloseIcon;
 import dev.therealdan.lights.programmer.Programmer;
@@ -27,8 +28,8 @@ public class NewSequenceProgrammerPanel implements Panel {
         float y = getY();
         float width = getWidth();
 
-        renderer.box(x, y, getWidth(), getHeight(), Lights.theme.DARK);
-        renderer.box(x, y, width, cellHeight, Lights.theme.DARK_BLUE, getFriendlyName(), Task.TextPosition.CENTER);
+        renderer.box(x, y, getWidth(), getHeight(), renderer.getTheme().DARK);
+        renderer.box(x, y, width, cellHeight, renderer.getTheme().DARK_BLUE, getFriendlyName(), Task.TextPosition.CENTER);
         drag(x, y, width, cellHeight);
         y -= cellHeight;
 
@@ -37,7 +38,7 @@ public class NewSequenceProgrammerPanel implements Panel {
                 if (Lights.mouse.leftClicked(500)) option.leftClick();
                 if (Lights.mouse.rightClicked(500)) option.rightClick();
             }
-            renderer.box(x, y, optionsWidth, cellHeight, option.getBackground(), option.getText(), option.getName(), Task.TextPosition.CENTER);
+            renderer.box(x, y, optionsWidth, cellHeight, option.getBackground(renderer.getTheme()), option.getText(renderer.getTheme()), option.getName(), Task.TextPosition.CENTER);
             y -= cellHeight;
         }
         setHeightBasedOnY(y);
@@ -93,30 +94,30 @@ public class NewSequenceProgrammerPanel implements Panel {
             }
         }
 
-        public Color getBackground() {
+        public Color getBackground(Theme theme) {
             switch (this) {
                 case NAME:
                     // TODO - Check if name is selected
-                    return false ? Lights.theme.DARK_RED : Lights.theme.MEDIUM;
+                    return false ? theme.DARK_RED : theme.MEDIUM;
                 case ENABLE_LOOP:
-                    return Programmer.getSequence().doesLoop() ? Lights.theme.DARK_GREEN : Lights.theme.MEDIUM;
+                    return Programmer.getSequence().doesLoop() ? theme.DARK_GREEN : theme.MEDIUM;
                 default:
-                    return Lights.theme.MEDIUM;
+                    return theme.MEDIUM;
             }
         }
 
-        public Color getText() {
+        public Color getText(Theme theme) {
             switch (this) {
                 default:
-                    return Lights.theme.TEXT;
+                    return theme.TEXT;
                 case ADD_FRAME:
                 case CLONE_FRAME:
-                    return Lights.theme.YELLOW;
+                    return theme.YELLOW;
                 case SAVE_SEQUENCE:
-                    return Lights.theme.GREEN;
+                    return theme.GREEN;
                 case DELETE_SELECTED:
                 case CLEAR_ALL:
-                    return Lights.theme.RED;
+                    return theme.RED;
             }
         }
     }

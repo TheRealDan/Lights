@@ -9,6 +9,7 @@ import dev.therealdan.lights.fixtures.Fixture;
 import dev.therealdan.lights.fixtures.Group;
 import dev.therealdan.lights.fixtures.fixture.Profile;
 import dev.therealdan.lights.main.Lights;
+import dev.therealdan.lights.main.Theme;
 import dev.therealdan.lights.panels.MenuIcon;
 import dev.therealdan.lights.panels.Panel;
 import dev.therealdan.lights.panels.menuicons.ResizeIcon;
@@ -48,7 +49,7 @@ public class PanelHandler implements Visual {
     private CondensedFrame targetCondensedFrame, currentCondensedFrame, previousCondensedFrame;
     private long condensedFrameTimestamp = System.currentTimeMillis();
 
-    public PanelHandler() {
+    public PanelHandler(Theme theme) {
         panelHandler = this;
 
         resizeIcon = new ResizeIcon();
@@ -78,7 +79,7 @@ public class PanelHandler implements Visual {
         panels.add(new ButtonEditorPanel());
 
         // Util
-        panels.add(new ConsolePanel());
+        panels.add(new ConsolePanel(theme));
         panels.add(new DMXOutputPanel());
 
         // Programmer
@@ -96,7 +97,7 @@ public class PanelHandler implements Visual {
         // Panels
         panels.add(new MasterPanel());
         panels.add(new FadersPanel());
-        panels.add(new ButtonsPanel());
+        panels.add(new ButtonsPanel(theme));
 
         // TODO - Move elsewhere
         Button.loadButtonsFromFile();

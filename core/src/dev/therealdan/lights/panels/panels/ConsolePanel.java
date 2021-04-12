@@ -4,6 +4,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import dev.therealdan.lights.commands.*;
 import dev.therealdan.lights.main.Lights;
+import dev.therealdan.lights.main.Theme;
 import dev.therealdan.lights.panels.Panel;
 import dev.therealdan.lights.panels.menuicons.CloseIcon;
 import dev.therealdan.lights.renderer.Renderer;
@@ -17,6 +18,8 @@ import java.util.List;
 
 public class ConsolePanel implements Panel {
 
+    private Theme _theme;
+
     private static ConsolePanel console;
     private static SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm:ss");
 
@@ -28,7 +31,9 @@ public class ConsolePanel implements Panel {
     private boolean commandHistoryActive = false;
     private String input = "";
 
-    public ConsolePanel() {
+    public ConsolePanel(Theme theme) {
+        _theme = theme;
+
         console = this;
 
         register(new HelpCommand());
@@ -49,7 +54,7 @@ public class ConsolePanel implements Panel {
         float width = getWidth();
         float cellHeight = 30;
 
-        renderer.box(x, y, width, cellHeight, Lights.theme.DARK_BLUE, setWidth(renderer, getFriendlyName()), Task.TextPosition.CENTER);
+        renderer.box(x, y, width, cellHeight, _theme.DARK_BLUE, setWidth(renderer, getFriendlyName()), Task.TextPosition.CENTER);
         drag(x, y, width, cellHeight);
         y -= cellHeight;
 
@@ -59,12 +64,12 @@ public class ConsolePanel implements Panel {
                 colorCode = line.substring(1, 2);
                 line = line.substring(2);
             }
-            renderer.box(x, y, width, cellHeight, Lights.theme.MEDIUM, getColor(colorCode), setWidth(renderer, line));
+            renderer.box(x, y, width, cellHeight, _theme.MEDIUM, getColor(colorCode), setWidth(renderer, line));
             drag(x, y, width, cellHeight);
             y -= cellHeight;
         }
 
-        renderer.box(x, y, width, cellHeight, canInteract() ? Lights.theme.DARK_RED : Lights.theme.MEDIUM, setWidth(renderer, input));
+        renderer.box(x, y, width, cellHeight, canInteract() ? _theme.DARK_RED : _theme.MEDIUM, setWidth(renderer, input));
         drag(x, y, width, cellHeight);
         y -= cellHeight;
 
@@ -162,21 +167,21 @@ public class ConsolePanel implements Panel {
     private Color getColor(String colorCode) {
         switch (colorCode.toUpperCase()) {
             case "R":
-                return Lights.theme.RED;
+                return _theme.RED;
             case "G":
-                return Lights.theme.GREEN;
+                return _theme.GREEN;
             case "B":
-                return Lights.theme.BLUE;
+                return _theme.BLUE;
             case "M":
-                return Lights.theme.MAGENTA;
+                return _theme.MAGENTA;
             case "Y":
-                return Lights.theme.YELLOW;
+                return _theme.YELLOW;
             case "C":
-                return Lights.theme.CYAN;
+                return _theme.CYAN;
 
             case "W":
             default:
-                return Lights.theme.TEXT;
+                return _theme.TEXT;
         }
     }
 

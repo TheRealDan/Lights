@@ -44,13 +44,13 @@ public class ParametersPanel implements Panel {
         float width = getWidth() / 4;
         float cellHeight = 30;
 
-        renderer.box(x, y, getWidth(), getHeight(), Lights.theme.DARK);
-        renderer.box(x, y, getWidth(), cellHeight, Lights.theme.DARK_BLUE, getFriendlyName(), Task.TextPosition.CENTER);
+        renderer.box(x, y, getWidth(), getHeight(), renderer.getTheme().DARK);
+        renderer.box(x, y, getWidth(), cellHeight, renderer.getTheme().DARK_BLUE, getFriendlyName(), Task.TextPosition.CENTER);
         drag(x, y, getWidth(), cellHeight);
         y -= cellHeight;
 
         for (Channel.Category category : Programmer.availableChannelTypeCategories()) {
-            renderer.box(x, y, width, cellHeight, category.equals(getCategory()) ? Lights.theme.DARK_GREEN : Lights.theme.MEDIUM, category.getName(), Task.TextPosition.CENTER);
+            renderer.box(x, y, width, cellHeight, category.equals(getCategory()) ? renderer.getTheme().DARK_GREEN : renderer.getTheme().MEDIUM, category.getName(), Task.TextPosition.CENTER);
             if (Lights.mouse.contains(x, y, width, cellHeight) && canInteract()) {
                 interacted = true;
                 if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(500)) {
@@ -81,13 +81,13 @@ public class ParametersPanel implements Panel {
                 }
                 seen++;
                 if (Lights.mouse.contains(x, y, width, parameterHeight) && canInteract()) setChannelType(channelType);
-                renderer.box(x, y, width, cellHeight, Lights.theme.DARK_BLUE, channelType.getName(), Task.TextPosition.CENTER);
+                renderer.box(x, y, width, cellHeight, renderer.getTheme().DARK_BLUE, channelType.getName(), Task.TextPosition.CENTER);
                 drag(x, y, width, cellHeight);
                 y -= cellHeight;
 
                 for (float percentage = 1.0f; percentage >= -0.01f; percentage -= 0.05f) {
                     float level = Float.parseFloat(decimalFormat.format(percentage * 100.0));
-                    renderer.box(x, y, width, cellHeight, isSet(channelType, parameter) && getLevel(channelType, parameter) == level ? Lights.theme.DARK_RED : Lights.theme.MEDIUM, Float.toString(level).replace("-", "").replace(".0", "") + "%", Task.TextPosition.CENTER);
+                    renderer.box(x, y, width, cellHeight, isSet(channelType, parameter) && getLevel(channelType, parameter) == level ? renderer.getTheme().DARK_RED : renderer.getTheme().MEDIUM, Float.toString(level).replace("-", "").replace(".0", "") + "%", Task.TextPosition.CENTER);
                     if (Lights.mouse.contains(x, y, width, cellHeight) && canInteract()) {
                         interacted = true;
                         if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(-1)) {

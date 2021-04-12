@@ -79,7 +79,7 @@ public class PanelHandler implements Visual {
 
         for (DMXInterface dmxInterface : output.getDMXInterfaces())
             if (dmxInterface instanceof CustomSerialInterface)
-                panels.add(new DMXInterfacePanel((CustomSerialInterface) dmxInterface));
+                panels.add(new CustomSerialInterfacePanel((CustomSerialInterface) dmxInterface));
 
         // Setup
         panels.add(new ProfilesPanel());

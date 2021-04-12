@@ -9,11 +9,11 @@ import dev.therealdan.lights.panels.menuicons.CloseIcon;
 import dev.therealdan.lights.renderer.Renderer;
 import dev.therealdan.lights.renderer.Task;
 
-public class DMXInterfacePanel implements Panel {
+public class CustomSerialInterfacePanel implements Panel {
 
     private CustomSerialInterface _customSerialInterface;
 
-    public DMXInterfacePanel(CustomSerialInterface customSerialInterface) {
+    public CustomSerialInterfacePanel(CustomSerialInterface customSerialInterface) {
         _customSerialInterface = customSerialInterface;
 
         register(new CloseIcon());

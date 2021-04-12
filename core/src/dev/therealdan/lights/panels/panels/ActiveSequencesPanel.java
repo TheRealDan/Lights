@@ -1,6 +1,6 @@
 package dev.therealdan.lights.panels.panels;
 
-import dev.therealdan.lights.main.Lights;
+import dev.therealdan.lights.main.Mouse;
 import dev.therealdan.lights.panels.Panel;
 import dev.therealdan.lights.panels.menuicons.CloseIcon;
 import dev.therealdan.lights.programmer.Sequence;
@@ -19,7 +19,7 @@ public class ActiveSequencesPanel implements Panel {
     }
 
     @Override
-    public boolean drawContent(Renderer renderer, float x, float y, float width, float height, boolean interacted) {
+    public boolean drawContent(Mouse mouse, Renderer renderer, float x, float y, float width, float height, boolean interacted) {
         if (PanelHandler.getSequences().size() == 0) {
             renderer.box(x, y, width, height, renderer.getTheme().MEDIUM, "No Sequences Active", Task.TextPosition.CENTER);
             return interacted;
@@ -31,9 +31,9 @@ public class ActiveSequencesPanel implements Panel {
             if (sequence == null) continue;
 
             renderer.box(x, y, width, rowHeight, renderer.getTheme().MEDIUM, sequence.getName() + " - " + priority);
-            if (Lights.mouse.contains(x, y, width, rowHeight) && canInteract(interacted)) {
+            if (mouse.within(x, y, width, rowHeight) && canInteract(interacted)) {
                 interacted = true;
-                if (Lights.mouse.leftClicked(1000)) {
+                if (mouse.leftClicked(1000)) {
                     PanelHandler.clearSequence(priority);
                 }
             }

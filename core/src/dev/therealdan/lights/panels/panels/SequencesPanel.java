@@ -5,7 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.files.FileHandle;
 import dev.therealdan.lights.fixtures.Fixture;
 import dev.therealdan.lights.fixtures.fixture.profile.Channel;
-import dev.therealdan.lights.main.Lights;
+import dev.therealdan.lights.main.Mouse;
 import dev.therealdan.lights.panels.Panel;
 import dev.therealdan.lights.panels.menuicons.CloseIcon;
 import dev.therealdan.lights.programmer.Frame;
@@ -120,7 +120,7 @@ public class SequencesPanel implements Panel {
     }
 
     @Override
-    public boolean draw(Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {
+    public boolean draw(Mouse mouse, Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {
         boolean interacted = false;
         boolean shift = Util.isShiftHeld();
 
@@ -134,9 +134,9 @@ public class SequencesPanel implements Panel {
 
         renderer.box(x, y, getWidth(), getHeight(), renderer.getTheme().DARK);
         renderer.box(x, y, sequencesWidth, cellHeight, renderer.getTheme().DARK_BLUE, "Sequences: " + countSequences(), dev.therealdan.lights.renderer.Task.TextPosition.CENTER);
-        drag(x, y, sequencesWidth, cellHeight);
+        drag(mouse, x, y, sequencesWidth, cellHeight);
         y -= cellHeight;
-        canScrollSequences = Lights.mouse.contains(x, y, sequencesWidth, getHeight());
+        canScrollSequences = mouse.within(x, y, sequencesWidth, getHeight());
 
         int i = 0;
         boolean display = false;
@@ -144,7 +144,7 @@ public class SequencesPanel implements Panel {
             if (sequence.equals(getSequencesScroll())) display = true;
             if (display) {
                 renderer.box(x, y, sequencesWidth, cellHeight, sequence.equals(getSelectedSequence()) ? renderer.getTheme().DARK_GREEN : renderer.getTheme().MEDIUM, setWidth(renderer, sequence.getName()));
-                if (Lights.mouse.contains(x, y, sequencesWidth, cellHeight) && canInteract()) {
+                if (mouse.within(x, y, sequencesWidth, cellHeight) && canInteract()) {
                     interacted = true;
                     if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
                         select(sequence);
@@ -166,13 +166,13 @@ public class SequencesPanel implements Panel {
         x += sequencesWidth;
         y = getY();
         renderer.box(x, y, optionsWidth, cellHeight, renderer.getTheme().DARK_BLUE, "Sequence Options", dev.therealdan.lights.renderer.Task.TextPosition.CENTER);
-        drag(x, y, optionsWidth, cellHeight);
+        drag(mouse, x, y, optionsWidth, cellHeight);
         y -= cellHeight;
 
         renderer.box(x, y, optionsWidth, cellHeight, canEdit(Section.NAME) ? renderer.getTheme().DARK_GREEN : renderer.getTheme().MEDIUM, "Name: " + getSelectedSequence().getName());
-        if (Lights.mouse.contains(x, y, optionsWidth, cellHeight) && canInteract()) {
+        if (mouse.within(x, y, optionsWidth, cellHeight) && canInteract()) {
             interacted = true;
-            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(500)) {
+            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && mouse.leftReady(500)) {
                 if (canEdit(Section.NAME)) {
                     edit(null);
                 } else {
@@ -183,54 +183,54 @@ public class SequencesPanel implements Panel {
         y -= cellHeight;
 
         renderer.box(x, y, optionsWidth, cellHeight, hasSelectedSequence() && getSelectedSequence().doesLoop() ? renderer.getTheme().DARK_GREEN : renderer.getTheme().MEDIUM, "Loop");
-        if (Lights.mouse.contains(x, y, optionsWidth, cellHeight) && canInteract()) {
+        if (mouse.within(x, y, optionsWidth, cellHeight) && canInteract()) {
             interacted = true;
-            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(500)) {
+            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && mouse.leftReady(500)) {
                 if (hasSelectedSequence()) getSelectedSequence().toggleLoop();
             }
         }
         y -= cellHeight;
 
         renderer.box(x, y, optionsWidth, cellHeight, hasSelectedSequence() && getSelectedSequence().doesClear() ? renderer.getTheme().DARK_GREEN : renderer.getTheme().MEDIUM, "Clear after play through");
-        if (Lights.mouse.contains(x, y, optionsWidth, cellHeight) && canInteract()) {
+        if (mouse.within(x, y, optionsWidth, cellHeight) && canInteract()) {
             interacted = true;
-            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(500)) {
+            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && mouse.leftReady(500)) {
                 if (hasSelectedSequence()) getSelectedSequence().toggleClear();
             }
         }
         y -= cellHeight;
 
         renderer.box(x, y, optionsWidth, cellHeight, hasSelectedSequence() && getSelectedSequence().globalFrameTime() ? renderer.getTheme().DARK_GREEN : renderer.getTheme().MEDIUM, "Global Frame Time");
-        if (Lights.mouse.contains(x, y, optionsWidth, cellHeight) && canInteract()) {
+        if (mouse.within(x, y, optionsWidth, cellHeight) && canInteract()) {
             interacted = true;
-            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(500)) {
+            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && mouse.leftReady(500)) {
                 if (hasSelectedSequence()) getSelectedSequence().toggleGlobalFrameTime();
             }
         }
         y -= cellHeight;
 
         renderer.box(x, y, optionsWidth, cellHeight, hasSelectedSequence() && getSelectedSequence().globalFadeTime() ? renderer.getTheme().DARK_GREEN : renderer.getTheme().MEDIUM, "Global Fade Time");
-        if (Lights.mouse.contains(x, y, optionsWidth, cellHeight) && canInteract()) {
+        if (mouse.within(x, y, optionsWidth, cellHeight) && canInteract()) {
             interacted = true;
-            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(500)) {
+            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && mouse.leftReady(500)) {
                 if (hasSelectedSequence()) getSelectedSequence().toggleGlobalFadeTime();
             }
         }
         y -= cellHeight;
 
         renderer.box(x, y, optionsWidth, cellHeight, hasSelectedSequence() && getSelectedSequence().useTempo() ? renderer.getTheme().DARK_GREEN : renderer.getTheme().MEDIUM, "Global Tempo");
-        if (Lights.mouse.contains(x, y, optionsWidth, cellHeight) && canInteract()) {
+        if (mouse.within(x, y, optionsWidth, cellHeight) && canInteract()) {
             interacted = true;
-            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(500)) {
+            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && mouse.leftReady(500)) {
                 if (hasSelectedSequence()) getSelectedSequence().toggleUseTempo();
             }
         }
         y -= cellHeight;
 
         renderer.box(x, y, optionsWidth, cellHeight, renderer.getTheme().MEDIUM, !hasAllSelected() ? "Select All" : "Deselect All");
-        if (Lights.mouse.contains(x, y, optionsWidth, cellHeight) && canInteract()) {
+        if (mouse.within(x, y, optionsWidth, cellHeight) && canInteract()) {
             interacted = true;
-            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(500)) {
+            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && mouse.leftReady(500)) {
                 if (!hasAllSelected()) {
                     for (Frame frame : getSelectedSequence().frames())
                         select(frame);
@@ -242,18 +242,18 @@ public class SequencesPanel implements Panel {
         y -= cellHeight;
 
         renderer.box(x, y, optionsWidth, cellHeight, renderer.getTheme().MEDIUM, "Edit Sequence");
-        if (Lights.mouse.contains(x, y, optionsWidth, cellHeight) && canInteract()) {
+        if (mouse.within(x, y, optionsWidth, cellHeight) && canInteract()) {
             interacted = true;
-            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(500)) {
+            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && mouse.leftReady(500)) {
                 Programmer.edit(getSelectedSequence());
             }
         }
         y -= cellHeight;
 
         renderer.box(x, y, optionsWidth, cellHeight, renderer.getTheme().MEDIUM, renderer.getTheme().RED, "Delete Sequence");
-        if (Lights.mouse.contains(x, y, optionsWidth, cellHeight) && canInteract()) {
+        if (mouse.within(x, y, optionsWidth, cellHeight) && canInteract()) {
             interacted = true;
-            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && shift && Lights.mouse.leftReady(500)) {
+            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && shift && mouse.leftReady(500)) {
                 if (hasSelectedSequence()) {
                     remove(getSelectedSequence());
                     return interacted;
@@ -264,7 +264,7 @@ public class SequencesPanel implements Panel {
 
         if (countSelectedFrames() > 0) {
             renderer.box(x, y, optionsWidth, cellHeight, renderer.getTheme().DARK_BLUE, "Frame Options", dev.therealdan.lights.renderer.Task.TextPosition.CENTER);
-            drag(x, y, optionsWidth, cellHeight);
+            drag(mouse, x, y, optionsWidth, cellHeight);
             y -= cellHeight;
 
             long frameTime = -1;
@@ -277,10 +277,10 @@ public class SequencesPanel implements Panel {
             }
 
             renderer.box(x, y, optionsWidth, cellHeight, renderer.getTheme().MEDIUM, "Frame Time: " + (frameTime == -2 ? "Various" : Frame.format(frameTime)));
-            if (Lights.mouse.contains(x, y, optionsWidth, cellHeight) && canInteract()) {
+            if (mouse.within(x, y, optionsWidth, cellHeight) && canInteract()) {
                 interacted = true;
-                if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(500)) {
-                    if (Lights.mouse.contains(x, y, optionsWidth / 2, cellHeight)) {
+                if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && mouse.leftReady(500)) {
+                    if (mouse.within(x, y, optionsWidth / 2, cellHeight)) {
                         for (Frame frame : selectedFrames())
                             frame.setFrameTime(frame.getFrameTime() + (shift ? 100 : 10));
                     } else {
@@ -292,10 +292,10 @@ public class SequencesPanel implements Panel {
             y -= cellHeight;
 
             renderer.box(x, y, optionsWidth, cellHeight, renderer.getTheme().MEDIUM, "Fade Time: " + (fadeTime == -2 ? "Various" : Frame.format(fadeTime)));
-            if (Lights.mouse.contains(x, y, optionsWidth, cellHeight) && canInteract()) {
+            if (mouse.within(x, y, optionsWidth, cellHeight) && canInteract()) {
                 interacted = true;
-                if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(500)) {
-                    if (Lights.mouse.contains(x, y, optionsWidth / 2, cellHeight)) {
+                if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && mouse.leftReady(500)) {
+                    if (mouse.within(x, y, optionsWidth / 2, cellHeight)) {
                         for (Frame frame : selectedFrames())
                             frame.setFadeTime(frame.getFadeTime() + (shift ? 100 : 10));
                     } else {
@@ -307,9 +307,9 @@ public class SequencesPanel implements Panel {
             y -= cellHeight;
 
             renderer.box(x, y, optionsWidth, cellHeight, renderer.getTheme().MEDIUM, renderer.getTheme().RED, "Delete Frame" + (countSelectedFrames() > 1 ? "s" : ""));
-            if (Lights.mouse.contains(x, y, optionsWidth, cellHeight) && canInteract()) {
+            if (mouse.within(x, y, optionsWidth, cellHeight) && canInteract()) {
                 interacted = true;
-                if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && shift && Lights.mouse.leftReady(500)) {
+                if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && shift && mouse.leftReady(500)) {
                     for (Frame frame : selectedFrames())
                         getSelectedSequence().delete(frame);
                 }
@@ -324,9 +324,9 @@ public class SequencesPanel implements Panel {
         x += optionsWidth;
         y = getY();
         renderer.box(x, y, framesWidth, cellHeight, renderer.getTheme().DARK_BLUE, "Frames: " + countSelectedFrames() + " / " + getSelectedSequence().countFrames(), dev.therealdan.lights.renderer.Task.TextPosition.CENTER);
-        drag(x, y, framesWidth, cellHeight);
+        drag(mouse, x, y, framesWidth, cellHeight);
         y -= cellHeight;
-        canScrollFrames = Lights.mouse.contains(x, y, framesWidth, getHeight());
+        canScrollFrames = mouse.within(x, y, framesWidth, getHeight());
 
         i = 0;
         display = false;
@@ -336,9 +336,9 @@ public class SequencesPanel implements Panel {
             current++;
             if (display) {
                 renderer.box(x, y, framesWidth, cellHeight, isSelected(frame) ? renderer.getTheme().DARK_RED : renderer.getTheme().MEDIUM, frame.getInfo());
-                if (Lights.mouse.contains(x, y, framesWidth, cellHeight) && canInteract()) {
+                if (mouse.within(x, y, framesWidth, cellHeight) && canInteract()) {
                     interacted = true;
-                    if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(500)) {
+                    if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && mouse.leftReady(500)) {
                         if (isSelected(frame)) {
                             deselect(frame);
                         } else {
@@ -363,9 +363,9 @@ public class SequencesPanel implements Panel {
         x += framesWidth;
         y = getY();
         renderer.box(x, y, tasksWidth, cellHeight, renderer.getTheme().DARK_BLUE, "Tasks: " + frame.tasks().size(), dev.therealdan.lights.renderer.Task.TextPosition.CENTER);
-        drag(x, y, tasksWidth, cellHeight);
+        drag(mouse, x, y, tasksWidth, cellHeight);
         y -= cellHeight;
-        canScrollTasks = Lights.mouse.contains(x, y, tasksWidth, getHeight());
+        canScrollTasks = mouse.within(x, y, tasksWidth, getHeight());
 
         i = 0;
         display = false;
@@ -375,7 +375,7 @@ public class SequencesPanel implements Panel {
             current++;
             if (display) {
                 renderer.box(x, y, tasksWidth, cellHeight, renderer.getTheme().MEDIUM, task.getInfo());
-                drag(x, y, tasksWidth, cellHeight);
+                drag(mouse, x, y, tasksWidth, cellHeight);
                 y -= cellHeight;
                 if (++i == MAX_ROWS) break;
             }
@@ -412,7 +412,7 @@ public class SequencesPanel implements Panel {
     }
 
     @Override
-    public void scrolled(int amount) {
+    public void scrolled(Mouse mouse, int amount) {
         if (canScrollSequences()) {
             if (amount > 0) {
                 boolean next = false;

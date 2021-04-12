@@ -5,7 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import dev.therealdan.lights.dmx.DMX;
 import dev.therealdan.lights.fixtures.Fixture;
-import dev.therealdan.lights.main.Lights;
+import dev.therealdan.lights.main.Mouse;
 import dev.therealdan.lights.panels.Panel;
 import dev.therealdan.lights.panels.menuicons.CloseIcon;
 import dev.therealdan.lights.renderer.Renderer;
@@ -22,7 +22,7 @@ public class PatchPanel implements Panel {
     }
 
     @Override
-    public boolean draw(Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {
+    public boolean draw(Mouse mouse, Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {
         boolean interacted = false;
 
         float x = getX();
@@ -45,20 +45,20 @@ public class PatchPanel implements Panel {
 
         renderer.box(x, y, uiWidth, getHeight(), renderer.getTheme().DARK);
         renderer.box(x, y, uiWidth, cellHeight, renderer.getTheme().DARK_BLUE, getFriendlyName(), Task.TextPosition.CENTER);
-        drag(x, y, uiWidth, cellHeight);
+        drag(mouse, x, y, uiWidth, cellHeight);
         y -= cellHeight;
 
         renderer.box(x, y, idWidth, cellHeight, renderer.getTheme().DARK_BLUE, "ID", Task.TextPosition.CENTER);
         renderer.box(x + idWidth, y, nameWidth, cellHeight, renderer.getTheme().DARK_BLUE, "Name", Task.TextPosition.CENTER);
         renderer.box(x + idWidth + nameWidth, y, profileWidth, cellHeight, renderer.getTheme().DARK_BLUE, "Profile", Task.TextPosition.CENTER);
         renderer.box(x + idWidth + nameWidth + profileWidth, y, addressWidth, cellHeight, renderer.getTheme().DARK_BLUE, "Address", Task.TextPosition.CENTER);
-        drag(x, y, width, cellHeight);
+        drag(mouse, x, y, width, cellHeight);
         y -= cellHeight;
 
         for (Fixture fixture : Fixture.fixtures(ID)) {
-            if (Lights.mouse.contains(x, y, width, cellHeight) && canInteract()) {
+            if (mouse.within(x, y, width, cellHeight) && canInteract()) {
                 interacted = true;
-                if (Lights.mouse.leftClicked()) {
+                if (mouse.leftClicked()) {
                     select(fixture);
                 }
             }
@@ -92,7 +92,7 @@ public class PatchPanel implements Panel {
                 if (occupied) color = renderer.getTheme().DARK_BLUE;
                 if (selected && occupied) color = renderer.getTheme().DARK_CYAN;
                 renderer.box(x, y, cellHeight, cellHeight, color, Integer.toString(address));
-                if (Lights.mouse.contains(x, y, cellHeight, cellHeight) && canInteract()) {
+                if (mouse.within(x, y, cellHeight, cellHeight) && canInteract()) {
                     interacted = true;
                     if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
                         getSelectedFixture().setAddress(address);

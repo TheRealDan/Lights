@@ -1,6 +1,7 @@
 package dev.therealdan.lights.ui;
 
 import com.badlogic.gdx.InputProcessor;
+import dev.therealdan.lights.main.Mouse;
 import dev.therealdan.lights.renderer.Renderer;
 
 import java.util.ArrayDeque;
@@ -11,9 +12,9 @@ public class TheInputProcessor implements InputProcessor {
 
     private Deque<Visual> active = new ArrayDeque<>();
 
-    public void draw(Renderer renderer) {
+    public void draw(Mouse mouse, Renderer renderer) {
         for (Visual visual : active)
-            if (!visual.draw(renderer))
+            if (!visual.draw(mouse, renderer))
                 return;
     }
 

@@ -3,7 +3,7 @@ package dev.therealdan.lights.panels.panels;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import dev.therealdan.lights.fixtures.Fixture;
-import dev.therealdan.lights.main.Lights;
+import dev.therealdan.lights.main.Mouse;
 import dev.therealdan.lights.panels.Panel;
 import dev.therealdan.lights.panels.menuicons.AddFixtureIcon;
 import dev.therealdan.lights.panels.menuicons.CloseIcon;
@@ -26,7 +26,7 @@ public class FixturesPanel implements Panel {
     }
 
     @Override
-    public boolean drawContent(Renderer renderer, float x, float y, float width, float height, boolean interacted) {
+    public boolean drawContent(Mouse mouse, Renderer renderer, float x, float y, float width, float height, boolean interacted) {
         int fixtures = Fixture.count();
         while (fixtures % getFixturesPerRow() != 0) fixtures++;
 
@@ -35,9 +35,9 @@ public class FixturesPanel implements Panel {
 
         for (Fixture fixture : Fixture.fixtures(ID)) {
             renderer.box(x, y, fixtureWidth, fixtureHeight, Programmer.isSelected(fixture) ? renderer.getTheme().DARK_RED : renderer.getTheme().MEDIUM, fixture.getName(), Task.TextPosition.CENTER);
-            if (Lights.mouse.contains(x, y, fixtureWidth, fixtureHeight) && canInteract()) {
+            if (mouse.within(x, y, fixtureWidth, fixtureHeight) && canInteract()) {
                 interacted = true;
-                if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(500)) {
+                if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && mouse.leftReady(500)) {
                     if (Programmer.isSelected(fixture)) {
                         Programmer.deselect(fixture);
                     } else {

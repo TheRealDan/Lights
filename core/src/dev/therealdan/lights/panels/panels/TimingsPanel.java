@@ -1,6 +1,6 @@
 package dev.therealdan.lights.panels.panels;
 
-import dev.therealdan.lights.main.Lights;
+import dev.therealdan.lights.main.Mouse;
 import dev.therealdan.lights.panels.Panel;
 import dev.therealdan.lights.panels.menuicons.CloseIcon;
 import dev.therealdan.lights.renderer.Renderer;
@@ -24,7 +24,7 @@ public class TimingsPanel implements Panel {
     }
 
     @Override
-    public boolean draw(Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {
+    public boolean draw(Mouse mouse, Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {
         boolean interacted = false;
 
         float x = getX();
@@ -33,7 +33,7 @@ public class TimingsPanel implements Panel {
         float cellHeight = 30;
 
         renderer.box(x, y, width, cellHeight, renderer.getTheme().DARK_BLUE, setWidth(renderer, getFriendlyName()), Task.TextPosition.CENTER);
-        drag(x, y, width, cellHeight);
+        drag(mouse, x, y, width, cellHeight);
         y -= cellHeight;
 
         for (String id : timings.keySet()) {
@@ -42,7 +42,7 @@ public class TimingsPanel implements Panel {
                     .replace("%z", Long.toString(nonZero.getOrDefault(id, 0L)))
                     .replace("%a", Long.toString(average.getOrDefault(id, 0L)))
             ));
-            drag(x, y, width, cellHeight);
+            drag(mouse, x, y, width, cellHeight);
             y -= cellHeight;
         }
 

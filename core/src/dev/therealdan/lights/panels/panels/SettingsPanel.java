@@ -2,7 +2,7 @@ package dev.therealdan.lights.panels.panels;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import dev.therealdan.lights.main.Lights;
+import dev.therealdan.lights.main.Mouse;
 import dev.therealdan.lights.panels.Panel;
 import dev.therealdan.lights.panels.menuicons.CloseIcon;
 import dev.therealdan.lights.renderer.Renderer;
@@ -16,7 +16,7 @@ public class SettingsPanel implements Panel {
     }
 
     @Override
-    public boolean draw(Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {
+    public boolean draw(Mouse mouse, Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {
         boolean interacted = false;
 
         float cellHeight = 30;
@@ -26,17 +26,17 @@ public class SettingsPanel implements Panel {
         float width = getWidth();
 
         renderer.box(x, y, width, cellHeight, renderer.getTheme().DARK_BLUE, setWidth(renderer, getFriendlyName()), Task.TextPosition.CENTER);
-        drag(x, y, width, cellHeight);
+        drag(mouse, x, y, width, cellHeight);
         y -= cellHeight;
 
         for (Setting setting : Setting.settings()) {
             switch (setting.getType()) {
                 case LONG:
                     renderer.box(x, y, width, cellHeight, renderer.getTheme().MEDIUM, setWidth(renderer, setting.getName() + ": " + setting.getValue()));
-                    if (Lights.mouse.contains(x, y, width, cellHeight) && canInteract()) {
+                    if (mouse.within(x, y, width, cellHeight) && canInteract()) {
                         interacted = true;
-                        if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(100)) {
-                            if (Lights.mouse.contains(x, y, width / 2, cellHeight)) {
+                        if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && mouse.leftReady(100)) {
+                            if (mouse.within(x, y, width / 2, cellHeight)) {
                                 setting.increment(1);
                             } else {
                                 setting.decrement(1);
@@ -46,9 +46,9 @@ public class SettingsPanel implements Panel {
                     break;
                 case BOOLEAN:
                     renderer.box(x, y, width, cellHeight, setting.isTrue() ? renderer.getTheme().DARK_GREEN : renderer.getTheme().MEDIUM, setWidth(renderer, setting.getName()));
-                    if (Lights.mouse.contains(x, y, width, cellHeight) && canInteract()) {
+                    if (mouse.within(x, y, width, cellHeight) && canInteract()) {
                         interacted = true;
-                        if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(250))
+                        if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && mouse.leftReady(250))
                             setting.toggle();
                     }
                     break;

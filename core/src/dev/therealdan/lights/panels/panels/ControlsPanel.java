@@ -3,7 +3,7 @@ package dev.therealdan.lights.panels.panels;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import dev.therealdan.lights.controllers.Button;
-import dev.therealdan.lights.main.Lights;
+import dev.therealdan.lights.main.Mouse;
 import dev.therealdan.lights.panels.Panel;
 import dev.therealdan.lights.panels.menuicons.CloseIcon;
 import dev.therealdan.lights.renderer.Renderer;
@@ -24,7 +24,7 @@ public class ControlsPanel implements Panel {
     }
 
     @Override
-    public boolean draw(Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {
+    public boolean draw(Mouse mouse, Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {
         boolean interacted = false;
 
         float x = getX();
@@ -33,15 +33,15 @@ public class ControlsPanel implements Panel {
         float cellHeight = 30;
 
         renderer.box(x, y, width, cellHeight, renderer.getTheme().DARK_BLUE, setWidth(renderer, getFriendlyName()), Task.TextPosition.CENTER);
-        drag(x, y, width, cellHeight);
+        drag(mouse, x, y, width, cellHeight);
         y -= cellHeight;
 
         renderer.box(x, y, width, cellHeight, renderer.getTheme().MEDIUM, setWidth(renderer, "Category: " + getSelectedCategory().formatString()), Task.TextPosition.LEFT_CENTER);
-        if (Lights.mouse.contains(x, y, width, cellHeight) && canInteract()) {
+        if (mouse.within(x, y, width, cellHeight) && canInteract()) {
             interacted = true;
-            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(500)) {
+            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && mouse.leftReady(500)) {
                 select(true);
-            } else if (Gdx.input.isButtonPressed(Input.Buttons.RIGHT) && Lights.mouse.rightReady(500)) {
+            } else if (Gdx.input.isButtonPressed(Input.Buttons.RIGHT) && mouse.rightReady(500)) {
                 select(false);
             }
         }
@@ -53,9 +53,9 @@ public class ControlsPanel implements Panel {
                 setWidth(renderer, button.getName(), 2);
                 renderer.box(x, y, width / 2, cellHeight, isSelected(control) ? renderer.getTheme().DARK_RED : renderer.getTheme().MEDIUM, button.getName());
                 renderer.box(x + width / 2, y, width / 2, cellHeight, isSelected(control) ? renderer.getTheme().DARK_RED : renderer.getTheme().MEDIUM, control.formatKeycode());
-                if (Lights.mouse.contains(x, y, width, cellHeight) && canInteract()) {
+                if (mouse.within(x, y, width, cellHeight) && canInteract()) {
                     interacted = true;
-                    if (Lights.mouse.leftClicked(500, getSelectedControl() != null && !control.equals(getSelectedControl()))) {
+                    if (mouse.leftClicked(500, getSelectedControl() != null && !control.equals(getSelectedControl()))) {
                         select(isSelected(control) ? null : control);
                     }
                 }
@@ -66,9 +66,9 @@ public class ControlsPanel implements Panel {
                 setWidth(renderer, control.getName(), 2);
                 renderer.box(x, y, width / 2, cellHeight, isSelected(control) ? renderer.getTheme().DARK_RED : renderer.getTheme().MEDIUM, control.getName());
                 renderer.box(x + width / 2, y, width / 2, cellHeight, isSelected(control) ? renderer.getTheme().DARK_RED : renderer.getTheme().MEDIUM, control.formatKeycode());
-                if (Lights.mouse.contains(x, y, width, cellHeight) && canInteract()) {
+                if (mouse.within(x, y, width, cellHeight) && canInteract()) {
                     interacted = true;
-                    if (Lights.mouse.leftClicked(500, getSelectedControl() != null && !control.equals(getSelectedControl()))) {
+                    if (mouse.leftClicked(500, getSelectedControl() != null && !control.equals(getSelectedControl()))) {
                         select(isSelected(control) ? null : control);
                     }
                 }

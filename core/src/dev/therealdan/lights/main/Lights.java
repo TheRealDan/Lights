@@ -15,7 +15,7 @@ public class Lights extends ApplicationAdapter {
 
     private static Lights lights;
 
-    public static Mouse mouse;
+    public Mouse _mouse;
     public static Output output;
 
     private Renderer renderer;
@@ -30,7 +30,7 @@ public class Lights extends ApplicationAdapter {
     public void create() {
         lights = this;
 
-        mouse = new Mouse();
+        _mouse = new Mouse();
         output = new Output();
 
         Setting.createSettings();
@@ -42,7 +42,7 @@ public class Lights extends ApplicationAdapter {
         renderer = new Renderer();
         theInputProcessor = new TheInputProcessor();
 
-        panelHandler = new PanelHandler(renderer.getTheme());
+        panelHandler = new PanelHandler(_mouse, renderer.getTheme());
         visualiser3D = new Visualiser3D();
         profileEditor = new ProfileEditor();
         fixtureEditor = new FixtureEditor();
@@ -61,10 +61,10 @@ public class Lights extends ApplicationAdapter {
         Gdx.gl.glClearColor(background.r, background.g, background.b, background.a);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
-        mouse.update();
+        _mouse.update();
         panelHandler.update();
 
-        theInputProcessor.draw(renderer);
+        theInputProcessor.draw(_mouse, renderer);
 
         renderer.draw();
     }

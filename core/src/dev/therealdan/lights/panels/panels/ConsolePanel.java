@@ -3,6 +3,7 @@ package dev.therealdan.lights.panels.panels;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import dev.therealdan.lights.commands.*;
+import dev.therealdan.lights.main.Mouse;
 import dev.therealdan.lights.main.Theme;
 import dev.therealdan.lights.panels.Panel;
 import dev.therealdan.lights.panels.menuicons.CloseIcon;
@@ -46,7 +47,7 @@ public class ConsolePanel implements Panel {
     }
 
     @Override
-    public boolean draw(Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {
+    public boolean draw(Mouse mouse, Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {
         boolean interacted = false;
 
         float x = getX();
@@ -55,7 +56,7 @@ public class ConsolePanel implements Panel {
         float cellHeight = 30;
 
         renderer.box(x, y, width, cellHeight, _theme.DARK_BLUE, setWidth(renderer, getFriendlyName()), Task.TextPosition.CENTER);
-        drag(x, y, width, cellHeight);
+        drag(mouse, x, y, width, cellHeight);
         y -= cellHeight;
 
         for (String line : getLog()) {
@@ -65,12 +66,12 @@ public class ConsolePanel implements Panel {
                 line = line.substring(2);
             }
             renderer.box(x, y, width, cellHeight, _theme.MEDIUM, getColor(colorCode), setWidth(renderer, line));
-            drag(x, y, width, cellHeight);
+            drag(mouse, x, y, width, cellHeight);
             y -= cellHeight;
         }
 
         renderer.box(x, y, width, cellHeight, canInteract() ? _theme.DARK_RED : _theme.MEDIUM, setWidth(renderer, input));
-        drag(x, y, width, cellHeight);
+        drag(mouse, x, y, width, cellHeight);
         y -= cellHeight;
 
         setHeightBasedOnY(y);

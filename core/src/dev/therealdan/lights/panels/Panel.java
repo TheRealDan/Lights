@@ -3,7 +3,7 @@ package dev.therealdan.lights.panels;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.files.FileHandle;
-import dev.therealdan.lights.main.Lights;
+import dev.therealdan.lights.main.Mouse;
 import dev.therealdan.lights.renderer.Renderer;
 import dev.therealdan.lights.renderer.Task;
 import dev.therealdan.lights.ui.PanelHandler;
@@ -49,7 +49,7 @@ public interface Panel {
             Gdx.files.local("Lights/Panels/" + getName() + ".txt").writeString("Visible: " + isVisible(), true);
     }
 
-    default void scrolled(int amount) {
+    default void scrolled(Mouse mouse, int amount) {
     }
 
     default boolean keyUp(int keycode) {
@@ -61,10 +61,10 @@ public interface Panel {
     }
 
     // Return whether hovering over resize area
-    default boolean drawBackground(Renderer renderer, float x, float y, float width, float height) {
+    default boolean drawBackground(Mouse mouse, Renderer renderer, float x, float y, float width, float height) {
         renderer.box(x, y, width, height, renderer.getTheme().DARK);
         if (isResizeable())
-            return Lights.mouse.contains(x + width - 20, y - height + 20, 20, 20);
+            return mouse.within(x + width - 20, y - height + 20, 20, 20);
         return false;
     }
 
@@ -75,7 +75,7 @@ public interface Panel {
     }
 
     // Return whether icons were interacted with
-    default boolean drawMenuIcons(Renderer renderer, float x, float y, float width, float height, float menuIconWidth, float menuIconHeight, float spacing, boolean interacted) {
+    default boolean drawMenuIcons(Mouse mouse, Renderer renderer, float x, float y, float width, float height, float menuIconWidth, float menuIconHeight, float spacing, boolean interacted) {
         int index = 0;
         float mx = x + width;
         float my = y - spacing;
@@ -83,10 +83,10 @@ public interface Panel {
             if (!menuIcon.isVisible()) continue;
             boolean hover = false, click = false;
             mx -= spacing + menuIconWidth;
-            if (Lights.mouse.contains(mx, my, menuIconWidth, menuIconHeight) && canInteract()) {
+            if (mouse.within(mx, my, menuIconWidth, menuIconHeight) && canInteract()) {
                 interacted = true;
                 hover = true;
-                if (Lights.mouse.leftClicked(1000)) {
+                if (mouse.leftClicked(1000)) {
                     click = true;
                 }
             }
@@ -94,18 +94,18 @@ public interface Panel {
             if (click && !click(menuIcon)) menuIcon.click(this);
         }
 
-        if (!interacted) drag(x, y, width, height);
+        if (!interacted) drag(mouse, x, y, width, height);
         return interacted;
     }
 
     // Return whether Panel was interacted with
-    default boolean drawContent(Renderer renderer, float x, float y, float width, float height, boolean interacted) {
+    default boolean drawContent(Mouse mouse, Renderer renderer, float x, float y, float width, float height, boolean interacted) {
         return interacted;
     }
 
     // Return whether Panel was interacted with
     @Deprecated
-    default boolean draw(Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {
+    default boolean draw(Mouse mouse, Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {
         return false;
     }
 
@@ -177,10 +177,6 @@ public interface Panel {
         set(getName() + "_MIN_HEIGHT", height);
     }
 
-    default boolean containsMouse() {
-        return Lights.mouse.contains(getX(), getY(), getWidth(), getHeight());
-    }
-
     default void toggleVisibility() {
         setVisible(!isVisible());
     }
@@ -222,8 +218,8 @@ public interface Panel {
         return allowInteract.contains(getName());
     }
 
-    default boolean drag(float x, float y, float width, float height) {
-        if (canInteract() && isVisible() && Lights.mouse.contains(x, y, width, height) && Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
+    default boolean drag(Mouse mouse, float x, float y, float width, float height) {
+        if (canInteract() && isVisible() && mouse.within(x, y, width, height) && Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
             PanelHandler.drag(this);
             return true;
         }

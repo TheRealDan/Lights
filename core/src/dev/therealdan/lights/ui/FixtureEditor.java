@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import dev.therealdan.lights.fixtures.Fixture;
 import dev.therealdan.lights.fixtures.fixture.Profile;
 import dev.therealdan.lights.main.Lights;
+import dev.therealdan.lights.main.Mouse;
 import dev.therealdan.lights.renderer.Renderer;
 import dev.therealdan.lights.renderer.Task;
 import dev.therealdan.lights.util.Util;
@@ -28,7 +29,7 @@ public class FixtureEditor implements Visual {
     }
 
     @Override
-    public boolean draw(Renderer renderer) {
+    public boolean draw(Mouse mouse, Renderer renderer) {
         float X = 0;
         float Y = Gdx.graphics.getHeight();
         float WIDTH = Gdx.graphics.getWidth();
@@ -47,8 +48,8 @@ public class FixtureEditor implements Visual {
         y -= cellHeight;
         for (Fixture fixture : Fixture.fixtures(ID)) {
             renderer.box(x, y, width, cellHeight, fixture.equals(getFixture()) ? renderer.getTheme().DARK_RED : renderer.getTheme().MEDIUM, fixture.getName(), Task.TextPosition.LEFT_CENTER);
-            if (Lights.mouse.contains(x, y, width, cellHeight)) {
-                if (Lights.mouse.leftClicked()) {
+            if (mouse.within(x, y, width, cellHeight)) {
+                if (mouse.leftClicked()) {
                     setFixture(fixture);
                 }
             }
@@ -62,8 +63,8 @@ public class FixtureEditor implements Visual {
         y -= cellHeight;
         for (Profile profile : Profile.profiles(NAME)) {
             renderer.box(x, y, width, cellHeight, profile.equals(getProfile()) ? renderer.getTheme().DARK_RED : renderer.getTheme().MEDIUM, profile.getName(), Task.TextPosition.LEFT_CENTER);
-            if (Lights.mouse.contains(x, y, width, cellHeight)) {
-                if (Lights.mouse.leftClicked()) {
+            if (mouse.within(x, y, width, cellHeight)) {
+                if (mouse.leftClicked()) {
                     setProfile(profile);
                 }
             }
@@ -79,8 +80,8 @@ public class FixtureEditor implements Visual {
 
         if (getFixture() != null) {
             renderer.box(x, y, width, cellHeight, renderer.getTheme().MEDIUM, renderer.getTheme().RED, "Delete");
-            if (Lights.mouse.contains(x, y, width, cellHeight) && Util.isShiftHeld()) {
-                if (Lights.mouse.leftClicked()) {
+            if (mouse.within(x, y, width, cellHeight) && Util.isShiftHeld()) {
+                if (mouse.leftClicked()) {
                     Fixture.remove(getFixture());
                     setFixture(null);
                     return false;
@@ -91,26 +92,26 @@ public class FixtureEditor implements Visual {
 
         if (getProfile() != null) {
             renderer.box(x, y, width, cellHeight, isEditing(Section.NAME) ? renderer.getTheme().DARK_RED : renderer.getTheme().MEDIUM, "Name: " + getName());
-            if (Lights.mouse.contains(x, y, width, cellHeight)) {
-                if (Lights.mouse.leftClicked()) {
+            if (mouse.within(x, y, width, cellHeight)) {
+                if (mouse.leftClicked()) {
                     edit(Section.NAME);
                 }
             }
             y -= cellHeight;
 
             renderer.box(x, y, width, cellHeight, isEditing(Section.ADDRESS) ? renderer.getTheme().DARK_RED : renderer.getTheme().MEDIUM, "Address: " + getAddress());
-            if (Lights.mouse.contains(x, y, width, cellHeight)) {
-                if (Lights.mouse.leftClicked()) {
+            if (mouse.within(x, y, width, cellHeight)) {
+                if (mouse.leftClicked()) {
                     edit(Section.ADDRESS);
                 }
             }
             y -= cellHeight;
 
             renderer.box(x, y, width, cellHeight, renderer.getTheme().MEDIUM, "Count: " + getCount());
-            if (Lights.mouse.contains(x, y, width, cellHeight)) {
-                if (Lights.mouse.leftClicked(500)) {
+            if (mouse.within(x, y, width, cellHeight)) {
+                if (mouse.leftClicked(500)) {
                     setCount(getCount() + 1);
-                } else if (Lights.mouse.rightClicked()) {
+                } else if (mouse.rightClicked()) {
                     setCount(getCount() - 1);
                 }
             }
@@ -118,10 +119,10 @@ public class FixtureEditor implements Visual {
 
             if (getCount() > 1) {
                 renderer.box(x, y, width, cellHeight, renderer.getTheme().MEDIUM, "Step: " + getStep());
-                if (Lights.mouse.contains(x, y, width, cellHeight)) {
-                    if (Lights.mouse.leftClicked(500)) {
+                if (mouse.within(x, y, width, cellHeight)) {
+                    if (mouse.leftClicked(500)) {
                         setStep(getStep() + 1);
-                    } else if (Lights.mouse.rightClicked()) {
+                    } else if (mouse.rightClicked()) {
                         setStep(getStep() - 1);
                     }
                 }
@@ -129,8 +130,8 @@ public class FixtureEditor implements Visual {
             }
 
             renderer.box(x, y, width, cellHeight, renderer.getTheme().MEDIUM, renderer.getTheme().YELLOW, "Create Fixture" + (getCount() > 1 ? "s" : ""));
-            if (Lights.mouse.contains(x, y, width, cellHeight)) {
-                if (Lights.mouse.leftClicked(500)) {
+            if (mouse.within(x, y, width, cellHeight)) {
+                if (mouse.leftClicked(500)) {
                     int address = getAddress();
                     for (int count = 1; count <= getCount(); count++) {
                         Fixture.add(new Fixture(getName() + " " + count, getProfile(), address, Fixture.getFreeID()));

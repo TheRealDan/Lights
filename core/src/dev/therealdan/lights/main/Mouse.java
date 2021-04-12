@@ -2,16 +2,13 @@ package dev.therealdan.lights.main;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import dev.therealdan.lights.panels.Panel;
 
 public class Mouse {
 
     private boolean leftMouseUp = true;
     private boolean rightMouseUp = true;
     private long lastAction = System.currentTimeMillis();
-
-    protected Mouse() {
-
-    }
 
     public void update() {
         if (!Gdx.input.isButtonPressed(Input.Buttons.LEFT)) leftMouseUp = true;
@@ -68,12 +65,16 @@ public class Mouse {
         return false;
     }
 
-    public boolean contains(float x, float y, float width, float height) {
+    public boolean within(float x, float y, float width, float height) {
         y = Gdx.graphics.getHeight() - y;
 
         float mouseX = Gdx.input.getX();
         float mouseY = Gdx.input.getY();
 
         return mouseX > x && mouseX < x + width && mouseY > y && mouseY < y + height;
+    }
+
+    public boolean within(Panel panel) {
+        return within(panel.getX(), panel.getY(), panel.getWidth(), panel.getHeight());
     }
 }

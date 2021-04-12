@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import dev.therealdan.lights.fixtures.fixture.Profile;
 import dev.therealdan.lights.main.Lights;
+import dev.therealdan.lights.main.Mouse;
 import dev.therealdan.lights.panels.Panel;
 import dev.therealdan.lights.panels.menuicons.CloseIcon;
 import dev.therealdan.lights.renderer.Renderer;
@@ -30,7 +31,7 @@ public class ProfilesPanel implements Panel {
     }
 
     @Override
-    public boolean drawContent(Renderer renderer, float x, float y, float width, float height, boolean interacted) {
+    public boolean drawContent(Mouse mouse, Renderer renderer, float x, float y, float width, float height, boolean interacted) {
         setTitle("Profiles: " + Profile.count());
 
         if (hasSelectedProfile()) {
@@ -47,9 +48,9 @@ public class ProfilesPanel implements Panel {
             current++;
             if (display) {
                 renderer.box(x, y, width, cellHeight, profile.equals(getSelectedProfile()) ? renderer.getTheme().DARK_GREEN : renderer.getTheme().MEDIUM, profile.getName());
-                if (Lights.mouse.contains(x, y, width, cellHeight) && canInteract(interacted)) {
+                if (mouse.within(x, y, width, cellHeight) && canInteract(interacted)) {
                     interacted = true;
-                    if (Lights.mouse.leftClicked()) {
+                    if (mouse.leftClicked()) {
                         select(profile);
                     }
                 }
@@ -59,9 +60,9 @@ public class ProfilesPanel implements Panel {
         }
 
         renderer.box(x, y, width, cellHeight, renderer.getTheme().MEDIUM, renderer.getTheme().GREEN, "Add New");
-        if (Lights.mouse.contains(x, y, width, cellHeight) && canInteract(interacted)) {
+        if (mouse.within(x, y, width, cellHeight) && canInteract(interacted)) {
             interacted = true;
-            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(500)) {
+            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && mouse.leftReady(500)) {
                 Profile newProfile = new Profile("New Profile", new ArrayList<>(), new ArrayList<>());
                 Profile.add(newProfile);
                 select(newProfile);
@@ -79,35 +80,35 @@ public class ProfilesPanel implements Panel {
         y = getY() - cellHeight;
 
         renderer.box(x, y, width, cellHeight, canEditName() ? renderer.getTheme().DARK_RED : renderer.getTheme().MEDIUM, "Name: " + getSelectedProfile().getName());
-        if (Lights.mouse.contains(x, y, width, cellHeight) && canInteract(interacted)) {
+        if (mouse.within(x, y, width, cellHeight) && canInteract(interacted)) {
             interacted = true;
-            if (Lights.mouse.leftClicked(500)) toggleCanEditName();
+            if (mouse.leftClicked(500)) toggleCanEditName();
         }
         y -= cellHeight;
 
         renderer.box(x, y, width, cellHeight, renderer.getTheme().MEDIUM, "Physical Channels: " + getSelectedProfile().getPhysicalChannels());
-        if (Lights.mouse.contains(x, y, width, cellHeight) && canInteract(interacted)) interacted = true;
+        if (mouse.within(x, y, width, cellHeight) && canInteract(interacted)) interacted = true;
         y -= cellHeight;
 
         renderer.box(x, y, width, cellHeight, renderer.getTheme().MEDIUM, "Virtual Channels: " + getSelectedProfile().getVirtualChannels());
-        if (Lights.mouse.contains(x, y, width, cellHeight) && canInteract(interacted)) interacted = true;
+        if (mouse.within(x, y, width, cellHeight) && canInteract(interacted)) interacted = true;
         y -= cellHeight;
 
         renderer.box(x, y, width, cellHeight, renderer.getTheme().MEDIUM, "Model: " + getSelectedProfile().countModels());
-        if (Lights.mouse.contains(x, y, width, cellHeight) && canInteract(interacted)) interacted = true;
+        if (mouse.within(x, y, width, cellHeight) && canInteract(interacted)) interacted = true;
         y -= cellHeight;
 
         renderer.box(x, y, width, cellHeight, renderer.getTheme().MEDIUM, renderer.getTheme().YELLOW, "Advanced");
-        if (Lights.mouse.contains(x, y, width, cellHeight) && canInteract(interacted)) {
+        if (mouse.within(x, y, width, cellHeight) && canInteract(interacted)) {
             interacted = true;
-            if (Lights.mouse.leftClicked()) Lights.openProfileEditor(getSelectedProfile());
+            if (mouse.leftClicked()) Lights.openProfileEditor(getSelectedProfile());
         }
         y -= cellHeight;
 
         renderer.box(x, y, width, cellHeight, renderer.getTheme().MEDIUM, renderer.getTheme().RED, "Delete");
-        if (Lights.mouse.contains(x, y, width, cellHeight) && canInteract(interacted)) {
+        if (mouse.within(x, y, width, cellHeight) && canInteract(interacted)) {
             interacted = true;
-            if (Lights.mouse.leftClicked()) {
+            if (mouse.leftClicked()) {
                 if (Util.isShiftHeld()) {
                     Profile.delete(getSelectedProfile());
                     select(null);
@@ -146,7 +147,7 @@ public class ProfilesPanel implements Panel {
     }
 
     @Override
-    public void scrolled(int amount) {
+    public void scrolled(Mouse mouse, int amount) {
         profileScroll += amount;
         if (getProfileScroll() < 0) profileScroll = 0;
         if (getProfileScroll() > Math.max(0, Profile.count() - (ROWS - 1)))

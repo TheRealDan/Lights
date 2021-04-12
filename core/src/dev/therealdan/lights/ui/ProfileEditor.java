@@ -14,6 +14,7 @@ import dev.therealdan.lights.fixtures.fixture.profile.Channel;
 import dev.therealdan.lights.fixtures.fixture.profile.ModelDesign;
 import dev.therealdan.lights.fixtures.fixture.profile.MutableProfile;
 import dev.therealdan.lights.main.Lights;
+import dev.therealdan.lights.main.Mouse;
 import dev.therealdan.lights.renderer.Renderer;
 import dev.therealdan.lights.renderer.Task;
 import dev.therealdan.lights.util.Util;
@@ -63,7 +64,7 @@ public class ProfileEditor implements Visual {
     }
 
     @Override
-    public boolean draw(Renderer renderer) {
+    public boolean draw(Mouse mouse, Renderer renderer) {
         float X = 0;
         float Y = Gdx.graphics.getHeight();
         float WIDTH = Gdx.graphics.getWidth();
@@ -84,19 +85,19 @@ public class ProfileEditor implements Visual {
         y -= cellHeight;
 
         renderer.box(x, y, width, cellHeight, isEditing(Section.NAME) ? renderer.getTheme().DARK_RED : renderer.getTheme().MEDIUM, "Name: " + getMutableProfile().getName());
-        if (Lights.mouse.contains(x, y, width, cellHeight) && Lights.mouse.leftClicked()) edit(Section.NAME);
+        if (mouse.within(x, y, width, cellHeight) && mouse.leftClicked()) edit(Section.NAME);
         y -= cellHeight;
 
         renderer.box(x, y, width, cellHeight, isEditing(Section.PHYSICAL_CHANNELS) ? renderer.getTheme().DARK_RED : renderer.getTheme().MEDIUM, "Physical Channels: " + getMutableProfile().getPhysicalChannels());
-        if (Lights.mouse.contains(x, y, width, cellHeight) && Lights.mouse.leftClicked()) edit(Section.PHYSICAL_CHANNELS);
+        if (mouse.within(x, y, width, cellHeight) && mouse.leftClicked()) edit(Section.PHYSICAL_CHANNELS);
         y -= cellHeight;
 
         renderer.box(x, y, width, cellHeight, isEditing(Section.VIRTUAL_CHANNELS) ? renderer.getTheme().DARK_RED : renderer.getTheme().MEDIUM, "Virtual Channels: " + getMutableProfile().getVirtualChannels());
-        if (Lights.mouse.contains(x, y, width, cellHeight) && Lights.mouse.leftClicked()) edit(Section.VIRTUAL_CHANNELS);
+        if (mouse.within(x, y, width, cellHeight) && mouse.leftClicked()) edit(Section.VIRTUAL_CHANNELS);
         y -= cellHeight;
 
         renderer.box(x, y, width, cellHeight, isEditing(Section.MODEL) ? renderer.getTheme().DARK_RED : renderer.getTheme().MEDIUM, "Model: " + getMutableProfile().countModels());
-        if (Lights.mouse.contains(x, y, width, cellHeight) && Lights.mouse.leftClicked()) edit(Section.MODEL);
+        if (mouse.within(x, y, width, cellHeight) && mouse.leftClicked()) edit(Section.MODEL);
         y -= cellHeight;
 
         if (profile.isUsingHardcodedModelDesignsBasedOnProfileName()) {
@@ -105,28 +106,28 @@ public class ProfileEditor implements Visual {
         }
 
         renderer.box(x, y, width, cellHeight, renderer.getTheme().MEDIUM, renderer.getTheme().YELLOW, "Save Changes");
-        if (Lights.mouse.contains(x, y, width, cellHeight) && Lights.mouse.leftClicked()) {
+        if (mouse.within(x, y, width, cellHeight) && mouse.leftClicked()) {
             profile.update(getMutableProfile());
             return false;
         }
         y -= cellHeight;
 
         renderer.box(x, y, width, cellHeight, renderer.getTheme().MEDIUM, renderer.getTheme().YELLOW, "Clear Changes");
-        if (Lights.mouse.contains(x, y, width, cellHeight) && Lights.mouse.leftClicked()) {
+        if (mouse.within(x, y, width, cellHeight) && mouse.leftClicked()) {
             edit(profile);
             return false;
         }
         y -= cellHeight;
 
         renderer.box(x, y, width, cellHeight, renderer.getTheme().MEDIUM, renderer.getTheme().YELLOW, "Close Editor");
-        if (Lights.mouse.contains(x, y, width, cellHeight) && Lights.mouse.leftClicked()) {
+        if (mouse.within(x, y, width, cellHeight) && mouse.leftClicked()) {
             Lights.openMainView();
             return false;
         }
         y -= cellHeight;
 
         renderer.box(x, y, width, cellHeight, renderer.getTheme().MEDIUM, renderer.getTheme().RED, "Delete Profile");
-        if (Lights.mouse.contains(x, y, width, cellHeight) && Util.isShiftHeld() && Lights.mouse.leftClicked()) {
+        if (mouse.within(x, y, width, cellHeight) && Util.isShiftHeld() && mouse.leftClicked()) {
             Profile.delete(getMutableProfile());
             edit((Profile) null);
             Lights.openMainView();
@@ -163,7 +164,7 @@ public class ProfileEditor implements Visual {
             y -= cellHeight;
             for (Channel channel : getMutableProfile().channels()) {
                 renderer.box(x, y, width, cellHeight, channel.equals(getSelectedChannel()) ? renderer.getTheme().DARK_RED : renderer.getTheme().MEDIUM, channel.getType().getName() + " - " + channel.addressOffsetsAsString());
-                if (Lights.mouse.contains(x, y, width, cellHeight) && Lights.mouse.leftClicked()) {
+                if (mouse.within(x, y, width, cellHeight) && mouse.leftClicked()) {
                     select(channel);
                 }
                 y -= cellHeight;
@@ -171,21 +172,21 @@ public class ProfileEditor implements Visual {
 
             if (hasChannelSelected()) {
                 renderer.box(x, y, width, cellHeight, renderer.getTheme().MEDIUM, renderer.getTheme().YELLOW, "Change Type");
-                if (Lights.mouse.contains(x, y, width, cellHeight) && Lights.mouse.leftClicked(500)) {
+                if (mouse.within(x, y, width, cellHeight) && mouse.leftClicked(500)) {
                     getMutableProfile().changeType(getSelectedChannel());
                 }
                 y -= cellHeight;
             }
 
             renderer.box(x, y, width, cellHeight, renderer.getTheme().MEDIUM, renderer.getTheme().GREEN, "Add Channel");
-            if (Lights.mouse.contains(x, y, width, cellHeight) && Lights.mouse.leftClicked()) {
+            if (mouse.within(x, y, width, cellHeight) && mouse.leftClicked()) {
                 getMutableProfile().addChannel(Channel.DEFAULT_TYPE);
             }
             y -= cellHeight;
 
             if (hasChannelSelected()) {
                 renderer.box(x, y, width, cellHeight, renderer.getTheme().MEDIUM, renderer.getTheme().RED, "Delete Channel");
-                if (Lights.mouse.contains(x, y, width, cellHeight) && Util.isShiftHeld() && Lights.mouse.leftClicked()) {
+                if (mouse.within(x, y, width, cellHeight) && Util.isShiftHeld() && mouse.leftClicked()) {
                     getMutableProfile().removeChannel(getSelectedChannel());
                     select((Channel) null);
                 }
@@ -202,8 +203,8 @@ public class ProfileEditor implements Visual {
             y -= cellHeight;
             for (ModelDesign modelDesign : getMutableProfile().getModelDesigns()) {
                 renderer.box(x, y, width, cellHeight, modelDesign.equals(getSelectedModelDesign()) ? renderer.getTheme().DARK_RED : renderer.getTheme().MEDIUM, modelDesign.toString());
-                if (Lights.mouse.contains(x, y, width, cellHeight)) {
-                    if (Lights.mouse.leftClicked()) {
+                if (mouse.within(x, y, width, cellHeight)) {
+                    if (mouse.leftClicked()) {
                         select(modelDesign);
                     }
                 }
@@ -211,14 +212,14 @@ public class ProfileEditor implements Visual {
             }
 
             renderer.box(x, y, width, cellHeight, renderer.getTheme().MEDIUM, renderer.getTheme().YELLOW, "Update Models");
-            if (Lights.mouse.contains(x, y, width, cellHeight) && Lights.mouse.leftClicked(500)) {
+            if (mouse.within(x, y, width, cellHeight) && mouse.leftClicked(500)) {
                 rebuildModelInstances();
             }
             y -= cellHeight;
 
             renderer.box(x, y, width, cellHeight, renderer.getTheme().MEDIUM, renderer.getTheme().GREEN, "Add Model");
-            if (Lights.mouse.contains(x, y, width, cellHeight)) {
-                if (Lights.mouse.leftClicked(500)) {
+            if (mouse.within(x, y, width, cellHeight)) {
+                if (mouse.leftClicked(500)) {
                     getMutableProfile().addModelDesign(new ModelDesign(1));
                 }
             }
@@ -226,7 +227,7 @@ public class ProfileEditor implements Visual {
 
             if (hasModelDesignSelected()) {
                 renderer.box(x, y, width, cellHeight, renderer.getTheme().MEDIUM, renderer.getTheme().RED, "Delete Model");
-                if (Lights.mouse.contains(x, y, width, cellHeight) && Util.isShiftHeld() && Lights.mouse.leftClicked(500)) {
+                if (mouse.within(x, y, width, cellHeight) && Util.isShiftHeld() && mouse.leftClicked(500)) {
                     getMutableProfile().removeModelDesign(getSelectedModelDesign());
                     select((ModelDesign) null);
                 }
@@ -243,27 +244,27 @@ public class ProfileEditor implements Visual {
             y -= cellHeight;
 
             renderer.box(x, y, width, cellHeight, isEditing(ModelSetting.WIDTH) ? renderer.getTheme().DARK_RED : renderer.getTheme().MEDIUM, "Width: " + getSelectedModelDesign().getDimensions().x);
-            if (Lights.mouse.contains(x, y, width, cellHeight) && Lights.mouse.leftClicked()) edit(ModelSetting.WIDTH);
+            if (mouse.within(x, y, width, cellHeight) && mouse.leftClicked()) edit(ModelSetting.WIDTH);
             y -= cellHeight;
 
             renderer.box(x, y, width, cellHeight, isEditing(ModelSetting.HEIGHT) ? renderer.getTheme().DARK_RED : renderer.getTheme().MEDIUM, "Height: " + getSelectedModelDesign().getDimensions().y);
-            if (Lights.mouse.contains(x, y, width, cellHeight) && Lights.mouse.leftClicked()) edit(ModelSetting.HEIGHT);
+            if (mouse.within(x, y, width, cellHeight) && mouse.leftClicked()) edit(ModelSetting.HEIGHT);
             y -= cellHeight;
 
             renderer.box(x, y, width, cellHeight, isEditing(ModelSetting.DEPTH) ? renderer.getTheme().DARK_RED : renderer.getTheme().MEDIUM, "Depth: " + getSelectedModelDesign().getDimensions().z);
-            if (Lights.mouse.contains(x, y, width, cellHeight) && Lights.mouse.leftClicked()) edit(ModelSetting.DEPTH);
+            if (mouse.within(x, y, width, cellHeight) && mouse.leftClicked()) edit(ModelSetting.DEPTH);
             y -= cellHeight;
 
             renderer.box(x, y, width, cellHeight, isEditing(ModelSetting.X_OFFSET) ? renderer.getTheme().DARK_RED : renderer.getTheme().MEDIUM, "X Offset: " + getSelectedModelDesign().getOffset().x);
-            if (Lights.mouse.contains(x, y, width, cellHeight) && Lights.mouse.leftClicked()) edit(ModelSetting.X_OFFSET);
+            if (mouse.within(x, y, width, cellHeight) && mouse.leftClicked()) edit(ModelSetting.X_OFFSET);
             y -= cellHeight;
 
             renderer.box(x, y, width, cellHeight, isEditing(ModelSetting.Y_OFFSET) ? renderer.getTheme().DARK_RED : renderer.getTheme().MEDIUM, "Y Offset: " + getSelectedModelDesign().getOffset().y);
-            if (Lights.mouse.contains(x, y, width, cellHeight) && Lights.mouse.leftClicked()) edit(ModelSetting.Y_OFFSET);
+            if (mouse.within(x, y, width, cellHeight) && mouse.leftClicked()) edit(ModelSetting.Y_OFFSET);
             y -= cellHeight;
 
             renderer.box(x, y, width, cellHeight, isEditing(ModelSetting.Z_OFFSET) ? renderer.getTheme().DARK_RED : renderer.getTheme().MEDIUM, "Z Offset: " + getSelectedModelDesign().getOffset().z);
-            if (Lights.mouse.contains(x, y, width, cellHeight) && Lights.mouse.leftClicked()) edit(ModelSetting.Z_OFFSET);
+            if (mouse.within(x, y, width, cellHeight) && mouse.leftClicked()) edit(ModelSetting.Z_OFFSET);
             y -= cellHeight;
 
             x += width;
@@ -272,7 +273,7 @@ public class ProfileEditor implements Visual {
 
         // MODEL PREVIEW
         width = WIDTH - x;
-        mouseInPreviewArea = Lights.mouse.contains(x, y, width, Gdx.graphics.getHeight());
+        mouseInPreviewArea = mouse.within(x, y, width, Gdx.graphics.getHeight());
         renderer.box(x, y, width, cellHeight, renderer.getTheme().DARK_BLUE, "Model Preview", Task.TextPosition.CENTER);
 
         resize((int) width, Gdx.graphics.getHeight());

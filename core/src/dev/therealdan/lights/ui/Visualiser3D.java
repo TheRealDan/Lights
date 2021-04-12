@@ -15,6 +15,7 @@ import com.badlogic.gdx.utils.IntIntMap;
 import dev.therealdan.lights.dmx.DMX;
 import dev.therealdan.lights.fixtures.Fixture;
 import dev.therealdan.lights.fixtures.fixture.Model;
+import dev.therealdan.lights.main.Mouse;
 import dev.therealdan.lights.programmer.Programmer;
 import dev.therealdan.lights.renderer.Renderer;
 import dev.therealdan.lights.settings.Control;
@@ -154,7 +155,7 @@ public class Visualiser3D implements Visual {
     }
 
     @Override
-    public boolean draw(Renderer renderer) {
+    public boolean draw(Mouse mouse, Renderer renderer) {
         mouseSelectFixtures();
         updateFixtureColors();
 

@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import dev.therealdan.lights.dmx.DMX;
-import dev.therealdan.lights.main.Lights;
+import dev.therealdan.lights.main.Mouse;
 import dev.therealdan.lights.panels.Panel;
 import dev.therealdan.lights.panels.menuicons.CloseIcon;
 import dev.therealdan.lights.programmer.Frame;
@@ -114,7 +114,7 @@ public class SequenceProgrammerPanel implements Panel {
     }
 
     @Override
-    public boolean draw(Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {
+    public boolean draw(Mouse mouse, Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {
         update();
 
         boolean interacted = false;
@@ -130,11 +130,11 @@ public class SequenceProgrammerPanel implements Panel {
         float width = getWidth();
 
         renderer.box(x, y, getWidth(), cellHeight, renderer.getTheme().DARK_BLUE, setWidth(renderer, getFriendlyName()), Task.TextPosition.CENTER);
-        drag(x, y, getWidth(), cellHeight);
+        drag(mouse, x, y, getWidth(), cellHeight);
         y -= cellHeight;
 
         renderer.box(x, y, getWidth(), cellHeight, selected.equals(Selected.NAME) ? renderer.getTheme().DARK_RED : renderer.getTheme().MEDIUM, setWidth(renderer, sequence.getName()), Task.TextPosition.CENTER);
-        if (Lights.mouse.contains(x, y, width, cellHeight) && canInteract()) {
+        if (mouse.within(x, y, width, cellHeight) && canInteract()) {
             interacted = true;
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT))
                 setSelected(Selected.NAME);
@@ -148,7 +148,7 @@ public class SequenceProgrammerPanel implements Panel {
                         "Frame time: " + Frame.format(firstSelectedFrame.getFrameTime()) :
                         "N/A"
                 , 2), Task.TextPosition.CENTER);
-        if (Lights.mouse.contains(x, y, width, cellHeight) && canInteract()) {
+        if (mouse.within(x, y, width, cellHeight) && canInteract()) {
             interacted = true;
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT))
                 setSelected(Selected.FRAME);
@@ -159,7 +159,7 @@ public class SequenceProgrammerPanel implements Panel {
                         "Fade time: " + Frame.format(firstSelectedFrame.getFadeTime()) :
                         "N/A"
                 , 2), Task.TextPosition.CENTER);
-        if (Lights.mouse.contains(x, y, width, cellHeight) && canInteract()) {
+        if (mouse.within(x, y, width, cellHeight) && canInteract()) {
             interacted = true;
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT))
                 setSelected(Selected.FADE);
@@ -173,9 +173,9 @@ public class SequenceProgrammerPanel implements Panel {
             if (button.equals(Button.LOOP)) highlight = sequence.doesLoop();
             setWidth((renderer.getWidth(button.getName()) + 10) * Button.values().length, true);
             renderer.box(x, y, width, cellHeight, highlight ? renderer.getTheme().DARK_GREEN : renderer.getTheme().MEDIUM, button.getName(), Task.TextPosition.CENTER);
-            if (Lights.mouse.contains(x, y, width, cellHeight) && canInteract()) {
+            if (mouse.within(x, y, width, cellHeight) && canInteract()) {
                 interacted = true;
-                if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(500))
+                if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && mouse.leftReady(500))
                     button.press();
             }
             x += width;
@@ -197,13 +197,13 @@ public class SequenceProgrammerPanel implements Panel {
                 if (color == renderer.getTheme().MEDIUM) color = renderer.getTheme().LIGHT;
                 frame.draw(renderer, x, y, width, cellHeight, color);
             }
-            if (Lights.mouse.contains(x, y, width, cellHeight) && canInteract()) {
+            if (mouse.within(x, y, width, cellHeight) && canInteract()) {
                 interacted = true;
                 if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
                     if (shift) {
                         sequence.set(index);
                     } else {
-                        if (Lights.mouse.leftReady(400)) {
+                        if (mouse.leftReady(400)) {
                             if (Programmer.isSelected(frame)) {
                                 Programmer.deselect(frame);
                             } else {

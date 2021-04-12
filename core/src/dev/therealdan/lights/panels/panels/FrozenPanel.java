@@ -1,6 +1,7 @@
 package dev.therealdan.lights.panels.panels;
 
 import dev.therealdan.lights.main.Lights;
+import dev.therealdan.lights.main.Mouse;
 import dev.therealdan.lights.panels.MenuIcon;
 import dev.therealdan.lights.panels.Panel;
 import dev.therealdan.lights.panels.menuicons.CloseIcon;
@@ -26,8 +27,8 @@ public class FrozenPanel implements Panel {
     }
 
     @Override
-    public boolean drawMenuIcons(Renderer renderer, float x, float y, float width, float height, float menuIconWidth, float menuIconHeight, float spacing, boolean interacted) {
-        interacted = Panel.super.drawMenuIcons(renderer, x, y, width, height, menuIconWidth, menuIconHeight, spacing, interacted);
+    public boolean drawMenuIcons(Mouse mouse, Renderer renderer, float x, float y, float width, float height, float menuIconWidth, float menuIconHeight, float spacing, boolean interacted) {
+        interacted = Panel.super.drawMenuIcons(mouse, renderer, x, y, width, height, menuIconWidth, menuIconHeight, spacing, interacted);
 
         setWidth(renderer.getWidth("OUTPUT FROZEN") + menuIconWidth * 4, true);
 
@@ -35,9 +36,9 @@ public class FrozenPanel implements Panel {
     }
 
     @Override
-    public boolean drawContent(Renderer renderer, float x, float y, float width, float height, boolean interacted) {
+    public boolean drawContent(Mouse mouse, Renderer renderer, float x, float y, float width, float height, boolean interacted) {
         renderer.box(x, y, width, height, renderer.getTheme().MEDIUM, setWidth(renderer, "Press Escape to unfreeze"), Task.TextPosition.CENTER);
-        drag(x, y, width, height);
+        drag(mouse, x, y, width, height);
         return interacted;
     }
 

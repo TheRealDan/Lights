@@ -2,7 +2,7 @@ package dev.therealdan.lights.panels.panels;
 
 import com.badlogic.gdx.graphics.Color;
 import dev.therealdan.lights.controllers.Button;
-import dev.therealdan.lights.main.Lights;
+import dev.therealdan.lights.main.Mouse;
 import dev.therealdan.lights.main.Theme;
 import dev.therealdan.lights.panels.Panel;
 import dev.therealdan.lights.panels.menuicons.AddButtonIcon;
@@ -24,7 +24,7 @@ public class ButtonsPanel implements Panel {
     }
 
     @Override
-    public boolean drawContent(Renderer renderer, float x, float y, float width, float height, boolean interacted) {
+    public boolean drawContent(Mouse mouse, Renderer renderer, float x, float y, float width, float height, boolean interacted) {
         ButtonEditorPanel buttonEditor = (ButtonEditorPanel) PanelHandler.byName("ButtonEditor");
 
         int topPositionToDisplay = Button.getTopPosition();
@@ -38,19 +38,19 @@ public class ButtonsPanel implements Panel {
             Button button = Button.byPosition(position);
             if (button != null) {
                 renderer.box(x, y, buttonWidth, buttonHeight, button.getColor(), button.getName(), Task.TextPosition.CENTER);
-                if (Lights.mouse.contains(x, y, buttonWidth, buttonHeight) && canInteract()) {
+                if (mouse.within(x, y, buttonWidth, buttonHeight) && canInteract()) {
                     interacted = true;
-                    if (Lights.mouse.leftClicked(1000)) {
+                    if (mouse.leftClicked(1000)) {
                         button.press();
                         renderer.box(x, y, buttonWidth, buttonHeight, new Color(button.getColor()).mul(1.5f));
-                    } else if (Lights.mouse.rightClicked()) {
+                    } else if (mouse.rightClicked()) {
                         buttonEditor.edit(button);
                     }
                 }
             } else {
                 renderer.box(x, y, buttonWidth, buttonHeight, renderer.getTheme().DARK);
-                if (Lights.mouse.contains(x, y, buttonWidth, buttonHeight) && canInteract() && buttonEditor.isEditing()) {
-                    if (Lights.mouse.leftClicked()) {
+                if (mouse.within(x, y, buttonWidth, buttonHeight) && canInteract() && buttonEditor.isEditing()) {
+                    if (mouse.leftClicked()) {
                         buttonEditor.getEditing().setPosition(position);
                     }
                 }

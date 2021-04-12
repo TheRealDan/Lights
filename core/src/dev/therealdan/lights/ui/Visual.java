@@ -1,11 +1,12 @@
 package dev.therealdan.lights.ui;
 
 import com.badlogic.gdx.InputProcessor;
+import dev.therealdan.lights.main.Mouse;
 import dev.therealdan.lights.renderer.Renderer;
 
 public interface Visual extends InputProcessor {
 
-    boolean draw(Renderer renderer);
+    boolean draw(Mouse mouse, Renderer renderer);
 
     default void resize(int width, int height) {
 

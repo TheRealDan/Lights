@@ -5,7 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.files.FileHandle;
 import dev.therealdan.lights.controllers.Fader;
 import dev.therealdan.lights.controllers.FaderBank;
-import dev.therealdan.lights.main.Lights;
+import dev.therealdan.lights.main.Mouse;
 import dev.therealdan.lights.panels.Panel;
 import dev.therealdan.lights.panels.menuicons.CloseIcon;
 import dev.therealdan.lights.renderer.Renderer;
@@ -105,7 +105,7 @@ public class FadersPanel implements Panel {
     }
 
     @Override
-    public boolean draw(Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {
+    public boolean draw(Mouse mouse, Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {
         boolean interacted = false;
 
         setHeight(FadersPanel.HEIGHT);
@@ -118,14 +118,14 @@ public class FadersPanel implements Panel {
         float height = getHeight() - cellHeight - cellHeight;
 
         renderer.box(x, y, getWidth(), cellHeight, renderer.getTheme().DARK_BLUE, setWidth(renderer, getFriendlyName()), Task.TextPosition.CENTER);
-        drag(x, y, getWidth(), cellHeight);
+        drag(mouse, x, y, getWidth(), cellHeight);
         y -= cellHeight;
 
         renderer.box(x, y, getWidth(), cellHeight, renderer.getTheme().MEDIUM, setWidth(renderer, "Bank: " + getBank().getID()));
-        if (Lights.mouse.contains(x, y, getWidth(), cellHeight) && canInteract()) {
+        if (mouse.within(x, y, getWidth(), cellHeight) && canInteract()) {
             interacted = true;
-            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(1000)) {
-                if (Lights.mouse.contains(x, y, getWidth() / 2, cellHeight)) {
+            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && mouse.leftReady(1000)) {
+                if (mouse.within(x, y, getWidth() / 2, cellHeight)) {
                     setBank(getBank().getID() + 1);
                 } else {
                     setBank(getBank().getID() - 1);
@@ -138,7 +138,7 @@ public class FadersPanel implements Panel {
             renderer.box(x, y, faderWidth, height, renderer.getTheme().MEDIUM, Util.getPercentage(fader.getValue()), Task.TextPosition.CENTER);
             float fill = fader.getValue() * height;
             renderer.box(x, y - height + fill, faderWidth, fill, fader.getColor());
-            if (Lights.mouse.contains(x, y, faderWidth, height) && canInteract()) {
+            if (mouse.within(x, y, faderWidth, height) && canInteract()) {
                 if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
                     interacted = true;
                     float bottom = y - height + 20;

@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import dev.therealdan.lights.fixtures.Fixture;
 import dev.therealdan.lights.fixtures.fixture.profile.Channel;
-import dev.therealdan.lights.main.Lights;
+import dev.therealdan.lights.main.Mouse;
 import dev.therealdan.lights.panels.Panel;
 import dev.therealdan.lights.panels.menuicons.CloseIcon;
 import dev.therealdan.lights.programmer.Programmer;
@@ -33,7 +33,7 @@ public class ParametersPanel implements Panel {
     }
 
     @Override
-    public boolean draw(Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {
+    public boolean draw(Mouse mouse, Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {
         boolean interacted = false;
 
         setWidth(ParametersPanel.WIDTH);
@@ -46,14 +46,14 @@ public class ParametersPanel implements Panel {
 
         renderer.box(x, y, getWidth(), getHeight(), renderer.getTheme().DARK);
         renderer.box(x, y, getWidth(), cellHeight, renderer.getTheme().DARK_BLUE, getFriendlyName(), Task.TextPosition.CENTER);
-        drag(x, y, getWidth(), cellHeight);
+        drag(mouse, x, y, getWidth(), cellHeight);
         y -= cellHeight;
 
         for (Channel.Category category : Programmer.availableChannelTypeCategories()) {
             renderer.box(x, y, width, cellHeight, category.equals(getCategory()) ? renderer.getTheme().DARK_GREEN : renderer.getTheme().MEDIUM, category.getName(), Task.TextPosition.CENTER);
-            if (Lights.mouse.contains(x, y, width, cellHeight) && canInteract()) {
+            if (mouse.within(x, y, width, cellHeight) && canInteract()) {
                 interacted = true;
-                if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(500)) {
+                if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && mouse.leftReady(500)) {
                     if (category.equals(getCategory())) {
                         setPage(getPage() + 1);
                     } else {
@@ -80,17 +80,17 @@ public class ParametersPanel implements Panel {
                     continue;
                 }
                 seen++;
-                if (Lights.mouse.contains(x, y, width, parameterHeight) && canInteract()) setChannelType(channelType);
+                if (mouse.within(x, y, width, parameterHeight) && canInteract()) setChannelType(channelType);
                 renderer.box(x, y, width, cellHeight, renderer.getTheme().DARK_BLUE, channelType.getName(), Task.TextPosition.CENTER);
-                drag(x, y, width, cellHeight);
+                drag(mouse, x, y, width, cellHeight);
                 y -= cellHeight;
 
                 for (float percentage = 1.0f; percentage >= -0.01f; percentage -= 0.05f) {
                     float level = Float.parseFloat(decimalFormat.format(percentage * 100.0));
                     renderer.box(x, y, width, cellHeight, isSet(channelType, parameter) && getLevel(channelType, parameter) == level ? renderer.getTheme().DARK_RED : renderer.getTheme().MEDIUM, Float.toString(level).replace("-", "").replace(".0", "") + "%", Task.TextPosition.CENTER);
-                    if (Lights.mouse.contains(x, y, width, cellHeight) && canInteract()) {
+                    if (mouse.within(x, y, width, cellHeight) && canInteract()) {
                         interacted = true;
-                        if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(-1)) {
+                        if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && mouse.leftReady(-1)) {
                             setValue(channelType, parameter, percentage * 255.0f);
                         }
                     }

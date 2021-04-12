@@ -1,6 +1,7 @@
 package dev.therealdan.lights.panels.panels;
 
 import com.badlogic.gdx.graphics.Color;
+import dev.therealdan.lights.main.Mouse;
 import dev.therealdan.lights.panels.Panel;
 import dev.therealdan.lights.programmer.Frame;
 import dev.therealdan.lights.programmer.Programmer;
@@ -15,8 +16,8 @@ public class ColorWheelPanel implements Panel {
     }
 
     @Override
-    public boolean draw(Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {
-        Panel.super.draw(renderer, X, Y, WIDTH, HEIGHT);
+    public boolean draw(Mouse mouse, Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {
+        Panel.super.draw(mouse, renderer, X, Y, WIDTH, HEIGHT);
         boolean interacted = false;
 
 //        List<Channel.Type> channelTypes = Programmer.getSelectedChannelTypes();

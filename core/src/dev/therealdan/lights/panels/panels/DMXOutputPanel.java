@@ -3,7 +3,7 @@ package dev.therealdan.lights.panels.panels;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import dev.therealdan.lights.dmx.DMX;
-import dev.therealdan.lights.main.Lights;
+import dev.therealdan.lights.main.Mouse;
 import dev.therealdan.lights.panels.Panel;
 import dev.therealdan.lights.panels.menuicons.CloseIcon;
 import dev.therealdan.lights.renderer.Renderer;
@@ -20,7 +20,7 @@ public class DMXOutputPanel implements Panel {
     }
 
     @Override
-    public boolean draw(Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {
+    public boolean draw(Mouse mouse, Renderer renderer, float X, float Y, float WIDTH, float HEIGHT) {
         boolean interacted = false;
         boolean heightSet = false;
 
@@ -32,21 +32,21 @@ public class DMXOutputPanel implements Panel {
         if (!displayInCells()) setWidth(0);
 
         renderer.box(x, y, width, cellHeight, renderer.getTheme().DARK_BLUE, setWidth(renderer, getFriendlyName()), Task.TextPosition.CENTER);
-        drag(x, y, width, cellHeight);
+        drag(mouse, x, y, width, cellHeight);
         y -= cellHeight;
 
         renderer.box(x, y, width, cellHeight, renderer.getTheme().MEDIUM, setWidth(renderer, "DMX: " + getDmxToDisplay()));
-        if (Lights.mouse.contains(x, y, width, cellHeight) && canInteract()) {
+        if (mouse.within(x, y, width, cellHeight) && canInteract()) {
             interacted = true;
-            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(500))
+            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && mouse.leftReady(500))
                 next();
         }
         y -= cellHeight;
 
         renderer.box(x, y, width, cellHeight, displayInCells() ? renderer.getTheme().DARK_RED : renderer.getTheme().MEDIUM, setWidth(renderer, "Display In Cells"));
-        if (Lights.mouse.contains(x, y, width, cellHeight) && canInteract()) {
+        if (mouse.within(x, y, width, cellHeight) && canInteract()) {
             interacted = true;
-            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(500))
+            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && mouse.leftReady(500))
                 toggleDisplayInCells();
         }
         y -= cellHeight;
@@ -55,7 +55,7 @@ public class DMXOutputPanel implements Panel {
         if (displayInCells()) {
             for (int address : dmx.active()) {
                 renderer.box(x, y, cellHeight, cellHeight, renderer.getTheme().MEDIUM, Integer.toString(address));
-                drag(x, y, cellHeight, cellHeight);
+                drag(mouse, x, y, cellHeight, cellHeight);
                 float fill = cellHeight * dmx.get(address) / 255f;
                 renderer.box(x, y - cellHeight + fill, cellHeight, fill, renderer.getTheme().DARK_RED);
                 x += cellHeight;

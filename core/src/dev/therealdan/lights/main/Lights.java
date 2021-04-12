@@ -15,7 +15,8 @@ public class Lights extends ApplicationAdapter {
 
     private static Lights lights;
 
-    public Mouse _mouse;
+    private Mouse _mouse;
+
     public static Output output;
 
     private Renderer renderer;

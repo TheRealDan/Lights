@@ -20,7 +20,6 @@ public class Lights extends ApplicationAdapter {
     private Mouse _mouse;
     private Renderer _renderer;
     private Output _output;
-
     private TheInputProcessor _theInputProcessor;
 
     private Visualiser3D visualiser3D;
@@ -37,7 +36,6 @@ public class Lights extends ApplicationAdapter {
         _mouse = new Mouse();
         _renderer = new Renderer();
         _output = new Output(_settingsStore);
-
         _theInputProcessor = new TheInputProcessor();
 
         panelHandler = new PanelHandler(_settingsStore, _controlsStore, _mouse, _renderer.getTheme(), _output);

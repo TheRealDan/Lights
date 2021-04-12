@@ -47,7 +47,7 @@ public class ButtonsPanel implements Panel {
                     }
                 }
             } else {
-                renderer.box(x, y, buttonWidth, buttonHeight, Lights.color.DARK);
+                renderer.box(x, y, buttonWidth, buttonHeight, Lights.theme.DARK);
                 if (Lights.mouse.contains(x, y, buttonWidth, buttonHeight) && canInteract() && buttonEditor.isEditing()) {
                     if (Lights.mouse.leftClicked()) {
                         buttonEditor.getEditing().setPosition(position);

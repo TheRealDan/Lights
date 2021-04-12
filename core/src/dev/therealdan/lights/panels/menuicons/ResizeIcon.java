@@ -10,12 +10,12 @@ public class ResizeIcon implements MenuIcon {
     @Override
     public boolean draw(Renderer renderer, float x, float y, float width, float height, int index, boolean hover, boolean click) {
         if (index == -1) {
-            renderer.queue(new Task(x + width - 10, y - height + 1).rect(2, 2).setColor(Lights.color.WHITE));
-            renderer.queue(new Task(x + width - 7, y - height + 4).rect(2, 2).setColor(Lights.color.WHITE));
-            renderer.queue(new Task(x + width - 7, y - height + 1).rect(2, 2).setColor(Lights.color.WHITE));
-            renderer.queue(new Task(x + width - 4, y - height + 7).rect(2, 2).setColor(Lights.color.WHITE));
-            renderer.queue(new Task(x + width - 4, y - height + 4).rect(2, 2).setColor(Lights.color.WHITE));
-            renderer.queue(new Task(x + width - 4, y - height + 1).rect(2, 2).setColor(Lights.color.WHITE));
+            renderer.queue(new Task(x + width - 10, y - height + 1).rect(2, 2).setColor(Lights.theme.WHITE));
+            renderer.queue(new Task(x + width - 7, y - height + 4).rect(2, 2).setColor(Lights.theme.WHITE));
+            renderer.queue(new Task(x + width - 7, y - height + 1).rect(2, 2).setColor(Lights.theme.WHITE));
+            renderer.queue(new Task(x + width - 4, y - height + 7).rect(2, 2).setColor(Lights.theme.WHITE));
+            renderer.queue(new Task(x + width - 4, y - height + 4).rect(2, 2).setColor(Lights.theme.WHITE));
+            renderer.queue(new Task(x + width - 4, y - height + 1).rect(2, 2).setColor(Lights.theme.WHITE));
         }
         return false;
     }

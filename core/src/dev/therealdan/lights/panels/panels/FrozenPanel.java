@@ -19,8 +19,8 @@ public class FrozenPanel implements Panel {
     public boolean drawMenuBar(Renderer renderer, float x, float y, float width, float height, boolean interacted) {
         boolean flash = System.currentTimeMillis() % 1000 > 500;
         renderer.box(x, y, width, height,
-                flash ? Lights.color.DARK_BLUE : Lights.color.RED,
-                flash ? Lights.color.TEXT : Lights.color.BLACK,
+                flash ? Lights.theme.DARK_BLUE : Lights.theme.RED,
+                flash ? Lights.theme.TEXT : Lights.theme.BLACK,
                 "OUTPUT FROZEN", Task.TextPosition.CENTER);
         return interacted;
     }
@@ -36,7 +36,7 @@ public class FrozenPanel implements Panel {
 
     @Override
     public boolean drawContent(Renderer renderer, float x, float y, float width, float height, boolean interacted) {
-        renderer.box(x, y, width, height, Lights.color.MEDIUM, setWidth(renderer, "Press Escape to unfreeze"), Task.TextPosition.CENTER);
+        renderer.box(x, y, width, height, Lights.theme.MEDIUM, setWidth(renderer, "Press Escape to unfreeze"), Task.TextPosition.CENTER);
         drag(x, y, width, height);
         return interacted;
     }

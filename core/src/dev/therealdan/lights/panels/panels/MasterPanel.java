@@ -40,14 +40,14 @@ public class MasterPanel implements Panel {
         float y = getY();
         float width = getWidth();
 
-        renderer.box(x, y, width, cellHeight, Lights.color.DARK_BLUE, setWidth(renderer, getFriendlyName()), Task.TextPosition.CENTER);
+        renderer.box(x, y, width, cellHeight, Lights.theme.DARK_BLUE, setWidth(renderer, getFriendlyName()), Task.TextPosition.CENTER);
         drag(x, y, width, cellHeight);
         y -= cellHeight;
 
         String currentAction = PanelHandler.getMaster() > 0.0 ? "Fade to Zero" : "Fade to Max";
         if (isFadeToMax()) currentAction = "Fading to Max..";
         if (isFadeToZero()) currentAction = "Fading to Zero..";
-        renderer.box(x, y, width, cellHeight, Lights.color.MEDIUM, setWidth(renderer, currentAction), Task.TextPosition.CENTER);
+        renderer.box(x, y, width, cellHeight, Lights.theme.MEDIUM, setWidth(renderer, currentAction), Task.TextPosition.CENTER);
         if (Lights.mouse.contains(x, y, width, cellHeight) && canInteract()) {
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(1000)) {
                 interacted = true;
@@ -57,9 +57,9 @@ public class MasterPanel implements Panel {
         y -= cellHeight;
 
         float height = getHeight() - cellHeight - cellHeight;
-        renderer.box(x, y, width, height, Lights.color.MEDIUM, setWidth(renderer, Util.getPercentage(PanelHandler.getMaster())), Task.TextPosition.CENTER);
+        renderer.box(x, y, width, height, Lights.theme.MEDIUM, setWidth(renderer, Util.getPercentage(PanelHandler.getMaster())), Task.TextPosition.CENTER);
         float fill = PanelHandler.getMaster() * height;
-        renderer.box(x, y - height + fill, width, fill, Lights.color.BLACK);
+        renderer.box(x, y - height + fill, width, fill, Lights.theme.BLACK);
 
         if (Lights.mouse.contains(x, y, width, height) && canInteract()) {
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {

@@ -34,7 +34,7 @@ public class FixturesPanel implements Panel {
         float fixtureHeight = height / (fixtures / getFixturesPerRow());
 
         for (Fixture fixture : Fixture.fixtures(ID)) {
-            renderer.box(x, y, fixtureWidth, fixtureHeight, Programmer.isSelected(fixture) ? Lights.color.DARK_RED : Lights.color.MEDIUM, fixture.getName(), Task.TextPosition.CENTER);
+            renderer.box(x, y, fixtureWidth, fixtureHeight, Programmer.isSelected(fixture) ? Lights.theme.DARK_RED : Lights.theme.MEDIUM, fixture.getName(), Task.TextPosition.CENTER);
             if (Lights.mouse.contains(x, y, fixtureWidth, fixtureHeight) && canInteract()) {
                 interacted = true;
                 if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(500)) {

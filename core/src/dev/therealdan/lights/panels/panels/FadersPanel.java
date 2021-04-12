@@ -114,11 +114,11 @@ public class FadersPanel implements Panel {
 
         float height = getHeight() - cellHeight - cellHeight;
 
-        renderer.box(x, y, getWidth(), cellHeight, Lights.color.DARK_BLUE, setWidth(renderer, getFriendlyName()), Task.TextPosition.CENTER);
+        renderer.box(x, y, getWidth(), cellHeight, Lights.theme.DARK_BLUE, setWidth(renderer, getFriendlyName()), Task.TextPosition.CENTER);
         drag(x, y, getWidth(), cellHeight);
         y -= cellHeight;
 
-        renderer.box(x, y, getWidth(), cellHeight, Lights.color.MEDIUM, setWidth(renderer, "Bank: " + getBank().getID()));
+        renderer.box(x, y, getWidth(), cellHeight, Lights.theme.MEDIUM, setWidth(renderer, "Bank: " + getBank().getID()));
         if (Lights.mouse.contains(x, y, getWidth(), cellHeight) && canInteract()) {
             interacted = true;
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(1000)) {
@@ -132,7 +132,7 @@ public class FadersPanel implements Panel {
         y -= cellHeight;
 
         for (Fader fader : getBank().faders()) {
-            renderer.box(x, y, faderWidth, height, Lights.color.MEDIUM, Util.getPercentage(fader.getValue()), Task.TextPosition.CENTER);
+            renderer.box(x, y, faderWidth, height, Lights.theme.MEDIUM, Util.getPercentage(fader.getValue()), Task.TextPosition.CENTER);
             float fill = fader.getValue() * height;
             renderer.box(x, y - height + fill, faderWidth, fill, fader.getColor());
             if (Lights.mouse.contains(x, y, faderWidth, height) && canInteract()) {

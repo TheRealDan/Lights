@@ -8,7 +8,6 @@ import dev.therealdan.lights.panels.Panel;
 import dev.therealdan.lights.panels.menuicons.CloseIcon;
 import dev.therealdan.lights.renderer.Renderer;
 import dev.therealdan.lights.renderer.Task;
-import dev.therealdan.lights.ui.PanelHandler;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -50,7 +49,7 @@ public class ConsolePanel implements Panel {
         float width = getWidth();
         float cellHeight = 30;
 
-        renderer.box(x, y, width, cellHeight, Lights.color.DARK_BLUE, setWidth(renderer, getFriendlyName()), Task.TextPosition.CENTER);
+        renderer.box(x, y, width, cellHeight, Lights.theme.DARK_BLUE, setWidth(renderer, getFriendlyName()), Task.TextPosition.CENTER);
         drag(x, y, width, cellHeight);
         y -= cellHeight;
 
@@ -60,12 +59,12 @@ public class ConsolePanel implements Panel {
                 colorCode = line.substring(1, 2);
                 line = line.substring(2);
             }
-            renderer.box(x, y, width, cellHeight, Lights.color.MEDIUM, getColor(colorCode), setWidth(renderer, line));
+            renderer.box(x, y, width, cellHeight, Lights.theme.MEDIUM, getColor(colorCode), setWidth(renderer, line));
             drag(x, y, width, cellHeight);
             y -= cellHeight;
         }
 
-        renderer.box(x, y, width, cellHeight, canInteract() ? Lights.color.DARK_RED : Lights.color.MEDIUM, setWidth(renderer, input));
+        renderer.box(x, y, width, cellHeight, canInteract() ? Lights.theme.DARK_RED : Lights.theme.MEDIUM, setWidth(renderer, input));
         drag(x, y, width, cellHeight);
         y -= cellHeight;
 
@@ -163,21 +162,21 @@ public class ConsolePanel implements Panel {
     private Color getColor(String colorCode) {
         switch (colorCode.toUpperCase()) {
             case "R":
-                return Lights.color.RED;
+                return Lights.theme.RED;
             case "G":
-                return Lights.color.GREEN;
+                return Lights.theme.GREEN;
             case "B":
-                return Lights.color.BLUE;
+                return Lights.theme.BLUE;
             case "M":
-                return Lights.color.MAGENTA;
+                return Lights.theme.MAGENTA;
             case "Y":
-                return Lights.color.YELLOW;
+                return Lights.theme.YELLOW;
             case "C":
-                return Lights.color.CYAN;
+                return Lights.theme.CYAN;
 
             case "W":
             default:
-                return Lights.color.TEXT;
+                return Lights.theme.TEXT;
         }
     }
 

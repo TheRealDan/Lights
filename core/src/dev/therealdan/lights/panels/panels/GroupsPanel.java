@@ -34,7 +34,7 @@ public class GroupsPanel implements Panel {
         float groupHeight = height / (groups / getGroupsPerRow());
 
         for (Group group : Group.groups(NAME)) {
-            renderer.box(x, y, groupWidth, groupHeight, Programmer.isSelected(group) ? Lights.color.DARK_RED : Lights.color.MEDIUM, setWidth(renderer, group.getName()), Task.TextPosition.CENTER);
+            renderer.box(x, y, groupWidth, groupHeight, Programmer.isSelected(group) ? Lights.theme.DARK_RED : Lights.theme.MEDIUM, setWidth(renderer, group.getName()), Task.TextPosition.CENTER);
             if (Lights.mouse.contains(x, y, groupWidth, groupHeight) && canInteract()) {
                 interacted = true;
                 if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(500)) {

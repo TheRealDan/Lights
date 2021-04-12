@@ -37,11 +37,11 @@ public class FaderEditorPanel implements Panel {
         float width = 250;
         float cellHeight = 30;
 
-        renderer.box(x, y, width, cellHeight, Lights.color.DARK_BLUE, getFriendlyName(), Task.TextPosition.CENTER);
+        renderer.box(x, y, width, cellHeight, Lights.theme.DARK_BLUE, getFriendlyName(), Task.TextPosition.CENTER);
         drag(x, y, uiWidth, cellHeight);
         y -= cellHeight;
 
-        renderer.box(x, y, width, cellHeight, canEdit(Section.NAME) ? Lights.color.DARK_RED : Lights.color.MEDIUM, "Name: " + getFader().getName());
+        renderer.box(x, y, width, cellHeight, canEdit(Section.NAME) ? Lights.theme.DARK_RED : Lights.theme.MEDIUM, "Name: " + getFader().getName());
         if (Lights.mouse.contains(x, y, width, cellHeight) && canInteract()) {
             interacted = true;
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(-1)) {
@@ -50,7 +50,7 @@ public class FaderEditorPanel implements Panel {
         }
         y -= cellHeight;
 
-        renderer.box(x, y, width, cellHeight, canEdit(Section.SEQUENCE) ? Lights.color.DARK_RED : Lights.color.MEDIUM, "Sequence: " + getFader().getSequence().getName());
+        renderer.box(x, y, width, cellHeight, canEdit(Section.SEQUENCE) ? Lights.theme.DARK_RED : Lights.theme.MEDIUM, "Sequence: " + getFader().getSequence().getName());
         if (Lights.mouse.contains(x, y, width, cellHeight) && canInteract()) {
             interacted = true;
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(-1)) {
@@ -59,8 +59,8 @@ public class FaderEditorPanel implements Panel {
         }
         y -= cellHeight;
 
-        renderer.box(x, y, width, cellHeight, Lights.color.MEDIUM, "Red: " + getFader().getColor().r);
-        renderer.box(x, y, getFader().getColor().r * width, cellHeight, canEdit(Section.RED) ? Lights.color.RED : getFader().getColor());
+        renderer.box(x, y, width, cellHeight, Lights.theme.MEDIUM, "Red: " + getFader().getColor().r);
+        renderer.box(x, y, getFader().getColor().r * width, cellHeight, canEdit(Section.RED) ? Lights.theme.RED : getFader().getColor());
         if (Lights.mouse.contains(x, y, width, cellHeight) && canInteract()) {
             interacted = true;
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(-1)) {
@@ -71,8 +71,8 @@ public class FaderEditorPanel implements Panel {
         }
         y -= cellHeight;
 
-        renderer.box(x, y, width, cellHeight, Lights.color.MEDIUM, "Green: " + getFader().getColor().g);
-        renderer.box(x, y, getFader().getColor().g * width, cellHeight, canEdit(Section.GREEN) ? Lights.color.GREEN : getFader().getColor());
+        renderer.box(x, y, width, cellHeight, Lights.theme.MEDIUM, "Green: " + getFader().getColor().g);
+        renderer.box(x, y, getFader().getColor().g * width, cellHeight, canEdit(Section.GREEN) ? Lights.theme.GREEN : getFader().getColor());
         if (Lights.mouse.contains(x, y, width, cellHeight) && canInteract()) {
             interacted = true;
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(-1)) {
@@ -83,8 +83,8 @@ public class FaderEditorPanel implements Panel {
         }
         y -= cellHeight;
 
-        renderer.box(x, y, width, cellHeight, Lights.color.MEDIUM, "Blue: " + getFader().getColor().b);
-        renderer.box(x, y, getFader().getColor().b * width, cellHeight, canEdit(Section.BLUE) ? Lights.color.BLUE : getFader().getColor());
+        renderer.box(x, y, width, cellHeight, Lights.theme.MEDIUM, "Blue: " + getFader().getColor().b);
+        renderer.box(x, y, getFader().getColor().b * width, cellHeight, canEdit(Section.BLUE) ? Lights.theme.BLUE : getFader().getColor());
         if (Lights.mouse.contains(x, y, width, cellHeight) && canInteract()) {
             interacted = true;
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(-1)) {
@@ -95,7 +95,7 @@ public class FaderEditorPanel implements Panel {
         }
         y -= cellHeight;
 
-        renderer.box(x, y, width, cellHeight, Lights.color.MEDIUM, "Move");
+        renderer.box(x, y, width, cellHeight, Lights.theme.MEDIUM, "Move");
         if (Lights.mouse.contains(x, y, width, cellHeight) && canInteract()) {
             interacted = true;
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(-1)) {
@@ -105,7 +105,7 @@ public class FaderEditorPanel implements Panel {
         }
         y -= cellHeight;
 
-        renderer.box(x, y, width, cellHeight, Lights.color.MEDIUM, Lights.color.RED, "Delete");
+        renderer.box(x, y, width, cellHeight, Lights.theme.MEDIUM, Lights.theme.RED, "Delete");
         if (Lights.mouse.contains(x, y, width, cellHeight) && canInteract()) {
             interacted = true;
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && shift && Lights.mouse.leftReady(-1)) {
@@ -116,7 +116,7 @@ public class FaderEditorPanel implements Panel {
         }
         y -= cellHeight;
 
-        renderer.box(x, y, width, cellHeight, Lights.color.MEDIUM, "Close");
+        renderer.box(x, y, width, cellHeight, Lights.theme.MEDIUM, "Close");
         if (Lights.mouse.contains(x, y, width, cellHeight) && canInteract()) {
             interacted = true;
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(-1)) {
@@ -136,7 +136,7 @@ public class FaderEditorPanel implements Panel {
             x += width;
             y = getY();
 
-            renderer.box(x, y, sequencesWidth, cellHeight, Lights.color.DARK_BLUE, "All Sequences", Task.TextPosition.CENTER);
+            renderer.box(x, y, sequencesWidth, cellHeight, Lights.theme.DARK_BLUE, "All Sequences", Task.TextPosition.CENTER);
             drag(x, y, sequencesWidth, cellHeight);
             y -= cellHeight;
 
@@ -145,7 +145,7 @@ public class FaderEditorPanel implements Panel {
             for (Sequence sequence : SequencesPanel.sequences(true)) {
                 if (sequence.equals(getScroll())) display = true;
                 if (display) {
-                    renderer.box(x, y, sequencesWidth, cellHeight, sequence.equals(getFader().getSequence()) ? Lights.color.DARK_GREEN : Lights.color.MEDIUM, sequence.getName());
+                    renderer.box(x, y, sequencesWidth, cellHeight, sequence.equals(getFader().getSequence()) ? Lights.theme.DARK_GREEN : Lights.theme.MEDIUM, sequence.getName());
                     if (Lights.mouse.contains(x, y, sequencesWidth, cellHeight) && canInteract()) {
                         interacted = true;
                         if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {

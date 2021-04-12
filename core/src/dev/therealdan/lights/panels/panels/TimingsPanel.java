@@ -32,12 +32,12 @@ public class TimingsPanel implements Panel {
         float width = getWidth();
         float cellHeight = 30;
 
-        renderer.box(x, y, width, cellHeight, Lights.color.DARK_BLUE, setWidth(renderer, getFriendlyName()), Task.TextPosition.CENTER);
+        renderer.box(x, y, width, cellHeight, Lights.theme.DARK_BLUE, setWidth(renderer, getFriendlyName()), Task.TextPosition.CENTER);
         drag(x, y, width, cellHeight);
         y -= cellHeight;
 
         for (String id : timings.keySet()) {
-            renderer.box(x, y, width, cellHeight, Lights.color.MEDIUM, setWidth(renderer, timings.get(id)
+            renderer.box(x, y, width, cellHeight, Lights.theme.MEDIUM, setWidth(renderer, timings.get(id)
                     .replace("%m", Long.toString(max.getOrDefault(id, 0L)))
                     .replace("%z", Long.toString(nonZero.getOrDefault(id, 0L)))
                     .replace("%a", Long.toString(average.getOrDefault(id, 0L)))

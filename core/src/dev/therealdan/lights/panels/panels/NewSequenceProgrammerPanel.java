@@ -27,8 +27,8 @@ public class NewSequenceProgrammerPanel implements Panel {
         float y = getY();
         float width = getWidth();
 
-        renderer.box(x, y, getWidth(), getHeight(), Lights.color.DARK);
-        renderer.box(x, y, width, cellHeight, Lights.color.DARK_BLUE, getFriendlyName(), Task.TextPosition.CENTER);
+        renderer.box(x, y, getWidth(), getHeight(), Lights.theme.DARK);
+        renderer.box(x, y, width, cellHeight, Lights.theme.DARK_BLUE, getFriendlyName(), Task.TextPosition.CENTER);
         drag(x, y, width, cellHeight);
         y -= cellHeight;
 
@@ -97,26 +97,26 @@ public class NewSequenceProgrammerPanel implements Panel {
             switch (this) {
                 case NAME:
                     // TODO - Check if name is selected
-                    return false ? Lights.color.DARK_RED : Lights.color.MEDIUM;
+                    return false ? Lights.theme.DARK_RED : Lights.theme.MEDIUM;
                 case ENABLE_LOOP:
-                    return Programmer.getSequence().doesLoop() ? Lights.color.DARK_GREEN : Lights.color.MEDIUM;
+                    return Programmer.getSequence().doesLoop() ? Lights.theme.DARK_GREEN : Lights.theme.MEDIUM;
                 default:
-                    return Lights.color.MEDIUM;
+                    return Lights.theme.MEDIUM;
             }
         }
 
         public Color getText() {
             switch (this) {
                 default:
-                    return Lights.color.TEXT;
+                    return Lights.theme.TEXT;
                 case ADD_FRAME:
                 case CLONE_FRAME:
-                    return Lights.color.YELLOW;
+                    return Lights.theme.YELLOW;
                 case SAVE_SEQUENCE:
-                    return Lights.color.GREEN;
+                    return Lights.theme.GREEN;
                 case DELETE_SELECTED:
                 case CLEAR_ALL:
-                    return Lights.color.RED;
+                    return Lights.theme.RED;
             }
         }
     }

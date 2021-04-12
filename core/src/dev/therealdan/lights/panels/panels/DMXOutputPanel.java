@@ -31,11 +31,11 @@ public class DMXOutputPanel implements Panel {
 
         if (!displayInCells()) setWidth(0);
 
-        renderer.box(x, y, width, cellHeight, Lights.color.DARK_BLUE, setWidth(renderer, getFriendlyName()), Task.TextPosition.CENTER);
+        renderer.box(x, y, width, cellHeight, Lights.theme.DARK_BLUE, setWidth(renderer, getFriendlyName()), Task.TextPosition.CENTER);
         drag(x, y, width, cellHeight);
         y -= cellHeight;
 
-        renderer.box(x, y, width, cellHeight, Lights.color.MEDIUM, setWidth(renderer, "DMX: " + getDmxToDisplay()));
+        renderer.box(x, y, width, cellHeight, Lights.theme.MEDIUM, setWidth(renderer, "DMX: " + getDmxToDisplay()));
         if (Lights.mouse.contains(x, y, width, cellHeight) && canInteract()) {
             interacted = true;
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(500))
@@ -43,7 +43,7 @@ public class DMXOutputPanel implements Panel {
         }
         y -= cellHeight;
 
-        renderer.box(x, y, width, cellHeight, displayInCells() ? Lights.color.DARK_RED : Lights.color.MEDIUM, setWidth(renderer, "Display In Cells"));
+        renderer.box(x, y, width, cellHeight, displayInCells() ? Lights.theme.DARK_RED : Lights.theme.MEDIUM, setWidth(renderer, "Display In Cells"));
         if (Lights.mouse.contains(x, y, width, cellHeight) && canInteract()) {
             interacted = true;
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Lights.mouse.leftReady(500))
@@ -54,10 +54,10 @@ public class DMXOutputPanel implements Panel {
         DMX dmx = DMX.get(getDmxToDisplay());
         if (displayInCells()) {
             for (int address : dmx.active()) {
-                renderer.box(x, y, cellHeight, cellHeight, Lights.color.MEDIUM, Integer.toString(address));
+                renderer.box(x, y, cellHeight, cellHeight, Lights.theme.MEDIUM, Integer.toString(address));
                 drag(x, y, cellHeight, cellHeight);
                 float fill = cellHeight * dmx.get(address) / 255f;
-                renderer.box(x, y - cellHeight + fill, cellHeight, fill, Lights.color.DARK_RED);
+                renderer.box(x, y - cellHeight + fill, cellHeight, fill, Lights.theme.DARK_RED);
                 x += cellHeight;
 
                 if (address % 16 == 0) {
@@ -72,7 +72,7 @@ public class DMXOutputPanel implements Panel {
             for (int address : dmx.active()) {
                 if (dmx.get(address) > 0) {
                     shown++;
-                    renderer.box(x, y, width, cellHeight, Lights.color.MEDIUM, setWidth(renderer, address + ": " + dmx.get(address)));
+                    renderer.box(x, y, width, cellHeight, Lights.theme.MEDIUM, setWidth(renderer, address + ": " + dmx.get(address)));
                     y -= cellHeight;
 
                     if (shown == 13 || (shown - 13) % 16 == 0) {

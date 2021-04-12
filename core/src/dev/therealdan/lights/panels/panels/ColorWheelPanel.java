@@ -32,7 +32,7 @@ public class ColorWheelPanel implements Panel {
         float width = getWidth();
         float height = getHeight() - cellHeight;
 
-        renderer.box(x, y, width, cellHeight, Lights.color.DARK_BLUE, setWidth(renderer, getFriendlyName()));
+        renderer.box(x, y, width, cellHeight, Lights.theme.DARK_BLUE, setWidth(renderer, getFriendlyName()));
 
         float third = width / 3f;
         float seventh = width / 7f;

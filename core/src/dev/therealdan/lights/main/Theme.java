@@ -2,7 +2,7 @@ package dev.therealdan.lights.main;
 
 import com.badlogic.gdx.graphics.Color;
 
-public class Colour {
+public class Theme {
 
     public Color TEXT;
     public Color LIGHT;
@@ -31,7 +31,7 @@ public class Colour {
     public Color DARK_YELLOW = new Color(0.5f, 0.5f, 0.1f, 1);
     public Color DARK_CYAN = new Color(0.1f, 0.5f, 0.5f, 1);
 
-    protected Colour() {
+    protected Theme() {
         TEXT = new Color(1, 1, 1, 1);
         LIGHT = new Color(0.6f, 0.6f, 0.6f, 1);
         MEDIUM = new Color(0.2f, 0.2f, 0.2f, 1);

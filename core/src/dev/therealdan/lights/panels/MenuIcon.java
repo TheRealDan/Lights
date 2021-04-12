@@ -14,10 +14,10 @@ public interface MenuIcon {
     }
 
     default boolean draw(Renderer renderer, float x, float y, float width, float height, int index, boolean hover, boolean click) {
-        renderer.box(x, y, width / 2, height / 2, Lights.color.MAGENTA);
-        renderer.box(x + width / 2, y, width / 2, height / 2, Lights.color.BLACK);
-        renderer.box(x, y - height / 2, width / 2, height / 2, Lights.color.BLACK);
-        renderer.box(x + width / 2, y - height / 2, width / 2, height / 2, Lights.color.MAGENTA);
+        renderer.box(x, y, width / 2, height / 2, Lights.theme.MAGENTA);
+        renderer.box(x + width / 2, y, width / 2, height / 2, Lights.theme.BLACK);
+        renderer.box(x, y - height / 2, width / 2, height / 2, Lights.theme.BLACK);
+        renderer.box(x + width / 2, y - height / 2, width / 2, height / 2, Lights.theme.MAGENTA);
         return false;
     }
 

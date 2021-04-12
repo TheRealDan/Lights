@@ -32,7 +32,7 @@ public class ModelDesign {
     }
 
     private void build(float width, float height, float depth, float xOffset, float yOffset, float zOffset) {
-        this.model = modelBuilder.createBox(width, height, depth, new Material(ColorAttribute.createDiffuse(Lights.color.BLACK)), VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal);
+        this.model = modelBuilder.createBox(width, height, depth, new Material(ColorAttribute.createDiffuse(Lights.theme.BLACK)), VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal);
         this.dimensions = new Vector3(width, height, depth);
         this.offset = new Vector3(xOffset, yOffset, zOffset);
     }

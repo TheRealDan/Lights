@@ -21,7 +21,7 @@ public class Fader {
     }
 
     public Fader(int id) {
-        this(id, "New fader", Lights.color.MEDIUM);
+        this(id, "New fader", Lights.theme.MEDIUM);
     }
 
     public Fader(int id, String fileName, String name, Color color) {

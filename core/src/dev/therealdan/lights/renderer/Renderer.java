@@ -76,11 +76,11 @@ public class Renderer {
     // CONVENIENCE
 
     public void box(float x, float y, float width, float height, Color background, String text) {
-        box(x, y, width, height, background, Lights.color.TEXT, text);
+        box(x, y, width, height, background, Lights.theme.TEXT, text);
     }
 
     public void box(float x, float y, float width, float height, Color background, String text, Task.TextPosition textPosition) {
-        box(x, y, width, height, background, Lights.color.TEXT, text, textPosition);
+        box(x, y, width, height, background, Lights.theme.TEXT, text, textPosition);
     }
 
     public void box(float x, float y, float width, float height, Color background, Color textColor, String text) {
@@ -94,6 +94,6 @@ public class Renderer {
 
     public void box(float x, float y, float width, float height, Color background) {
         queue(new Task(x, y - height).rect(width, height).setColor(background));
-        queue(new Task(x, y - height).rectOutline(width, height).setColor(Lights.color.LIGHT));
+        queue(new Task(x, y - height).rectOutline(width, height).setColor(Lights.theme.LIGHT));
     }
 }

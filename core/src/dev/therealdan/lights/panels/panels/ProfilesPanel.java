@@ -7,6 +7,7 @@ import dev.therealdan.lights.main.Lights;
 import dev.therealdan.lights.panels.Panel;
 import dev.therealdan.lights.panels.menuicons.CloseIcon;
 import dev.therealdan.lights.renderer.Renderer;
+import dev.therealdan.lights.util.Util;
 
 import java.util.ArrayList;
 
@@ -107,7 +108,7 @@ public class ProfilesPanel implements Panel {
         if (Lights.mouse.contains(x, y, width, cellHeight) && canInteract(interacted)) {
             interacted = true;
             if (Lights.mouse.leftClicked()) {
-                if (Lights.keyboard.isShift()) {
+                if (Util.isShiftHeld()) {
                     Profile.delete(getSelectedProfile());
                     select(null);
                     return interacted;
@@ -120,7 +121,7 @@ public class ProfilesPanel implements Panel {
 
     @Override
     public boolean keyDown(int keycode) {
-        boolean shift = Lights.keyboard.isShift();
+        boolean shift = Util.isShiftHeld();
 
         if (canEditName()) {
             switch (keycode) {

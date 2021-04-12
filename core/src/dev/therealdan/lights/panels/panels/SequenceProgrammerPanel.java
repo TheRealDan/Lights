@@ -13,6 +13,7 @@ import dev.therealdan.lights.programmer.Sequence;
 import dev.therealdan.lights.renderer.Renderer;
 import dev.therealdan.lights.renderer.Task;
 import dev.therealdan.lights.ui.PanelHandler;
+import dev.therealdan.lights.util.Util;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +36,7 @@ public class SequenceProgrammerPanel implements Panel {
 
     @Override
     public boolean keyDown(int keycode) {
-        boolean shift = Lights.keyboard.isShift();
+        boolean shift = Util.isShiftHeld();
 
         switch (getSelected()) {
             case NAME:
@@ -117,7 +118,7 @@ public class SequenceProgrammerPanel implements Panel {
         update();
 
         boolean interacted = false;
-        boolean shift = Lights.keyboard.isShift();
+        boolean shift = Util.isShiftHeld();
 
         Sequence sequence = Programmer.getSequence();
         Frame firstSelectedFrame = Programmer.getFirstSelectedFrame();

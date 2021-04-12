@@ -16,6 +16,7 @@ import dev.therealdan.lights.fixtures.fixture.profile.MutableProfile;
 import dev.therealdan.lights.main.Lights;
 import dev.therealdan.lights.renderer.Renderer;
 import dev.therealdan.lights.renderer.Task;
+import dev.therealdan.lights.util.Util;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -125,7 +126,7 @@ public class ProfileEditor implements Visual {
         y -= cellHeight;
 
         renderer.box(x, y, width, cellHeight, renderer.getTheme().MEDIUM, renderer.getTheme().RED, "Delete Profile");
-        if (Lights.mouse.contains(x, y, width, cellHeight) && Lights.keyboard.isShift() && Lights.mouse.leftClicked()) {
+        if (Lights.mouse.contains(x, y, width, cellHeight) && Util.isShiftHeld() && Lights.mouse.leftClicked()) {
             Profile.delete(getMutableProfile());
             edit((Profile) null);
             Lights.openMainView();
@@ -184,7 +185,7 @@ public class ProfileEditor implements Visual {
 
             if (hasChannelSelected()) {
                 renderer.box(x, y, width, cellHeight, renderer.getTheme().MEDIUM, renderer.getTheme().RED, "Delete Channel");
-                if (Lights.mouse.contains(x, y, width, cellHeight) && Lights.keyboard.isShift() && Lights.mouse.leftClicked()) {
+                if (Lights.mouse.contains(x, y, width, cellHeight) && Util.isShiftHeld() && Lights.mouse.leftClicked()) {
                     getMutableProfile().removeChannel(getSelectedChannel());
                     select((Channel) null);
                 }
@@ -225,7 +226,7 @@ public class ProfileEditor implements Visual {
 
             if (hasModelDesignSelected()) {
                 renderer.box(x, y, width, cellHeight, renderer.getTheme().MEDIUM, renderer.getTheme().RED, "Delete Model");
-                if (Lights.mouse.contains(x, y, width, cellHeight) && Lights.keyboard.isShift() && Lights.mouse.leftClicked(500)) {
+                if (Lights.mouse.contains(x, y, width, cellHeight) && Util.isShiftHeld() && Lights.mouse.leftClicked(500)) {
                     getMutableProfile().removeModelDesign(getSelectedModelDesign());
                     select((ModelDesign) null);
                 }
@@ -310,7 +311,7 @@ public class ProfileEditor implements Visual {
 
     @Override
     public boolean keyDown(int keycode) {
-        boolean shift = Lights.keyboard.isShift();
+        boolean shift = Util.isShiftHeld();
 
         switch (keycode) {
             case Input.Keys.ESCAPE:

@@ -15,11 +15,11 @@ import com.badlogic.gdx.utils.IntIntMap;
 import dev.therealdan.lights.dmx.DMX;
 import dev.therealdan.lights.fixtures.Fixture;
 import dev.therealdan.lights.fixtures.fixture.Model;
-import dev.therealdan.lights.main.Lights;
 import dev.therealdan.lights.programmer.Programmer;
 import dev.therealdan.lights.renderer.Renderer;
 import dev.therealdan.lights.settings.Control;
 import dev.therealdan.lights.settings.Setting;
+import dev.therealdan.lights.util.Util;
 
 public class Visualiser3D implements Visual {
 
@@ -120,7 +120,7 @@ public class Visualiser3D implements Visual {
     }
 
     private void controls(float deltaTime) {
-        boolean shift = Lights.keyboard.isShift();
+        boolean shift = Util.isShiftHeld();
         float velocity = this.velocity * (shift ? 10 : 1);
 
         if (Programmer.getSelectedFixtures().size() == 1) {

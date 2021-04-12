@@ -7,6 +7,7 @@ import dev.therealdan.lights.fixtures.fixture.Profile;
 import dev.therealdan.lights.main.Lights;
 import dev.therealdan.lights.renderer.Renderer;
 import dev.therealdan.lights.renderer.Task;
+import dev.therealdan.lights.util.Util;
 
 import static dev.therealdan.lights.util.sorting.Sortable.Sort.ID;
 import static dev.therealdan.lights.util.sorting.Sortable.Sort.NAME;
@@ -78,7 +79,7 @@ public class FixtureEditor implements Visual {
 
         if (getFixture() != null) {
             renderer.box(x, y, width, cellHeight, renderer.getTheme().MEDIUM, renderer.getTheme().RED, "Delete");
-            if (Lights.mouse.contains(x, y, width, cellHeight) && Lights.keyboard.isShift()) {
+            if (Lights.mouse.contains(x, y, width, cellHeight) && Util.isShiftHeld()) {
                 if (Lights.mouse.leftClicked()) {
                     Fixture.remove(getFixture());
                     setFixture(null);
@@ -156,7 +157,7 @@ public class FixtureEditor implements Visual {
                 case Input.Keys.BACKSPACE:
                     if (getName().length() > 0)
                         setName(getName().substring(0, getName().length() - 1));
-                    if (Lights.keyboard.isShift()) setName("");
+                    if (Util.isShiftHeld()) setName("");
                     return false;
                 case Input.Keys.SPACE:
                     setName(getName() + " ");
@@ -164,7 +165,7 @@ public class FixtureEditor implements Visual {
                 default:
                     String string = Input.Keys.toString(keycode);
                     if ("ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890".contains(string)) {
-                        if (!Lights.keyboard.isShift()) string = string.toLowerCase();
+                        if (!Util.isShiftHeld()) string = string.toLowerCase();
                         setName(getName() + string);
                     }
                     return false;
@@ -176,7 +177,7 @@ public class FixtureEditor implements Visual {
                 case Input.Keys.BACKSPACE:
                     if (getAddress() < 10) setAddress(0);
                     if (Integer.toString(getAddress()).length() > 1) setAddress(Integer.parseInt(Integer.toString(getAddress()).substring(0, Integer.toString(getAddress()).length() - 1)));
-                    if (Lights.keyboard.isShift()) setAddress(0);
+                    if (Util.isShiftHeld()) setAddress(0);
                     return false;
                 default:
                     String string = Input.Keys.toString(keycode);

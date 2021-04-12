@@ -3,12 +3,12 @@ package dev.therealdan.lights.panels.panels;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import dev.therealdan.lights.commands.*;
-import dev.therealdan.lights.main.Lights;
 import dev.therealdan.lights.main.Theme;
 import dev.therealdan.lights.panels.Panel;
 import dev.therealdan.lights.panels.menuicons.CloseIcon;
 import dev.therealdan.lights.renderer.Renderer;
 import dev.therealdan.lights.renderer.Task;
+import dev.therealdan.lights.util.Util;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -103,7 +103,7 @@ public class ConsolePanel implements Panel {
                 input = input.concat("~");
                 break;
             case Input.Keys.MINUS:
-                input = input.concat(Lights.keyboard.isShift() ? "_" : "-");
+                input = input.concat(Util.isShiftHeld() ? "_" : "-");
                 break;
             case Input.Keys.COMMA:
                 input = input.concat(",");
@@ -112,7 +112,7 @@ public class ConsolePanel implements Panel {
             default:
                 String key = Input.Keys.toString(keycode);
                 if ("ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890".contains(key.toUpperCase()))
-                    input = input.concat(Lights.keyboard.isShift() ? key.toUpperCase() : key.toLowerCase());
+                    input = input.concat(Util.isShiftHeld() ? key.toUpperCase() : key.toLowerCase());
         }
 
         return true;

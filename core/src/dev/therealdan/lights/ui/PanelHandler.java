@@ -20,6 +20,7 @@ import dev.therealdan.lights.programmer.Programmer;
 import dev.therealdan.lights.programmer.Sequence;
 import dev.therealdan.lights.renderer.Renderer;
 import dev.therealdan.lights.settings.Control;
+import dev.therealdan.lights.util.Util;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -264,7 +265,7 @@ public class PanelHandler implements Visual {
 
     @Override
     public boolean keyDown(int keycode) {
-        boolean shift = Lights.keyboard.isShift();
+        boolean shift = Util.isShiftHeld();
 
         if (keycode == Input.Keys.SPACE) {
             tempo = System.currentTimeMillis() - lastTempo;

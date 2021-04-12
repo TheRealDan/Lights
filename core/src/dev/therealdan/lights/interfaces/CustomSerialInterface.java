@@ -95,7 +95,8 @@ public class CustomSerialInterface implements DMXInterface {
         if (_output.isFrozen()) return;
 
         try {
-            byte[] bytes = getNextBytes(null); // todo urgent - get a dmx object
+            DMX dmx = _output.getDMXByLevel("LIVE");
+            byte[] bytes = getNextBytes(dmx);
             if (bytes == null) return;
             serialPort.getOutputStream().write(bytes);
             if (_settingsStore.getByKey(Setting.Key.SHOW_DMX_SEND_DEBUG).isTrue())

@@ -21,7 +21,7 @@ public class Lights extends ApplicationAdapter {
     private Renderer _renderer;
     private Output _output;
 
-    private TheInputProcessor theInputProcessor;
+    private TheInputProcessor _theInputProcessor;
 
     private Visualiser3D visualiser3D;
     private PanelHandler panelHandler;
@@ -38,7 +38,7 @@ public class Lights extends ApplicationAdapter {
         _renderer = new Renderer();
         _output = new Output(_settingsStore);
 
-        theInputProcessor = new TheInputProcessor();
+        _theInputProcessor = new TheInputProcessor();
 
         panelHandler = new PanelHandler(_settingsStore, _controlsStore, _mouse, _renderer.getTheme(), _output);
         visualiser3D = new Visualiser3D(_settingsStore, _controlsStore, _output);
@@ -46,7 +46,7 @@ public class Lights extends ApplicationAdapter {
         fixtureEditor = new FixtureEditor();
 
         Gdx.graphics.setVSync(true);
-        Gdx.input.setInputProcessor(theInputProcessor);
+        Gdx.input.setInputProcessor(_theInputProcessor);
 
         openMainView();
     }
@@ -60,7 +60,7 @@ public class Lights extends ApplicationAdapter {
         _mouse.update();
         panelHandler.update();
 
-        theInputProcessor.draw(_mouse, _renderer);
+        _theInputProcessor.draw(_mouse, _renderer);
 
         _renderer.draw();
     }
@@ -69,7 +69,7 @@ public class Lights extends ApplicationAdapter {
     public void resize(int width, int height) {
         _renderer.resize();
 
-        theInputProcessor.resize(width, height);
+        _theInputProcessor.resize(width, height);
     }
 
     @Override
@@ -84,20 +84,20 @@ public class Lights extends ApplicationAdapter {
     }
 
     public static void openMainView() {
-        lights.theInputProcessor.clear();
-        lights.theInputProcessor.add(lights.visualiser3D);
-        lights.theInputProcessor.add(lights.panelHandler);
+        lights._theInputProcessor.clear();
+        lights._theInputProcessor.add(lights.visualiser3D);
+        lights._theInputProcessor.add(lights.panelHandler);
     }
 
     public static void openProfileEditor(Profile profile) {
         lights.profileEditor.edit(profile);
-        lights.theInputProcessor.clear();
-        lights.theInputProcessor.add(lights.profileEditor);
+        lights._theInputProcessor.clear();
+        lights._theInputProcessor.add(lights.profileEditor);
     }
 
     public static void openFixtureEditor() {
         lights.fixtureEditor.clear();
-        lights.theInputProcessor.clear();
-        lights.theInputProcessor.add(lights.fixtureEditor);
+        lights._theInputProcessor.clear();
+        lights._theInputProcessor.add(lights.fixtureEditor);
     }
 }

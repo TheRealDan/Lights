@@ -19,7 +19,7 @@ public class Lights extends ApplicationAdapter {
 
     public static Output output;
 
-    private Renderer renderer;
+    private Renderer _renderer;
     private TheInputProcessor theInputProcessor;
 
     private Visualiser3D visualiser3D;
@@ -32,6 +32,8 @@ public class Lights extends ApplicationAdapter {
         lights = this;
 
         _mouse = new Mouse();
+        _renderer = new Renderer();
+
         output = new Output();
 
         Setting.createSettings();
@@ -39,11 +41,9 @@ public class Lights extends ApplicationAdapter {
 
         Control.createControls();
         Control.loadFromFile();
-
-        renderer = new Renderer();
         theInputProcessor = new TheInputProcessor();
 
-        panelHandler = new PanelHandler(_mouse, renderer.getTheme());
+        panelHandler = new PanelHandler(_mouse, _renderer.getTheme());
         visualiser3D = new Visualiser3D();
         profileEditor = new ProfileEditor();
         fixtureEditor = new FixtureEditor();
@@ -58,21 +58,21 @@ public class Lights extends ApplicationAdapter {
 
     @Override
     public void render() {
-        Color background = renderer.getTheme().BACKGROUND;
+        Color background = _renderer.getTheme().BACKGROUND;
         Gdx.gl.glClearColor(background.r, background.g, background.b, background.a);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
         _mouse.update();
         panelHandler.update();
 
-        theInputProcessor.draw(_mouse, renderer);
+        theInputProcessor.draw(_mouse, _renderer);
 
-        renderer.draw();
+        _renderer.draw();
     }
 
     @Override
     public void resize(int width, int height) {
-        renderer.resize();
+        _renderer.resize();
 
         theInputProcessor.resize(width, height);
     }
@@ -85,7 +85,7 @@ public class Lights extends ApplicationAdapter {
         panelHandler.save();
         visualiser3D.save();
 
-        renderer.dispose();
+        _renderer.dispose();
     }
 
     public static void openMainView() {

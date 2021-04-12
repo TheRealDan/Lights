@@ -21,6 +21,7 @@ import dev.therealdan.lights.programmer.Programmer;
 import dev.therealdan.lights.programmer.Sequence;
 import dev.therealdan.lights.renderer.Renderer;
 import dev.therealdan.lights.settings.Control;
+import dev.therealdan.lights.settings.SettingsStore;
 import dev.therealdan.lights.util.Util;
 
 import java.util.ArrayList;
@@ -29,6 +30,7 @@ import java.util.List;
 
 public class PanelHandler implements Visual {
 
+    private SettingsStore _settingsStore;
     private Mouse _mouse;
 
     private static PanelHandler panelHandler;
@@ -53,7 +55,8 @@ public class PanelHandler implements Visual {
     private CondensedFrame targetCondensedFrame, currentCondensedFrame, previousCondensedFrame;
     private long condensedFrameTimestamp = System.currentTimeMillis();
 
-    public PanelHandler(Mouse mouse, Theme theme) {
+    public PanelHandler(SettingsStore settingsStore, Mouse mouse, Theme theme) {
+        _settingsStore = settingsStore;
         _mouse = mouse;
 
         panelHandler = this;
@@ -64,7 +67,7 @@ public class PanelHandler implements Visual {
         panels.add(new PanelVisibilityPanel());
 
         // Settings
-        panels.add(new SettingsPanel());
+        panels.add(new SettingsPanel(settingsStore));
         panels.add(new ControlsPanel());
         panels.add(new DMXInterfacePanel());
 
@@ -85,8 +88,8 @@ public class PanelHandler implements Visual {
         panels.add(new ButtonEditorPanel());
 
         // Util
-        panels.add(new ConsolePanel(theme));
-        panels.add(new DMXOutputPanel());
+        panels.add(new ConsolePanel(settingsStore, theme));
+        panels.add(new DMXOutputPanel(settingsStore));
 
         // Programmer
         panels.add(new SequenceProgrammerPanel());
@@ -126,8 +129,8 @@ public class PanelHandler implements Visual {
     }
 
     public void update() {
-        DMX output = DMX.get("OUTPUT");
-        DMX visualiser = DMX.get("VISUALISER");
+        DMX output = DMX.get(_settingsStore, "OUTPUT");
+        DMX visualiser = DMX.get(_settingsStore, "VISUALISER");
 
         for (Sequence sequence : getSequences()) {
             if (!sequence.isPlaying())

@@ -9,6 +9,7 @@ import dev.therealdan.lights.panels.Panel;
 import dev.therealdan.lights.panels.menuicons.CloseIcon;
 import dev.therealdan.lights.renderer.Renderer;
 import dev.therealdan.lights.renderer.Task;
+import dev.therealdan.lights.settings.SettingsStore;
 import dev.therealdan.lights.util.Util;
 
 import java.text.SimpleDateFormat;
@@ -32,7 +33,7 @@ public class ConsolePanel implements Panel {
     private boolean commandHistoryActive = false;
     private String input = "";
 
-    public ConsolePanel(Theme theme) {
+    public ConsolePanel(SettingsStore settingsStore, Theme theme) {
         _theme = theme;
 
         console = this;
@@ -41,7 +42,7 @@ public class ConsolePanel implements Panel {
         register(new ClearCommand());
         register(new ChannelCommand());
         register(new FreezeCommand());
-        register(new SettingsCommand());
+        register(new SettingsCommand(settingsStore));
 
         register(new CloseIcon());
     }

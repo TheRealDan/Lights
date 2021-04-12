@@ -1,40 +1,25 @@
 package dev.therealdan.lights.settings;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
-
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-
 public class Setting {
 
-    private static LinkedHashMap<String, Setting> settings = new LinkedHashMap<>();
-
-    private String name;
-    private Type type;
+    private Key key;
     private String value;
 
-    public Setting(String name, boolean value) {
-        this(name, Type.BOOLEAN, value ? "True" : "False");
+    public Setting(Key key, boolean value) {
+        this(key, value ? "True" : "False");
     }
 
-    public Setting(String name, long value) {
-        this(name, Type.LONG, Long.toString(value));
+    public Setting(Key key, long value) {
+        this(key, Long.toString(value));
     }
 
-    public Setting(String name, String value) {
-        this(name, Type.STRING, value);
-    }
-
-    public Setting(String name, Type type, String value) {
-        this.name = name;
-        this.type = type;
+    public Setting(Key key, String value) {
+        this.key = key;
         this.value = value;
     }
 
     public void toggle() {
-        if (!getType().equals(Type.BOOLEAN)) return;
+        if (!getKey().getType().equals(Type.BOOLEAN)) return;
 
         if (isTrue()) {
             setValue("False");
@@ -44,26 +29,19 @@ public class Setting {
     }
 
     public void increment(long amount) {
-        if (!getType().equals(Type.LONG)) return;
+        if (!getKey().getType().equals(Type.LONG)) return;
 
         setValue(Long.toString(Long.parseLong(getValue()) + amount));
     }
 
     public void decrement(long amount) {
-        if (!getType().equals(Type.LONG)) return;
+        if (!getKey().getType().equals(Type.LONG)) return;
 
         setValue(Long.toString(Long.parseLong(getValue()) - amount));
     }
 
     public void setValue(String value) {
         this.value = value;
-    }
-
-    public void register() {
-        if (settings.containsKey(getName().toUpperCase())) return;
-        if (settings.containsValue(this)) return;
-
-        settings.put(getName().toUpperCase(), this);
     }
 
     public boolean isFalse() {
@@ -82,12 +60,8 @@ public class Setting {
         return Integer.parseInt(getValue());
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public Type getType() {
-        return type;
+    public Key getKey() {
+        return key;
     }
 
     public String getValue() {
@@ -105,7 +79,7 @@ public class Setting {
         }
     }
 
-    public enum Name {
+    public enum Key {
         INTERVAL,
         CONNECTION_WAIT,
         NEW_READ_TIMEOUT,
@@ -118,6 +92,25 @@ public class Setting {
         DRAW_DMX,
         REMEMBER_CAMERA_POSITION;
 
+        public Type getType() {
+            switch (this) {
+                case SHOW_DMX_SEND_DEBUG:
+                case CONTINUOUS:
+                case DRAW_DMX:
+                case REMEMBER_CAMERA_POSITION:
+                    return Type.BOOLEAN;
+                case INTERVAL:
+                case CONNECTION_WAIT:
+                case NEW_READ_TIMEOUT:
+                case NEW_WRITE_TIMEOUT:
+                case CHANNELS_PER_SEND:
+                case CHANNELS_PER_TIME:
+                    return Type.LONG;
+                default:
+                    return Type.STRING;
+            }
+        }
+
         public String getName() {
             StringBuilder stringBuilder = new StringBuilder();
             for (String string : this.toString().split("_")) {
@@ -127,58 +120,5 @@ public class Setting {
             }
             return stringBuilder.toString().substring(1);
         }
-    }
-
-    public static void createSettings() {
-        new Setting(Name.INTERVAL.getName(), 100).register();
-        new Setting(Name.CONNECTION_WAIT.getName(), 2000).register();
-        new Setting(Name.NEW_READ_TIMEOUT.getName(), 0).register();
-        new Setting(Name.NEW_WRITE_TIMEOUT.getName(), 0).register();
-        new Setting(Name.CHANNELS_PER_SEND.getName(), 512).register();
-        new Setting(Name.CHANNELS_PER_TIME.getName(), 512).register();
-
-        new Setting(Name.SHOW_DMX_SEND_DEBUG.getName(), false).register();
-        new Setting(Name.CONTINUOUS.getName(), false).register();
-        new Setting(Name.DRAW_DMX.getName(), false).register();
-        new Setting(Name.REMEMBER_CAMERA_POSITION.getName(), false).register();
-    }
-
-    public static void loadFromFile() {
-        FileHandle fileHandle = Gdx.files.local("Lights/Settings/Settings.txt");
-        if (!fileHandle.exists()) return;
-
-        for (String line : fileHandle.readString().split("\\r?\\n")) {
-            if (!line.contains(": ")) continue;
-
-            Setting setting = byName(line.split(": ")[0]);
-            if (setting == null) continue;
-            setting.setValue(line.split(": ")[1]);
-        }
-    }
-
-    public static void saveToFile() {
-        if (count() == 0) return;
-
-        FileHandle fileHandle = Gdx.files.local("Lights/Settings/Settings.txt");
-        fileHandle.writeString("", false);
-
-        for (Setting setting : settings())
-            fileHandle.writeString(setting.getName().toUpperCase() + ": " + setting.getValue() + "\r\n", true);
-    }
-
-    public static int count() {
-        return settings.size();
-    }
-
-    public static Setting byName(Name name) {
-        return byName(name.getName());
-    }
-
-    public static Setting byName(String name) {
-        return settings.getOrDefault(name.toUpperCase(), null);
-    }
-
-    public static List<Setting> settings() {
-        return new ArrayList<>(settings.values());
     }
 }

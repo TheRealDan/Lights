@@ -8,10 +8,14 @@ import dev.therealdan.lights.panels.menuicons.CloseIcon;
 import dev.therealdan.lights.renderer.Renderer;
 import dev.therealdan.lights.renderer.Task;
 import dev.therealdan.lights.settings.Setting;
+import dev.therealdan.lights.settings.SettingsStore;
 
 public class SettingsPanel implements Panel {
 
-    public SettingsPanel() {
+    private SettingsStore _settingsStore;
+
+    public SettingsPanel(SettingsStore settingsStore) {
+        _settingsStore = settingsStore;
         register(new CloseIcon());
     }
 
@@ -29,10 +33,10 @@ public class SettingsPanel implements Panel {
         drag(mouse, x, y, width, cellHeight);
         y -= cellHeight;
 
-        for (Setting setting : Setting.settings()) {
-            switch (setting.getType()) {
+        for (Setting setting : _settingsStore.getSettings()) {
+            switch (setting.getKey().getType()) {
                 case LONG:
-                    renderer.box(x, y, width, cellHeight, renderer.getTheme().MEDIUM, setWidth(renderer, setting.getName() + ": " + setting.getValue()));
+                    renderer.box(x, y, width, cellHeight, renderer.getTheme().MEDIUM, setWidth(renderer, setting.getKey() + ": " + setting.getValue()));
                     if (mouse.within(x, y, width, cellHeight) && canInteract()) {
                         interacted = true;
                         if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && mouse.leftReady(100)) {
@@ -45,7 +49,7 @@ public class SettingsPanel implements Panel {
                     }
                     break;
                 case BOOLEAN:
-                    renderer.box(x, y, width, cellHeight, setting.isTrue() ? renderer.getTheme().DARK_GREEN : renderer.getTheme().MEDIUM, setWidth(renderer, setting.getName()));
+                    renderer.box(x, y, width, cellHeight, setting.isTrue() ? renderer.getTheme().DARK_GREEN : renderer.getTheme().MEDIUM, setWidth(renderer, setting.getKey().getName()));
                     if (mouse.within(x, y, width, cellHeight) && canInteract()) {
                         interacted = true;
                         if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && mouse.leftReady(250))

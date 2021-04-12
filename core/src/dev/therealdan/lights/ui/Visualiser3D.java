@@ -20,9 +20,12 @@ import dev.therealdan.lights.programmer.Programmer;
 import dev.therealdan.lights.renderer.Renderer;
 import dev.therealdan.lights.settings.Control;
 import dev.therealdan.lights.settings.Setting;
+import dev.therealdan.lights.settings.SettingsStore;
 import dev.therealdan.lights.util.Util;
 
 public class Visualiser3D implements Visual {
+
+    private SettingsStore _settingsStore;
 
     private PerspectiveCamera camera;
 
@@ -35,7 +38,9 @@ public class Visualiser3D implements Visual {
     private float degreesPerPixel = 0.5f;
     private final Vector3 tmp = new Vector3();
 
-    public Visualiser3D() {
+    public Visualiser3D(SettingsStore settingsStore) {
+        _settingsStore = settingsStore;
+
         camera = new PerspectiveCamera(75, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.position.set(0f, 0f, 10f);
         camera.lookAt(0f, 0f, 0f);
@@ -62,7 +67,7 @@ public class Visualiser3D implements Visual {
     }
 
     private void loadCameraPosition() {
-        if (Setting.byName(Setting.Name.REMEMBER_CAMERA_POSITION).isFalse()) return;
+        if (_settingsStore.getByKey(Setting.Key.REMEMBER_CAMERA_POSITION).isFalse()) return;
 
         FileHandle fileHandle = Gdx.files.local("Lights/Settings/Camera.txt");
         if (fileHandle.exists()) {
@@ -87,7 +92,7 @@ public class Visualiser3D implements Visual {
     private void saveCameraPosition() {
         FileHandle fileHandle = Gdx.files.local("Lights/Settings/Camera.txt");
 
-        if (Setting.byName(Setting.Name.REMEMBER_CAMERA_POSITION).isFalse()) {
+        if (_settingsStore.getByKey(Setting.Key.REMEMBER_CAMERA_POSITION).isFalse()) {
             if (fileHandle.exists()) fileHandle.delete();
             return;
         }
@@ -114,7 +119,7 @@ public class Visualiser3D implements Visual {
     }
 
     private void updateFixtureColors() {
-        DMX visualiser = DMX.get("VISUALISER");
+        DMX visualiser = DMX.get(_settingsStore, "VISUALISER");
         for (Fixture fixture : Fixture.fixtures()) {
             fixture.updateColor(visualiser);
         }

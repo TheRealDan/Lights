@@ -5,6 +5,7 @@ import dev.therealdan.lights.panels.panels.ConsolePanel;
 import dev.therealdan.lights.renderer.Renderer;
 import dev.therealdan.lights.renderer.Task;
 import dev.therealdan.lights.settings.Setting;
+import dev.therealdan.lights.settings.SettingsStore;
 import dev.therealdan.lights.ui.PanelHandler;
 
 import java.util.ArrayList;
@@ -15,6 +16,8 @@ public class DMX {
 
     public static final float MAX_CHANNELS = 512;
     public static boolean DRAW_DMX = false;
+
+    private SettingsStore _settingsStore;
 
     private static HashMap<String, DMX> dmx = new HashMap<>();
 
@@ -27,7 +30,8 @@ public class DMX {
 
     private int next = 1;
 
-    private DMX(String level) {
+    public DMX(SettingsStore settingsStore, String level) {
+        _settingsStore = settingsStore;
         this.level = level;
     }
 
@@ -77,8 +81,8 @@ public class DMX {
     public byte[] getNext() {
         StringBuilder data = new StringBuilder();
 
-        if (Setting.byName(Setting.Name.CONTINUOUS).isTrue()) {
-            for (int address = next; address < next + Setting.byName(Setting.Name.CHANNELS_PER_SEND).getInt(); address++) {
+        if (_settingsStore.getByKey(Setting.Key.CONTINUOUS).isTrue()) {
+            for (int address = next; address < next + _settingsStore.getByKey(Setting.Key.CHANNELS_PER_SEND).getInt(); address++) {
                 int value = get(address);
                 if (value < 10) data.append("0");
                 if (value < 100) data.append("0");
@@ -89,14 +93,14 @@ public class DMX {
                 data.append(" ");
             }
 
-            next += Setting.byName(Setting.Name.CHANNELS_PER_SEND).getInt();
+            next += _settingsStore.getByKey(Setting.Key.CHANNELS_PER_SEND).getInt();
             if (next > MAX_CHANNELS) next = 1;
         } else {
             int currentValue = -1;
             int queued = 0;
             for (int address = 1; address <= MAX_CHANNELS; address++) {
-                if (queued >= Setting.byName(Setting.Name.CHANNELS_PER_SEND).getInt()) break;
-                if (channelsPerSecondCounter.size() > Setting.byName(Setting.Name.CHANNELS_PER_TIME).getInt()) break;
+                if (queued >= _settingsStore.getByKey(Setting.Key.CHANNELS_PER_SEND).getInt()) break;
+                if (channelsPerSecondCounter.size() > _settingsStore.getByKey(Setting.Key.CHANNELS_PER_TIME).getInt()) break;
                 int value = channels.get(address);
                 if ((!lastSent.containsKey(address) || value != lastSent.get(address)) && (currentValue == -1 || value == currentValue)) {
                     if (currentValue == -1) {
@@ -123,7 +127,7 @@ public class DMX {
         }
 
         if (data.length() <= 1) return null;
-        if (Setting.byName(Setting.Name.SHOW_DMX_SEND_DEBUG).isTrue())
+        if (_settingsStore.getByKey(Setting.Key.SHOW_DMX_SEND_DEBUG).isTrue())
             ConsolePanel.log("Preparing to send: " + data.toString());
         try {
             return data.toString().getBytes("UTF-8");
@@ -137,8 +141,8 @@ public class DMX {
         return level;
     }
 
-    public static DMX get(String level) {
-        if (!dmx.containsKey(level)) dmx.put(level, new DMX(level));
+    public static DMX get(SettingsStore settingsStore, String level) {
+        if (!dmx.containsKey(level)) dmx.put(level, new DMX(settingsStore, level));
         return dmx.get(level);
     }
 

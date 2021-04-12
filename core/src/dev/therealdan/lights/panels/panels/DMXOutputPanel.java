@@ -8,13 +8,17 @@ import dev.therealdan.lights.panels.Panel;
 import dev.therealdan.lights.panels.menuicons.CloseIcon;
 import dev.therealdan.lights.renderer.Renderer;
 import dev.therealdan.lights.renderer.Task;
+import dev.therealdan.lights.settings.SettingsStore;
 
 public class DMXOutputPanel implements Panel {
+
+    private SettingsStore _settingsStore;
 
     private String dmxToDisplay = "VISUALISER";
     private boolean displayInCells = true;
 
-    public DMXOutputPanel() {
+    public DMXOutputPanel(SettingsStore settingsStore) {
+        _settingsStore = settingsStore;
         register(new CloseIcon());
         // TODO - Save and load above settings
     }
@@ -51,7 +55,7 @@ public class DMXOutputPanel implements Panel {
         }
         y -= cellHeight;
 
-        DMX dmx = DMX.get(getDmxToDisplay());
+        DMX dmx = DMX.get(_settingsStore, getDmxToDisplay());
         if (displayInCells()) {
             for (int address : dmx.active()) {
                 renderer.box(x, y, cellHeight, cellHeight, renderer.getTheme().MEDIUM, Integer.toString(address));

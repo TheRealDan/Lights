@@ -8,18 +8,19 @@ import dev.therealdan.lights.dmx.Output;
 import dev.therealdan.lights.fixtures.fixture.Profile;
 import dev.therealdan.lights.renderer.Renderer;
 import dev.therealdan.lights.settings.Control;
-import dev.therealdan.lights.settings.Setting;
+import dev.therealdan.lights.settings.SettingsStore;
 import dev.therealdan.lights.ui.*;
 
 public class Lights extends ApplicationAdapter {
 
     private static Lights lights;
 
+    private SettingsStore _settingsStore;
     private Mouse _mouse;
+    private Renderer _renderer;
 
     public static Output output;
 
-    private Renderer _renderer;
     private TheInputProcessor theInputProcessor;
 
     private Visualiser3D visualiser3D;
@@ -31,20 +32,18 @@ public class Lights extends ApplicationAdapter {
     public void create() {
         lights = this;
 
+        _settingsStore = new SettingsStore();
         _mouse = new Mouse();
         _renderer = new Renderer();
 
-        output = new Output();
-
-        Setting.createSettings();
-        Setting.loadFromFile();
+        output = new Output(_settingsStore);
 
         Control.createControls();
         Control.loadFromFile();
         theInputProcessor = new TheInputProcessor();
 
-        panelHandler = new PanelHandler(_mouse, _renderer.getTheme());
-        visualiser3D = new Visualiser3D();
+        panelHandler = new PanelHandler(_settingsStore, _mouse, _renderer.getTheme());
+        visualiser3D = new Visualiser3D(_settingsStore);
         profileEditor = new ProfileEditor();
         fixtureEditor = new FixtureEditor();
 
@@ -79,7 +78,7 @@ public class Lights extends ApplicationAdapter {
 
     @Override
     public void dispose() {
-        Setting.saveToFile();
+        _settingsStore.saveToFile();
         Control.saveToFile();
 
         panelHandler.save();

@@ -1,14 +1,17 @@
 package dev.therealdan.lights.dmx;
 
 import com.fazecast.jSerialComm.SerialPort;
-import dev.therealdan.lights.settings.Setting;
 import dev.therealdan.lights.panels.panels.ConsolePanel;
 import dev.therealdan.lights.panels.panels.TimingsPanel;
+import dev.therealdan.lights.settings.Setting;
+import dev.therealdan.lights.settings.SettingsStore;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Output {
+
+    private SettingsStore _settingsStore;
 
     private boolean FROZEN = false;
 
@@ -24,7 +27,9 @@ public class Output {
     private long lastConnect = System.currentTimeMillis();
     private long lastSend = System.currentTimeMillis();
 
-    public Output() {
+    public Output(SettingsStore settingsStore) {
+        _settingsStore = settingsStore;
+
         thread = new Thread("Output") {
             @Override
             public void run() {
@@ -41,13 +46,13 @@ public class Output {
     }
 
     private void tick() {
-        if (System.currentTimeMillis() - lastSend < Setting.byName(Setting.Name.INTERVAL).getLong()) return;
+        if (System.currentTimeMillis() - lastSend < _settingsStore.getByKey(Setting.Key.INTERVAL).getLong()) return;
         long timestamp = System.currentTimeMillis();
         lastSend = System.currentTimeMillis();
 
         if (this.serialPort != null && !this.serialPort.getSystemPortName().equals(activePort)) {
             this.serialPort = null;
-            if (Setting.byName(Setting.Name.SHOW_DMX_SEND_DEBUG).isTrue())
+            if (_settingsStore.getByKey(Setting.Key.SHOW_DMX_SEND_DEBUG).isTrue())
                 ConsolePanel.log(ConsolePanel.ConsoleColor.YELLOW, "Port dropped");
         }
 
@@ -60,9 +65,9 @@ public class Output {
                     this.serialPort = openPort;
                     this.serialPort.openPort();
                     this.serialPort.setBaudRate(BAUDRATE);
-                    this.serialPort.setComPortTimeouts(SerialPort.TIMEOUT_WRITE_BLOCKING, Setting.byName(Setting.Name.NEW_READ_TIMEOUT).getInt(), Setting.byName(Setting.Name.NEW_WRITE_TIMEOUT).getInt());
+                    this.serialPort.setComPortTimeouts(SerialPort.TIMEOUT_WRITE_BLOCKING, _settingsStore.getByKey(Setting.Key.NEW_READ_TIMEOUT).getInt(), _settingsStore.getByKey(Setting.Key.NEW_WRITE_TIMEOUT).getInt());
                     this.lastConnect = System.currentTimeMillis();
-                    if (Setting.byName(Setting.Name.SHOW_DMX_SEND_DEBUG).isTrue())
+                    if (_settingsStore.getByKey(Setting.Key.SHOW_DMX_SEND_DEBUG).isTrue())
                         ConsolePanel.log(ConsolePanel.ConsoleColor.YELLOW, "Port Connected");
                     break;
                 } else if (this.serialPort != null) {
@@ -78,18 +83,18 @@ public class Output {
         if (!serialPort.isOpen()) {
             serialPort.openPort();
             this.lastConnect = System.currentTimeMillis();
-            if (Setting.byName(Setting.Name.SHOW_DMX_SEND_DEBUG).isTrue())
+            if (_settingsStore.getByKey(Setting.Key.SHOW_DMX_SEND_DEBUG).isTrue())
                 ConsolePanel.log(ConsolePanel.ConsoleColor.YELLOW, "Port Opened");
         }
 
-        if (System.currentTimeMillis() - lastConnect < Setting.byName(Setting.Name.CONNECTION_WAIT).getLong()) return;
+        if (System.currentTimeMillis() - lastConnect < _settingsStore.getByKey(Setting.Key.CONNECTION_WAIT).getLong()) return;
         if (isFrozen()) return;
 
         try {
-            byte[] bytes = DMX.get("OUTPUT").getNext();
+            byte[] bytes = DMX.get(_settingsStore, "OUTPUT").getNext();
             if (bytes == null) return;
             serialPort.getOutputStream().write(bytes);
-            if (Setting.byName(Setting.Name.SHOW_DMX_SEND_DEBUG).isTrue())
+            if (_settingsStore.getByKey(Setting.Key.SHOW_DMX_SEND_DEBUG).isTrue())
                 ConsolePanel.log(ConsolePanel.ConsoleColor.YELLOW, "DMX Sent");
         } catch (Exception e) {
             serialPort = null;

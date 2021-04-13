@@ -17,26 +17,8 @@ public class DMX {
         _level = level;
     }
 
-    public void flood(int value) {
-        for (int channel = 1; channel <= MAX_CHANNELS; channel++)
-            set(channel, value);
-    }
-
-    public void zero() {
-        flood(0);
-    }
-
-    public void clear() {
-        _channels.clear();
-    }
-
     public void copy(DMX dmx) {
         for (int channel = 1; channel <= MAX_CHANNELS; channel++)
-            set(channel, dmx.get(channel));
-    }
-
-    public void pull(DMX dmx) {
-        for (int channel : active())
             set(channel, dmx.get(channel));
     }
 
@@ -48,12 +30,8 @@ public class DMX {
     }
 
     public int get(int channel) {
-        float value = pget(channel);
+        float value = _channels.getOrDefault(channel, 0);
         return (int) (value * PanelHandler.getMaster());
-    }
-
-    private int pget(int channel) {
-        return _channels.getOrDefault(channel, 0);
     }
 
     public List<Integer> active() {

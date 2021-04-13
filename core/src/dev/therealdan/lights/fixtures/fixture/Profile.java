@@ -37,8 +37,6 @@ public class Profile implements Sortable {
 
     public void rename(String name) {
         this.name = name;
-
-        // TODO - Need to test name changing, it should be fine since Fixtures hold an object reference rather than the profile name as a string
     }
 
     @Override

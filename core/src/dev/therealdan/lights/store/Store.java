@@ -9,4 +9,9 @@ public interface Store {
     void saveToFile();
 
     int count();
+
+    default String getPath() {
+        String className = getClass().getSimpleName().replace("Store", "");
+        return "Lights/" + className + "/" + className + ".txt";
+    }
 }

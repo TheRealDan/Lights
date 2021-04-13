@@ -3,15 +3,12 @@ package dev.therealdan.lights.store;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import dev.therealdan.lights.settings.Setting;
-import dev.therealdan.lights.store.Store;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 
 public class SettingsStore implements Store {
-
-    private final String _path = "Lights/Settings/Settings.txt";
 
     private LinkedHashSet<Setting> _settings = new LinkedHashSet<>();
 
@@ -37,7 +34,7 @@ public class SettingsStore implements Store {
 
     @Override
     public void loadFromFile() {
-        FileHandle fileHandle = Gdx.files.local(_path);
+        FileHandle fileHandle = Gdx.files.local(getPath());
         if (!fileHandle.exists()) return;
 
         for (String line : fileHandle.readString().split("\\r?\\n")) {
@@ -53,7 +50,7 @@ public class SettingsStore implements Store {
     public void saveToFile() {
         if (count() == 0) return;
 
-        FileHandle fileHandle = Gdx.files.local(_path);
+        FileHandle fileHandle = Gdx.files.local(getPath());
         fileHandle.writeString("", false);
 
         for (Setting setting : getSettings())

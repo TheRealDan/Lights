@@ -12,8 +12,6 @@ import dev.therealdan.lights.ui.DisplayHandler;
 
 public class Lights extends ApplicationAdapter {
 
-    private static Lights lights;
-
     private SettingsStore _settingsStore;
     private ControlsStore _controlsStore;
     private Mouse _mouse;
@@ -23,8 +21,6 @@ public class Lights extends ApplicationAdapter {
 
     @Override
     public void create() {
-        lights = this;
-
         _settingsStore = new SettingsStore();
         _controlsStore = new ControlsStore();
         _mouse = new Mouse();

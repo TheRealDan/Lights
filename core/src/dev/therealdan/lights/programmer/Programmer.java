@@ -4,6 +4,8 @@ import dev.therealdan.lights.fixtures.Fixture;
 import dev.therealdan.lights.fixtures.Group;
 import dev.therealdan.lights.fixtures.fixture.profile.Channel;
 import dev.therealdan.lights.panels.panels.SequencesPanel;
+import dev.therealdan.lights.store.FixturesStore;
+import dev.therealdan.lights.store.GroupsStore;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,17 +13,25 @@ import java.util.List;
 
 public class Programmer {
 
+    private static FixturesStore _fixturesStore;
+    private static GroupsStore _groupsStore;
+
     private static List<Fixture> selectedFixtures = new ArrayList<>();
     private static List<Frame> selectedFrames = new ArrayList<>();
 
     private static Sequence sequence = null;
+
+    public Programmer(FixturesStore fixturesStore, GroupsStore groupsStore) {
+        _fixturesStore = fixturesStore;
+        _groupsStore = groupsStore;
+    }
 
     public static void edit(Sequence sequence) {
         Programmer.sequence = sequence.clone();
     }
 
     public static void set(float address, float value) {
-        for (Fixture fixture : Fixture.fixtures()) {
+        for (Fixture fixture : _fixturesStore.getFixtures()) {
             HashMap<String, Integer> parameters = new HashMap<>();
             for (Channel channel : fixture.channels()) {
                 parameters.put(channel.getType().toString(), parameters.getOrDefault(channel.getType().toString(), 0) + 1);
@@ -85,7 +95,7 @@ public class Programmer {
 
     public static int countSelectedGroups() {
         int count = 0;
-        for (Group group : Group.groups())
+        for (Group group : _groupsStore.getGroups())
             if (isSelected(group))
                 count++;
         return count;
@@ -156,7 +166,7 @@ public class Programmer {
 
     public static List<Group> getSelectedGroups() {
         List<Group> groups = new ArrayList<>();
-        for (Group group : Group.groups())
+        for (Group group : _groupsStore.getGroups())
             if (isSelected(group))
                 groups.add(group);
         return groups;

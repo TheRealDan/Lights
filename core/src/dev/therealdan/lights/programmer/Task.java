@@ -1,7 +1,8 @@
 package dev.therealdan.lights.programmer;
 
-import dev.therealdan.lights.fixtures.fixture.profile.Channel;
 import dev.therealdan.lights.fixtures.Fixture;
+import dev.therealdan.lights.fixtures.fixture.profile.Channel;
+import dev.therealdan.lights.store.FixturesStore;
 
 import java.util.List;
 
@@ -71,9 +72,10 @@ public class Task {
     }
 
     public static Task fromString(String string) {
+        FixturesStore fixturesStore = null; // todo review and implement
         String[] args = string.split(";");
         return new Task(
-                Fixture.fixtureByID(Integer.parseInt(args[0])),
+                fixturesStore.getFixtureByID(Integer.parseInt(args[0])),
                 Channel.Type.valueOf(args[1]),
                 Integer.parseInt(args[2]),
                 Float.parseFloat(args[3])

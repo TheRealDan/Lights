@@ -7,6 +7,8 @@ import dev.therealdan.lights.fixtures.fixture.Profile;
 import dev.therealdan.lights.main.Mouse;
 import dev.therealdan.lights.renderer.Renderer;
 import dev.therealdan.lights.renderer.Task;
+import dev.therealdan.lights.store.FixturesStore;
+import dev.therealdan.lights.store.ProfilesStore;
 import dev.therealdan.lights.util.Util;
 
 import static dev.therealdan.lights.util.sorting.Sortable.Sort.ID;
@@ -14,6 +16,8 @@ import static dev.therealdan.lights.util.sorting.Sortable.Sort.NAME;
 
 public class FixtureEditor implements Visual {
 
+    private ProfilesStore _profilesStore;
+    private FixturesStore _fixturesStore;
     private DisplayHandler _displayHandler;
 
     private Fixture fixture;
@@ -26,7 +30,9 @@ public class FixtureEditor implements Visual {
 
     private Section section;
 
-    public FixtureEditor(DisplayHandler displayHandler) {
+    public FixtureEditor(ProfilesStore profilesStore, FixturesStore fixturesStore, DisplayHandler displayHandler) {
+        _profilesStore = profilesStore;
+        _fixturesStore = fixturesStore;
         _displayHandler = displayHandler;
     }
 
@@ -48,7 +54,7 @@ public class FixtureEditor implements Visual {
         width = WIDTH / 3;
         renderer.box(x, y, width, cellHeight, renderer.getTheme().DARK_BLUE, "Fixtures", Task.TextPosition.CENTER);
         y -= cellHeight;
-        for (Fixture fixture : Fixture.fixtures(ID)) {
+        for (Fixture fixture : _fixturesStore.getFixtures(ID)) {
             renderer.box(x, y, width, cellHeight, fixture.equals(getFixture()) ? renderer.getTheme().DARK_RED : renderer.getTheme().MEDIUM, fixture.getName(), Task.TextPosition.LEFT_CENTER);
             if (mouse.within(x, y, width, cellHeight)) {
                 if (mouse.leftClicked()) {
@@ -63,7 +69,7 @@ public class FixtureEditor implements Visual {
         // PROFILES
         renderer.box(x, y, width, cellHeight, renderer.getTheme().DARK_BLUE, "Profiles", Task.TextPosition.CENTER);
         y -= cellHeight;
-        for (Profile profile : Profile.profiles(NAME)) {
+        for (Profile profile : _profilesStore.getProfiles(NAME)) {
             renderer.box(x, y, width, cellHeight, profile.equals(getProfile()) ? renderer.getTheme().DARK_RED : renderer.getTheme().MEDIUM, profile.getName(), Task.TextPosition.LEFT_CENTER);
             if (mouse.within(x, y, width, cellHeight)) {
                 if (mouse.leftClicked()) {
@@ -84,7 +90,7 @@ public class FixtureEditor implements Visual {
             renderer.box(x, y, width, cellHeight, renderer.getTheme().MEDIUM, renderer.getTheme().RED, "Delete");
             if (mouse.within(x, y, width, cellHeight) && Util.isShiftHeld()) {
                 if (mouse.leftClicked()) {
-                    Fixture.remove(getFixture());
+                    _fixturesStore.delete(getFixture());
                     setFixture(null);
                     return false;
                 }
@@ -136,7 +142,7 @@ public class FixtureEditor implements Visual {
                 if (mouse.leftClicked(500)) {
                     int address = getAddress();
                     for (int count = 1; count <= getCount(); count++) {
-                        Fixture.add(new Fixture(getName() + " " + count, getProfile(), address, Fixture.getFreeID()));
+                        _fixturesStore.register(new Fixture(getName() + " " + count, getProfile(), address, _fixturesStore.getFreeID()));
                         address += getStep();
                     }
                 }

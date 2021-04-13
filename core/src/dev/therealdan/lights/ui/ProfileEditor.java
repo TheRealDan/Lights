@@ -16,6 +16,7 @@ import dev.therealdan.lights.fixtures.fixture.profile.MutableProfile;
 import dev.therealdan.lights.main.Mouse;
 import dev.therealdan.lights.renderer.Renderer;
 import dev.therealdan.lights.renderer.Task;
+import dev.therealdan.lights.store.ProfilesStore;
 import dev.therealdan.lights.util.Util;
 
 import java.text.DecimalFormat;
@@ -25,6 +26,8 @@ import java.util.List;
 public class ProfileEditor implements Visual {
 
     // TODO - Finish Profile editor; Channels, Models and how they interact
+
+    private ProfilesStore _profilesStore;
 
     private final DecimalFormat decimalFormat = new DecimalFormat("#.##");
 
@@ -48,7 +51,8 @@ public class ProfileEditor implements Visual {
     private float degreesPerPixel = 0.5f;
     private Vector3 tmp = new Vector3();
 
-    public ProfileEditor(DisplayHandler displayHandler) {
+    public ProfileEditor(ProfilesStore profilesStore, DisplayHandler displayHandler) {
+        _profilesStore = profilesStore;
         _displayHandler = displayHandler;
 
         camera = new PerspectiveCamera(75, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -131,7 +135,7 @@ public class ProfileEditor implements Visual {
 
         renderer.box(x, y, width, cellHeight, renderer.getTheme().MEDIUM, renderer.getTheme().RED, "Delete Profile");
         if (mouse.within(x, y, width, cellHeight) && Util.isShiftHeld() && mouse.leftClicked()) {
-            Profile.delete(getMutableProfile());
+            _profilesStore.delete(getMutableProfile());
             edit((Profile) null);
             _displayHandler.setFocus(DisplayHandler.Focus.MAIN_VIEW);
             return false;

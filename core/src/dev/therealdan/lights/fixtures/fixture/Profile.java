@@ -1,20 +1,14 @@
 package dev.therealdan.lights.fixtures.fixture;
 
-import dev.therealdan.lights.files.ProfileFile;
 import dev.therealdan.lights.fixtures.fixture.profile.Channel;
 import dev.therealdan.lights.fixtures.fixture.profile.ModelDesign;
 import dev.therealdan.lights.fixtures.fixture.profile.MutableProfile;
 import dev.therealdan.lights.util.sorting.Sortable;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
-import static dev.therealdan.lights.util.sorting.Sortable.Sort.NAME;
-
 public class Profile implements Sortable {
-
-    private static HashSet<Profile> profiles = new HashSet<>();
 
     private String name;
     private List<ModelDesign> modelDesigns;
@@ -115,46 +109,5 @@ public class Profile implements Sortable {
             }
         }
         return new ArrayList<>(modelDesigns);
-    }
-
-    public static void loadProfilesFromFile() {
-        for (ProfileFile profileFile : ProfileFile.load()) {
-            add(profileFile.getProfile());
-        }
-    }
-
-    public static void saveProfilesToFile() {
-        for (Profile profile : Profile.profiles()) {
-            new ProfileFile(profile).saveAsTxt();
-        }
-    }
-
-    public static void add(Profile profile) {
-        profiles.add(profile);
-    }
-
-    public static void delete(Profile profile) {
-        profiles.remove(profile);
-    }
-
-    public static int count() {
-        return profiles.size();
-    }
-
-    public static Profile profileByName(String name) {
-        for (Profile profile : profiles(NAME))
-            if (profile.getName().equalsIgnoreCase(name))
-                return profile;
-
-        return null;
-    }
-
-    public static List<Profile> profiles(Sort... sort) {
-        if (sort.length == 0) return new ArrayList<>(Profile.profiles);
-
-        List<Profile> profiles = new ArrayList<>();
-        for (Sortable sortable : Sortable.sort(new ArrayList<>(Profile.profiles), sort))
-            profiles.add((Profile) sortable);
-        return profiles;
     }
 }

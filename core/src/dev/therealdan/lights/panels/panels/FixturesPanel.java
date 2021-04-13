@@ -10,15 +10,20 @@ import dev.therealdan.lights.panels.menuicons.CloseIcon;
 import dev.therealdan.lights.programmer.Programmer;
 import dev.therealdan.lights.renderer.Renderer;
 import dev.therealdan.lights.renderer.Task;
+import dev.therealdan.lights.store.FixturesStore;
 import dev.therealdan.lights.ui.DisplayHandler;
 
 import static dev.therealdan.lights.util.sorting.Sortable.Sort.ID;
 
 public class FixturesPanel implements Panel {
 
+    private FixturesStore _fixturesStore;
+
     public int fixturesPerRow = 8;
 
-    public FixturesPanel(DisplayHandler displayHandler) {
+    public FixturesPanel(FixturesStore fixturesStore, DisplayHandler displayHandler) {
+        _fixturesStore = fixturesStore;
+
         register(new CloseIcon());
         register(new AddFixtureIcon(displayHandler));
 
@@ -28,13 +33,13 @@ public class FixturesPanel implements Panel {
 
     @Override
     public boolean drawContent(Mouse mouse, Renderer renderer, float x, float y, float width, float height, boolean interacted) {
-        int fixtures = Fixture.count();
+        int fixtures = _fixturesStore.count();
         while (fixtures % getFixturesPerRow() != 0) fixtures++;
 
         float fixtureWidth = width / getFixturesPerRow();
         float fixtureHeight = height / (fixtures / getFixturesPerRow());
 
-        for (Fixture fixture : Fixture.fixtures(ID)) {
+        for (Fixture fixture : _fixturesStore.getFixtures(ID)) {
             renderer.box(x, y, fixtureWidth, fixtureHeight, Programmer.isSelected(fixture) ? renderer.getTheme().DARK_RED : renderer.getTheme().MEDIUM, fixture.getName(), Task.TextPosition.CENTER);
             if (mouse.within(x, y, fixtureWidth, fixtureHeight) && canInteract()) {
                 interacted = true;

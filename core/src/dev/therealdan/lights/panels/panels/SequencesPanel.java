@@ -3,7 +3,6 @@ package dev.therealdan.lights.panels.panels;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.files.FileHandle;
-import dev.therealdan.lights.fixtures.Fixture;
 import dev.therealdan.lights.fixtures.fixture.profile.Channel;
 import dev.therealdan.lights.main.Mouse;
 import dev.therealdan.lights.panels.Panel;
@@ -13,12 +12,15 @@ import dev.therealdan.lights.programmer.Programmer;
 import dev.therealdan.lights.programmer.Sequence;
 import dev.therealdan.lights.programmer.Task;
 import dev.therealdan.lights.renderer.Renderer;
+import dev.therealdan.lights.store.FixturesStore;
 import dev.therealdan.lights.util.Util;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class SequencesPanel implements Panel {
+
+    private FixturesStore _fixturesStore;
 
     private static SequencesPanel sequencesUI;
 
@@ -38,7 +40,9 @@ public class SequencesPanel implements Panel {
     private int tasksScroll = 0;
     private boolean canScrollTasks = false;
 
-    public SequencesPanel() {
+    public SequencesPanel(FixturesStore fixturesStore) {
+        _fixturesStore = fixturesStore;
+
         sequencesUI = this;
 
         register(new CloseIcon());
@@ -81,7 +85,7 @@ public class SequencesPanel implements Panel {
                 if (frame != null) {
                     String[] args = line.split(" \\| ");
                     frame.set(
-                            Fixture.fixtureByID(Integer.parseInt(args[1])),
+                            _fixturesStore.getFixtureByID(Integer.parseInt(args[1])),
                             Channel.Type.valueOf(args[2]),
                             Float.parseFloat(args[4]),
                             Integer.parseInt(args[3])

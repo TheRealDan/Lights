@@ -5,8 +5,7 @@ import dev.therealdan.lights.dmx.Output;
 import dev.therealdan.lights.main.Mouse;
 import dev.therealdan.lights.main.Theme;
 import dev.therealdan.lights.renderer.Renderer;
-import dev.therealdan.lights.store.ControlsStore;
-import dev.therealdan.lights.store.SettingsStore;
+import dev.therealdan.lights.store.*;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -21,11 +20,11 @@ public class DisplayHandler implements InputProcessor {
 
     private Focus _focus = Focus.MAIN_VIEW;
 
-    public DisplayHandler(SettingsStore settingsStore, ControlsStore controlsStore, Mouse mouse, Theme theme, Output output) {
-        _visualiser3D = new Visualiser3D(settingsStore, controlsStore, output);
-        _panelHandler = new PanelHandler(settingsStore, controlsStore, mouse, theme, output, this);
-        _profileEditor = new ProfileEditor(this);
-        _fixtureEditor = new FixtureEditor(this);
+    public DisplayHandler(SettingsStore settingsStore, ControlsStore controlsStore, ProfilesStore profilesStore, FixturesStore fixturesStore, GroupsStore groupsStore, Mouse mouse, Theme theme, Output output) {
+        _visualiser3D = new Visualiser3D(settingsStore, controlsStore, fixturesStore, output);
+        _panelHandler = new PanelHandler(settingsStore, controlsStore, profilesStore, fixturesStore, groupsStore, mouse, theme, output, this);
+        _profileEditor = new ProfileEditor(profilesStore, this);
+        _fixtureEditor = new FixtureEditor(profilesStore, fixturesStore, this);
     }
 
     public void save() {

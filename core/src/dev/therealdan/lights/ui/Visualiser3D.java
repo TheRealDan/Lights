@@ -19,8 +19,9 @@ import dev.therealdan.lights.main.Mouse;
 import dev.therealdan.lights.programmer.Programmer;
 import dev.therealdan.lights.renderer.Renderer;
 import dev.therealdan.lights.settings.Control;
-import dev.therealdan.lights.store.ControlsStore;
 import dev.therealdan.lights.settings.Setting;
+import dev.therealdan.lights.store.ControlsStore;
+import dev.therealdan.lights.store.FixturesStore;
 import dev.therealdan.lights.store.SettingsStore;
 import dev.therealdan.lights.util.Util;
 
@@ -28,6 +29,7 @@ public class Visualiser3D implements Visual {
 
     private SettingsStore _settingsStore;
     private ControlsStore _controlsStore;
+    private FixturesStore _fixturesStore;
     private Output _output;
 
     private PerspectiveCamera camera;
@@ -41,9 +43,10 @@ public class Visualiser3D implements Visual {
     private float degreesPerPixel = 0.5f;
     private final Vector3 tmp = new Vector3();
 
-    public Visualiser3D(SettingsStore settingsStore, ControlsStore controlsStore, Output output) {
+    public Visualiser3D(SettingsStore settingsStore, ControlsStore controlsStore, FixturesStore fixturesStore, Output output) {
         _settingsStore = settingsStore;
         _controlsStore = controlsStore;
+        _fixturesStore = fixturesStore;
         _output = output;
 
         camera = new PerspectiveCamera(75, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -60,7 +63,7 @@ public class Visualiser3D implements Visual {
         environment.add(new DirectionalLight().set(0.8f, 0.8f, 0.8f, -1f, -0.8f, -0.2f));
         environment.add(new DirectionalLight().set(0.6f, 0.6f, 0.6f, 1f, 0.8f, 0.2f));
 
-        for (Fixture fixture : Fixture.fixtures()) {
+        for (Fixture fixture : _fixturesStore.getFixtures()) {
             fixture.buildModels();
         }
 
@@ -125,7 +128,7 @@ public class Visualiser3D implements Visual {
     }
 
     private void updateFixtureColors() {
-        for (Fixture fixture : Fixture.fixtures())
+        for (Fixture fixture : _fixturesStore.getFixtures())
             fixture.updateColor(_output.getDMXByLevel("VISUALISER"));
     }
 
@@ -173,7 +176,7 @@ public class Visualiser3D implements Visual {
         camera.update();
 
         modelBatch.begin(camera);
-        for (Fixture fixture : Fixture.fixtures()) {
+        for (Fixture fixture : _fixturesStore.getFixtures()) {
             modelBatch.render(fixture.getModelInstances(), environment);
         }
         modelBatch.end();
@@ -214,7 +217,7 @@ public class Visualiser3D implements Visual {
 
     public Fixture getFixture(int screenX, int screenY) {
         Ray ray = camera.getPickRay(screenX, screenY);
-        for (Fixture fixture : Fixture.fixtures()) {
+        for (Fixture fixture : _fixturesStore.getFixtures()) {
             if (fixture.getModels().size() > 0) {
                 for (Model model : fixture.getModels()) {
                     if (Intersector.intersectRayBoundsFast(ray, model.getPosition(), model.getDimensions())) {

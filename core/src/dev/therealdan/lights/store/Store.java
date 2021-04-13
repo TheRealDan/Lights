@@ -2,7 +2,8 @@ package dev.therealdan.lights.store;
 
 public interface Store {
 
-    void loadDefaults();
+    default void loadDefaults() {
+    }
 
     void loadFromFile();
 

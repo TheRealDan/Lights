@@ -7,15 +7,22 @@ import dev.therealdan.lights.panels.Panel;
 import dev.therealdan.lights.programmer.Programmer;
 import dev.therealdan.lights.renderer.Renderer;
 import dev.therealdan.lights.renderer.Task;
+import dev.therealdan.lights.store.GroupsStore;
 
 public class AddGroupIcon implements MenuIcon {
+
+    private GroupsStore _groupsStore;
+
+    public AddGroupIcon(GroupsStore groupsStore) {
+        _groupsStore = groupsStore;
+    }
 
     @Override
     public boolean click(Panel panel) {
         Group group = new Group("New Group");
         for (Fixture fixture : Programmer.getSelectedFixtures())
             group.add(fixture);
-        Group.add(group);
+        _groupsStore.register(group);
         return true;
     }
 

@@ -5,15 +5,19 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import dev.therealdan.lights.dmx.Output;
+import dev.therealdan.lights.programmer.Programmer;
 import dev.therealdan.lights.renderer.Renderer;
-import dev.therealdan.lights.store.ControlsStore;
-import dev.therealdan.lights.store.SettingsStore;
+import dev.therealdan.lights.store.*;
 import dev.therealdan.lights.ui.DisplayHandler;
 
 public class Lights extends ApplicationAdapter {
 
     private SettingsStore _settingsStore;
     private ControlsStore _controlsStore;
+    private ProfilesStore _profilesStore;
+    private FixturesStore _fixturesStore;
+    private GroupsStore _groupsStore;
+
     private Mouse _mouse;
     private Renderer _renderer;
     private Output _output;
@@ -23,11 +27,16 @@ public class Lights extends ApplicationAdapter {
     public void create() {
         _settingsStore = new SettingsStore();
         _controlsStore = new ControlsStore();
+        _profilesStore = new ProfilesStore();
+        _fixturesStore = new FixturesStore(_profilesStore);
+        _groupsStore = new GroupsStore(_fixturesStore);
+
+        new Programmer(_fixturesStore, _groupsStore); // todo review static abuse
+
         _mouse = new Mouse();
         _renderer = new Renderer();
         _output = new Output(_settingsStore);
-
-        _displayHandler = new DisplayHandler(_settingsStore, _controlsStore, _mouse, _renderer.getTheme(), _output);
+        _displayHandler = new DisplayHandler(_settingsStore, _controlsStore, _profilesStore, _fixturesStore, _groupsStore, _mouse, _renderer.getTheme(), _output);
 
         Gdx.graphics.setVSync(true);
         Gdx.input.setInputProcessor(_displayHandler);
@@ -55,6 +64,8 @@ public class Lights extends ApplicationAdapter {
     public void dispose() {
         _settingsStore.saveToFile();
         _controlsStore.saveToFile();
+        _profilesStore.saveToFile();
+
         _displayHandler.save();
         _renderer.dispose();
     }

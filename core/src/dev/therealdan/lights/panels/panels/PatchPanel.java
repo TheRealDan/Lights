@@ -10,14 +10,19 @@ import dev.therealdan.lights.panels.Panel;
 import dev.therealdan.lights.panels.menuicons.CloseIcon;
 import dev.therealdan.lights.renderer.Renderer;
 import dev.therealdan.lights.renderer.Task;
+import dev.therealdan.lights.store.FixturesStore;
 
 import static dev.therealdan.lights.util.sorting.Sortable.Sort.ID;
 
 public class PatchPanel implements Panel {
 
+    private FixturesStore _fixturesStore;
+
     private Fixture selectedFixture = null;
 
-    public PatchPanel() {
+    public PatchPanel(FixturesStore fixturesStore) {
+        _fixturesStore = fixturesStore;
+
         register(new CloseIcon());
     }
 
@@ -35,7 +40,7 @@ public class PatchPanel implements Panel {
         float profileWidth = renderer.getWidth("Profile") + 10;
         float addressWidth = renderer.getWidth("Address") + 10;
         float width = idWidth + nameWidth + profileWidth + addressWidth;
-        for (Fixture fixture : Fixture.fixtures()) {
+        for (Fixture fixture : _fixturesStore.getFixtures()) {
             idWidth = Math.max(idWidth, renderer.getWidth(Integer.toString(fixture.getID())) + 10);
             nameWidth = Math.max(nameWidth, renderer.getWidth(fixture.getName()) + 10);
             profileWidth = Math.max(profileWidth, renderer.getWidth(fixture.getProfile()) + 10);
@@ -55,7 +60,7 @@ public class PatchPanel implements Panel {
         drag(mouse, x, y, width, cellHeight);
         y -= cellHeight;
 
-        for (Fixture fixture : Fixture.fixtures(ID)) {
+        for (Fixture fixture : _fixturesStore.getFixtures(ID)) {
             if (mouse.within(x, y, width, cellHeight) && canInteract()) {
                 interacted = true;
                 if (mouse.leftClicked()) {
@@ -80,7 +85,7 @@ public class PatchPanel implements Panel {
 
             for (int address = 1; address <= DMX.MAX_CHANNELS; address++) {
                 boolean occupied = false;
-                for (Fixture fixture : Fixture.fixtures()) {
+                for (Fixture fixture : _fixturesStore.getFixtures()) {
                     if (!fixture.equals(getSelectedFixture()) && fixture.getAddress() <= address && address <= fixture.getAddress() + fixture.getPhysicalChannels() - 1) {
                         occupied = true;
                         break;

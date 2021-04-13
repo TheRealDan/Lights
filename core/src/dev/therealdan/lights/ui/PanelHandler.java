@@ -6,9 +6,6 @@ import dev.therealdan.lights.controllers.Button;
 import dev.therealdan.lights.controllers.Fader;
 import dev.therealdan.lights.dmx.DMX;
 import dev.therealdan.lights.dmx.Output;
-import dev.therealdan.lights.fixtures.Fixture;
-import dev.therealdan.lights.fixtures.Group;
-import dev.therealdan.lights.fixtures.fixture.Profile;
 import dev.therealdan.lights.interfaces.CustomSerialInterface;
 import dev.therealdan.lights.interfaces.DMXInterface;
 import dev.therealdan.lights.main.Mouse;
@@ -23,8 +20,7 @@ import dev.therealdan.lights.programmer.Programmer;
 import dev.therealdan.lights.programmer.Sequence;
 import dev.therealdan.lights.renderer.Renderer;
 import dev.therealdan.lights.settings.Control;
-import dev.therealdan.lights.store.ControlsStore;
-import dev.therealdan.lights.store.SettingsStore;
+import dev.therealdan.lights.store.*;
 import dev.therealdan.lights.util.Util;
 
 import java.util.ArrayList;
@@ -60,7 +56,7 @@ public class PanelHandler implements Visual {
     private CondensedFrame targetCondensedFrame, currentCondensedFrame, previousCondensedFrame;
     private long condensedFrameTimestamp = System.currentTimeMillis();
 
-    public PanelHandler(SettingsStore settingsStore, ControlsStore controlsStore, Mouse mouse, Theme theme, Output output, DisplayHandler displayHandler) {
+    public PanelHandler(SettingsStore settingsStore, ControlsStore controlsStore, ProfilesStore profilesStore, FixturesStore fixturesStore, GroupsStore groupsStore, Mouse mouse, Theme theme, Output output, DisplayHandler displayHandler) {
         _settingsStore = settingsStore;
         _controlsStore = controlsStore;
         _mouse = mouse;
@@ -82,18 +78,11 @@ public class PanelHandler implements Visual {
                 panels.add(new CustomSerialInterfacePanel((CustomSerialInterface) dmxInterface));
 
         // Setup
-        panels.add(new ProfilesPanel(displayHandler));
+        panels.add(new ProfilesPanel(profilesStore, displayHandler));
 
-        // TODO - Move elsewhere
-        Profile.loadProfilesFromFile();
+        panels.add(new PatchPanel(fixturesStore));
 
-        panels.add(new PatchPanel());
-
-        // TODO - Move elsewhere
-        Fixture.loadFixturesFromFile();
-        Group.loadGroupsFromFile();
-
-        panels.add(new SequencesPanel());
+        panels.add(new SequencesPanel(fixturesStore));
         panels.add(new FaderEditorPanel());
         panels.add(new ButtonEditorPanel());
 
@@ -104,8 +93,8 @@ public class PanelHandler implements Visual {
         // Programmer
         panels.add(new SequenceProgrammerPanel(settingsStore));
         panels.add(new NewSequenceProgrammerPanel());
-        panels.add(new FixturesPanel(displayHandler));
-        panels.add(new GroupsPanel());
+        panels.add(new FixturesPanel(fixturesStore, displayHandler));
+        panels.add(new GroupsPanel(groupsStore));
         panels.add(new ParametersPanel());
 
         // Info
@@ -129,12 +118,6 @@ public class PanelHandler implements Visual {
     public void save() {
         for (Panel panel : UIs())
             panel.save();
-
-        // TODO - Move elsewhere?
-        Fixture.saveFixturesToFile();
-        Group.saveGroupsToFile();
-
-        Profile.saveProfilesToFile();
 
         Button.saveButtonsToFile();
     }

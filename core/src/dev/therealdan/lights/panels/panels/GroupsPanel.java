@@ -10,16 +10,21 @@ import dev.therealdan.lights.panels.menuicons.CloseIcon;
 import dev.therealdan.lights.programmer.Programmer;
 import dev.therealdan.lights.renderer.Renderer;
 import dev.therealdan.lights.renderer.Task;
+import dev.therealdan.lights.store.GroupsStore;
 
 import static dev.therealdan.lights.util.sorting.Sortable.Sort.NAME;
 
 public class GroupsPanel implements Panel {
 
+    private GroupsStore _groupsStore;
+
     private int groupsPerRow = 8;
 
-    public GroupsPanel() {
+    public GroupsPanel(GroupsStore groupsStore) {
+        _groupsStore = groupsStore;
+
         register(new CloseIcon());
-        register(new AddGroupIcon());
+        register(new AddGroupIcon(groupsStore));
 
         setWidth(800);
         setHeight(200);
@@ -27,13 +32,13 @@ public class GroupsPanel implements Panel {
 
     @Override
     public boolean drawContent(Mouse mouse, Renderer renderer, float x, float y, float width, float height, boolean interacted) {
-        int groups = Group.count();
+        int groups = _groupsStore.count();
         while (groups % getGroupsPerRow() != 0) groups++;
 
         float groupWidth = width / getGroupsPerRow();
         float groupHeight = height / (groups / getGroupsPerRow());
 
-        for (Group group : Group.groups(NAME)) {
+        for (Group group : _groupsStore.getGroups(NAME)) {
             renderer.box(x, y, groupWidth, groupHeight, Programmer.isSelected(group) ? renderer.getTheme().DARK_RED : renderer.getTheme().MEDIUM, setWidth(renderer, group.getName()), Task.TextPosition.CENTER);
             if (mouse.within(x, y, groupWidth, groupHeight) && canInteract()) {
                 interacted = true;

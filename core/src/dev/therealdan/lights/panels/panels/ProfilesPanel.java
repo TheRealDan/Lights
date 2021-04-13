@@ -7,6 +7,7 @@ import dev.therealdan.lights.main.Mouse;
 import dev.therealdan.lights.panels.Panel;
 import dev.therealdan.lights.panels.menuicons.CloseIcon;
 import dev.therealdan.lights.renderer.Renderer;
+import dev.therealdan.lights.store.ProfilesStore;
 import dev.therealdan.lights.ui.DisplayHandler;
 import dev.therealdan.lights.ui.ProfileEditor;
 import dev.therealdan.lights.ui.Visual;
@@ -19,6 +20,7 @@ import static dev.therealdan.lights.util.sorting.Sortable.Sort.NAME;
 
 public class ProfilesPanel implements Panel {
 
+    private ProfilesStore _profilesStore;
     private DisplayHandler _displayHandler;
 
     private final int ROWS = 6;
@@ -28,7 +30,8 @@ public class ProfilesPanel implements Panel {
     private int profileScroll = 0;
     private boolean canEditName = false;
 
-    public ProfilesPanel(DisplayHandler displayHandler) {
+    public ProfilesPanel(ProfilesStore profilesStore, DisplayHandler displayHandler) {
+        _profilesStore = profilesStore;
         _displayHandler = displayHandler;
 
         register(new CloseIcon());
@@ -39,7 +42,7 @@ public class ProfilesPanel implements Panel {
 
     @Override
     public boolean drawContent(Mouse mouse, Renderer renderer, float x, float y, float width, float height, boolean interacted) {
-        setTitle("Profiles: " + Profile.count());
+        setTitle("Profiles: " + _profilesStore.count());
 
         if (hasSelectedProfile()) {
             width /= 2;
@@ -50,7 +53,7 @@ public class ProfilesPanel implements Panel {
         int i = 0;
         boolean display = false;
         int current = 0;
-        for (Profile profile : Profile.profiles(NAME)) {
+        for (Profile profile : _profilesStore.getProfiles(NAME)) {
             if (current == getProfileScroll()) display = true;
             current++;
             if (display) {
@@ -71,7 +74,7 @@ public class ProfilesPanel implements Panel {
             interacted = true;
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && mouse.leftReady(500)) {
                 Profile newProfile = new Profile("New Profile", new ArrayList<>(), new ArrayList<>());
-                Profile.add(newProfile);
+                _profilesStore.register(newProfile);
                 select(newProfile);
             }
         }
@@ -125,7 +128,7 @@ public class ProfilesPanel implements Panel {
             interacted = true;
             if (mouse.leftClicked()) {
                 if (Util.isShiftHeld()) {
-                    Profile.delete(getSelectedProfile());
+                    _profilesStore.delete(getSelectedProfile());
                     select(null);
                     return interacted;
                 }
@@ -165,8 +168,8 @@ public class ProfilesPanel implements Panel {
     public void scrolled(Mouse mouse, int amount) {
         profileScroll += amount;
         if (getProfileScroll() < 0) profileScroll = 0;
-        if (getProfileScroll() > Math.max(0, Profile.count() - (ROWS - 1)))
-            profileScroll = Math.max(0, Profile.count() - (ROWS - 1));
+        if (getProfileScroll() > Math.max(0, _profilesStore.count() - (ROWS - 1)))
+            profileScroll = Math.max(0, _profilesStore.count() - (ROWS - 1));
     }
 
     private void toggleCanEditName() {

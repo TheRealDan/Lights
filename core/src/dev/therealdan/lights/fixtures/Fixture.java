@@ -1,7 +1,5 @@
 package dev.therealdan.lights.fixtures;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.math.Vector3;
@@ -13,14 +11,9 @@ import dev.therealdan.lights.fixtures.fixture.profile.ModelDesign;
 import dev.therealdan.lights.util.sorting.Sortable;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
-import static dev.therealdan.lights.util.sorting.Sortable.Sort.ID;
-
 public class Fixture implements Sortable {
-
-    private static HashSet<Fixture> fixtures = new HashSet<>();
 
     private String fileName;
     private String name;
@@ -263,110 +256,5 @@ public class Fixture implements Sortable {
 
     public List<Channel> channels() {
         return profile.channels();
-    }
-
-    public static void add(Fixture fixture) {
-        fixtures.add(fixture);
-    }
-
-    public static void remove(Fixture fixture) {
-        fixtures.remove(fixture);
-    }
-
-    public static void loadFixturesFromFile() {
-        FileHandle fileHandle = Gdx.files.local("Lights/Fixtures/");
-        if (fileHandle.exists() && fileHandle.isDirectory())
-            for (FileHandle file : fileHandle.list())
-                loadFixtureFromFile(file);
-    }
-
-    private static void loadFixtureFromFile(FileHandle fileHandle) {
-        if (fileHandle.isDirectory()) return;
-
-        String fileName = fileHandle.toString().replaceFirst("Lights/Fixtures/", "").replace(".txt", "");
-        String name = null;
-        Profile profile = null;
-        int address = 0;
-        int id = -1;
-        Vector3 position = new Vector3();
-
-        for (String line : fileHandle.readString().split("\\r?\\n")) {
-            if (line.startsWith("Name: ")) {
-                name = line.split(": ")[1];
-            } else if (line.startsWith("Profile: ")) {
-                profile = Profile.profileByName(line.split(": ")[1]);
-            } else if (line.startsWith("Address: ")) {
-                address = Integer.parseInt(line.split(": ")[1]);
-            } else if (line.startsWith("ID: ")) {
-                id = Integer.parseInt(line.split(": ")[1]);
-
-            } else if (line.startsWith("  X: ")) {
-                position.set(Float.parseFloat(line.split(": ")[1]), position.y, position.z);
-            } else if (line.startsWith("  Y: ")) {
-                position.set(position.x, Float.parseFloat(line.split(": ")[1]), position.z);
-            } else if (line.startsWith("  Z: ")) {
-                position.set(position.x, position.y, Float.parseFloat(line.split(": ")[1]));
-            }
-        }
-
-        if (name == null) return;
-        if (profile == null) return;
-        if (address == 0) return;
-        if (id <= -1) return;
-
-        add(new Fixture(name, profile, address, id, position, fileName));
-    }
-
-    public static void saveFixturesToFile() {
-        for (Fixture fixture : fixtures()) {
-            FileHandle fileHandle = Gdx.files.local("Lights/Fixtures/" + fixture.getFileName() + ".txt");
-            fileHandle.writeString("", false);
-
-            fileHandle.writeString("Name: " + fixture.getName() + "\r\n", true);
-            fileHandle.writeString("Profile: " + fixture.getProfile() + "\r\n", true);
-            fileHandle.writeString("Address: " + fixture.getAddress() + "\r\n", true);
-            fileHandle.writeString("ID: " + fixture.getID() + "\r\n", true);
-
-            Vector3 position = fixture.getLocation();
-            fileHandle.writeString("Position:\r\n", true);
-            fileHandle.writeString("  X: " + position.x + "\r\n", true);
-            fileHandle.writeString("  Y: " + position.y + "\r\n", true);
-            fileHandle.writeString("  Z: " + position.z + "\r\n", true);
-        }
-    }
-
-    public static int getFreeID() {
-        int id = 0;
-        while (fixtureByID(id) != null) id++;
-        return id;
-    }
-
-    public static int count() {
-        return fixtures.size();
-    }
-
-    public static Fixture fixtureByID(int id) {
-        for (Fixture fixture : fixtures(ID))
-            if (fixture.getID() == id)
-                return fixture;
-
-        return null;
-    }
-
-    public static Fixture fixtureByName(String name) {
-        for (Fixture fixture : fixtures())
-            if (fixture.getName().equalsIgnoreCase(name))
-                return fixture;
-
-        return null;
-    }
-
-    public static List<Fixture> fixtures(Sort... sort) {
-        if (sort.length == 0) return new ArrayList<>(Fixture.fixtures);
-
-        List<Fixture> fixtures = new ArrayList<>();
-        for (Sortable sortable : Sortable.sort(new ArrayList<>(Fixture.fixtures), sort))
-            fixtures.add((Fixture) sortable);
-        return fixtures;
     }
 }

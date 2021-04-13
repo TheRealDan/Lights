@@ -4,15 +4,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import dev.therealdan.lights.controllers.Button;
 import dev.therealdan.lights.settings.Control;
-import dev.therealdan.lights.store.Store;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 
 public class ControlsStore implements Store {
-
-    private final String _path = "Lights/Settings/Controls.txt";
 
     private LinkedHashSet<Control> _controls = new LinkedHashSet<>();
 
@@ -34,7 +31,7 @@ public class ControlsStore implements Store {
 
     @Override
     public void loadFromFile() {
-        FileHandle fileHandle = Gdx.files.local(_path);
+        FileHandle fileHandle = Gdx.files.local(getPath());
         if (!fileHandle.exists()) return;
 
         Control.Category category = null;
@@ -65,7 +62,7 @@ public class ControlsStore implements Store {
     public void saveToFile() {
         if (count() == 0) return;
 
-        FileHandle fileHandle = Gdx.files.local(_path);
+        FileHandle fileHandle = Gdx.files.local(getPath());
         fileHandle.writeString("", false);
 
         for (Control.Category category : Control.Category.values()) {
@@ -117,5 +114,10 @@ public class ControlsStore implements Store {
                 controls.add(control);
 
         return controls;
+    }
+
+    @Override
+    public String getPath() {
+        return "Lights/Settings/Controls.txt";
     }
 }

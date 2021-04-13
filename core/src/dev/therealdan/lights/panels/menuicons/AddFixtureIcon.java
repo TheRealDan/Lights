@@ -1,16 +1,22 @@
 package dev.therealdan.lights.panels.menuicons;
 
-import dev.therealdan.lights.main.Lights;
 import dev.therealdan.lights.panels.MenuIcon;
 import dev.therealdan.lights.panels.Panel;
 import dev.therealdan.lights.renderer.Renderer;
 import dev.therealdan.lights.renderer.Task;
+import dev.therealdan.lights.ui.DisplayHandler;
 
 public class AddFixtureIcon implements MenuIcon {
 
+    private DisplayHandler _displayHandler;
+
+    public AddFixtureIcon(DisplayHandler displayHandler) {
+        _displayHandler = displayHandler;
+    }
+
     @Override
     public boolean click(Panel panel) {
-        Lights.openFixtureEditor();
+        _displayHandler.setFocus(DisplayHandler.Focus.FIXTURE_EDITOR);
         return true;
     }
 

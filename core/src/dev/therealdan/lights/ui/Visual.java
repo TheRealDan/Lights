@@ -6,6 +6,14 @@ import dev.therealdan.lights.renderer.Renderer;
 
 public interface Visual extends InputProcessor {
 
+    default void save() {
+        
+    }
+
+    default void update() {
+
+    }
+
     boolean draw(Mouse mouse, Renderer renderer);
 
     default void resize(int width, int height) {

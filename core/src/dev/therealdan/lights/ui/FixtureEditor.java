@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import dev.therealdan.lights.fixtures.Fixture;
 import dev.therealdan.lights.fixtures.fixture.Profile;
-import dev.therealdan.lights.main.Lights;
 import dev.therealdan.lights.main.Mouse;
 import dev.therealdan.lights.renderer.Renderer;
 import dev.therealdan.lights.renderer.Task;
@@ -14,6 +13,8 @@ import static dev.therealdan.lights.util.sorting.Sortable.Sort.ID;
 import static dev.therealdan.lights.util.sorting.Sortable.Sort.NAME;
 
 public class FixtureEditor implements Visual {
+
+    private DisplayHandler _displayHandler;
 
     private Fixture fixture;
 
@@ -25,7 +26,8 @@ public class FixtureEditor implements Visual {
 
     private Section section;
 
-    public FixtureEditor() {
+    public FixtureEditor(DisplayHandler displayHandler) {
+        _displayHandler = displayHandler;
     }
 
     @Override
@@ -149,7 +151,7 @@ public class FixtureEditor implements Visual {
     public boolean keyDown(int keycode) {
         switch (keycode) {
             case Input.Keys.ESCAPE:
-                Lights.openMainView();
+                _displayHandler.setFocus(DisplayHandler.Focus.MAIN_VIEW);
                 return false;
         }
 

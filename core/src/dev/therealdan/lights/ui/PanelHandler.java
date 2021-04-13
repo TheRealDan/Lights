@@ -60,7 +60,7 @@ public class PanelHandler implements Visual {
     private CondensedFrame targetCondensedFrame, currentCondensedFrame, previousCondensedFrame;
     private long condensedFrameTimestamp = System.currentTimeMillis();
 
-    public PanelHandler(SettingsStore settingsStore, ControlsStore controlsStore, Mouse mouse, Theme theme, Output output) {
+    public PanelHandler(SettingsStore settingsStore, ControlsStore controlsStore, Mouse mouse, Theme theme, Output output, DisplayHandler displayHandler) {
         _settingsStore = settingsStore;
         _controlsStore = controlsStore;
         _mouse = mouse;
@@ -82,7 +82,7 @@ public class PanelHandler implements Visual {
                 panels.add(new CustomSerialInterfacePanel((CustomSerialInterface) dmxInterface));
 
         // Setup
-        panels.add(new ProfilesPanel());
+        panels.add(new ProfilesPanel(displayHandler));
 
         // TODO - Move elsewhere
         Profile.loadProfilesFromFile();
@@ -104,7 +104,7 @@ public class PanelHandler implements Visual {
         // Programmer
         panels.add(new SequenceProgrammerPanel(settingsStore));
         panels.add(new NewSequenceProgrammerPanel());
-        panels.add(new FixturesPanel());
+        panels.add(new FixturesPanel(displayHandler));
         panels.add(new GroupsPanel());
         panels.add(new ParametersPanel());
 
@@ -125,6 +125,7 @@ public class PanelHandler implements Visual {
             panel.load();
     }
 
+    @Override
     public void save() {
         for (Panel panel : UIs())
             panel.save();
@@ -138,6 +139,7 @@ public class PanelHandler implements Visual {
         Button.saveButtonsToFile();
     }
 
+    @Override
     public void update() {
         DMX visualiser = _output.getDMXByLevel("VISUALISER");
 

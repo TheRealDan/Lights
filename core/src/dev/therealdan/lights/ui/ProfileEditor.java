@@ -13,7 +13,6 @@ import dev.therealdan.lights.fixtures.fixture.Profile;
 import dev.therealdan.lights.fixtures.fixture.profile.Channel;
 import dev.therealdan.lights.fixtures.fixture.profile.ModelDesign;
 import dev.therealdan.lights.fixtures.fixture.profile.MutableProfile;
-import dev.therealdan.lights.main.Lights;
 import dev.therealdan.lights.main.Mouse;
 import dev.therealdan.lights.renderer.Renderer;
 import dev.therealdan.lights.renderer.Task;
@@ -28,6 +27,8 @@ public class ProfileEditor implements Visual {
     // TODO - Finish Profile editor; Channels, Models and how they interact
 
     private final DecimalFormat decimalFormat = new DecimalFormat("#.##");
+
+    private DisplayHandler _displayHandler;
 
     private PerspectiveCamera camera;
     private Environment environment;
@@ -47,7 +48,9 @@ public class ProfileEditor implements Visual {
     private float degreesPerPixel = 0.5f;
     private Vector3 tmp = new Vector3();
 
-    public ProfileEditor() {
+    public ProfileEditor(DisplayHandler displayHandler) {
+        _displayHandler = displayHandler;
+
         camera = new PerspectiveCamera(75, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.position.set(0f, 0f, 10f);
         camera.lookAt(0f, 0f, 0f);
@@ -121,7 +124,7 @@ public class ProfileEditor implements Visual {
 
         renderer.box(x, y, width, cellHeight, renderer.getTheme().MEDIUM, renderer.getTheme().YELLOW, "Close Editor");
         if (mouse.within(x, y, width, cellHeight) && mouse.leftClicked()) {
-            Lights.openMainView();
+            _displayHandler.setFocus(DisplayHandler.Focus.MAIN_VIEW);
             return false;
         }
         y -= cellHeight;
@@ -130,7 +133,7 @@ public class ProfileEditor implements Visual {
         if (mouse.within(x, y, width, cellHeight) && Util.isShiftHeld() && mouse.leftClicked()) {
             Profile.delete(getMutableProfile());
             edit((Profile) null);
-            Lights.openMainView();
+            _displayHandler.setFocus(DisplayHandler.Focus.MAIN_VIEW);
             return false;
         }
         y -= cellHeight;
@@ -316,7 +319,7 @@ public class ProfileEditor implements Visual {
 
         switch (keycode) {
             case Input.Keys.ESCAPE:
-                Lights.openMainView();
+                _displayHandler.setFocus(DisplayHandler.Focus.MAIN_VIEW);
                 return false;
         }
 

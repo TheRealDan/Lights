@@ -67,6 +67,7 @@ public class Visualiser3D implements Visual {
         loadCameraPosition();
     }
 
+    @Override
     public void save() {
         saveCameraPosition();
     }

@@ -10,6 +10,7 @@ import dev.therealdan.lights.panels.menuicons.CloseIcon;
 import dev.therealdan.lights.programmer.Programmer;
 import dev.therealdan.lights.renderer.Renderer;
 import dev.therealdan.lights.renderer.Task;
+import dev.therealdan.lights.ui.DisplayHandler;
 
 import static dev.therealdan.lights.util.sorting.Sortable.Sort.ID;
 
@@ -17,9 +18,9 @@ public class FixturesPanel implements Panel {
 
     public int fixturesPerRow = 8;
 
-    public FixturesPanel() {
+    public FixturesPanel(DisplayHandler displayHandler) {
         register(new CloseIcon());
-        register(new AddFixtureIcon());
+        register(new AddFixtureIcon(displayHandler));
 
         setWidth(800);
         setHeight(200);

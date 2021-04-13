@@ -3,18 +3,23 @@ package dev.therealdan.lights.panels.panels;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import dev.therealdan.lights.fixtures.fixture.Profile;
-import dev.therealdan.lights.main.Lights;
 import dev.therealdan.lights.main.Mouse;
 import dev.therealdan.lights.panels.Panel;
 import dev.therealdan.lights.panels.menuicons.CloseIcon;
 import dev.therealdan.lights.renderer.Renderer;
+import dev.therealdan.lights.ui.DisplayHandler;
+import dev.therealdan.lights.ui.ProfileEditor;
+import dev.therealdan.lights.ui.Visual;
 import dev.therealdan.lights.util.Util;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import static dev.therealdan.lights.util.sorting.Sortable.Sort.NAME;
 
 public class ProfilesPanel implements Panel {
+
+    private DisplayHandler _displayHandler;
 
     private final int ROWS = 6;
 
@@ -23,7 +28,9 @@ public class ProfilesPanel implements Panel {
     private int profileScroll = 0;
     private boolean canEditName = false;
 
-    public ProfilesPanel() {
+    public ProfilesPanel(DisplayHandler displayHandler) {
+        _displayHandler = displayHandler;
+
         register(new CloseIcon());
 
         setMinimumWidth(200);
@@ -101,7 +108,15 @@ public class ProfilesPanel implements Panel {
         renderer.box(x, y, width, cellHeight, renderer.getTheme().MEDIUM, renderer.getTheme().YELLOW, "Advanced");
         if (mouse.within(x, y, width, cellHeight) && canInteract(interacted)) {
             interacted = true;
-            if (mouse.leftClicked()) Lights.openProfileEditor(getSelectedProfile());
+            if (mouse.leftClicked()) {
+                _displayHandler.setFocus(DisplayHandler.Focus.PROFILE_EDITOR);
+                Iterator<Visual> iterator = _displayHandler.getAll(false);
+                while (iterator.hasNext()) {
+                    Visual visual = iterator.next();
+                    if (visual instanceof ProfileEditor)
+                        ((ProfileEditor) visual).edit(getSelectedProfile());
+                }
+            }
         }
         y -= cellHeight;
 

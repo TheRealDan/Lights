@@ -5,11 +5,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import dev.therealdan.lights.dmx.Output;
-import dev.therealdan.lights.fixtures.fixture.Profile;
 import dev.therealdan.lights.renderer.Renderer;
 import dev.therealdan.lights.settings.ControlsStore;
 import dev.therealdan.lights.settings.SettingsStore;
-import dev.therealdan.lights.ui.*;
+import dev.therealdan.lights.ui.DisplayHandler;
 
 public class Lights extends ApplicationAdapter {
 
@@ -20,12 +19,7 @@ public class Lights extends ApplicationAdapter {
     private Mouse _mouse;
     private Renderer _renderer;
     private Output _output;
-    private TheInputProcessor _theInputProcessor;
-
-    private Visualiser3D visualiser3D;
-    private PanelHandler panelHandler;
-    private ProfileEditor profileEditor;
-    private FixtureEditor fixtureEditor;
+    private DisplayHandler _displayHandler;
 
     @Override
     public void create() {
@@ -36,17 +30,11 @@ public class Lights extends ApplicationAdapter {
         _mouse = new Mouse();
         _renderer = new Renderer();
         _output = new Output(_settingsStore);
-        _theInputProcessor = new TheInputProcessor();
 
-        panelHandler = new PanelHandler(_settingsStore, _controlsStore, _mouse, _renderer.getTheme(), _output);
-        visualiser3D = new Visualiser3D(_settingsStore, _controlsStore, _output);
-        profileEditor = new ProfileEditor();
-        fixtureEditor = new FixtureEditor();
+        _displayHandler = new DisplayHandler(_settingsStore, _controlsStore, _mouse, _renderer.getTheme(), _output);
 
         Gdx.graphics.setVSync(true);
-        Gdx.input.setInputProcessor(_theInputProcessor);
-
-        openMainView();
+        Gdx.input.setInputProcessor(_displayHandler);
     }
 
     @Override
@@ -56,46 +44,22 @@ public class Lights extends ApplicationAdapter {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
         _mouse.update();
-        panelHandler.update();
-
-        _theInputProcessor.draw(_mouse, _renderer);
-
+        _displayHandler.update();
+        _displayHandler.draw(_mouse, _renderer);
         _renderer.draw();
     }
 
     @Override
     public void resize(int width, int height) {
         _renderer.resize();
-
-        _theInputProcessor.resize(width, height);
+        _displayHandler.resize(width, height);
     }
 
     @Override
     public void dispose() {
         _settingsStore.saveToFile();
         _controlsStore.saveToFile();
-
-        panelHandler.save();
-        visualiser3D.save();
-
+        _displayHandler.save();
         _renderer.dispose();
-    }
-
-    public static void openMainView() {
-        lights._theInputProcessor.clear();
-        lights._theInputProcessor.add(lights.visualiser3D);
-        lights._theInputProcessor.add(lights.panelHandler);
-    }
-
-    public static void openProfileEditor(Profile profile) {
-        lights.profileEditor.edit(profile);
-        lights._theInputProcessor.clear();
-        lights._theInputProcessor.add(lights.profileEditor);
-    }
-
-    public static void openFixtureEditor() {
-        lights.fixtureEditor.clear();
-        lights._theInputProcessor.clear();
-        lights._theInputProcessor.add(lights.fixtureEditor);
     }
 }

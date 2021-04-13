@@ -8,7 +8,7 @@ import dev.therealdan.lights.panels.menuicons.CloseIcon;
 import dev.therealdan.lights.renderer.Renderer;
 import dev.therealdan.lights.renderer.Task;
 import dev.therealdan.lights.settings.Setting;
-import dev.therealdan.lights.settings.SettingsStore;
+import dev.therealdan.lights.store.SettingsStore;
 
 public class SettingsPanel implements Panel {
 

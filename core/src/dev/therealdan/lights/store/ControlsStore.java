@@ -1,14 +1,16 @@
-package dev.therealdan.lights.settings;
+package dev.therealdan.lights.store;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import dev.therealdan.lights.controllers.Button;
+import dev.therealdan.lights.settings.Control;
+import dev.therealdan.lights.store.Store;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 
-public class ControlsStore {
+public class ControlsStore implements Store {
 
     private final String _path = "Lights/Settings/Controls.txt";
 
@@ -19,6 +21,7 @@ public class ControlsStore {
         loadFromFile();
     }
 
+    @Override
     public void loadDefaults() {
         // TODO - These need some default key binds
         register(new Control(Control.Key.CAMERA_STRAFE_LEFT.toString(), Control.Category.VISUALISER3D, -1));
@@ -29,6 +32,7 @@ public class ControlsStore {
         register(new Control(Control.Key.CAMERA_DOWN.toString(), Control.Category.VISUALISER3D, -1));
     }
 
+    @Override
     public void loadFromFile() {
         FileHandle fileHandle = Gdx.files.local(_path);
         if (!fileHandle.exists()) return;
@@ -57,6 +61,7 @@ public class ControlsStore {
         }
     }
 
+    @Override
     public void saveToFile() {
         if (count() == 0) return;
 
@@ -75,6 +80,7 @@ public class ControlsStore {
         _controls.add(control);
     }
 
+    @Override
     public int count() {
         return _controls.size();
     }

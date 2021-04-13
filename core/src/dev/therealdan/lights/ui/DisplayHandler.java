@@ -5,8 +5,8 @@ import dev.therealdan.lights.dmx.Output;
 import dev.therealdan.lights.main.Mouse;
 import dev.therealdan.lights.main.Theme;
 import dev.therealdan.lights.renderer.Renderer;
-import dev.therealdan.lights.settings.ControlsStore;
-import dev.therealdan.lights.settings.SettingsStore;
+import dev.therealdan.lights.store.ControlsStore;
+import dev.therealdan.lights.store.SettingsStore;
 
 import java.util.ArrayDeque;
 import java.util.Deque;

@@ -11,7 +11,7 @@ import dev.therealdan.lights.programmer.Programmer;
 import dev.therealdan.lights.programmer.Sequence;
 import dev.therealdan.lights.renderer.Renderer;
 import dev.therealdan.lights.renderer.Task;
-import dev.therealdan.lights.settings.SettingsStore;
+import dev.therealdan.lights.store.SettingsStore;
 import dev.therealdan.lights.ui.PanelHandler;
 import dev.therealdan.lights.util.Util;
 

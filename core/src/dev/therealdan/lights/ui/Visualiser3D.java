@@ -19,9 +19,9 @@ import dev.therealdan.lights.main.Mouse;
 import dev.therealdan.lights.programmer.Programmer;
 import dev.therealdan.lights.renderer.Renderer;
 import dev.therealdan.lights.settings.Control;
-import dev.therealdan.lights.settings.ControlsStore;
+import dev.therealdan.lights.store.ControlsStore;
 import dev.therealdan.lights.settings.Setting;
-import dev.therealdan.lights.settings.SettingsStore;
+import dev.therealdan.lights.store.SettingsStore;
 import dev.therealdan.lights.util.Util;
 
 public class Visualiser3D implements Visual {

@@ -6,8 +6,8 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import dev.therealdan.lights.dmx.Output;
 import dev.therealdan.lights.renderer.Renderer;
-import dev.therealdan.lights.settings.ControlsStore;
-import dev.therealdan.lights.settings.SettingsStore;
+import dev.therealdan.lights.store.ControlsStore;
+import dev.therealdan.lights.store.SettingsStore;
 import dev.therealdan.lights.ui.DisplayHandler;
 
 public class Lights extends ApplicationAdapter {

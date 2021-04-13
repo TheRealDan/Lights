@@ -6,7 +6,7 @@ import dev.therealdan.lights.dmx.Output;
 import dev.therealdan.lights.panels.panels.ConsolePanel;
 import dev.therealdan.lights.panels.panels.TimingsPanel;
 import dev.therealdan.lights.settings.Setting;
-import dev.therealdan.lights.settings.SettingsStore;
+import dev.therealdan.lights.store.SettingsStore;
 
 import java.util.ArrayList;
 import java.util.HashMap;

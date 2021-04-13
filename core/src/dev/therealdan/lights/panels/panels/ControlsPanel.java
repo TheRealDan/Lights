@@ -9,7 +9,7 @@ import dev.therealdan.lights.panels.menuicons.CloseIcon;
 import dev.therealdan.lights.renderer.Renderer;
 import dev.therealdan.lights.renderer.Task;
 import dev.therealdan.lights.settings.Control;
-import dev.therealdan.lights.settings.ControlsStore;
+import dev.therealdan.lights.store.ControlsStore;
 
 import static dev.therealdan.lights.util.sorting.Sortable.Sort.POSITION;
 

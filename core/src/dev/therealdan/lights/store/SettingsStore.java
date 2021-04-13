@@ -1,13 +1,15 @@
-package dev.therealdan.lights.settings;
+package dev.therealdan.lights.store;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import dev.therealdan.lights.settings.Setting;
+import dev.therealdan.lights.store.Store;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 
-public class SettingsStore {
+public class SettingsStore implements Store {
 
     private final String _path = "Lights/Settings/Settings.txt";
 
@@ -18,6 +20,7 @@ public class SettingsStore {
         loadFromFile();
     }
 
+    @Override
     public void loadDefaults() {
         register(new Setting(Setting.Key.INTERVAL, 100));
         register(new Setting(Setting.Key.CONNECTION_WAIT, 2000));
@@ -32,6 +35,7 @@ public class SettingsStore {
         register(new Setting(Setting.Key.REMEMBER_CAMERA_POSITION, false));
     }
 
+    @Override
     public void loadFromFile() {
         FileHandle fileHandle = Gdx.files.local(_path);
         if (!fileHandle.exists()) return;
@@ -45,6 +49,7 @@ public class SettingsStore {
         }
     }
 
+    @Override
     public void saveToFile() {
         if (count() == 0) return;
 
@@ -59,6 +64,7 @@ public class SettingsStore {
         _settings.add(setting);
     }
 
+    @Override
     public int count() {
         return _settings.size();
     }

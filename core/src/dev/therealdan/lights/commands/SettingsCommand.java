@@ -2,7 +2,7 @@ package dev.therealdan.lights.commands;
 
 import dev.therealdan.lights.panels.panels.ConsolePanel;
 import dev.therealdan.lights.settings.Setting;
-import dev.therealdan.lights.settings.SettingsStore;
+import dev.therealdan.lights.store.SettingsStore;
 
 public class SettingsCommand implements Command {
 
